@@ -31,6 +31,7 @@ class ImageTest extends TestCase
         $image->setAlt('New Image');
         $image->setUrl('http://localhost/public/images/new_image.png');
 
+        static::assertNull($image->getId());
         static::assertEquals(new \DateTime('2017-03-21'), $image->getCreationDate());
         static::assertEquals(new \DateTime('2017-03-21'), $image->getModificationDate());
         static::assertEquals('New Image', $image->getAlt());

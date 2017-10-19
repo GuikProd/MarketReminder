@@ -13,6 +13,7 @@ namespace Tests\Models;
 
 use App\Models\User;
 use App\Models\Image;
+use App\Models\Stock;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,6 +40,7 @@ class UserTest extends TestCase
         $user->setActive(true);
         $user->setApiToken('a5d4a94d498zx59z1xas5s5s2sa47s7+s4+as4s49');
 
+        static::assertNull($user->getId());
         static::assertEquals('Harry', $user->getFirstname());
         static::assertEquals('Potter', $user->getLastname());
         static::assertEquals('HP', $user->getUsername());
@@ -77,6 +79,10 @@ class UserTest extends TestCase
         $user->addStock($stock);
 
         static::assertEquals($stock, $user->getStocks()->get(0));
+
+        $user->removeStock($stock);
+
+        static::assertEmpty($user->getStocks());
     }
 
     public function testImageRelation()

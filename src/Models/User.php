@@ -107,7 +107,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId():? int
     {
         return $this->id;
     }
@@ -338,6 +338,8 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function isAccountNonExpired()
     {
@@ -346,6 +348,8 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function isAccountNonLocked()
     {
@@ -354,6 +358,8 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function isCredentialsNonExpired()
     {
@@ -362,6 +368,8 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function isEnabled()
     {
@@ -378,6 +386,8 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getSalt()
     {
@@ -386,11 +396,15 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function eraseCredentials() {}
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function serialize()
     {
@@ -404,6 +418,8 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function unserialize($serialized)
     {
