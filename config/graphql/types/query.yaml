@@ -1,0 +1,37 @@
+Query:
+    type: object
+    config:
+        description:
+        fields:
+            user:
+                type: "User"
+                description: "An user registered into the application"
+                args:
+                    id:
+                        type: "Int"
+                        description: "The id of the User"
+                resolve: ""
+            image:
+                type: "Image"
+                description: "An image linked to an user"
+                args:
+                    id:
+                        type: "Int"
+                        description: "The id of the Image"
+                resolve: ""
+            stock:
+                type: "Stock"
+                description: "A stock saved and linked to an user"
+                args:
+                    id:
+                        type: "Int"
+                        description: "The id of the Stock"
+                resolve: ""
+            products:
+                type: "Products"
+                description: "A product saved and linked to a stock"
+                args:
+                    id:
+                        type: "Int"
+                        description: "The id of the product"
+                resolve: ""

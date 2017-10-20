@@ -1,0 +1,23 @@
+Image:
+    type: object
+    config:
+        description: "An image who can be linked to an user"
+        fields:
+            id:
+                type: "Int"
+                description: "The identifier of the Image"
+            creationDate:
+                type: "String"
+                description: "The creation date of the Image"
+            modificationDate:
+                type: "String"
+                description: "The modification date of the Image"
+            alt:
+                type: "String"
+                description: "The replacement text of the Image"
+            url:
+                type: "String"
+                description: "The relative path of the Image"
+            user:
+                type: "User"
+                description: "The user who's the proprietary of the Image"

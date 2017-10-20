@@ -1,0 +1,8 @@
+User:
+    type: object
+    config:
+        description: "An user who's registered in the application."
+        fields:
+            id:
+                type: "Int"
+                description: "The identifier of the user"
