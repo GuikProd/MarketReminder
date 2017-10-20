@@ -19,7 +19,7 @@
         <!-- Format described at http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url -->
         <!-- For an SQLite database, use: "sqlite:///%kernel.project_dir%/var/data.db" -->
         <!-- Set "serverVersion" to your server version to avoid edge-case exceptions and extra database calls -->
-        <env name="DATABASE_URL" value=""mysql://root@127.0.0.1:3306/symfony?charset=utf8mb4&serverVersion=5.7"" />
+        <env name="DATABASE_URL_DEV" value="pgsql://marketReminder:marketReminder@172.20.0.1:5432/marketReminder?charset=utf8" />
         <!-- ###- doctrine/doctrine-bundle ### -->
 
         <!-- ###+ snc/redis-bundle ### -->
@@ -40,4 +40,17 @@
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>./src/*</directory>
+            <exclude>
+                <directory>src/DataFixtures</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-text" target="php://stdout"/>
+    </logging>
 </phpunit>

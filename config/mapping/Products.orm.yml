@@ -1,0 +1,44 @@
+App\Models\Products:
+    type: entity
+    repositoryClass: App\Repository\ProductsRepository
+    table: marketReminder_products
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        label:
+            type: string
+            length: 200
+            nullable: false
+        entryDate:
+            type: datetime
+            nullable: false
+        modificationDate:
+            type: datetime
+            nullable: true
+        outDate:
+            type: datetime
+            nullable: true
+        quantity:
+            type: string
+            length: 200
+            nullable: false
+        status:
+            type: string
+            length: 200
+            nullable: false
+        limiteConsumptionDate:
+            type: datetime
+            nullable: true
+        limiteUsageDate:
+            type: datetime
+            nullable: true
+
+    manyToOne:
+        stock:
+            targetEntity: App\Models\Stock
+            inversedBy: products
+            joinColumn:
+                name: stock_id
+                referencedColumnName: id

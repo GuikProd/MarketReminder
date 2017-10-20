@@ -1,0 +1,28 @@
+App\Models\Image:
+    type: entity
+    repositoryClass: App\Repository\ImageRepository
+    table: marketReminder_image
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        creationDate:
+            type: datetime
+            nullable: false
+        modificationDate:
+            type: datetime
+            nullable: true
+        alt:
+            type: string
+            nullable: false
+            length: 50
+        url:
+            type: string
+            nullable: false
+            length: 200
+
+    oneToOne:
+        user:
+            targetEntity: App\Models\User
+            mappedBy: image

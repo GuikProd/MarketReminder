@@ -13,3 +13,6 @@ behat.yml
 
 # Docker
 docker/nginx/logs/
+
+# Global
+coverage/**/
