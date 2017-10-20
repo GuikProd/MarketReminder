@@ -1,5 +1,6 @@
 App\Models\Image:
     type: entity
+    repositoryClass: App\Repository\ImageRepository
     table: marketReminder_image
     id:
         id:

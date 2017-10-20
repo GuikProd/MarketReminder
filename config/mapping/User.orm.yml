@@ -1,5 +1,6 @@
 App\Models\User:
     type: entity
+    repositoryClass: App\Repository\UserRepository
     table: marketReminder_user
     id:
          id:
