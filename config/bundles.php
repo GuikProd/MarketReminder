@@ -11,4 +11,5 @@ return [
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle::class => ['all' => true],
+    Overblog\GraphQLBundle\OverblogGraphQLBundle::class => ['all' => true],
 ];

@@ -6,6 +6,7 @@
         "behat/symfony2-extension": "^2.1",
         "doctrine/doctrine-fixtures-bundle": "^2.4",
         "lexik/jwt-authentication-bundle": "^2.4",
+        "overblog/graphql-bundle": "^0.9.1",
         "phpunit/phpunit": "^6.4",
         "predis/predis": "^1.1",
         "snc/redis-bundle": "^2.0",
