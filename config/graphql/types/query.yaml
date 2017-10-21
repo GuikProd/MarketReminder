@@ -10,7 +10,7 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the User"
-                resolve: ""
+                resolve: "@resolver=('user_id', [args])"
             image:
                 type: "Image"
                 description: "An image linked to an user"
@@ -18,7 +18,7 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the Image"
-                resolve: ""
+                resolve: "@resolver=('image_id', [args])"
             stock:
                 type: "Stock"
                 description: "A stock saved and linked to an user"
@@ -26,7 +26,7 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the Stock"
-                resolve: ""
+                resolve: "@resolver=('stock_id', [args])"
             products:
                 type: "Products"
                 description: "A product saved and linked to a stock"
@@ -34,4 +34,4 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the product"
-                resolve: ""
+                resolve: "@resolver=('products_id', [args])"
