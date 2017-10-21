@@ -1,8 +1,35 @@
 Products:
     type: object
     config:
-        description:
+        description: "A product who's stored into a Stock"
         fields:
             id:
                 type: "Int"
                 description: "The identifier of the product"
+            label:
+                type: "String"
+                description: "The label of the product"
+            entryDate:
+                type: "String"
+                description: "The entry date of the product"
+            modificationDate:
+                type: "String"
+                description: "The modification date of the product"
+            outDate:
+                type: "String"
+                description: "The out date of the product"
+            quantity:
+                type: "Int"
+                description: "The quantity of the product"
+            status:
+                type: "String"
+                description: "The status of the product"
+            limiteConsumptionDate:
+                type: "Int"
+                description: "The limite consumption date of the product"
+            limiteUsageDate:
+                type: "Int"
+                description: "The limite usage date of the product"
+            stock:
+                type: "Stock"
+                description: "The stock who contain the product"
