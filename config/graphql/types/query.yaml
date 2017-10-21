@@ -18,7 +18,7 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the Image"
-                resolve: "@resolver=('image_id', [args])"
+                resolve: "@marketReminder.graphql.image_resolver=('image_id', [args])"
             stock:
                 type: "Stock"
                 description: "A stock saved and linked to an user"

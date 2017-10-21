@@ -6,7 +6,7 @@ User:
             id:
                 type: "Int"
                 description: "The identifier of the user"
-            lastname:
+            firstname:
                 type: "String"
                 description: "The firstname of the user"
             lastname:
