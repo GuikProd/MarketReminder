@@ -11,17 +11,17 @@
 
 namespace App\Resolvers;
 
-use App\Models\User;
+use App\Models\Stock;
 use Doctrine\ORM\EntityManagerInterface;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class UserResolver
+ * Class StockResolver
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserResolver implements ResolverInterface
+class StockResolver implements ResolverInterface
 {
     /**
      * @var EntityManagerInterface
@@ -29,7 +29,7 @@ class UserResolver implements ResolverInterface
     private $entityManagerInterface;
 
     /**
-     * UserResolver constructor.
+     * StockResolver constructor.
      *
      * @param EntityManagerInterface $entityManagerInterface
      */
@@ -41,17 +41,17 @@ class UserResolver implements ResolverInterface
     /**
      * @param Argument $argument
      *
-     * @return User|User[]|array|null|object
+     * @return Stock|Stock[]|array|null|object
      */
-    public function getUser(Argument $argument)
+    public function getStock(Argument $argument)
     {
         if ($argument->offsetExists('id')) {
-            return $this->entityManagerInterface->getRepository(User::class)
+            return $this->entityManagerInterface->getRepository(Stock::class)
                                                 ->findOneBy([
                                                     'id' => $argument->offsetGet('id')
                                                 ]);
         }
 
-        return $this->entityManagerInterface->getRepository(User::class)->findAll();
+        return $this->entityManagerInterface->getRepository(Stock::class)->findAll();
     }
 }

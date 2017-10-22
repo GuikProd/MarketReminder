@@ -29,6 +29,20 @@ services:
         tags:
             - { name: overblog_graphql.resolver }
 
+    graphql.stock_resolver:
+        class: App\Resolvers\StockResolver
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: overblog_graphql.resolver }
+
+    graphql.products_resolver:
+        class: App\Resolvers\ProductsResolver
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: overblog_graphql.resolver }
+
     graphql.user_mutator:
         class: App\Mutators\UserMutator
         tags:

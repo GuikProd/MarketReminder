@@ -13,6 +13,7 @@ namespace App\Resolvers;
 
 use App\Models\Image;
 use Doctrine\ORM\EntityManagerInterface;
+use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
@@ -38,16 +39,16 @@ class ImageResolver implements ResolverInterface
     }
 
     /**
-     * @param $id
+     * @param Argument $argument
      *
      * @return Image|Image[]|array|null|object
      */
-    public function getImage(int $id)
+    public function getImage(Argument $argument)
     {
-        if ($id) {
+        if ($argument->offsetExists('id')) {
             return $this->entityManager->getRepository(Image::class)
                                        ->findOneBy([
-                                           'id' => $id
+                                           'id' => $argument->offsetGet('id')
                                        ]);
         }
 

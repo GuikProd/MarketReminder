@@ -9,18 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Mutators;
+namespace App\Resolvers;
 
+use App\Models\Products;
 use Doctrine\ORM\EntityManagerInterface;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class UserMutator
+ * Class ProductsResolver
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserMutator implements MutationInterface
+class ProductsResolver implements ResolverInterface
 {
     /**
      * @var EntityManagerInterface
@@ -28,7 +29,7 @@ class UserMutator implements MutationInterface
     private $entityManagerInterface;
 
     /**
-     * UserMutator constructor.
+     * ProductsResolver constructor.
      *
      * @param EntityManagerInterface $entityManagerInterface
      */
@@ -37,23 +38,15 @@ class UserMutator implements MutationInterface
         $this->entityManagerInterface = $entityManagerInterface;
     }
 
-    public function register(Argument $argument)
+    public function getProduct(Argument $argument)
     {
+        if ($argument->offsetExists('id')) {
+            return $this->entityManagerInterface->getRepository(Products::class)
+                                                ->findOneBy([
+                                                    'id' => $argument->offsetGet('id')
+                                                ]);
+        }
 
-    }
-
-    public function login(array $credentials)
-    {
-
-    }
-
-    public function forgotPassword(array $credentials)
-    {
-
-    }
-
-    public function dropUser(array $credentials)
-    {
-
+        return $this->entityManagerInterface->getRepository(Products::class)->findAll();
     }
 }

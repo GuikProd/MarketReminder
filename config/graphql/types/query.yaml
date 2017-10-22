@@ -4,34 +4,34 @@ Query:
         description:
         fields:
             user:
-                type: "User"
+                type: "[User]"
                 description: "An user registered into the application"
                 args:
                     id:
                         type: "Int"
-                        description: "The id of the User"
-                resolve: "@=service('graphql.user_resolver').getUser(args['id'])"
+                        description: "The id of the User, if omitted, return all the users."
+                resolve: "@=service('graphql.user_resolver').getUser(args)"
             image:
-                type: "Image"
+                type: "[Image]"
                 description: "An image linked to an user"
                 args:
                     id:
                         type: "Int"
-                        description: "The id of the Image"
-                resolve: "@=service('graphql.image_resolver').getImage(args['id'])"
+                        description: "The id of the Image, if omitted, the whole images are returned."
+                resolve: "@=service('graphql.image_resolver').getImage(args)"
             stock:
-                type: "Stock"
+                type: "[Stock]"
                 description: "A stock saved and linked to an user"
                 args:
                     id:
                         type: "Int"
                         description: "The id of the Stock"
-                resolve: "@resolver=('stock_id', [args])"
+                resolve: "@=service('graphql.stock_resolver').getStock(args)"
             products:
-                type: "Products"
-                description: "A product saved and linked to a stock"
+                type: "[Products]"
+                description: "A product saved and linked to a stock, if omitted, return all the stocks"
                 args:
                     id:
                         type: "Int"
-                        description: "The id of the product"
-                resolve: "@resolver=('products_id', [args])"
+                        description: "The id of the product, if omitted, return all the products."
+                resolve: "@=service('graphql.products_resolver').getProduct(args)"

@@ -19,5 +19,5 @@ Stock:
                 type: "User"
                 description: "The user who own the stock"
             products:
-                type: "Products"
+                type: "[Products]"
                 description: "The products contained by the stock"

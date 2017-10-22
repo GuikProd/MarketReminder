@@ -23,17 +23,25 @@ class FeatureContext implements Context
      */
     private $response;
 
+    /**
+     * FeatureContext constructor.
+     *
+     * @param KernelInterface $kernel
+     */
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
     }
 
     /**
-     * @When a demo scenario sends a request to :path
+     * @param string $path      The path to go.
+     * @param string $method    The method linked to this request.
+     *
+     * @When i send a request to :path with method :method
      */
-    public function aDemoScenarioSendsARequestTo(string $path)
+    public function iSendARequestToWithMethod(string $path, string $method)
     {
-        $this->response = $this->kernel->handle(Request::create($path, 'GET'));
+        $this->response = $this->kernel->handle(Request::create($path, $method));
     }
 
     /**
@@ -43,6 +51,25 @@ class FeatureContext implements Context
     {
         if ($this->response === null) {
             throw new \RuntimeException('No response received');
+        }
+    }
+
+    /**
+     * @param int $statusCode
+     *
+     * @throws Exception
+     *
+     * @Then the response status code should be :statusCode
+     */
+    public function theResponseStatusCodeShouldBe(int $statusCode)
+    {
+        if ($this->response->getStatusCode() !== $statusCode) {
+            throw new \Exception(
+                sprintf(
+                    'Bad status code ! Found %d',
+                    $this->response->getStatusCode()
+                )
+            );
         }
     }
 }
