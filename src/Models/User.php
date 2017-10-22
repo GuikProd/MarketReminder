@@ -299,7 +299,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @return Image
      */
-    public function getImage(): Image
+    public function getImage():? Image
     {
         return $this->image;
     }

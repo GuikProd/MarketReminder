@@ -20,14 +20,29 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:
-            - { name: overblog_graphql.resolver, method: getImage }
+            - { name: overblog_graphql.resolver }
 
-    graphql.register_mutator:
-        class: App\Mutators\RegisterMutator
+    graphql.user_resolver:
+        class: App\Resolvers\UserResolver
+        arguments:
+            - '@doctrine.orm.entity_manager'
         tags:
-            - { name: overblog_graphql.mutation, alias: 'register', method: register }
+            - { name: overblog_graphql.resolver }
+
+    graphql.user_mutator:
+        class: App\Mutators\UserMutator
+        tags:
+            - { name: overblog_graphql.mutation, method: register }
+            - { name: overblog_graphql.mutation, method: login }
+            - { name: overblog_graphql.mutation, method: forgotPassword }
+            - { name: overblog_graphql.mutation, method: dropUser }
 
     graphql.image_mutator:
         class: App\Mutators\ImageMutator
         tags:
             - { name: overblog_graphql.mutation, alias: 'image_creation', method: createImage }
+
+    graphql.stock_mutator:
+        class: App\Mutators\StockMutator
+        tags:
+            - { name: overblog_graphql.mutation, alias: 'stock_creation', method: createStock }

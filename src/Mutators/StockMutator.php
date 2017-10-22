@@ -15,13 +15,23 @@ use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 
 /**
- * Class RegisterMutator
+ * Class StockMutator
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisterMutator implements MutationInterface
+class StockMutator implements MutationInterface
 {
-    public function register(Argument $argument)
+    public function createStock(Argument $argument)
+    {
+
+    }
+
+    public function updateStock(Argument $argument)
+    {
+
+    }
+
+    public function dropStock(Argument $argument)
     {
 
     }

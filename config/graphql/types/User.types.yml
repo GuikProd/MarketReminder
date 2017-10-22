@@ -33,6 +33,9 @@ User:
             active:
                 type: "Boolean"
                 description: "If the user is active"
+            apiToken:
+                type: "String"
+                description: "The user token in order to access the API"
             image:
                 type: "Image"
                 description: "The image of the user"

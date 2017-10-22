@@ -10,7 +10,7 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the User"
-                resolve: "@resolver=('user_id', [args])"
+                resolve: "@=service('graphql.user_resolver').getUser(args['id'])"
             image:
                 type: "Image"
                 description: "An image linked to an user"
@@ -18,7 +18,7 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the Image"
-                resolve: "@marketReminder.graphql.image_resolver=('image_id', [args])"
+                resolve: "@=service('graphql.image_resolver').getImage(args['id'])"
             stock:
                 type: "Stock"
                 description: "A stock saved and linked to an user"

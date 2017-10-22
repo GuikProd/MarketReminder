@@ -11,46 +11,41 @@
 
 namespace App\Resolvers;
 
-use App\Models\Image;
+use App\Models\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class ImageResolver
+ * Class UserResolver
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ImageResolver implements ResolverInterface
+class UserResolver implements ResolverInterface
 {
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private $entityManagerInterface;
 
     /**
-     * ImageResolver constructor.
+     * UserResolver constructor.
      *
      * @param EntityManagerInterface $entityManagerInterface
      */
     public function __construct(EntityManagerInterface $entityManagerInterface)
     {
-        $this->entityManager = $entityManagerInterface;
+        $this->entityManagerInterface = $entityManagerInterface;
     }
 
-    /**
-     * @param $id
-     *
-     * @return Image|Image[]|array|null|object
-     */
-    public function getImage(int $id)
+    public function getUser($id)
     {
-        if ($id) {
-            return $this->entityManager->getRepository(Image::class)
-                                       ->findOneBy([
-                                           'id' => $id
-                                       ]);
+        if (is_int($id) && $id != 0) {
+            return $this->entityManagerInterface->getRepository(User::class)
+                                                ->findOneBy([
+                                                    'id' => $id
+                                                ]);
         }
 
-        return $this->entityManager->getRepository(Image::class)->findAll();
+        return $this->entityManagerInterface->getRepository(User::class)->findAll();
     }
 }
