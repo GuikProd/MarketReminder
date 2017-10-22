@@ -20,4 +20,14 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:
-            - { name: overblog_graphql.resolver, alias: 'image_id', method: 'getImage' }
+            - { name: overblog_graphql.resolver, method: getImage }
+
+    graphql.register_mutator:
+        class: App\Mutators\RegisterMutator
+        tags:
+            - { name: overblog_graphql.mutation, alias: 'register', method: register }
+
+    graphql.image_mutator:
+        class: App\Mutators\ImageMutator
+        tags:
+            - { name: overblog_graphql.mutation, alias: 'image_creation', method: createImage }

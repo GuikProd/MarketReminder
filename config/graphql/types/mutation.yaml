@@ -1,0 +1,23 @@
+Mutation:
+    type: object
+    config:
+        description: ""
+        fields:
+           user:
+               type: "User"
+               args:
+                   username:
+                       type: "String"
+                   password:
+                       type: "String"
+                   email:
+                       type: "String"
+               resolve: "@graphql.register_mutator=('register', [args])"
+           image:
+               type: "Image"
+               args:
+                   alt:
+                       type: "String"
+                   url:
+                       type: "String"
+               resolve: "@graphql.image_mutator=('image_creation', [args])"
