@@ -11,6 +11,7 @@
 
 namespace App\Models;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -68,11 +69,11 @@ class Stock
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getCreationDate(): \DateTime
+    public function getCreationDate(): string
     {
-        return $this->creationDate;
+        return $this->creationDate->format('d-m-Y h:i:s');
     }
 
     /**
@@ -84,11 +85,11 @@ class Stock
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getModificationDate():? \DateTime
+    public function getModificationDate():? string
     {
-        return $this->modificationDate;
+        return $this->modificationDate->format('d-m-Y h:i:s');
     }
 
     /**
@@ -132,9 +133,9 @@ class Stock
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getProducts(): ArrayCollection
+    public function getProducts(): Collection
     {
         return $this->products;
     }

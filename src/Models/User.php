@@ -12,6 +12,7 @@
 namespace App\Models;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
@@ -217,11 +218,11 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getCreationDate(): \DateTime
+    public function getCreationDate(): string
     {
-        return $this->creationDate;
+        return $this->creationDate->format('d-m-Y h:i:s');
     }
 
     /**
@@ -233,11 +234,11 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getValidationDate():? \DateTime
+    public function getValidationDate():? string
     {
-        return $this->validationDate;
+        return $this->validationDate->format('d-m-Y h:i:s');
     }
 
     /**
@@ -313,9 +314,9 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getStocks(): ArrayCollection
+    public function getStocks(): Collection
     {
         return $this->stocks;
     }

@@ -10,15 +10,15 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the User, if omitted, return all the users."
-                resolve: "@=service('graphql.user_resolver').getUser(args)"
+                resolve: "@=resolver('user_resolver', [args])"
             image:
                 type: "[Image]"
                 description: "An image linked to an user"
                 args:
                     id:
                         type: "Int"
-                        description: "The id of the Image, if omitted, the whole images are returned."
-                resolve: "@=service('graphql.image_resolver').getImage(args)"
+                        description: "The id of the Image, if omitted, all the images are returned."
+                resolve: "@=resolver('image_resolver', [args])"
             stock:
                 type: "[Stock]"
                 description: "A stock saved and linked to an user"
@@ -26,7 +26,7 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the Stock"
-                resolve: "@=service('graphql.stock_resolver').getStock(args)"
+                resolve: "@=resolver('stock_resolver', [args])"
             products:
                 type: "[Products]"
                 description: "A product saved and linked to a stock, if omitted, return all the stocks"
@@ -34,4 +34,4 @@ Query:
                     id:
                         type: "Int"
                         description: "The id of the product, if omitted, return all the products."
-                resolve: "@=service('graphql.products_resolver').getProduct(args)"
+                resolve: "@=resolver('products_resolver', [args])"

@@ -40,5 +40,5 @@ User:
                 type: "Image"
                 description: "The image of the user"
             stocks:
-                type: "Stock"
+                type: "[Stock]"
                 description: "The stocks of the user"

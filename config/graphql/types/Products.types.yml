@@ -25,10 +25,10 @@ Products:
                 type: "String"
                 description: "The status of the product"
             limiteConsumptionDate:
-                type: "Int"
+                type: "String"
                 description: "The limite consumption date of the product"
             limiteUsageDate:
-                type: "Int"
+                type: "String"
                 description: "The limite usage date of the product"
             stock:
                 type: "Stock"

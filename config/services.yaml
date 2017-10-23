@@ -7,12 +7,8 @@ services:
         autoconfigure: true
         public: false
 
-    App\:
-        resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Repository}'
-
-    App\Controller\:
-        resource: '../src/Controller'
+    App\Action\:
+        resource: '../src/Action'
         tags: ['controller.service_arguments']
 
     graphql.image_resolver:
@@ -20,28 +16,28 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:
-            - { name: overblog_graphql.resolver }
+            - { name: overblog_graphql.resolver, alias: 'image_resolver', method: getImage }
 
     graphql.user_resolver:
         class: App\Resolvers\UserResolver
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:
-            - { name: overblog_graphql.resolver }
+            - { name: overblog_graphql.resolver, alias: 'user_resolver', method: getUser }
 
     graphql.stock_resolver:
         class: App\Resolvers\StockResolver
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:
-            - { name: overblog_graphql.resolver }
+            - { name: overblog_graphql.resolver, alias: 'stock_resolver', method: getStock }
 
     graphql.products_resolver:
         class: App\Resolvers\ProductsResolver
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:
-            - { name: overblog_graphql.resolver }
+            - { name: overblog_graphql.resolver, alias: 'products_resolver', method: getProduct }
 
     graphql.user_mutator:
         class: App\Mutators\UserMutator

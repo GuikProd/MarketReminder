@@ -65,11 +65,11 @@ class Image
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getCreationDate(): \DateTime
+    public function getCreationDate(): string
     {
-        return $this->creationDate;
+        return $this->creationDate->format('d-m-Y');
     }
 
     /**
@@ -81,11 +81,11 @@ class Image
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getModificationDate():? \DateTime
+    public function getModificationDate():? string
     {
-        return $this->modificationDate;
+        return $this->modificationDate->format('d-m-Y');
     }
 
     /**
@@ -142,5 +142,7 @@ class Image
     public function setUser(User $user)
     {
         $this->user = $user;
+
+        $this->user->setImage($this);
     }
 }

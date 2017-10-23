@@ -44,6 +44,8 @@ class UserFixtures extends Fixture
         $user->setActive(true);
         $user->setApiToken('a5d4a94d498zx59z1xas5s5s2sa47s7+s4+as4s49');
 
+        $this->setReference('user', $user);
+
         $user_II = new User();
 
         $user_II->setFirstname('Tom');
@@ -59,6 +61,8 @@ class UserFixtures extends Fixture
         $user_II->setActive(true);
         $user_II->setApiToken('a5d4a94d498zx59z1xas5s5s2sa47s7+s4+as44a5d');
 
+        $this->setReference('user_II', $user_II);
+
         $user_III = new User();
 
         $user_III->setFirstname('Lilly');
@@ -73,6 +77,8 @@ class UserFixtures extends Fixture
         $user_III->setValidated(true);
         $user_III->setActive(true);
         $user_III->setApiToken('a5d4a94d498zx59z1xas5s5s2sa47s7+s4+as4a1d8');
+
+        $this->setReference('user_III', $user_III);
 
         $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
         $user->setPassword($password);

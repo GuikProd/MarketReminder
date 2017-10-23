@@ -41,15 +41,17 @@ class ImageResolver implements ResolverInterface
     /**
      * @param Argument $argument
      *
-     * @return Image|Image[]|array|null|object
+     * @return Image[]|array
      */
     public function getImage(Argument $argument)
     {
         if ($argument->offsetExists('id')) {
-            return $this->entityManager->getRepository(Image::class)
-                                       ->findOneBy([
-                                           'id' => $argument->offsetGet('id')
-                                       ]);
+            return [
+                $this->entityManager->getRepository(Image::class)
+                                    ->findOneBy([
+                                      'id' => $argument->offsetGet('id')
+                                    ])
+            ];
         }
 
         return $this->entityManager->getRepository(Image::class)->findAll();

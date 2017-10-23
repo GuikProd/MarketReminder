@@ -37,6 +37,7 @@ class ProductsFixtures extends Fixture
         $products->setStatus('Added');
         $products->setLimiteConsumptionDate(new \DateTime('2017-03-30'));
         $products->setLimiteUsageDate(new \DateTime('2017-03-30'));
+        $products->setStock($this->getReference('stock'));
 
         $products_II = new Products();
 
@@ -48,6 +49,7 @@ class ProductsFixtures extends Fixture
         $products_II->setStatus('Added');
         $products_II->setLimiteConsumptionDate(new \DateTime('2020-03-21'));
         $products_II->setLimiteUsageDate(new \DateTime('2020-03-21'));
+        $products_II->setStock($this->getReference('stock'));
 
         $products_III = new Products();
 
@@ -59,6 +61,7 @@ class ProductsFixtures extends Fixture
         $products_III->setStatus('Added');
         $products_III->setLimiteConsumptionDate(new \DateTime('2017-04-21'));
         $products_III->setLimiteUsageDate(new \DateTime('2017-04-21'));
+        $products_III->setStock($this->getReference('stock_II'));
 
         $products_IV = new Products();
 
@@ -70,6 +73,7 @@ class ProductsFixtures extends Fixture
         $products_IV->setStatus('Added');
         $products_IV->setLimiteConsumptionDate(new \DateTime('2025-03-21'));
         $products_IV->setLimiteUsageDate(new \DateTime('2025-03-21'));
+        $products_IV->setStock($this->getReference('stock_II'));
 
         $manager->persist($products);
         $manager->persist($products_II);
@@ -77,5 +81,15 @@ class ProductsFixtures extends Fixture
         $manager->persist($products_IV);
 
         $manager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            StockFixtures::class
+        ];
     }
 }

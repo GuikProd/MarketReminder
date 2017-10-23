@@ -38,13 +38,20 @@ class ProductsResolver implements ResolverInterface
         $this->entityManagerInterface = $entityManagerInterface;
     }
 
+    /**
+     * @param Argument $argument
+     *
+     * @return Products[]|array
+     */
     public function getProduct(Argument $argument)
     {
         if ($argument->offsetExists('id')) {
-            return $this->entityManagerInterface->getRepository(Products::class)
-                                                ->findOneBy([
-                                                    'id' => $argument->offsetGet('id')
-                                                ]);
+            return [
+                $this->entityManagerInterface->getRepository(Products::class)
+                                             ->findOneBy([
+                                                 'id' => $argument->offsetGet('id')
+                                             ])
+            ];
         }
 
         return $this->entityManagerInterface->getRepository(Products::class)->findAll();

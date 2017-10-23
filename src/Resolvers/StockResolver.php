@@ -46,10 +46,12 @@ class StockResolver implements ResolverInterface
     public function getStock(Argument $argument)
     {
         if ($argument->offsetExists('id')) {
-            return $this->entityManagerInterface->getRepository(Stock::class)
-                                                ->findOneBy([
-                                                    'id' => $argument->offsetGet('id')
-                                                ]);
+            return [
+                $this->entityManagerInterface->getRepository(Stock::class)
+                                             ->findOneBy([
+                                                 'id' => $argument->offsetGet('id')
+                                             ])
+            ];
         }
 
         return $this->entityManagerInterface->getRepository(Stock::class)->findAll();

@@ -33,23 +33,42 @@ class StockFixtures extends Fixture
         $stock->setCreationDate(new \DateTime('2017-03-21'));
         $stock->setModificationDate(new \DateTime('2017-03-21'));
         $stock->setStatus('In use');
+        $stock->setUser($this->getReference('user'));
+
+        $this->setReference('stock', $stock);
 
         $stock_II = new Stock();
 
         $stock_II->setCreationDate(new \DateTime('2017-03-23'));
         $stock_II->setModificationDate(new \DateTime('2017-03-23'));
         $stock_II->setStatus('Paused');
+        $stock_II->setUser($this->getReference('user_II'));
+
+        $this->setReference('stock_II', $stock_II);
 
         $stock_III = new Stock();
 
         $stock_III->setCreationDate(new \DateTime('2017-03-30'));
         $stock_III->setModificationDate(new \DateTime('2017-03-30'));
         $stock_III->setStatus('Stopped');
+        $stock_III->setUser($this->getReference('user_III'));
+
+        $this->setReference('stock_III', $stock_III);
 
         $manager->persist($stock);
         $manager->persist($stock_II);
         $manager->persist($stock_III);
 
         $manager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class
+        ];
     }
 }

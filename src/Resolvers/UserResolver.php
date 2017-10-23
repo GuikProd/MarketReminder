@@ -46,10 +46,12 @@ class UserResolver implements ResolverInterface
     public function getUser(Argument $argument)
     {
         if ($argument->offsetExists('id')) {
-            return $this->entityManagerInterface->getRepository(User::class)
-                                                ->findOneBy([
-                                                    'id' => $argument->offsetGet('id')
-                                                ]);
+            return [
+                $this->entityManagerInterface->getRepository(User::class)
+                                             ->findOneBy([
+                                                 'id' => $argument->offsetGet('id')
+                                             ])
+            ];
         }
 
         return $this->entityManagerInterface->getRepository(User::class)->findAll();
