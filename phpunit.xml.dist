@@ -33,6 +33,11 @@
         <env name="JWT_PUBLIC_KEY_PATH" value="config/jwt/public.pem" />
         <env name="JWT_PASSPHRASE" value="f7ece5879922f89abaf6e0a3ade8f3de" />
         <!-- ###- lexik/jwt-authentication-bundle ### -->
+
+        <!-- ###+ doctrine/mongodb-odm-bundle ### -->
+        <env name="MONGODB_URL" value="mongodb://localhost:27017" />
+        <env name="MONGODB_DB" value="symfony" />
+        <!-- ###- doctrine/mongodb-odm-bundle ### -->
     </php>
 
     <testsuites>
