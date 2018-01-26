@@ -15,6 +15,7 @@ namespace App\FormHandler;
 
 use Symfony\Component\Form\FormInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use App\Builder\Interfaces\UserBuilderInterface;
 use App\Models\Interfaces\RegisteredUserInterface;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 
@@ -26,6 +27,11 @@ use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 class RegisterTypeHandler implements RegisterTypeHandlerInterface
 {
     /**
+     * @var UserBuilderInterface
+     */
+    private $userBuilderInterface;
+
+    /**
      * @var ObjectManager
      */
     private $documentManagerInterface;
@@ -33,10 +39,14 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     /**
      * RegisterTypeHandler constructor.
      *
+     * @param UserBuilderInterface $userBuilderInterface
      * @param ObjectManager $documentManagerInterface
      */
-    public function __construct(ObjectManager $documentManagerInterface)
-    {
+    public function __construct(
+        UserBuilderInterface $userBuilderInterface,
+        ObjectManager $documentManagerInterface
+    ) {
+        $this->userBuilderInterface = $userBuilderInterface;
         $this->documentManagerInterface = $documentManagerInterface;
     }
 

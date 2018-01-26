@@ -20,11 +20,20 @@
     "ocramius/proxy-manager": {
         "version": "2.1.1"
     },
+    "phpspec/php-diff": {
+        "version": "v1.1.0"
+    },
+    "phpspec/phpspec": {
+        "version": "4.3.0"
+    },
     "symfony/form": {
         "version": "v3.4.3"
     },
     "symfony/orm-pack": {
         "version": "v1.0.5"
+    },
+    "symfony/process": {
+        "version": "v4.0.3"
     },
     "zendframework/zend-code": {
         "version": "3.3.0"
