@@ -4,10 +4,6 @@ The source code of the web application/API used for MarketReminder mobile applic
 
 ## Build
 
-- Insight :
-
-- Blackfire :
-
 ## Usage
 
 Once you've installed Docker, time to build the project.
