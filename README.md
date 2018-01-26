@@ -43,7 +43,7 @@ docker exec -it project_php-fpm sh
 # Use Composer inside the container for better performances.
 composer install
 composer clear-cache
-composer dump-autoload --optimize --classmap-authoritative --no-dev
+composer dump-autoload --optimize --classmap-authoritative
 
 # Configure BDD
 ./bin/console d:s:c # for classic users
