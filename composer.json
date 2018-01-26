@@ -13,6 +13,7 @@
         "predis/predis": "^1.1",
         "snc/redis-bundle": "^2.0",
         "symfony/console": "^3.3",
+        "symfony/form": "^3.3",
         "symfony/framework-bundle": "^3.3",
         "symfony/intl": "^3.3",
         "symfony/monolog-bundle": "^3.1",

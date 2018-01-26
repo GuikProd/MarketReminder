@@ -20,6 +20,9 @@
     "ocramius/proxy-manager": {
         "version": "2.1.1"
     },
+    "symfony/form": {
+        "version": "v3.4.3"
+    },
     "symfony/orm-pack": {
         "version": "v1.0.5"
     },
