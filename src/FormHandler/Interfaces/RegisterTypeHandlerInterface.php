@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\FormHandler\Interfaces;
 
 use Symfony\Component\Form\FormInterface;
-use App\Models\Interfaces\RegisteredUserInterface;
+use App\Builder\Interfaces\UserBuilderInterface;
 
 /**
  * Interface RegisterTypeHandlerInterface
@@ -24,10 +24,10 @@ use App\Models\Interfaces\RegisteredUserInterface;
 interface RegisterTypeHandlerInterface
 {
     /**
-     * @param FormInterface $registerForm                The RegisterType form.
-     * @param RegisteredUserInterface $registeredUser    The User which is managed by the form.
+     * @param FormInterface        $registerForm    The RegisterType form.
+     * @param UserBuilderInterface $userBuilder     The User which is managed by the form.
      *
-     * @return bool                                      If the handling process has succeed.
+     * @return bool                                 If the handling process has succeed.
      */
-    public function handle(FormInterface $registerForm, RegisteredUserInterface $registeredUser): bool;
+    public function handle(FormInterface $registerForm, UserBuilderInterface $userBuilder): bool;
 }

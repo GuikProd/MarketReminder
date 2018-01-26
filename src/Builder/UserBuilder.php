@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace App\Builder;
 
-use App\Document\User;
+use App\Interactor\UserInteractor;
 use App\Document\Interfaces\UserInterface;
 use App\Builder\Interfaces\UserBuilderInterface;
-use App\Models\Interfaces\RegisteredUserInterface;
 
 /**
  * Class UserBuilder
@@ -33,14 +32,38 @@ class UserBuilder implements UserBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function registerUser(RegisteredUserInterface $registeredUser): UserBuilderInterface
+    public function createUser(): UserBuilderInterface
     {
-        $this->user = new User();
-
-        $this->user->setUsername($registeredUser->getUsername());
-        $this->user->setEmail($registeredUser->getEmail());
-        $this->user->setPassword($registeredUser->getPassword());
+        $this->user = new UserInteractor();
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withUsername(string $username): UserBuilderInterface
+    {
+        $this->user->setUsername($username);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withEmail(string $email): UserBuilderInterface
+    {
+        $this->user->setEmail($email);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUser(): UserInterface
+    {
+        return $this->user;
     }
 }

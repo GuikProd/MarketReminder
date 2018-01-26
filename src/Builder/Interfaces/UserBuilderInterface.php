@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Builder\Interfaces;
 
-use App\Models\Interfaces\RegisteredUserInterface;
+use App\Document\Interfaces\UserInterface;
 
 /**
  * Interface UserBuilderInterface
@@ -23,9 +23,26 @@ use App\Models\Interfaces\RegisteredUserInterface;
 interface UserBuilderInterface
 {
     /**
-     * @param RegisteredUserInterface $registeredUser
-     * 
      * @return UserBuilderInterface
      */
-    public function registerUser(RegisteredUserInterface $registeredUser): UserBuilderInterface;
+    public function createUser(): UserBuilderInterface;
+
+    /**
+     * @param string $username
+     *
+     * @return UserBuilderInterface
+     */
+    public function withUsername(string $username): UserBuilderInterface;
+
+    /**
+     * @param string $email
+     *
+     * @return UserBuilderInterface
+     */
+    public function withEmail(string $email): UserBuilderInterface;
+
+    /**
+     * @return UserInterface
+     */
+    public function getUser(): UserInterface;
 }

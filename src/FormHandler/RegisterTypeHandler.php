@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\FormHandler;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use App\Builder\Interfaces\UserBuilderInterface;
-use App\Models\Interfaces\RegisteredUserInterface;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class RegisterTypeHandler
@@ -27,35 +27,24 @@ use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 class RegisterTypeHandler implements RegisterTypeHandlerInterface
 {
     /**
-     * @var UserBuilderInterface
+     * @var EntityManagerInterface
      */
-    private $userBuilderInterface;
+    private $entityManagerInterface;
 
     /**
-     * @var ObjectManager
+     * @var UserPasswordEncoderInterface
      */
-    private $documentManagerInterface;
-
-    /**
-     * RegisterTypeHandler constructor.
-     *
-     * @param UserBuilderInterface $userBuilderInterface
-     * @param ObjectManager $documentManagerInterface
-     */
-    public function __construct(
-        UserBuilderInterface $userBuilderInterface,
-        ObjectManager $documentManagerInterface
-    ) {
-        $this->userBuilderInterface = $userBuilderInterface;
-        $this->documentManagerInterface = $documentManagerInterface;
-    }
+    private $userPasswordEncoderInterface;
 
     /**
      * {@inheritdoc}
      */
-    public function handle(FormInterface $registerForm, RegisteredUserInterface $registeredUser): bool
+    public function handle(FormInterface $registerForm, UserBuilderInterface $userBuilder): bool
     {
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
+
+            $this->entityManagerInterface->persist($userBuilder->getUser());
+            $this->entityManagerInterface->flush();
 
             return true;
         }

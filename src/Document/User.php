@@ -25,22 +25,27 @@ class User implements UserInterface
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $username;
+    protected $username;
 
     /**
      * @var string
      */
-    private $email;
+    protected $email;
 
     /**
      * @var string
      */
-    private $password;
+    protected $password;
+
+    /**
+     * @var array
+     */
+    protected $roles;
 
     /**
      * {@inheritdoc}
@@ -59,7 +64,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param string $username
+     * {@inheritdoc}
      */
     public function setUsername(string $username): void
     {
@@ -75,7 +80,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param string $email
+     * {@inheritdoc}
      */
     public function setEmail(string $email): void
     {
@@ -91,10 +96,26 @@ class User implements UserInterface
     }
 
     /**
-     * @param string $password
+     * {@inheritdoc}
      */
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRole(string $role): UserInterface
+    {
+        $this->roles[] = $role;
     }
 }

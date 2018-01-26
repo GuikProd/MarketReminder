@@ -48,26 +48,6 @@ class RegisteredUser implements RegisteredUserInterface
     private $profileImage;
 
     /**
-     * RegisteredUser constructor.
-     *
-     * @param string $username
-     * @param string $email
-     * @param string $plainPassword
-     * @param \SplFileInfo|null $profileImage
-     */
-    public function __construct(
-        string $username,
-        string $email,
-        string $plainPassword,
-        \SplFileInfo $profileImage = null
-    ) {
-        $this->email = $email;
-        $this->username = $username;
-        $this->profileImage = $profileImage;
-        $this->plainPassword = $plainPassword;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getUsername(): string

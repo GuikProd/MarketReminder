@@ -72,13 +72,17 @@ services:
         restart: always
 
     # DB configuration
-    mongo:
-        container_name: ${CONTAINER_NAME}_mongo
-        image: mongo
+    postgresql:
+        container_name: ${CONTAINER_NAME}_postgresql
+        image: postgres:9.6 # Update to 10.0 once Doctrine is updated.
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         ports:
-            - '${MONGO_PORT}:27017'
+            - '${POSTGRES_PORT}:5432'
         volumes:
-            - 'mongo_data:/data/db:rw'
+            - 'postgres_marketReminder:/var/lib/postgresql/data:rw'
         restart: always
 
     # Performances configuration
@@ -97,4 +101,4 @@ services:
         restart: always
 
 volumes:
-    mongo_data:
+    postgres_marketReminder:

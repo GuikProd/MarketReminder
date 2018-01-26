@@ -1,0 +1,19 @@
+doctrine:
+    dbal:
+        driver: '%env(DB_DRIVER_DEV)%'
+        server_version: '%env(DB_VERSION_DEV)%'
+        charset: '%env(DB_CHARSET_DEV)%'
+        memory: false
+        url: '%env(resolve:DATABASE_URL_DEV)%'
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: yml
+                dir: '%kernel.project_dir%/config/mapping'
+                prefix: 'App\Interactors'
+                alias: App

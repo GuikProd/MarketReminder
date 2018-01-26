@@ -1,3 +1,6 @@
+index:
+    path:    /{_locale}
+
 web_register:
     path:    /{_locale}/register
     methods: ['GET', 'POST']

@@ -6,7 +6,6 @@
         "alcaeus/mongo-php-adapter": "^1.1",
         "behat/symfony2-extension": "^2.1",
         "doctrine/doctrine-fixtures-bundle": "^2.4",
-        "doctrine/mongodb-odm-bundle": "^3.4",
         "lexik/jwt-authentication-bundle": "^2.4",
         "overblog/graphql-bundle": "^0.9.1",
         "phpspec/phpspec": "^4.3",

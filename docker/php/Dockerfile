@@ -23,11 +23,10 @@ COPY conf/php.ini /usr/local/etc/php/
 # Core extensions
 RUN pecl install apcu \
                  xdebug \
-                 mongodb \
     && apt-get install -y libpq-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql \
-    && docker-php-ext-enable apcu xdebug mongodb.so \
+    && docker-php-ext-enable apcu xdebug \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli
 
