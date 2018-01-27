@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace tests\Handler;
 
 use PHPUnit\Framework\TestCase;
+use Doctrine\ORM\EntityManagerInterface;
 use App\FormHandler\RegisterTypeHandler;
-use Doctrine\Common\Persistence\ObjectManager;
-use App\Builder\Interfaces\UserBuilderInterface;
+use Symfony\Component\Workflow\Registry;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class RegisterTypeHandlerTest
@@ -28,13 +29,16 @@ class RegisterTypeHandlerTest extends TestCase
 {
     public function testItImplement()
     {
-        $userBuilderMock = $this->createMock(UserBuilderInterface::class);
+        $registryMock = $this->createMock(Registry::class);
 
-        $objectManagerMock = $this->createMock(ObjectManager::class);
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
+
+        $userPasswordEncoderMock = $this->createMock(UserPasswordEncoderInterface::class);
 
         $registerTypeHandler = new RegisterTypeHandler(
-            $userBuilderMock,
-            $objectManagerMock
+            $registryMock,
+            $entityManagerMock,
+            $userPasswordEncoderMock
         );
 
         static::assertInstanceOf(

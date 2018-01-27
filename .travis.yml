@@ -13,18 +13,12 @@ before_script:
     - composer install
     - cp .env.dist .env
     - cp .env.behat.dist .env.behat
-    - mkdir var/jwt
-    - cp ./docker/CI/private.pem ./var/jwt/private.pem
-    - cp ./docker/CI/public.pem ./var/jwt/public.pem
-    - yarn install
-    - ./node_modules/.bin/encore production
 script:
     - ./bin/console d:d:c --env=test
     - ./bin/console d:s:c --env=test
     - vendor/bin/phpspec run
     - vendor/bin/phpunit -v
     - vendor/bin/behat --profile default
-    - vendor/bin/behat --profile graphql
 
 notifications:
     email: false
