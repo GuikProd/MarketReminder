@@ -60,15 +60,16 @@ class RegisterAction
      */
     public function __invoke(Request $request, UserBuilderInterface $userBuilderInterface, RegisterResponder $responder)
     {
+        $userBuilderInterface->createUser();
+
         $registerType = $this->formFactoryInterface->create(
             RegisterType::class,
-            $userBuilderInterface->registerUser()
+            $userBuilderInterface->getUser()
         );
 
-        if ($this->registerTypeHandlerInterface->handle($registerType, $userBuilderInterface->getRegisteredUser())) {
+        if ($this->registerTypeHandlerInterface->handle($registerType, $userBuilderInterface)) {
 
             $userCreatedEvent = new UserCreatedEvent();
-
             $this->eventDispatcherInterface->dispatch(UserCreatedEvent::NAME, $userCreatedEvent);
 
             return new RedirectResponse(

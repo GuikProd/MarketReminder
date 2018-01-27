@@ -1,11 +1,12 @@
-App\Models\Image:
+App\Interactor\ImageInteractor:
     type: entity
     repositoryClass: App\Repository\ImageRepository
     table: marketReminder_image
     id:
         id:
             type: integer
-            generator: { strategy: AUTO }
+            generator:
+                strategy: AUTO
     fields:
         creationDate:
             type: datetime
@@ -24,5 +25,6 @@ App\Models\Image:
 
     oneToOne:
         user:
-            targetEntity: App\Models\User
-            mappedBy: image
+            targetEntity: App\Interactor\UserInteractor
+            mappedBy: profileImage
+            cascade: ['persist', 'remove']

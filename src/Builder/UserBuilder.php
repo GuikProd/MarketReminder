@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Builder;
 
 use App\Interactor\UserInteractor;
-use App\Document\Interfaces\UserInterface;
+use App\Models\Interfaces\UserInterface;
 use App\Builder\Interfaces\UserBuilderInterface;
 
 /**
@@ -55,6 +55,86 @@ class UserBuilder implements UserBuilderInterface
     public function withEmail(string $email): UserBuilderInterface
     {
         $this->user->setEmail($email);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withPlainPassword(string $plainPassword): UserBuilderInterface
+    {
+        $this->user->setPlainPassword($plainPassword);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withPassword(string $password): UserBuilderInterface
+    {
+        $this->user->setPassword($password);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withCreationDate(\DateTime $creationDate): UserBuilderInterface
+    {
+        $this->user->setCreationDate($creationDate);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withValidationDate(\DateTime $validationDate): UserBuilderInterface
+    {
+        $this->user->setValidationDate($validationDate);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withRole(string $role): UserBuilderInterface
+    {
+        $this->user->setRole($role);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withValidated(bool $validated): UserBuilderInterface
+    {
+        $this->user->setValidated($validated);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withActive(bool $active): UserBuilderInterface
+    {
+        $this->user->setActive($active);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withCurrentState(string $currentState): UserBuilderInterface
+    {
+        $this->user->setCurrentState($currentState);
 
         return $this;
     }

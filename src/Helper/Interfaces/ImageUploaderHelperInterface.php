@@ -11,20 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Models\User;
-
-use PhpSpec\ObjectBehavior;
-use App\Models\Interfaces\RegisteredUserInterface;
+namespace App\Helper\Interfaces;
 
 /**
- * Class RegisteredUserSpec
+ * Interface ImageUploaderHelperInterface
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisteredUserSpec extends ObjectBehavior
+interface ImageUploaderHelperInterface
 {
-    public function it_is_initializable()
-    {
-        $this->shouldImplement(RegisteredUserInterface::class);
-    }
+
 }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Interactor;
 
-use App\Document\User;
+use App\Models\User;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
@@ -52,7 +52,7 @@ class UserInteractor extends User implements AdvancedUserInterface
      */
     public function isEnabled()
     {
-        return $this->isActive;
+        return $this->active;
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the MarketReminder project.
  *
@@ -11,42 +13,44 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\ImageInterface;
+
 /**
  * Class Image
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class Image
+abstract class Image implements ImageInterface
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \DateTime
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
      * @var \DateTime
      */
-    private $modificationDate;
+    protected $modificationDate;
 
     /**
      * @var string
      */
-    private $alt;
+    protected $alt;
 
     /**
      * @var string
      */
-    private $url;
+    protected $url;
 
     /**
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
      * Image constructor.
@@ -143,6 +147,6 @@ class Image
     {
         $this->user = $user;
 
-        $this->user->setImage($this);
+        $this->user->setProfileImage($this);
     }
 }

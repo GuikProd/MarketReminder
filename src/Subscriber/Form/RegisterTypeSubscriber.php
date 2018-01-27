@@ -11,37 +11,29 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Subscriber;
+namespace App\Subscriber\Form;
 
-use Twig\Environment;
-use App\Event\User\UserCreatedEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class UserSecuritySubscriber
+ * Class RegisterTypeSubscriber
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserSecuritySubscriber implements EventSubscriberInterface
+class RegisterTypeSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var Environment
-     */
-    private $twig;
-
-    private $swiftMailer;
-
     /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            UserCreatedEvent::NAME => 'onUserCreated'
+            FormEvents::SUBMIT => 'onSubmit'
         ];
     }
 
-    public function onUserCreated(UserCreatedEvent $event)
+    public function onSubmit(FormEvents $events)
     {
 
     }

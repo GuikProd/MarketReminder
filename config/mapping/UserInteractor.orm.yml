@@ -1,20 +1,13 @@
-App\Models\User:
+App\Interactor\UserInteractor:
     type: entity
     repositoryClass: App\Repository\UserRepository
     table: marketReminder_user
     id:
          id:
              type: integer
-             generator: { strategy: AUTO }
+             generator:
+                 strategy: AUTO
     fields:
-         firstname:
-             type: string
-             length: 70
-             nullable: true
-         lastname:
-             type: string
-             length: 70
-             nullable: true
          username:
              type: string
              length: 50
@@ -42,20 +35,16 @@ App\Models\User:
          active:
              type: boolean
              nullable: true
-         apiToken:
+         currentState:
              type: string
-             length: 255
-             nullable: true
+             length: 10
+             nullable: false
+             unique: false
 
     oneToOne:
-        image:
-            targetEntity: App\Models\Image
+        profileImage:
+            targetEntity: App\Interactor\ImageInteractor
             inversedBy: user
             joinColumn:
                 name: image_id
                 referencedColumnName: id
-
-    oneToMany:
-        stocks:
-            targetEntity: App\Models\Stock
-            mappedBy: user

@@ -42,6 +42,17 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     public function handle(FormInterface $registerForm, UserBuilderInterface $userBuilder): bool
     {
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
+            $userBuilder
+                ->withCreationDate(new \DateTime())
+                ->withPassword(
+                    $this->userPasswordEncoderInterface
+                         ->encodePassword(
+                             $userBuilder->getUser(),
+                             $userBuilder->getUser()->getPlainPassword()
+                         )
+                )
+                ->withRole('ROLE_USER')
+            ;
 
             $this->entityManagerInterface->persist($userBuilder->getUser());
             $this->entityManagerInterface->flush();

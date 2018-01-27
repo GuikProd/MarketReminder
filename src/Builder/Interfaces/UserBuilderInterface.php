@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Builder\Interfaces;
 
-use App\Document\Interfaces\UserInterface;
+use App\Models\Interfaces\UserInterface;
 
 /**
  * Interface UserBuilderInterface
@@ -40,6 +40,62 @@ interface UserBuilderInterface
      * @return UserBuilderInterface
      */
     public function withEmail(string $email): UserBuilderInterface;
+
+    /**
+     * @param string $plainPassword
+     *
+     * @return UserBuilderInterface
+     */
+    public function withPlainPassword(string $plainPassword): UserBuilderInterface;
+
+    /**
+     * @param string $password
+     *
+     * @return UserBuilderInterface
+     */
+    public function withPassword(string $password): UserBuilderInterface;
+
+    /**
+     * @param string $role
+     *
+     * @return UserBuilderInterface
+     */
+    public function withRole(string $role): UserBuilderInterface;
+
+    /**
+     * @param \DateTime $creationDate
+     *
+     * @return UserBuilderInterface
+     */
+    public function withCreationDate(\DateTime $creationDate): UserBuilderInterface;
+
+    /**
+     * @param \DateTime $validationDate
+     *
+     * @return UserBuilderInterface
+     */
+    public function withValidationDate(\DateTime $validationDate): UserBuilderInterface;
+
+    /**
+     * @param bool $validated
+     *
+     * @return UserBuilderInterface
+     */
+    public function withValidated(bool $validated): UserBuilderInterface;
+
+    /**
+     * @param bool $active
+     *
+     * @return UserBuilderInterface
+     */
+    public function withActive(bool $active): UserBuilderInterface;
+
+    /**
+     * @param string $currentState
+     *
+     * @return UserBuilderInterface
+     */
+    public function withCurrentState(string $currentState): UserBuilderInterface;
 
     /**
      * @return UserInterface
