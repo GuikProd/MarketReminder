@@ -6,11 +6,6 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> behat/symfony2-extension ###
-behat.yml
-###< behat/symfony2-extension ###
-
-
 # Docker
 docker/nginx/logs/
 

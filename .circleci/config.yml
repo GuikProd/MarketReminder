@@ -55,6 +55,10 @@ jobs:
                     - composer-v1-
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
+            - save_cache:
+                key: composer-v1-{{ checksum "composer.json" }}
+                paths:
+                    - vendor
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
             - run: ./bin/console d:d:c --env=test
