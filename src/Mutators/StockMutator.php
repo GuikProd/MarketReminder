@@ -23,16 +23,13 @@ class StockMutator implements MutationInterface
 {
     public function createStock(Argument $argument)
     {
-
     }
 
     public function updateStock(Argument $argument)
     {
-
     }
 
     public function dropStock(Argument $argument)
     {
-
     }
 }

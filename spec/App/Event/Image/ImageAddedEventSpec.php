@@ -19,7 +19,7 @@ use App\Event\Interfaces\ImageEventInterface;
 
 /**
  * Class ImageAddedEventSpec
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class ImageAddedEventSpec extends ObjectBehavior

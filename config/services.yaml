@@ -7,6 +7,10 @@ services:
         autoconfigure: true
         public: false
 
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Models,Migrations}'
+
     App\Action\:
         resource: '../src/Action'
         tags: ['controller.service_arguments']

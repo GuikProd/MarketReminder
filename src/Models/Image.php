@@ -17,7 +17,7 @@ use App\Models\Interfaces\ImageInterface;
 
 /**
  * Class Image
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 abstract class Image implements ImageInterface

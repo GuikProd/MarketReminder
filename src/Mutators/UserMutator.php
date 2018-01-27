@@ -39,21 +39,17 @@ class UserMutator implements MutationInterface
 
     public function register(Argument $argument)
     {
-
     }
 
     public function login(array $credentials)
     {
-
     }
 
     public function forgotPassword(array $credentials)
     {
-
     }
 
     public function dropUser(array $credentials)
     {
-
     }
 }

@@ -99,7 +99,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getUsername(): string
+    public function getUsername():? string
     {
         return $this->username;
     }
@@ -115,7 +115,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getEmail(): string
+    public function getEmail():? string
     {
         return $this->email;
     }
@@ -147,7 +147,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getPassword(): string
+    public function getPassword():? string
     {
         return $this->password;
     }
@@ -163,7 +163,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getRoles(): array
+    public function getRoles():? array
     {
         return $this->roles;
     }
@@ -179,7 +179,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getActive(): bool
+    public function getActive():? bool
     {
         return $this->active;
     }
@@ -195,7 +195,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getCurrentState(): string
+    public function getCurrentState():? string
     {
         return $this->currentState;
     }
@@ -211,7 +211,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getCreationDate(): string
+    public function getCreationDate():? string
     {
         return $this->creationDate->format('d-m-Y h:i:s');
     }
@@ -227,7 +227,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getValidationDate(): string
+    public function getValidationDate():? string
     {
         return $this->validationDate->format('d-m-Y h:i:s');
     }
@@ -243,7 +243,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getValidated(): bool
+    public function getValidated():? bool
     {
         return $this->validated;
     }
@@ -267,7 +267,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getValidationToken(): ? string
+    public function getValidationToken():? string
     {
         return $this->validationToken;
     }
@@ -275,7 +275,7 @@ abstract class User implements UserInterface, \Serializable
     /**
      * @return ImageInterface
      */
-    public function getProfileImage(): ImageInterface
+    public function getProfileImage():? ImageInterface
     {
         return $this->profileImage;
     }

@@ -20,5 +20,4 @@ namespace App\Helper\Interfaces;
  */
 interface ImageUploaderHelperInterface
 {
-
 }

@@ -19,7 +19,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class UserCreatedEvent
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class UserCreatedEvent extends Event implements UserEventInterface

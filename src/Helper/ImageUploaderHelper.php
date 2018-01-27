@@ -22,5 +22,4 @@ use App\Helper\Interfaces\ImageUploaderHelperInterface;
  */
 class ImageUploaderHelper implements ImageUploaderHelperInterface
 {
-
 }

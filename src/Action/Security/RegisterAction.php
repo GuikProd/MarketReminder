@@ -52,11 +52,35 @@ class RegisterAction
     private $registerTypeHandlerInterface;
 
     /**
+     * RegisterAction constructor.
+     *
+     * @param FormFactoryInterface $formFactoryInterface
+     * @param UrlGeneratorInterface $urlGeneratorInterface
+     * @param EventDispatcherInterface $eventDispatcherInterface
+     * @param RegisterTypeHandlerInterface $registerTypeHandlerInterface
+     */
+    public function __construct(
+        FormFactoryInterface $formFactoryInterface,
+        UrlGeneratorInterface $urlGeneratorInterface,
+        EventDispatcherInterface $eventDispatcherInterface,
+        RegisterTypeHandlerInterface $registerTypeHandlerInterface
+    ) {
+        $this->formFactoryInterface = $formFactoryInterface;
+        $this->urlGeneratorInterface = $urlGeneratorInterface;
+        $this->eventDispatcherInterface = $eventDispatcherInterface;
+        $this->registerTypeHandlerInterface = $registerTypeHandlerInterface;
+    }
+
+    /**
      * @param Request $request
      * @param UserBuilderInterface $userBuilderInterface
      * @param RegisterResponder $responder
      *
      * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function __invoke(Request $request, UserBuilderInterface $userBuilderInterface, RegisterResponder $responder)
     {
@@ -67,7 +91,6 @@ class RegisterAction
                              ->handleRequest($request);
 
         if ($this->registerTypeHandlerInterface->handle($registerType, $userBuilderInterface)) {
-
             $userCreatedEvent = new UserCreatedEvent($userBuilderInterface->getUser());
             $this->eventDispatcherInterface->dispatch(UserCreatedEvent::NAME, $userCreatedEvent);
 

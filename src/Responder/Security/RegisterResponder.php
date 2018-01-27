@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class RegisterResponder
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class RegisterResponder
@@ -29,6 +29,25 @@ class RegisterResponder
      */
     private $twig;
 
+    /**
+     * RegisterResponder constructor.
+     *
+     * @param Environment $twig
+     */
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
+    /**
+     * @param FormInterface $registerForm
+     *
+     * @return Response
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function __invoke(FormInterface $registerForm)
     {
         $response = new Response(

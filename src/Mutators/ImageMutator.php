@@ -23,6 +23,5 @@ class ImageMutator implements MutationInterface
 {
     public function createImage(Argument $argument)
     {
-
     }
 }

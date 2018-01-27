@@ -18,7 +18,7 @@ use App\Models\Interfaces\ImageInterface;
 
 /**
  * Class ImageInteractorSpec
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class ImageInteractorSpec extends ObjectBehavior

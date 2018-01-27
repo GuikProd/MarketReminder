@@ -27,7 +27,6 @@ class StockFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-
         $stock = new Stock();
 
         $stock->setCreationDate(new \DateTime('2017-03-21'));

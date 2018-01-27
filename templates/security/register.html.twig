@@ -1,5 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{% block title %}{{ "Registration"|trans }}{% endblock %}
 
+{% block body %}
+    <div>
+        {{ form_start(registerForm) }}
+            {{ form_label(registerForm.username) }}
+            {{ form_widget(registerForm.username) }}
+            {{ form_errors(registerForm.username) }}
+            {{ form_label(registerForm.email) }}
+            {{ form_widget(registerForm.email) }}
+            {{ form_errors(registerForm.email) }}
+            {{ form_label(registerForm.plainPassword) }}
+            {{ form_widget(registerForm.plainPassword) }}
+            {{ form_errors(registerForm.plainPassword) }}
+            {{ form_label(registerForm.profileImage) }}
+            {{ form_widget(registerForm.profileImage) }}
+            {{ form_errors(registerForm.profileImage) }}
+        <button type="submit">
+            {{ "Create an account"|trans }}
+        </button>
+        {{ form_end(registerForm) }}
+    </div>
 {% endblock %}

@@ -35,6 +35,5 @@ class RegisterTypeSubscriber implements EventSubscriberInterface
 
     public function onSubmit(FormEvents $events)
     {
-
     }
 }

@@ -43,6 +43,5 @@ class UserSecuritySubscriber implements EventSubscriberInterface
 
     public function onUserCreated(UserCreatedEvent $event)
     {
-
     }
 }

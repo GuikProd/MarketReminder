@@ -43,6 +43,23 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     private $userPasswordEncoderInterface;
 
     /**
+     * RegisterTypeHandler constructor.
+     *
+     * @param Registry $workflowRegistry
+     * @param EntityManagerInterface $entityManagerInterface
+     * @param UserPasswordEncoderInterface $userPasswordEncoderInterface
+     */
+    public function __construct(
+        Registry $workflowRegistry,
+        EntityManagerInterface $entityManagerInterface,
+        UserPasswordEncoderInterface $userPasswordEncoderInterface
+    ) {
+        $this->workflowRegistry = $workflowRegistry;
+        $this->entityManagerInterface = $entityManagerInterface;
+        $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function handle(FormInterface $registerForm, UserBuilderInterface $userBuilder): bool

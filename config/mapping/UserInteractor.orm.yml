@@ -10,11 +10,11 @@ App\Interactor\UserInteractor:
     fields:
          username:
              type: string
-             length: 50
+             length: 25
              nullable: false
          email:
              type: string
-             length: 100
+             length: 50
              nullable: false
          password:
              type: string

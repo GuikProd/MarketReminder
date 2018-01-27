@@ -68,7 +68,7 @@ interface UserInterface
     /**
      * @return array
      */
-    public function getRoles(): array;
+    public function getRoles():? array;
 
     /**
      * @param string $role
@@ -78,7 +78,7 @@ interface UserInterface
     /**
      * @return bool
      */
-    public function getActive(): bool;
+    public function getActive():? bool;
 
     /**
      * @param bool $active
@@ -93,7 +93,7 @@ interface UserInterface
     /**
      * @return string
      */
-    public function getCreationDate(): string;
+    public function getCreationDate():? string;
 
     /**
      * @param \DateTime $validationDate
@@ -113,7 +113,7 @@ interface UserInterface
     /**
      * @return string
      */
-    public function getCurrentState(): string;
+    public function getCurrentState():? string;
 
     /**
      * @param bool $validated
@@ -123,7 +123,7 @@ interface UserInterface
     /**
      * @return bool
      */
-    public function getValidated(): bool;
+    public function getValidated():? bool;
 
     /**
      * @param string $validationToken

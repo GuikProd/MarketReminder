@@ -17,7 +17,7 @@ use App\Models\Interfaces\UserInterface;
 
 /**
  * Interface UserBuilderInterface
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 interface UserBuilderInterface

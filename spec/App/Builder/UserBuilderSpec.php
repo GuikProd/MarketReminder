@@ -21,7 +21,7 @@ use App\Builder\Interfaces\UserBuilderInterface;
 
 /**
  * Class UserBuilder
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class UserBuilderSpec extends ObjectBehavior
