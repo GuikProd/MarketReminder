@@ -48,19 +48,6 @@ abstract class Image implements ImageInterface
     protected $url;
 
     /**
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * Image constructor.
-     */
-    public function __construct()
-    {
-        $this->creationDate = new \DateTime();
-    }
-
-    /**
      * @return int
      */
     public function getId():? int
@@ -130,23 +117,5 @@ abstract class Image implements ImageInterface
     public function setUrl(string $url)
     {
         $this->url = $url;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-
-        $this->user->setProfileImage($this);
     }
 }

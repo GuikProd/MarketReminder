@@ -124,4 +124,14 @@ interface UserInterface
      * @return bool
      */
     public function getValidated(): bool;
+
+    /**
+     * @param string $validationToken
+     */
+    public function setValidationToken(string $validationToken): void;
+
+    /**
+     * @return null|string
+     */
+    public function getValidationToken():? string;
 }

@@ -62,14 +62,13 @@ class RegisterAction
     {
         $userBuilderInterface->createUser();
 
-        $registerType = $this->formFactoryInterface->create(
-            RegisterType::class,
-            $userBuilderInterface->getUser()
-        );
+        $registerType = $this->formFactoryInterface
+                             ->create(RegisterType::class, $userBuilderInterface->getUser())
+                             ->handleRequest($request);
 
         if ($this->registerTypeHandlerInterface->handle($registerType, $userBuilderInterface)) {
 
-            $userCreatedEvent = new UserCreatedEvent();
+            $userCreatedEvent = new UserCreatedEvent($userBuilderInterface->getUser());
             $this->eventDispatcherInterface->dispatch(UserCreatedEvent::NAME, $userCreatedEvent);
 
             return new RedirectResponse(

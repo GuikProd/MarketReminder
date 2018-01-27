@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\FormHandler;
 
+use Symfony\Component\Workflow\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use App\Builder\Interfaces\UserBuilderInterface;
@@ -26,6 +27,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class RegisterTypeHandler implements RegisterTypeHandlerInterface
 {
+    /**
+     * @var Registry
+     */
+    private $workflowRegistry;
+
     /**
      * @var EntityManagerInterface
      */
@@ -52,7 +58,18 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                          )
                 )
                 ->withRole('ROLE_USER')
+                ->withValidationToken(
+                    str_rot13(
+                        random_bytes(35)
+                    )
+                )
+                ->withActive(false)
+                ->withValidated(false)
             ;
+
+            $workflow = $this->workflowRegistry->get($userBuilder->getUser());
+
+            $workflow->apply($userBuilder->getUser(), 'to_validate');
 
             $this->entityManagerInterface->persist($userBuilder->getUser());
             $this->entityManagerInterface->flush();

@@ -11,22 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Models\Interfaces;
+namespace spec\App\Interactor;
+
+use PhpSpec\ObjectBehavior;
+use App\Models\Interfaces\UserInterface;
 
 /**
- * Interface ImageInterface
+ * Class UserInteractorSpec
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface ImageInterface
+class UserInteractorSpec extends ObjectBehavior
 {
-    /**
-     * @return UserInterface
-     */
-    public function getUser(): UserInterface;
-
-    /**
-     * @param UserInterface $user
-     */
-    public function setUser(UserInterface $user): void;
+    public function it_implement()
+    {
+        $this->shouldImplement(UserInterface::class);
+    }
 }

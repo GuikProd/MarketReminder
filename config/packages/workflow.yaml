@@ -1,25 +1,25 @@
 framework:
     workflows:
-#        user_status:
-#            type: workflow
-#            marking_store:
-#                type: 'multiple_state'
-#                arguments:
-#                    - 'currentState'
-#                supports:
-#                    - App\Interactors\UserInteractor
-#                places:
-#                    - registered
-#                    - toValidate
-#                    - validated
-#                    - active
-#                transitions:
-#                    to_validate:
-#                        from: registered
-#                        to:   toValidate
-#                    validation:
-#                        from: toValidate
-#                        to:   validated
-#                    active:
-#                        from: validated
-#                        to:   active
+        user_status:
+            type: 'workflow'
+            marking_store:
+                type: 'multiple_state'
+                arguments:
+                    - 'currentState'
+            supports:
+                - App\Interactor\UserInteractor
+            places:
+                - registered
+                - toValidate
+                - validated
+                - active
+            transitions:
+                to_validate:
+                    from: registered
+                    to:   toValidate
+                validation:
+                    from: toValidate
+                    to:   validated
+                active:
+                    from: validated
+                    to:   active

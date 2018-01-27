@@ -84,6 +84,13 @@ interface UserBuilderInterface
     public function withValidated(bool $validated): UserBuilderInterface;
 
     /**
+     * @param string $validationToken
+     *
+     * @return UserBuilderInterface
+     */
+    public function withValidationToken(string $validationToken): UserBuilderInterface;
+
+    /**
      * @param bool $active
      *
      * @return UserBuilderInterface

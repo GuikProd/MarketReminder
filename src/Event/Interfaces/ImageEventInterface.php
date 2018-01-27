@@ -11,22 +11,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Models\Interfaces;
+namespace App\Event\Interfaces;
+
+use App\Models\Interfaces\ImageInterface;
 
 /**
- * Interface ImageInterface
+ * Interface ImageEventInterface
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface ImageInterface
+interface ImageEventInterface
 {
     /**
-     * @return UserInterface
+     * @return ImageInterface
      */
-    public function getUser(): UserInterface;
-
-    /**
-     * @param UserInterface $user
-     */
-    public function setUser(UserInterface $user): void;
+    public function getImage(): ImageInterface;
 }

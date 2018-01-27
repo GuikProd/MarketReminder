@@ -32,6 +32,11 @@ App\Interactor\UserInteractor:
          validated:
              type: boolean
              nullable: false
+         validationToken:
+             type: string
+             length: 35
+             nullable: true
+             unique: true
          active:
              type: boolean
              nullable: true

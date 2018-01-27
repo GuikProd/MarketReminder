@@ -79,6 +79,11 @@ abstract class User implements UserInterface, \Serializable
     protected $validated;
 
     /**
+     * @var string
+     */
+    protected $validationToken;
+
+    /**
      * @var ImageInterface
      */
     protected $profileImage;
@@ -249,6 +254,22 @@ abstract class User implements UserInterface, \Serializable
     public function setValidated(bool $validated): void
     {
         $this->validated = $validated;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValidationToken(string $validationToken): void
+    {
+        $this->validationToken = $validationToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidationToken(): ? string
+    {
+        return $this->validationToken;
     }
 
     /**

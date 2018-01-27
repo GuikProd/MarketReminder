@@ -10,8 +10,8 @@ jobs:
                 keys:
                     - composer-v1-{{ checksum "composer.json" }}
                     - composer-v1-
-            - run: composer install -n --optimize-autoloader --apcu-autoloader
-            - run: composer dump-autoload --optimize --apcu
+            - run: composer install -n --optimize-autoloader --classmap-authoritative
+            - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:
                 key: composer-v1-{{ checksum "composer.json" }}
                 paths:
@@ -32,8 +32,8 @@ jobs:
             - run: rm -rf var/cache/*
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
-            - run: composer install -n --optimize-autoloader --apcu-autoloader
-            - run: composer dump-autoload --optimize --apcu
+            - run: composer install -n --optimize-autoloader --classmap-authoritative
+            - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:
                 key: composer-v1-{{ checksum "composer.json" }}
                 paths:
@@ -53,8 +53,8 @@ jobs:
                 keys:
                     - composer-v1-{{ checksum "composer.json" }}
                     - composer-v1-
-            - run: composer install -n --optimize-autoloader --apcu-autoloader
-            - run: composer dump-autoload --optimize --apcu
+            - run: composer install -n --optimize-autoloader --classmap-authoritative
+            - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:
                 key: composer-v1-{{ checksum "composer.json" }}
                 paths:

@@ -74,7 +74,7 @@ services:
     # DB configuration
     postgresql:
         container_name: ${CONTAINER_NAME}_postgresql
-        image: postgres
+        image: postgres:9.6
         environment:
             POSTGRES_DB: '${POSTGRES_DB}'
             POSTGRES_USER: '${POSTGRES_USER}'
@@ -82,7 +82,7 @@ services:
         ports:
             - '${POSTGRES_PORT}:5432'
         volumes:
-            - 'postgres_data_marketReminder:/var/lib/postgresql/data:rw'
+            - 'marketReminder:/var/lib/postgresql/data:rw'
         restart: always
 
     # Performances configuration
@@ -101,4 +101,4 @@ services:
         restart: always
 
 volumes:
-    postgres_data_marketReminder:
+    marketReminder:

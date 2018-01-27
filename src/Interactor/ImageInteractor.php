@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Interactor;
 
 use App\Models\Image;
+use App\Models\Interfaces\UserInterface;
 
 /**
  * Class ImageInteractor
@@ -22,5 +23,24 @@ use App\Models\Image;
  */
 class ImageInteractor extends Image
 {
+    /**
+     * @var UserInterface
+     */
+    private $user;
 
+    /**
+     * @return UserInterface
+     */
+    public function getUser(): UserInterface
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param UserInterface $user
+     */
+    public function setUser(UserInterface $user): void
+    {
+        $this->user = $user;
+    }
 }

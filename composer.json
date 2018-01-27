@@ -26,11 +26,16 @@
         "symfony/yaml": "^3.3"
     },
     "require-dev": {
+        "behat/gherkin": "^4.5",
+        "behat/mink": "^1.7",
+        "behat/mink-extension": "^2.3",
+        "behat/mink-goutte-driver": "^1.2",
         "behat/symfony2-extension": "^2.1",
+        "behatch/contexts": "^3.0",
         "phpspec/phpspec": "^4.3",
         "phpunit/phpunit": "^6.4",
-        "symfony/flex": "^1.0",
-        "symfony/dotenv": "^3.3"
+        "symfony/dotenv": "^3.3",
+        "symfony/flex": "^1.0"
     },
     "config": {
         "preferred-install": {

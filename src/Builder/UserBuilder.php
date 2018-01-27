@@ -122,6 +122,16 @@ class UserBuilder implements UserBuilderInterface
     /**
      * {@inheritdoc}
      */
+    public function withValidationToken(string $validationToken): UserBuilderInterface
+    {
+        $this->user->setValidationToken($validationToken);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function withActive(bool $active): UserBuilderInterface
     {
         $this->user->setActive($active);
