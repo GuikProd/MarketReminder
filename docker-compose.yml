@@ -74,15 +74,15 @@ services:
     # DB configuration
     postgresql:
         container_name: ${CONTAINER_NAME}_postgresql
-        image: postgres:9.6 # Update to 10.0 once Doctrine is updated.
+        image: postgres
         environment:
-            POSTGRES_DB: ${POSTGRES_DB}
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: '${POSTGRES_DB}'
+            POSTGRES_USER: '${POSTGRES_USER}'
+            POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
         ports:
             - '${POSTGRES_PORT}:5432'
         volumes:
-            - 'postgres_marketReminder:/var/lib/postgresql/data:rw'
+            - 'postgres_data_marketReminder:/var/lib/postgresql/data:rw'
         restart: always
 
     # Performances configuration
@@ -101,4 +101,4 @@ services:
         restart: always
 
 volumes:
-    postgres_marketReminder:
+    postgres_data_marketReminder:

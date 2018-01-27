@@ -16,3 +16,6 @@ docker/nginx/logs/
 
 # Global
 coverage/**/
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###
