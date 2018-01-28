@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Models\Interfaces\UserInterface;
+use App\Subscriber\Interfaces\RegisterTypeSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
@@ -29,6 +30,21 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
  */
 class RegisterType extends AbstractType
 {
+    /**
+     * @var RegisterTypeSubscriberInterface
+     */
+    private $registerTypeSubscriber;
+
+    /**
+     * RegisterType constructor.
+     *
+     * @param RegisterTypeSubscriberInterface $registerTypeSubscriber
+     */
+    public function __construct(RegisterTypeSubscriberInterface $registerTypeSubscriber)
+    {
+        $this->registerTypeSubscriber = $registerTypeSubscriber;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -43,6 +59,8 @@ class RegisterType extends AbstractType
                 'required' => false,
             ])
         ;
+
+        $builder->get('profileImage')->addEventSubscriber($this->registerTypeSubscriber);
     }
 
     /**

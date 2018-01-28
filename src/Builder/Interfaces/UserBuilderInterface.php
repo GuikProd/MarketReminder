@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Builder\Interfaces;
 
+use App\Models\Interfaces\ImageInterface;
 use App\Models\Interfaces\UserInterface;
 
 /**
@@ -98,11 +99,18 @@ interface UserBuilderInterface
     public function withActive(bool $active): self;
 
     /**
-     * @param string $currentState
+     * @param array $currentState
      *
      * @return UserBuilderInterface
      */
-    public function withCurrentState(string $currentState): self;
+    public function withCurrentState(array $currentState): self;
+
+    /**
+     * @param ImageInterface $profileImage
+     *
+     * @return UserBuilderInterface
+     */
+    public function withProfileImage(ImageInterface $profileImage): self;
 
     /**
      * @return UserInterface

@@ -42,6 +42,26 @@ class ImageBuilder implements ImageBuilderInterface
     /**
      * {@inheritdoc}
      */
+    public function withCreationDate(\DateTime $creationDate): ImageBuilderInterface
+    {
+        $this->image->setCreationDate($creationDate);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withAlt(string $alt): ImageBuilderInterface
+    {
+        $this->image->setAlt($alt);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getImage(): ImageInterface
     {
         return $this->image;

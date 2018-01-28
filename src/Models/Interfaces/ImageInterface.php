@@ -21,6 +21,31 @@ namespace App\Models\Interfaces;
 interface ImageInterface
 {
     /**
+     * @return int|null
+     */
+    public function getId():? int;
+
+    /**
+     * @return string
+     */
+    public function getCreationDate(): string;
+
+    /**
+     * @param \DateTime $creationDate
+     */
+    public function setCreationDate(\DateTime $creationDate): void;
+
+    /**
+     * @return null|string
+     */
+    public function getAlt():? string;
+
+    /**
+     * @param string $alt
+     */
+    public function setAlt(string $alt): void;
+
+    /**
      * @return UserInterface
      */
     public function getUser(): UserInterface;

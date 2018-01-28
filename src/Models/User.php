@@ -273,7 +273,7 @@ abstract class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return ImageInterface
+     * {@inheritdoc}
      */
     public function getProfileImage(): ? ImageInterface
     {
@@ -281,7 +281,7 @@ abstract class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param ImageInterface $profileImage
+     * {@inheritdoc}
      */
     public function setProfileImage(ImageInterface $profileImage): void
     {

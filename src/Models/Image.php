@@ -48,7 +48,7 @@ abstract class Image implements ImageInterface
     protected $url;
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getId(): ? int
     {
@@ -56,7 +56,7 @@ abstract class Image implements ImageInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCreationDate(): string
     {
@@ -64,9 +64,9 @@ abstract class Image implements ImageInterface
     }
 
     /**
-     * @param \DateTime $creationDate
+     * {@inheritdoc}
      */
-    public function setCreationDate(\DateTime $creationDate)
+    public function setCreationDate(\DateTime $creationDate): void
     {
         $this->creationDate = $creationDate;
     }
@@ -90,7 +90,7 @@ abstract class Image implements ImageInterface
     /**
      * @return string
      */
-    public function getAlt(): string
+    public function getAlt():? string
     {
         return $this->alt;
     }
@@ -98,7 +98,7 @@ abstract class Image implements ImageInterface
     /**
      * @param string $alt
      */
-    public function setAlt(string $alt)
+    public function setAlt(string $alt): void
     {
         $this->alt = $alt;
     }
@@ -106,7 +106,7 @@ abstract class Image implements ImageInterface
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl():? string
     {
         return $this->url;
     }

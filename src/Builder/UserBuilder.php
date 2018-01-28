@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Builder;
 
 use App\Interactor\UserInteractor;
+use App\Models\Interfaces\ImageInterface;
 use App\Models\Interfaces\UserInterface;
 use App\Builder\Interfaces\UserBuilderInterface;
 
@@ -142,9 +143,19 @@ class UserBuilder implements UserBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function withCurrentState(string $currentState): UserBuilderInterface
+    public function withCurrentState(array $currentState): UserBuilderInterface
     {
         $this->user->setCurrentState($currentState);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withProfileImage(ImageInterface $profileImage): UserBuilderInterface
+    {
+        $this->user->setProfileImage($profileImage);
 
         return $this;
     }

@@ -28,6 +28,20 @@ interface ImageBuilderInterface
     public function createImage(): self;
 
     /**
+     * @param \DateTime $creationDate
+     *
+     * @return ImageBuilderInterface
+     */
+    public function withCreationDate(\DateTime $creationDate): self;
+
+    /**
+     * @param string $alt
+     *
+     * @return ImageBuilderInterface
+     */
+    public function withAlt(string $alt): self;
+
+    /**
      * @return ImageInterface
      */
     public function getImage(): ImageInterface;

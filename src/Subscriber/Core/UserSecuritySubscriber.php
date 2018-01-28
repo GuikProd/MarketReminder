@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Subscriber;
+namespace App\Subscriber\Core;
 
 use Twig\Environment;
 use App\Event\User\UserCreatedEvent;

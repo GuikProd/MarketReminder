@@ -61,11 +61,12 @@ jobs:
                     - vendor
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
+            - run: echo $GCP_PROJECT_KEY > ./docker/config/google/credentials.json
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: vendor/bin/behat --profile default
             - run: rm -rf var/data.db
-    gcloud_app_engine:
+    gcloud_kubernetes_check:
         docker:
             - image: google/cloud-sdk
         steps:
@@ -73,8 +74,7 @@ jobs:
             - run: echo $GCP_PROJECT_KEY > /tmp/gcp_key.json
             - run: gcloud config set project $GCP_PROJECT_NAME
             - run: gcloud auth activate-service-account --key-file /tmp/gcp_key.json
-            - run: rm -rf ./Dockerfile
-            - run: gcloud app deploy
+            - run: kubectl get nodes
 
 workflows:
     version: 2
@@ -87,4 +87,4 @@ workflows:
             - behat_core
     staging:
         jobs:
-            - gcloud_app_engine
+            - gcloud_kubernetes_check

@@ -20,4 +20,20 @@ namespace App\Helper\Interfaces;
  */
 interface ImageUploaderHelperInterface
 {
+    /**
+     * @param \SplFileInfo $uploadedFile
+     *
+     * @return ImageUploaderHelperInterface
+     */
+    public function store(\SplFileInfo $uploadedFile): self;
+
+    /**
+     * @return ImageUploaderHelperInterface
+     */
+    public function upload(): self;
+
+    /**
+     * @return string
+     */
+    public function getFileName(): string;
 }

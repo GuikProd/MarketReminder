@@ -45,8 +45,8 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     /**
      * RegisterTypeHandler constructor.
      *
-     * @param Registry                     $workflowRegistry
-     * @param EntityManagerInterface       $entityManagerInterface
+     * @param Registry $workflowRegistry
+     * @param EntityManagerInterface $entityManagerInterface
      * @param UserPasswordEncoderInterface $userPasswordEncoderInterface
      */
     public function __construct(
@@ -65,6 +65,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     public function handle(FormInterface $registerForm, UserBuilderInterface $userBuilder): bool
     {
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
+
             $userBuilder
                 ->withCreationDate(new \DateTime())
                 ->withPassword(

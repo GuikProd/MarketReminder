@@ -1,11 +1,17 @@
 parameters:
     locale: 'fr'
+    kernel.docker_dir: "%kernel.project_dir%/docker/config"
+    kernel.images_dir: "%kernel.project_dir%/public/images/profiles"
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
         public: false
+        bind:
+            $credentialsFolder: "%kernel.docker_dir%"
+            $filePath: "%kernel.images_dir%"
+            $bucketName: "%env(GOOGLE_BUCKET_NAME)%"
 
     App\:
         resource: '../src/*'

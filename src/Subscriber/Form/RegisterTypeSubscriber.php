@@ -13,16 +13,33 @@ declare(strict_types=1);
 
 namespace App\Subscriber\Form;
 
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use App\Helper\Interfaces\ImageUploaderHelperInterface;
+use App\Subscriber\Interfaces\RegisterTypeSubscriberInterface;
 
 /**
  * Class RegisterTypeSubscriber.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisterTypeSubscriber implements EventSubscriberInterface
+class RegisterTypeSubscriber implements RegisterTypeSubscriberInterface
 {
+    /**
+     * @var ImageUploaderHelperInterface
+     */
+    private $imageUploaderHelper;
+
+    /**
+     * RegisterTypeSubscriber constructor.
+     *
+     * @param ImageUploaderHelperInterface $imageUploaderHelper
+     */
+    public function __construct(ImageUploaderHelperInterface $imageUploaderHelper)
+    {
+        $this->imageUploaderHelper = $imageUploaderHelper;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +50,17 @@ class RegisterTypeSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onSubmit(FormEvents $events)
+    /**
+     * {@inheritdoc}
+     */
+    public function onSubmit(FormEvent $events): void
     {
+        if ($events->getData() == null) {
+            return;
+        }
+
+        $this->imageUploaderHelper
+             ->store($events->getData())
+             ->upload();
     }
 }

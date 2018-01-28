@@ -13,3 +13,8 @@ coverage/**/
 ###> phpunit/phpunit ###
 /phpunit.xml
 ###< phpunit/phpunit ###
+
+
+# Google Cloud
+docker/config/google/
+public/images/profiles/

@@ -106,12 +106,12 @@ interface UserInterface
     public function getValidationDate(): ? string;
 
     /**
-     * @param string $currentState
+     * @param array $currentState
      */
     public function setCurrentState(array $currentState): void;
 
     /**
-     * @return string
+     * @return array
      */
     public function getCurrentState(): ? array;
 
@@ -134,4 +134,14 @@ interface UserInterface
      * @return null|string
      */
     public function getValidationToken(): ? string;
+
+    /**
+     * @param ImageInterface $profileImage
+     */
+    public function setProfileImage(ImageInterface $profileImage): void;
+
+    /**
+     * @return null|ImageInterface
+     */
+    public function getProfileImage():? ImageInterface;
 }
