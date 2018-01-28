@@ -8,7 +8,7 @@ The source code of the web application/API used for MarketReminder mobile applic
 [![CircleCI](https://circleci.com/gh/Guikingone/MarketReminder.svg?style=svg)](https://circleci.com/gh/Guikingone/MarketReminder)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0975d1e66031b5235e08/maintainability)](https://codeclimate.com/github/Guikingone/MarketReminder/maintainability)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d2ba90dea73e4225ba366d2495391865)](https://www.codacy.com/app/Guikingone/MarketReminder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Guikingone/MarketReminder&amp;utm_campaign=Badge_Grade)
-[![Coverage Status](https://coveralls.io/repos/github/Guikingone/MarketReminder/badge.svg?branch=master)](https://coveralls.io/github/Guikingone/MarketReminder?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Guikingone/MarketReminder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Guikingone/MarketReminder/?branch=master)
 
 ## Usage
 

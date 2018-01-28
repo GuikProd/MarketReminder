@@ -1,0 +1,12 @@
+runtime: php
+env: flex
+
+runtime_config:
+    document_root: public
+    front_controller_file: index.php
+    php_ini_override: docker/php/conf/production/php.ini
+
+resources:
+    cpu: 1
+    memory_gb: 0.6
+    disk_size_gb: 10

@@ -65,6 +65,16 @@ jobs:
             - run: ./bin/console d:s:c --env=test
             - run: vendor/bin/behat --profile default
             - run: rm -rf var/data.db
+    gcloud_app_engine:
+        docker:
+            - image: google/cloud-sdk
+        steps:
+            - checkout
+            - run: echo $GCP_PROJECT_KEY > /tmp/gcp_key.json
+            - run: gcloud config set project $GCP_PROJECT_NAME
+            - run: gcloud auth activate-service-account --key-file /tmp/gcp_key.json
+            - run: gcloud app deploy
+
 workflows:
     version: 2
     unit_and_spec:
@@ -74,3 +84,6 @@ workflows:
     functional:
         jobs:
             - behat_core
+    staging:
+        jobs:
+            - gcloud_app_engine
