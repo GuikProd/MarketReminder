@@ -15,7 +15,7 @@ use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 
 /**
- * Class StockMutator
+ * Class StockMutator.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

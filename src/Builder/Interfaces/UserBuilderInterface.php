@@ -16,7 +16,7 @@ namespace App\Builder\Interfaces;
 use App\Models\Interfaces\UserInterface;
 
 /**
- * Interface UserBuilderInterface
+ * Interface UserBuilderInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -25,84 +25,84 @@ interface UserBuilderInterface
     /**
      * @return UserBuilderInterface
      */
-    public function createUser(): UserBuilderInterface;
+    public function createUser(): self;
 
     /**
      * @param string $username
      *
      * @return UserBuilderInterface
      */
-    public function withUsername(string $username): UserBuilderInterface;
+    public function withUsername(string $username): self;
 
     /**
      * @param string $email
      *
      * @return UserBuilderInterface
      */
-    public function withEmail(string $email): UserBuilderInterface;
+    public function withEmail(string $email): self;
 
     /**
      * @param string $plainPassword
      *
      * @return UserBuilderInterface
      */
-    public function withPlainPassword(string $plainPassword): UserBuilderInterface;
+    public function withPlainPassword(string $plainPassword): self;
 
     /**
      * @param string $password
      *
      * @return UserBuilderInterface
      */
-    public function withPassword(string $password): UserBuilderInterface;
+    public function withPassword(string $password): self;
 
     /**
      * @param string $role
      *
      * @return UserBuilderInterface
      */
-    public function withRole(string $role): UserBuilderInterface;
+    public function withRole(string $role): self;
 
     /**
      * @param \DateTime $creationDate
      *
      * @return UserBuilderInterface
      */
-    public function withCreationDate(\DateTime $creationDate): UserBuilderInterface;
+    public function withCreationDate(\DateTime $creationDate): self;
 
     /**
      * @param \DateTime $validationDate
      *
      * @return UserBuilderInterface
      */
-    public function withValidationDate(\DateTime $validationDate): UserBuilderInterface;
+    public function withValidationDate(\DateTime $validationDate): self;
 
     /**
      * @param bool $validated
      *
      * @return UserBuilderInterface
      */
-    public function withValidated(bool $validated): UserBuilderInterface;
+    public function withValidated(bool $validated): self;
 
     /**
      * @param string $validationToken
      *
      * @return UserBuilderInterface
      */
-    public function withValidationToken(string $validationToken): UserBuilderInterface;
+    public function withValidationToken(string $validationToken): self;
 
     /**
      * @param bool $active
      *
      * @return UserBuilderInterface
      */
-    public function withActive(bool $active): UserBuilderInterface;
+    public function withActive(bool $active): self;
 
     /**
      * @param string $currentState
      *
      * @return UserBuilderInterface
      */
-    public function withCurrentState(string $currentState): UserBuilderInterface;
+    public function withCurrentState(string $currentState): self;
 
     /**
      * @return UserInterface

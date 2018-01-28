@@ -14,7 +14,7 @@ namespace App\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class UserRepository
+ * Class UserRepository.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Helper\Interfaces;
 
 /**
- * Interface ImageUploaderHelperInterface
+ * Interface ImageUploaderHelperInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

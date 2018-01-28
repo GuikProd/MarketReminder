@@ -100,5 +100,11 @@ services:
             - './:${WORKPATH}:rw'
         restart: always
 
+    # Deployment configuration
+    gcloud-sdk:
+        container_name: ${CONTAINER_NAME}_gcloud-sdk
+        image: google/cloud-sdk
+        restart: always
+
 volumes:
     marketReminder:

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Models\Interfaces;
 
 /**
- * Interface RegisteredUserInterface
+ * Interface RegisteredUserInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

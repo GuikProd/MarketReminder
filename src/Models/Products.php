@@ -12,7 +12,7 @@
 namespace App\Models;
 
 /**
- * Class Products
+ * Class Products.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -79,7 +79,7 @@ class Products
     /**
      * @return int
      */
-    public function getId():? int
+    public function getId(): ? int
     {
         return $this->id;
     }
@@ -119,7 +119,7 @@ class Products
     /**
      * @return string
      */
-    public function getModificationDate():? string
+    public function getModificationDate(): ? string
     {
         return $this->modificationDate->format('d-m-Y h:i:s');
     }
@@ -135,7 +135,7 @@ class Products
     /**
      * @return string
      */
-    public function getOutDate():? string
+    public function getOutDate(): ? string
     {
         return $this->outDate->format('d-m-Y h:i:s');
     }
@@ -183,7 +183,7 @@ class Products
     /**
      * @return string
      */
-    public function getLimiteConsumptionDate():? string
+    public function getLimiteConsumptionDate(): ? string
     {
         return $this->limiteConsumptionDate->format('d-m-Y h:i:s');
     }
@@ -199,7 +199,7 @@ class Products
     /**
      * @return string
      */
-    public function getLimiteUsageDate():? string
+    public function getLimiteUsageDate(): ? string
     {
         return $this->limiteUsageDate->format('d-m-Y h:i:s');
     }

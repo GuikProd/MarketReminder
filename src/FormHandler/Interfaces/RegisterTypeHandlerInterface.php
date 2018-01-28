@@ -17,17 +17,17 @@ use Symfony\Component\Form\FormInterface;
 use App\Builder\Interfaces\UserBuilderInterface;
 
 /**
- * Interface RegisterTypeHandlerInterface
+ * Interface RegisterTypeHandlerInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 interface RegisterTypeHandlerInterface
 {
     /**
-     * @param FormInterface        $registerForm    The RegisterType form.
-     * @param UserBuilderInterface $userBuilder     The User which is managed by the form.
+     * @param FormInterface        $registerForm the RegisterType form
+     * @param UserBuilderInterface $userBuilder  the User which is managed by the form
      *
-     * @return bool                                 If the handling process has succeed.
+     * @return bool if the handling process has succeed
      */
     public function handle(FormInterface $registerForm, UserBuilderInterface $userBuilder): bool;
 }

@@ -16,7 +16,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Class StockFixtures
+ * Class StockFixtures.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -67,7 +67,7 @@ class StockFixtures extends Fixture
     public function getDependencies()
     {
         return [
-            UserFixtures::class
+            UserFixtures::class,
         ];
     }
 }

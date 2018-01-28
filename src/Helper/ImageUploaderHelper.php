@@ -16,7 +16,7 @@ namespace App\Helper;
 use App\Helper\Interfaces\ImageUploaderHelperInterface;
 
 /**
- * Class ImageUploaderHelper
+ * Class ImageUploaderHelper.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

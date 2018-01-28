@@ -14,7 +14,7 @@ namespace App\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class ProductsRepository
+ * Class ProductsRepository.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

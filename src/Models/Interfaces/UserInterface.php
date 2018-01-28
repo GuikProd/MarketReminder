@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Models\Interfaces;
 
 /**
- * Interface UserInterface
+ * Interface UserInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -23,12 +23,12 @@ interface UserInterface
     /**
      * @return int|null
      */
-    public function getId():? int;
+    public function getId(): ? int;
 
     /**
      * @return null|string
      */
-    public function getUsername():? string;
+    public function getUsername(): ? string;
 
     /**
      * @param string $username
@@ -38,7 +38,7 @@ interface UserInterface
     /**
      * @return null|string
      */
-    public function getEmail():? string;
+    public function getEmail(): ? string;
 
     /**
      * @param string $email
@@ -48,7 +48,7 @@ interface UserInterface
     /**
      * @return null|string
      */
-    public function getPlainPassword():? string;
+    public function getPlainPassword(): ? string;
 
     /**
      * @param string $plainPassword
@@ -58,7 +58,7 @@ interface UserInterface
     /**
      * @return null|string
      */
-    public function getPassword():? string;
+    public function getPassword(): ? string;
 
     /**
      * @param string $password
@@ -68,7 +68,7 @@ interface UserInterface
     /**
      * @return array
      */
-    public function getRoles():? array;
+    public function getRoles(): ? array;
 
     /**
      * @param string $role
@@ -78,7 +78,7 @@ interface UserInterface
     /**
      * @return bool
      */
-    public function getActive():? bool;
+    public function getActive(): ? bool;
 
     /**
      * @param bool $active
@@ -93,7 +93,7 @@ interface UserInterface
     /**
      * @return string
      */
-    public function getCreationDate():? string;
+    public function getCreationDate(): ? string;
 
     /**
      * @param \DateTime $validationDate
@@ -103,17 +103,17 @@ interface UserInterface
     /**
      * @return null|string
      */
-    public function getValidationDate():? string;
+    public function getValidationDate(): ? string;
 
     /**
      * @param string $currentState
      */
-    public function setCurrentState(string $currentState): void;
+    public function setCurrentState(array $currentState): void;
 
     /**
      * @return string
      */
-    public function getCurrentState():? string;
+    public function getCurrentState(): ? array;
 
     /**
      * @param bool $validated
@@ -123,7 +123,7 @@ interface UserInterface
     /**
      * @return bool
      */
-    public function getValidated():? bool;
+    public function getValidated(): ? bool;
 
     /**
      * @param string $validationToken
@@ -133,5 +133,5 @@ interface UserInterface
     /**
      * @return null|string
      */
-    public function getValidationToken():? string;
+    public function getValidationToken(): ? string;
 }

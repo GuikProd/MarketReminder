@@ -1,8 +1,23 @@
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: 'index'
+        permanent: true
+
+index:
+    path: /{_locale}/
+    methods: ["GET"]
+    defaults:
+        _controller: App\Action\Core\HomeAction
+    requirements:
+        _locale: '%locale%'
+
 web_register:
     path:    /{_locale}/register
     methods: ['GET', 'POST']
     defaults:
-        _controller: 'App\Action\Security\RegisterAction'
+        _controller: App\Action\Security\RegisterAction
         _locale: '%locale%'
     requirements:
         _locale: '%locale%'

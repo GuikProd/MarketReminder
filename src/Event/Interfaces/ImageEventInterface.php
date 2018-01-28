@@ -16,7 +16,7 @@ namespace App\Event\Interfaces;
 use App\Models\Interfaces\ImageInterface;
 
 /**
- * Interface ImageEventInterface
+ * Interface ImageEventInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

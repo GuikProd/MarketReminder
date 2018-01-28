@@ -17,7 +17,7 @@ use App\Models\User;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
- * Class UserInteractor
+ * Class UserInteractor.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

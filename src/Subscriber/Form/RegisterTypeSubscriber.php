@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class RegisterTypeSubscriber
+ * Class RegisterTypeSubscriber.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -29,7 +29,7 @@ class RegisterTypeSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::SUBMIT => 'onSubmit'
+            FormEvents::SUBMIT => 'onSubmit',
         ];
     }
 

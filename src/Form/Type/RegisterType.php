@@ -23,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 /**
- * Class RegisterType
+ * Class RegisterType.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -40,7 +40,7 @@ class RegisterType extends AbstractType
             ->add('plainPassword', PasswordType::class)
             ->add('profileImage', FileType::class, [
                 'mapped' => false,
-                'required' => false
+                'required' => false,
             ])
         ;
     }
@@ -53,8 +53,8 @@ class RegisterType extends AbstractType
         $resolver->setDefaults([
             'data_class' => UserInterface::class,
             'validation_groups' => [
-                'registration'
-            ]
+                'registration',
+            ],
         ]);
     }
 }

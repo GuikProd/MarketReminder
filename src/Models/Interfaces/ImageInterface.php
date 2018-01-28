@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Models\Interfaces;
 
 /**
- * Interface ImageInterface
+ * Interface ImageInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

@@ -16,7 +16,7 @@ namespace App\Builder\Interfaces;
 use App\Models\Interfaces\ImageInterface;
 
 /**
- * Interface ImageBuilderInterface
+ * Interface ImageBuilderInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -25,7 +25,7 @@ interface ImageBuilderInterface
     /**
      * @return ImageBuilderInterface
      */
-    public function createImage(): ImageBuilderInterface;
+    public function createImage(): self;
 
     /**
      * @return ImageInterface

@@ -17,7 +17,7 @@ use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class StockResolver
+ * Class StockResolver.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -49,8 +49,8 @@ class StockResolver implements ResolverInterface
             return [
                 $this->entityManagerInterface->getRepository(Stock::class)
                                              ->findOneBy([
-                                                 'id' => $argument->offsetGet('id')
-                                             ])
+                                                 'id' => $argument->offsetGet('id'),
+                                             ]),
             ];
         }
 

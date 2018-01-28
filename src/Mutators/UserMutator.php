@@ -16,7 +16,7 @@ use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 
 /**
- * Class UserMutator
+ * Class UserMutator.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

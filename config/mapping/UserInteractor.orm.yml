@@ -41,8 +41,7 @@ App\Interactor\UserInteractor:
              type: boolean
              nullable: true
          currentState:
-             type: string
-             length: 10
+             type: array
              nullable: false
              unique: false
 

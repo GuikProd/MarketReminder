@@ -17,7 +17,7 @@ use App\Models\Image;
 use App\Models\Interfaces\UserInterface;
 
 /**
- * Class ImageInteractor
+ * Class ImageInteractor.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

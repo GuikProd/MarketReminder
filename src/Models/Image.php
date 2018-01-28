@@ -16,7 +16,7 @@ namespace App\Models;
 use App\Models\Interfaces\ImageInterface;
 
 /**
- * Class Image
+ * Class Image.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -50,7 +50,7 @@ abstract class Image implements ImageInterface
     /**
      * @return int
      */
-    public function getId():? int
+    public function getId(): ? int
     {
         return $this->id;
     }
@@ -74,7 +74,7 @@ abstract class Image implements ImageInterface
     /**
      * @return string
      */
-    public function getModificationDate():? string
+    public function getModificationDate(): ? string
     {
         return $this->modificationDate->format('d-m-Y');
     }

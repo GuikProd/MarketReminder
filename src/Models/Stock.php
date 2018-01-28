@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Class Stock
+ * Class Stock.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -63,7 +63,7 @@ class Stock
     /**
      * @return int
      */
-    public function getId():? int
+    public function getId(): ? int
     {
         return $this->id;
     }
@@ -87,7 +87,7 @@ class Stock
     /**
      * @return string
      */
-    public function getModificationDate():? string
+    public function getModificationDate(): ? string
     {
         return $this->modificationDate->format('d-m-Y h:i:s');
     }

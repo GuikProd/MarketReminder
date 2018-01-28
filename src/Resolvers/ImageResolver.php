@@ -17,7 +17,7 @@ use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class ImageResolver
+ * Class ImageResolver.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -49,8 +49,8 @@ class ImageResolver implements ResolverInterface
             return [
                 $this->entityManager->getRepository(Image::class)
                                     ->findOneBy([
-                                      'id' => $argument->offsetGet('id')
-                                    ])
+                                      'id' => $argument->offsetGet('id'),
+                                    ]),
             ];
         }
 

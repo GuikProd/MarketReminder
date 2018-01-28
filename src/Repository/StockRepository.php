@@ -14,7 +14,7 @@ namespace App\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class StockRepository
+ * Class StockRepository.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

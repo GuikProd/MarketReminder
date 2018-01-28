@@ -18,7 +18,7 @@ use App\Event\User\UserCreatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class UserSecuritySubscriber
+ * Class UserSecuritySubscriber.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -37,7 +37,7 @@ class UserSecuritySubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            UserCreatedEvent::NAME => 'onUserCreated'
+            UserCreatedEvent::NAME => 'onUserCreated',
         ];
     }
 

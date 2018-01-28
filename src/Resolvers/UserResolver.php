@@ -17,7 +17,7 @@ use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class UserResolver
+ * Class UserResolver.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -49,8 +49,8 @@ class UserResolver implements ResolverInterface
             return [
                 $this->entityManagerInterface->getRepository(User::class)
                                              ->findOneBy([
-                                                 'id' => $argument->offsetGet('id')
-                                             ])
+                                                 'id' => $argument->offsetGet('id'),
+                                             ]),
             ];
         }
 

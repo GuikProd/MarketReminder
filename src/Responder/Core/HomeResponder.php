@@ -11,18 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Responder\Security;
+namespace App\Responder\Core;
 
 use Twig\Environment;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RegisterResponder.
+ * Class HomeResponder.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisterResponder
+class HomeResponder
 {
     /**
      * @var Environment
@@ -30,7 +29,7 @@ class RegisterResponder
     private $twig;
 
     /**
-     * RegisterResponder constructor.
+     * HomeResponder constructor.
      *
      * @param Environment $twig
      */
@@ -40,20 +39,16 @@ class RegisterResponder
     }
 
     /**
-     * @param FormInterface $registerForm
-     *
      * @return Response
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function __invoke(FormInterface $registerForm)
+    public function __invoke()
     {
         $response = new Response(
-            $this->twig->render('security/register.html.twig', [
-                'registerForm' => $registerForm->createView(),
-            ])
+            $this->twig->render('core/index.html.twig')
         );
 
         return $response->setCache([

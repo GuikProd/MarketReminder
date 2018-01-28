@@ -21,7 +21,7 @@ use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Class RegisterTypeHandler
+ * Class RegisterTypeHandler.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -45,8 +45,8 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     /**
      * RegisterTypeHandler constructor.
      *
-     * @param Registry $workflowRegistry
-     * @param EntityManagerInterface $entityManagerInterface
+     * @param Registry                     $workflowRegistry
+     * @param EntityManagerInterface       $entityManagerInterface
      * @param UserPasswordEncoderInterface $userPasswordEncoderInterface
      */
     public function __construct(
@@ -76,8 +76,13 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 )
                 ->withRole('ROLE_USER')
                 ->withValidationToken(
-                    str_rot13(
-                        random_bytes(35)
+                    crypt(
+                        str_rot13(
+                            str_shuffle(
+                                $userBuilder->getUser()->getEmail()
+                            )
+                        ),
+                        $userBuilder->getUser()->getUsername()
                     )
                 )
                 ->withActive(false)

@@ -49,3 +49,12 @@ Feature: As a normal user, I want to be able to register myself and create a new
     Then I should be on "/fr/register"
     And I should see "Cette valeur est trop longue !"
     And the response status code should be 200
+
+  Scenario: I want to register myself using a right profile image.
+    Then I fill in "register_username" with "Toto"
+    And I fill in "register_email" with "toto@gmail.com"
+    And I fill in "register_plainPassword" with "Ie1FDLDLMR"
+    And I attach the file "test.png" to "register_profileImage"
+    And I press "Créer un compte"
+    Then I should be on "/fr/"
+    And the response status code should be 200

@@ -16,7 +16,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Class ProductsFixtures
+ * Class ProductsFixtures.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -89,7 +89,7 @@ class ProductsFixtures extends Fixture
     public function getDependencies()
     {
         return [
-            StockFixtures::class
+            StockFixtures::class,
         ];
     }
 }

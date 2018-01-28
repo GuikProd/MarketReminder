@@ -18,7 +18,7 @@ use App\Models\Interfaces\ImageInterface;
 use App\Builder\Interfaces\ImageBuilderInterface;
 
 /**
- * Class ImageBuilder
+ * Class ImageBuilder.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

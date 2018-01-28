@@ -17,7 +17,7 @@ use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class ProductsResolver
+ * Class ProductsResolver.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -49,8 +49,8 @@ class ProductsResolver implements ResolverInterface
             return [
                 $this->entityManagerInterface->getRepository(Products::class)
                                              ->findOneBy([
-                                                 'id' => $argument->offsetGet('id')
-                                             ])
+                                                 'id' => $argument->offsetGet('id'),
+                                             ]),
             ];
         }
 
