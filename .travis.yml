@@ -13,7 +13,7 @@ before_script:
     - composer install
     - cp .env.dist .env
     - cp .env.behat.dist .env.behat
-    - echo $GCP_PROJECT_KEY > ./docker/config/google/credentials.json
+    - echo $GCP_PROJECT_KEY > /docker/config/google/credentials.json
 script:
     - ./bin/console d:d:c --env=test
     - ./bin/console d:s:c --env=test
