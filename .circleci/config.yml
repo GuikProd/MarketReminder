@@ -61,8 +61,8 @@ jobs:
                     - vendor
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
-            - run: mkdir -p /docker/config/google
-            - run: echo $GCP_PROJECT_KEY > /docker/config/google/credentials.json
+            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/docker/config/google
+            - run: echo $GCP_PROJECT_KEY > $CIRCLE_WORKING_DIRECTORY/docker/config/google/credentials.json
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: vendor/bin/behat --profile default
