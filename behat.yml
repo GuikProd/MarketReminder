@@ -15,7 +15,7 @@ default:
                 bootstrap: features/bootstrap/bootstrap.php
                 class: App\Kernel
         Behat\MinkExtension:
-            files_path: '%paths.base%/assets'
+            files_path: '%paths.base%/features/assets'
             goutte: ~
             sessions:
                 default:
