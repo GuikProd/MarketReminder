@@ -24,8 +24,8 @@ phpspec:
     before_script:
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
-        - php composer.phar install -n --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize --classmap-authoritative
+        - composer install -n --optimize-autoloader --classmap-authoritative
+        - composer dump-autoload --optimize --classmap-authoritative
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
