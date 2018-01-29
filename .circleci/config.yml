@@ -62,6 +62,7 @@ jobs:
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
             - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
+            - run: rm -rf $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/*.json
             - run: echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
             - run: ls -l $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
             - run: ./bin/console d:d:c --env=test
