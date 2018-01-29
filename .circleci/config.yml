@@ -62,12 +62,9 @@ jobs:
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
             - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
-            - run: rm -rf $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/*.json
-            - run: echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
-            - run: ls -l $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
+            - run: echo $GCP_PROJECT_KEY > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
-            - run: cat $CIRCLE_WORKING_DIRECTORY/var/logs/test.log
             - run: vendor/bin/behat --profile default
             - run: rm -rf var/data.db
     gcloud_kubernetes_check:
@@ -75,7 +72,7 @@ jobs:
             - image: google/cloud-sdk
         steps:
             - checkout
-            - run: echo $GCP_SERVICE_CREDENTIALS > /tmp/gcp_key.json
+            - run: echo $GCP_PROJECT_KEY > /tmp/gcp_key.json
             - run: gcloud config set project $GCP_PROJECT_NAME
             - run: gcloud auth activate-service-account --key-file /tmp/gcp_key.json
             - run: gcloud container clusters get-credentials $GCK_CLUSTER_NAME --zone $GCK_CLUSTER_ZONE --project $GCP_PROJECT_NAME
