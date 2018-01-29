@@ -61,7 +61,7 @@ jobs:
                     - vendor
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
-            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
+            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/
             - run: echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
