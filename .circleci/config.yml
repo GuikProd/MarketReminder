@@ -89,4 +89,6 @@ workflows:
             - behat_core
     staging:
         jobs:
-            - gcloud_kubernetes_check
+            - gcloud_kubernetes_check:
+                requires:
+                    - behat_core
