@@ -16,5 +16,5 @@ coverage/**/
 
 
 # Google Cloud
-docker/config/google/
+config/credentials/google/bucket
 public/images/profiles/

@@ -25,23 +25,23 @@ use App\Bridge\Interfaces\CloudStorageBridgeInterface;
 class CloudStorageBridge implements CloudStorageBridgeInterface
 {
     /**
-     * @var string
+     * @var array
      */
-    private $credentialsFolder;
+    private $credentials;
 
     /**
      * @var \SplFileInfo
      */
-    private $credentialsFile;
+    private $bucketCredentialsFolder;
 
     /**
      * CloudStorageBridge constructor.
      *
-     * @param string $credentialsFolder
+     * @param string $bucketCredentialsFolder
      */
-    public function __construct(string $credentialsFolder)
+    public function __construct(string $bucketCredentialsFolder)
     {
-        $this->credentialsFolder = $credentialsFolder;
+        $this->bucketCredentialsFolder = $bucketCredentialsFolder;
     }
 
     /**
@@ -50,7 +50,7 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
     public function getServiceBuilder(): ServiceBuilder
     {
         return new ServiceBuilder([
-            'keyFile' => $this->credentialsFile
+            'keyFile' => $this->credentials
         ]);
     }
 
@@ -61,16 +61,24 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
     {
         $finder = new Finder();
 
-        $files = $finder->in($this->credentialsFolder."/google")
-                                        ->files()
-                                        ->name('*.json');
+        $files = $finder->in($this->bucketCredentialsFolder)
+                        ->files()
+                        ->name('*.json');
 
         foreach ($files as $file) {
             if ($file->getFilename() === 'credentials.json') {
-                $this->credentialsFile = json_decode($file->getContents(), true);
+                $this->credentials = json_decode($file->getContents(), true);
             }
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closeConnexion(): void
+    {
+        $this->credentials = null;
     }
 }

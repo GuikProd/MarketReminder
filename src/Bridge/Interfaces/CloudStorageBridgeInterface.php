@@ -31,4 +31,9 @@ interface CloudStorageBridgeInterface
      * @return CloudStorageBridgeInterface
      */
     public function loadCredentialsFile(): CloudStorageBridgeInterface;
+
+    /**
+     * Allow to close the connexion via ths service account.
+     */
+    public function closeConnexion(): void;
 }
