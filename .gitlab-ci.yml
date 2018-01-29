@@ -1,0 +1,115 @@
+stages:
+    - quality_tests
+    - frontend
+    - unit_tests
+    - functional_tests
+    - performances_tests
+    - deployment
+
+quality_tests:
+    stage: quality_tests
+    image: php:fpm
+    before_script:
+        - curl -o insight.phar -s http://get.insight.sensiolabs.com/insight.phar
+    script:
+        - php insight.phar analyze --no-interaction --no-ansi $INSIGHT_PROJECT_ID --reference=$CI_COMMIT_SHA --user-uuid="$INSIGHT_USER_UID" --api-token="$INSIGHT_USER_TOKEN"
+    only:
+        - master
+
+phpspec:
+    stage: unit_tests
+    image: php:7.1-fpm
+    services:
+        - redis
+    before_script:
+        - apt-get update -y
+        - apt-get install -y libssl-dev
+        - pecl install apcu xdebug
+        - apt-get install -y libpq-dev
+        - docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+        - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
+        - docker-php-ext-enable apcu xdebug
+        - apt-get install zip unzip git -y
+        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        - php composer-setup.php
+        - php -r "unlink('composer-setup.php');"
+        - cp ./Gitlab/.env.gitlab.dist ./.env
+        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
+    script:
+        - php composer.phar install -n --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize --classmap-authoritative
+        - ./bin/console d:d:c --env=test
+        - ./bin/console d:s:c --env=test
+        - vendor/bin/phpspec run
+        - rm -rf var/data.db
+    cache:
+        paths:
+        - vendor/
+
+phpunit:
+    stage: unit_tests
+    image: php:7.1-fpm
+    services:
+        - redis
+    before_script:
+        - apt-get update -y
+        - apt-get install -y libssl-dev
+        - pecl install apcu xdebug
+        - apt-get install -y libpq-dev
+        - docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+        - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
+        - docker-php-ext-enable apcu xdebug
+        - apt-get install zip unzip git -y
+        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        - php composer-setup.php
+        - php -r "unlink('composer-setup.php');"
+        - cp ./Gitlab/.env.gitlab.dist ./.env
+        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
+    script:
+        - php composer.phar install -n --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize --classmap-authoritative
+        - ./bin/console d:d:c --env=test
+        - ./bin/console d:s:c --env=test
+        - vendor/bin/phpunit -v
+        - rm -rf var/data.db
+    cache:
+        paths:
+        - vendor/
+
+behat:
+    stage: functional_tests
+    image: php:7.1-fpm
+    services:
+        - redis
+        - node
+    before_script:
+        - apt-get update -y
+        - apt-get install -y libssl-dev
+        - pecl install apcu xdebug
+        - apt-get install -y libpq-dev
+        - docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+        - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
+        - docker-php-ext-enable apcu xdebug
+        - apt-get install zip unzip git -y
+        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        - php composer-setup.php
+        - php -r "unlink('composer-setup.php');"
+        - cp ./Gitlab/.env.gitlab.dist ./.env
+        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
+        - mkdir -p ./config/credentials/google/bucket
+        - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
+    script:
+        - php composer.phar install -n --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize --classmap-authoritative
+        - ./bin/console d:d:c --env=test
+        - ./bin/console d:s:c --env=test
+        - vendor/bin/behat
+        - rm -rf var/data.db
+    cache:
+        paths:
+        - vendor/
+
+performances:
+    stage: performances_tests
+    script:
+        - echo 'Hello World'
