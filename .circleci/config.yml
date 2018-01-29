@@ -67,8 +67,8 @@ jobs:
             - run: ls -l $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
-            - run: vendor/bin/behat --profile default
             - run: cat $CIRCLE_WORKING_DIRECTORY/var/logs/test.log
+            - run: vendor/bin/behat --profile default
             - run: rm -rf var/data.db
     gcloud_kubernetes_check:
         docker:
