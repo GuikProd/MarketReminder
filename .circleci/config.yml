@@ -48,16 +48,6 @@ jobs:
             - image: redis
         steps:
             - checkout
-            - run:
-                name: Google Cloud Credentials
-                command: |
-                    mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/
-                    echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
-            - store_artifacts:
-                      path: $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
-                      destination: google_cloud_credentials-file
-            - store_artifacts:
-                path: $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
             - run: sudo composer self-update
             - restore_cache:
                 keys:
@@ -71,6 +61,9 @@ jobs:
                     - vendor
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
+            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
+            - run: touch $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: vendor/bin/behat --profile default
