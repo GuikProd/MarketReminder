@@ -68,6 +68,7 @@ jobs:
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: vendor/bin/behat --profile default
+            - run: cat $CIRCLE_WORKING_DIRECTORY/var/logs/test.log
             - run: rm -rf var/data.db
     gcloud_kubernetes_check:
         docker:
