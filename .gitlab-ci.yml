@@ -34,6 +34,8 @@ phpspec:
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
+        - php composer.phar install --optimize-autoloader --authorative-classmap
+        - php composer.phar dump-autoload --optimize-autoloader --authorative-classmap
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
     script:
@@ -56,6 +58,11 @@ phpunit:
         - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
         - docker-php-ext-enable apcu xdebug
         - apt-get install zip unzip git -y
+        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        - php composer-setup.php
+        - php -r "unlink('composer-setup.php');"
+        - php composer.phar install --optimize-autoloader --authorative-classmap
+        - php composer.phar dump-autoload --optimize-autoloader --authorative-classmap
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
     script:
@@ -79,6 +86,11 @@ behat:
         - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
         - docker-php-ext-enable apcu xdebug
         - apt-get install zip unzip git -y
+        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        - php composer-setup.php
+        - php -r "unlink('composer-setup.php');"
+        - php composer.phar install --optimize-autoloader --authorative-classmap
+        - php composer.phar dump-autoload --optimize-autoloader --authorative-classmap
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
