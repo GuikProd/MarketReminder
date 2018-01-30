@@ -19,13 +19,13 @@ quality_tests:
 docker_image:
     stage: unit_tests
     before_script:
-        - docker build -t marketReminder-gitlab --build-arg GOOGLE_SERVICE_CREDENTIALS=$GCP_SERVICE_CREDENTIALS --file ./Dockerfile.gitlab .
+        - docker build -t marketreminder-gitlab --build-arg GOOGLE_SERVICE_CREDENTIALS=$GCP_SERVICE_CREDENTIALS --file ./Dockerfile.gitlab .
     script:
         - echo "hello from Dockerfile !"
 
 phpspec:
     stage: unit_tests
-    image: marketReminder-gitlab
+    image: marketreminder-gitlab
     services:
         - redis
     script:
@@ -39,7 +39,7 @@ phpspec:
 
 phpunit:
     stage: unit_tests
-    image: marketReminder-gitlab
+    image: marketreminder-gitlab
     services:
         - redis
     script:
