@@ -4,6 +4,10 @@ ENV WORKPATH "/var/www/marketReminder"
 
 ADD . ${WORKDIR}
 
+RUN mkdir -p ${WORKPATH}
+
+RUN chown www-data:www-data -R ${WORKPATH}
+
 RUN ls -l
 
 RUN apt-get update -y \
@@ -42,14 +46,10 @@ RUN chmod +x /usr/local/bin/docker-app-install-composer \
     && cp Gitlab/.env.gitlab.dist ./.env \
     && cp Gitlab/.env.gitlab.dist ./.env.behat \
 
-RUN mkdir -p ${WORKPATH}
-
-RUN chown www-data:www-data -R ${WORKPATH}
-
-WORKDIR ${WORKPATH}
-
 RUN composer install --no-dev --optimize --classmap-authoritative \
     && composer dump-autoload --optimize --classmap-authoritative
+
+WORKDIR ${WORKPATH}
 
 EXPOSE 9000
 
