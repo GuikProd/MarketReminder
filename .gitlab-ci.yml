@@ -35,7 +35,7 @@ phpspec:
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
         - php composer.phar install --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
     script:
@@ -43,6 +43,9 @@ phpspec:
         - ./bin/console d:s:c --env=test
         - vendor/bin/phpspec run
         - rm -rf var/data.db
+    cache:
+        paths:
+            - vendor/
 
 phpunit:
     stage: unit_tests
@@ -62,7 +65,7 @@ phpunit:
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
         - php composer.phar install --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
     script:
@@ -70,6 +73,9 @@ phpunit:
         - ./bin/console d:s:c --env=test
         - vendor/bin/phpunit -v
         - rm -rf var/data.db
+    cache:
+        paths:
+            - vendor/
 
 behat:
     stage: functional_tests
@@ -90,7 +96,7 @@ behat:
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
         - php composer.phar install --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
@@ -100,6 +106,9 @@ behat:
         - ./bin/console d:s:c --env=test
         - vendor/bin/behat
         - rm -rf var/data.db
+    cache:
+        paths:
+            - vendor/
 
 performances:
     stage: performances_tests
