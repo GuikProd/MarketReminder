@@ -23,7 +23,7 @@ docker_image:
         - mkdir -p ./config/credentials/google/bucket
         - echo $GOOGLE_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
         - rm -rf .git
-        - docker build -t marketreminder --file ./Dockerfile.gitlab .
+        - docker build -t marketreminder --file ./Dockerfile.gitlab . --cache-from
     script:
         - echo "Dockerfile builded !"
 

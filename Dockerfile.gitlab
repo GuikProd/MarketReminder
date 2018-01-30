@@ -44,7 +44,7 @@ RUN chmod +x /usr/local/bin/docker-app-install-composer \
     && docker-app-install-composer \
     && mv composer.phar /usr/local/bin/composer \
     && cp Gitlab/.env.gitlab.dist ./.env \
-    && cp Gitlab/.env.gitlab.dist ./.env.behat \
+    && cp Gitlab/.env.gitlab.dist ./.env.behat
 
 RUN composer install --no-dev --optimize --classmap-authoritative \
     && composer dump-autoload --optimize --classmap-authoritative
