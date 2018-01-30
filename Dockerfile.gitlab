@@ -2,6 +2,8 @@ FROM php:7.1-fpm
 
 ENV WORKPATH "/var/www/marketReminder"
 
+ADD . ${WORKDIR}
+
 RUN apt-get update -y \
     && apt-get install -y \
                libfreetype6-dev \
@@ -43,8 +45,6 @@ RUN mkdir -p ${WORKPATH}
 RUN chown www-data:www-data -R ${WORKPATH}
 
 WORKDIR ${WORKPATH}
-
-ADD . ${WORKDIR}
 
 RUN composer install --no-dev --optimize --classmap-authoritative \
     && composer dump-autoload --optimize --classmap-authoritative
