@@ -1,9 +1,6 @@
 FROM php:7.1-fpm
 
-ARG google_service_credentials
-
 ENV WORKPATH "/var/www/marketReminder"
-ENV GOOGLE_SERVICE_CREDENTIALS=${google_service_credentials}
 
 RUN apt-get update -y \
     && apt-get install -y \
@@ -19,7 +16,7 @@ RUN apt-get update -y \
                libssl-dev \
                libpq-dev
 
-COPY conf/php.ini /usr/local/etc/php/
+COPY docker/php/conf/php.ini /usr/local/etc/php/
 
 # Core extensions
 RUN pecl install apcu \
@@ -40,8 +37,6 @@ RUN chmod +x /usr/local/bin/docker-app-install-composer \
     && mv composer.phar /usr/local/bin/composer \
     && cp ./Gitlab/.env.gitlab.dist ./.env \
     && cp ./Gitlab/.env.gitlab.dist ./.env.behat \
-    && mkdir -p ./config/credentials/google/bucket \
-    && echo ${GOOGLE_SERVICE_CREDENTIALS} > ./config/credentials/google/bucket/credentials.json
 
 RUN mkdir -p ${WORKPATH}
 

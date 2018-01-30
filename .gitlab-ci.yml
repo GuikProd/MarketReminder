@@ -20,9 +20,11 @@ quality_tests:
 docker_image:
     stage: docker_image
     before_script:
-        - docker build -t marketreminder --build-arg google_service_credentials=$GCP_SERVICE_CREDENTIALS --file ./Dockerfile.gitlab .
+        - mkdir -p ./config/credentials/google/bucket
+        - echo $GOOGLE_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
+        - docker build -t marketreminder --file ./Dockerfile.gitlab .
     script:
-        - echo "hello from Dockerfile !"
+        - echo "Dockerfile builded !"
 
 phpspec:
     stage: unit_tests
