@@ -31,7 +31,7 @@ RUN pecl install apcu \
 # Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-COPY ./install-composer.sh /usr/local/bin/docker-app-install-composer
+COPY docker/php/install-composer.sh /usr/local/bin/docker-app-install-composer
 RUN chmod +x /usr/local/bin/docker-app-install-composer \
     && docker-app-install-composer \
     && mv composer.phar /usr/local/bin/composer \
@@ -43,6 +43,8 @@ RUN mkdir -p ${WORKPATH}
 RUN chown www-data:www-data -R ${WORKPATH}
 
 WORKDIR ${WORKPATH}
+
+ADD . ${WORKDIR}
 
 RUN composer install --no-dev --optimize --classmap-authoritative \
     && composer dump-autoload --optimize --classmap-authoritative
