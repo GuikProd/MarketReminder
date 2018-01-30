@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:latest
 
 ENV WORKDIR "/var/www/marketReminder"
 

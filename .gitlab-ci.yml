@@ -41,9 +41,6 @@ phpspec:
         - ./bin/console d:s:c --env=test
         - vendor/bin/phpspec run
         - rm -rf var/data.db
-    cache:
-        paths:
-        - vendor/
 
 phpunit:
     stage: unit_tests
@@ -66,9 +63,6 @@ phpunit:
         - ./bin/console d:s:c --env=test
         - vendor/bin/phpunit -v
         - rm -rf var/data.db
-    cache:
-        paths:
-        - vendor/
 
 behat:
     stage: functional_tests
@@ -94,9 +88,6 @@ behat:
         - ./bin/console d:s:c --env=test
         - vendor/bin/behat
         - rm -rf var/data.db
-    cache:
-        paths:
-        - ./
 
 performances:
     stage: performances_tests
