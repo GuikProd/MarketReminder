@@ -19,7 +19,7 @@ quality_tests:
 docker_image:
     stage: unit_tests
     before_script:
-        - docker build -t marketreminder-gitlab --build-arg GOOGLE_SERVICE_CREDENTIALS=$GCP_SERVICE_CREDENTIALS --file ./Dockerfile.gitlab .
+        - docker build -t marketreminder_gitlab --build-arg GOOGLE_SERVICE_CREDENTIALS=$GCP_SERVICE_CREDENTIALS --file ./Dockerfile.gitlab .
     script:
         - echo "hello from Dockerfile !"
 
