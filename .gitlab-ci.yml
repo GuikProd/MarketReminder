@@ -35,6 +35,8 @@ phpspec:
         - php -r "unlink('composer-setup.php');"
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
+        - mkdir -p ./config/credentials/google/bucket
+        - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
     script:
         - php composer.phar install -n --optimize-autoloader --classmap-authoritative
         - php composer.phar dump-autoload --optimize --classmap-authoritative
@@ -44,7 +46,7 @@ phpspec:
         - rm -rf var/data.db
     cache:
         paths:
-        - vendor/
+        - ./
 
 phpunit:
     stage: unit_tests
@@ -60,21 +62,14 @@ phpunit:
         - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
         - docker-php-ext-enable apcu xdebug
         - apt-get install zip unzip git -y
-        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        - php composer-setup.php
-        - php -r "unlink('composer-setup.php');"
-        - cp ./Gitlab/.env.gitlab.dist ./.env
-        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
     script:
-        - php composer.phar install -n --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
         - vendor/bin/phpunit -v
         - rm -rf var/data.db
     cache:
         paths:
-        - vendor/
+        - ./
 
 behat:
     stage: functional_tests
@@ -91,23 +86,14 @@ behat:
         - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
         - docker-php-ext-enable apcu xdebug
         - apt-get install zip unzip git -y
-        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        - php composer-setup.php
-        - php -r "unlink('composer-setup.php');"
-        - cp ./Gitlab/.env.gitlab.dist ./.env
-        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
-        - mkdir -p ./config/credentials/google/bucket
-        - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
     script:
-        - php composer.phar install -n --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
         - vendor/bin/behat
         - rm -rf var/data.db
     cache:
         paths:
-        - vendor/
+        - ./
 
 performances:
     stage: performances_tests
