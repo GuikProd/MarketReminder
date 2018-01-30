@@ -1,0 +1,57 @@
+FROM php:7.1-fpm
+
+ARG GOOGLE_SERVICE_CREDENTIALS
+
+ENV WORKPATH "/var/www/marketReminder"
+ENV GOOGLE_SERVICE_CREDENTIALS=$GOOGLE_SERVICE_CREDENTIALS
+
+RUN apt-get update -y \
+    && apt-get install -y \
+               libfreetype6-dev \
+               libjpeg62-turbo-dev \
+               libmcrypt-dev \
+               zip \
+               unzip \
+               wget \
+               curl \
+               libcurl4-openssl-dev \
+               pkg-config \
+               libssl-dev \
+               libpq-dev
+
+COPY conf/php.ini /usr/local/etc/php/
+
+# Core extensions
+RUN pecl install apcu \
+                 xdebug \
+    && apt-get install -y libpq-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql \
+    && docker-php-ext-enable apcu xdebug \
+    && docker-php-ext-install mysqli \
+    && docker-php-ext-enable mysqli
+
+# Composer
+COPY ./install-composer.sh /usr/local/bin/docker-app-install-composer
+RUN chmod +x /usr/local/bin/docker-app-install-composer \
+    && docker-app-install-composer \
+    && mv composer.phar /usr/local/bin/composer \
+    && cp ./Gitlab/.env.gitlab.dist ./.env \
+    && cp ./Gitlab/.env.gitlab.dist ./.env.behat \
+    && mkdir -p ./config/credentials/google/bucket \
+    && echo ${GOOGLE_SERVICE_CREDENTIALS} > ./config/credentials/google/bucket/credentials.json
+
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+RUN mkdir -p ${WORKPATH}
+
+RUN chown www-data:www-data -R ${WORKPATH}
+
+WORKDIR ${WORKPATH}
+
+RUN composer install --no-dev --optimize --classmap-authoritative \
+    && composer dump-autoload --optimize --classmap-authoritative
+
+EXPOSE 9000
+
+CMD ["php-fpm"]

@@ -16,30 +16,21 @@ quality_tests:
     only:
         - master
 
+docker_image:
+    stage: unit_tests
+    before_script:
+        - docker build -t marketReminder-gitlab --build-arg GOOGLE_SERVICE_CREDENTIALS=$GCP_SERVICE_CREDENTIALS --file ./Dockerfile.gitlab .
+
 phpspec:
     stage: unit_tests
-    image: php:7.1-fpm
+    image: marketReminder-gitlab
     services:
         - redis
     before_script:
-        - apt-get update -y
-        - apt-get install -y libssl-dev
-        - pecl install apcu xdebug
-        - apt-get install -y libpq-dev
-        - docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-        - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
-        - docker-php-ext-enable apcu xdebug
-        - apt-get install zip unzip git -y
-        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        - php composer-setup.php
-        - php -r "unlink('composer-setup.php');"
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
-        - mkdir -p ./config/credentials/google/bucket
-        - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
+
     script:
-        - php composer.phar install -n --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
         - vendor/bin/phpspec run
@@ -50,18 +41,9 @@ phpspec:
 
 phpunit:
     stage: unit_tests
-    image: php:7.1-fpm
+    image: marketReminder-gitlab
     services:
         - redis
-    before_script:
-        - apt-get update -y
-        - apt-get install -y libssl-dev
-        - pecl install apcu xdebug
-        - apt-get install -y libpq-dev
-        - docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-        - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
-        - docker-php-ext-enable apcu xdebug
-        - apt-get install zip unzip git -y
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
