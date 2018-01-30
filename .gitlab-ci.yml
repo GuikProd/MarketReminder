@@ -34,8 +34,8 @@ phpspec:
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
-        - php composer.phar install --optimize-autoloader --authorative-classmap
-        - php composer.phar dump-autoload --optimize-autoloader --authorative-classmap
+        - php composer.phar install --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize-autoloader --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
     script:
@@ -61,8 +61,8 @@ phpunit:
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
-        - php composer.phar install --optimize-autoloader --authorative-classmap
-        - php composer.phar dump-autoload --optimize-autoloader --authorative-classmap
+        - php composer.phar install --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize-autoloader --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
     script:
@@ -89,8 +89,8 @@ behat:
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
-        - php composer.phar install --optimize-autoloader --authorative-classmap
-        - php composer.phar dump-autoload --optimize-autoloader --authorative-classmap
+        - php composer.phar install --optimize-autoloader --classmap-authoritative
+        - php composer.phar dump-autoload --optimize-autoloader --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
