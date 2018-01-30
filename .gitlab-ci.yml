@@ -20,6 +20,7 @@ quality_tests:
 docker_image:
     stage: docker_image
     before_script:
+        - rm -rf .git
         - mkdir -p ./config/credentials/google/bucket
         - echo $GOOGLE_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
         - docker build -t marketreminder --file ./Dockerfile.gitlab .
