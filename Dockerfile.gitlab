@@ -46,8 +46,8 @@ RUN chmod +x /usr/local/bin/docker-app-install-composer \
     && cp Gitlab/.env.gitlab.dist ./.env \
     && cp Gitlab/.env.gitlab.dist ./.env.behat
 
-RUN composer install --no-dev --optimize --classmap-authoritative \
-    && composer dump-autoload --optimize --classmap-authoritative
+RUN composer install --no-dev --optimize-autoloader --classmap-authoritative \
+    && composer dump-autoload --optimize-autoloader --classmap-authoritative
 
 WORKDIR ${WORKPATH}
 
