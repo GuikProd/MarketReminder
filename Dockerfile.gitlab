@@ -4,6 +4,8 @@ ENV WORKPATH "/var/www/marketReminder"
 
 ADD . ${WORKDIR}
 
+RUN ls -l
+
 RUN apt-get update -y \
     && apt-get install -y \
                libfreetype6-dev \
@@ -37,8 +39,8 @@ COPY docker/php/install-composer.sh /usr/local/bin/docker-app-install-composer
 RUN chmod +x /usr/local/bin/docker-app-install-composer \
     && docker-app-install-composer \
     && mv composer.phar /usr/local/bin/composer \
-    && cp /Gitlab/.env.gitlab.dist ./.env \
-    && cp /Gitlab/.env.gitlab.dist ./.env.behat \
+    && cp Gitlab/.env.gitlab.dist ./.env \
+    && cp Gitlab/.env.gitlab.dist ./.env.behat \
 
 RUN mkdir -p ${WORKPATH}
 
