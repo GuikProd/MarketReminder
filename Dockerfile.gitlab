@@ -3,7 +3,7 @@ FROM php:7.1-fpm
 ARG google_service_credentials
 
 ENV WORKPATH "/var/www/marketReminder"
-ENV GOOGLE_SERVICE_CREDENTIALS=$google_service_credentials
+ENV GOOGLE_SERVICE_CREDENTIALS=${google_service_credentials}
 
 RUN apt-get update -y \
     && apt-get install -y \
