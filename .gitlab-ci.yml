@@ -1,6 +1,6 @@
 stages:
-    - docker_image
     - quality_tests
+    - specifications
     - frontend
     - unit_tests
     - functional_tests
@@ -17,24 +17,25 @@ quality_tests:
     only:
         - master
 
-docker_image:
-    stage: docker_image
-    before_script:
-        - mkdir -p ./config/credentials/google/bucket
-        - echo $GOOGLE_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
-        - rm -rf .git
-        - docker build -t marketreminder --file ./Dockerfile.gitlab . --cache-from php:7.1-fpm
-    script:
-        - echo "Dockerfile builded !"
-
 phpspec:
-    stage: unit_tests
-    image: marketreminder
+    stage: specifications
+    image: php:7.1-fpm
     services:
         - redis
     before_script:
-        - composer install --no-dev --optimize-autoloader --classmap-authoritative
-        - composer dump-autoload --optimize-autoloader --classmap-authoritative
+        - apt-get update -y
+        - apt-get install -y libssl-dev
+        - pecl install apcu xdebug
+        - apt-get install -y libpq-dev
+        - docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+        - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
+        - docker-php-ext-enable apcu xdebug
+        - apt-get install zip unzip git -y
+        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        - php composer-setup.php
+        - php -r "unlink('composer-setup.php');"
+        - cp ./Gitlab/.env.gitlab.dist ./.env
+        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
@@ -46,12 +47,18 @@ phpspec:
 
 phpunit:
     stage: unit_tests
-    image: marketreminder
+    image: php:7.1-fpm
     services:
         - redis
     before_script:
-        - composer install --no-dev --optimize-autoloader --classmap-authoritative
-        - composer dump-autoload --optimize-autoloader --classmap-authoritative
+        - apt-get update -y
+        - apt-get install -y libssl-dev
+        - pecl install apcu xdebug
+        - apt-get install -y libpq-dev
+        - docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+        - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
+        - docker-php-ext-enable apcu xdebug
+        - apt-get install zip unzip git -y
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
@@ -76,6 +83,8 @@ behat:
         - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
         - docker-php-ext-enable apcu xdebug
         - apt-get install zip unzip git -y
+        - mkdir -p ./config/credentials/google/bucket
+        - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
