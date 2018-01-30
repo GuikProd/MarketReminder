@@ -32,6 +32,9 @@ phpspec:
     image: marketreminder
     services:
         - redis
+    before_script:
+        - composer install --no-dev --optimize-autoloader --classmap-authoritative
+        - composer dump-autoload --optimize-autoloader --classmap-authoritative
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
@@ -46,6 +49,9 @@ phpunit:
     image: marketreminder
     services:
         - redis
+    before_script:
+        - composer install --no-dev --optimize-autoloader --classmap-authoritative
+        - composer dump-autoload --optimize-autoloader --classmap-authoritative
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
