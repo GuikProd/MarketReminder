@@ -32,6 +32,8 @@ RUN pecl install apcu \
     && docker-php-ext-enable mysqli
 
 # Composer
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
 COPY ./install-composer.sh /usr/local/bin/docker-app-install-composer
 RUN chmod +x /usr/local/bin/docker-app-install-composer \
     && docker-app-install-composer \
@@ -40,8 +42,6 @@ RUN chmod +x /usr/local/bin/docker-app-install-composer \
     && cp ./Gitlab/.env.gitlab.dist ./.env.behat \
     && mkdir -p ./config/credentials/google/bucket \
     && echo ${GOOGLE_SERVICE_CREDENTIALS} > ./config/credentials/google/bucket/credentials.json
-
-ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN mkdir -p ${WORKPATH}
 

@@ -20,16 +20,14 @@ docker_image:
     stage: unit_tests
     before_script:
         - docker build -t marketReminder-gitlab --build-arg GOOGLE_SERVICE_CREDENTIALS=$GCP_SERVICE_CREDENTIALS --file ./Dockerfile.gitlab .
+    script:
+        - echo "hello from Dockerfile !"
 
 phpspec:
     stage: unit_tests
     image: marketReminder-gitlab
     services:
         - redis
-    before_script:
-        - cp ./Gitlab/.env.gitlab.dist ./.env
-        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
-
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
