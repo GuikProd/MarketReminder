@@ -58,3 +58,13 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I press "Créer un compte"
     Then I should be on "/fr/"
     And the response status code should be 200
+
+  Scenario: I want to register myself using a wrong profile image.
+    Then I fill in "register_username" with "Toto"
+    And I fill in "register_email" with "toto@gmail.com"
+    And I fill in "register_plainPassword" with "Ie1FDLDLMR"
+    And I attach the file "test_III.gif" to "register_profileImage"
+    And I press "Créer un compte"
+    Then I should be on "/fr/register"
+    And I should see "Le format est invalide ! Veuillez réessayer avec un nouveau format valide !"
+    And the response status code should be 200

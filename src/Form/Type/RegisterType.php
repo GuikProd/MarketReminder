@@ -15,6 +15,7 @@ namespace App\Form\Type;
 
 use App\Models\Interfaces\UserInterface;
 use Symfony\Component\Form\AbstractType;
+use App\Subscriber\Form\ProfileImageSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,6 +31,21 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 class RegisterType extends AbstractType
 {
     /**
+     * @var ProfileImageSubscriber
+     */
+    private $profileImageSubscriber;
+
+    /**
+     * RegisterType constructor.
+     *
+     * @param ProfileImageSubscriber $profileImageSubscriber
+     */
+    public function __construct(ProfileImageSubscriber $profileImageSubscriber)
+    {
+        $this->profileImageSubscriber = $profileImageSubscriber;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -40,9 +56,11 @@ class RegisterType extends AbstractType
             ->add('plainPassword', PasswordType::class)
             ->add('profileImage', FileType::class, [
                 'mapped' => false,
-                'required' => false,
+                'required' => false
             ])
         ;
+
+        $builder->get('profileImage')->addEventSubscriber($this->profileImageSubscriber);
     }
 
     /**

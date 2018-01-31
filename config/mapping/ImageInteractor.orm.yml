@@ -16,12 +16,14 @@ App\Interactor\ImageInteractor:
             nullable: true
         alt:
             type: string
-            nullable: false
             length: 50
+            nullable: false
+            unique: true
         url:
             type: string
-            nullable: false
             length: 200
+            nullable: false
+            unique: true
 
     oneToOne:
         user:

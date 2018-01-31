@@ -69,12 +69,6 @@ class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterfac
      */
     public function retrieveAsString(string $bucketName, string $fileName): string
     {
-        var_dump($this->cloudStorageBridge
-            ->getServiceBuilder()
-            ->storage()
-            ->bucket($bucketName)
-            ->object($fileName)->info());
-
         return $this->cloudStorageBridge
                     ->getServiceBuilder()
                     ->storage()

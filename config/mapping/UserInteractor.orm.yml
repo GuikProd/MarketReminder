@@ -12,10 +12,12 @@ App\Interactor\UserInteractor:
              type: string
              length: 25
              nullable: false
+             unique: true
          email:
              type: string
              length: 50
              nullable: false
+             unique: true
          password:
              type: string
              length: 60

@@ -18,7 +18,7 @@ use App\Helper\Interfaces\CloudStorageRetrieverHelperInterface;
 
 /**
  * Class ImageRetrieverHelper
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class ImageRetrieverHelper implements ImageRetrieverHelperInterface

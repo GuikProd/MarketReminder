@@ -22,6 +22,11 @@ interface ImageUploaderHelperInterface
 {
     /**
      * @param \SplFileInfo $uploadedFile
+     */
+    public function checkExtension(\SplFileInfo $uploadedFile): void;
+
+    /**
+     * @param \SplFileInfo $uploadedFile
      *
      * @return ImageUploaderHelperInterface
      */
@@ -36,4 +41,14 @@ interface ImageUploaderHelperInterface
      * @return string
      */
     public function getFileName(): string;
+
+    /**
+     * @return string
+     */
+    public function getFileExtension(): string;
+
+    /**
+     * @return bool
+     */
+    public function getAllowedToSave(): bool;
 }

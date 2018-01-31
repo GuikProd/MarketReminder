@@ -93,23 +93,23 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     {
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
 
-            $this->imageUploaderHelperInterface
-                 ->store($registerForm->get('profileImage')->getData())
-                 ->upload();
+            if ($registerForm->get('profileImage')->getData() !== null) {
+                $this->imageUploaderHelperInterface
+                    ->store($registerForm->get('profileImage')->getData())
+                    ->upload();
 
-            $this->imageBuilderInterface
-                 ->createImage()
-                 ->withCreationDate(new \DateTime())
-                 ->withAlt($this->imageUploaderHelperInterface->getFileName())
-                 ->withPublicUrl(
-                     $this->imageRetrieverHelperInterface->getGoogleStoragePublicUrl()
-                     .
-                     $this->imageRetrieverHelperInterface->getBucketName()
-                     .
-                     '/'
-                     .
-                     $this->imageUploaderHelperInterface->getFileName()
-                 );
+                $this->imageBuilderInterface
+                    ->createImage()
+                    ->withCreationDate(new \DateTime())
+                    ->withAlt($this->imageUploaderHelperInterface->getFileName())
+                    ->withPublicUrl(
+                        $this->imageRetrieverHelperInterface->getGoogleStoragePublicUrl()
+                        .
+                        $this->imageUploaderHelperInterface->getFileName()
+                    );
+
+                $userBuilder->withProfileImage($this->imageBuilderInterface->getImage());
+            }
 
             $userBuilder
                 ->withCreationDate(new \DateTime())
@@ -133,7 +133,6 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 )
                 ->withActive(false)
                 ->withValidated(false)
-                ->withProfileImage($this->imageBuilderInterface->getImage())
             ;
 
             $workflow = $this->workflowRegistry->get($userBuilder->getUser());

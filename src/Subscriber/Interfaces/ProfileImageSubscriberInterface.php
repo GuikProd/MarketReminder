@@ -17,11 +17,11 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Interface RegisterTypeSubscriberInterface
+ * Interface ProfileImageSubscriberInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface RegisterTypeSubscriberInterface extends EventSubscriberInterface
+interface ProfileImageSubscriberInterface extends EventSubscriberInterface
 {
     /**
      * @param FormEvent $event
