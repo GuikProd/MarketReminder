@@ -16,6 +16,7 @@ namespace App\Builder;
 use App\Interactor\ImageInteractor;
 use App\Models\Interfaces\ImageInterface;
 use App\Builder\Interfaces\ImageBuilderInterface;
+use App\Models\Interfaces\UserInterface;
 
 /**
  * Class ImageBuilder.
@@ -52,9 +53,39 @@ class ImageBuilder implements ImageBuilderInterface
     /**
      * {@inheritdoc}
      */
+    public function withModificationDate(\DateTime $modificationDate): ImageBuilderInterface
+    {
+        $this->image->setModificationDate($modificationDate);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function withAlt(string $alt): ImageBuilderInterface
     {
         $this->image->setAlt($alt);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withPublicUrl(string $publicUrl): ImageBuilderInterface
+    {
+        $this->image->setUrl($publicUrl);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withUser(UserInterface $user): ImageBuilderInterface
+    {
+        $this->image->setUser($user);
 
         return $this;
     }

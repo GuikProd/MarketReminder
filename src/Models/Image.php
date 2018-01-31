@@ -72,7 +72,7 @@ abstract class Image implements ImageInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getModificationDate(): ? string
     {
@@ -80,15 +80,15 @@ abstract class Image implements ImageInterface
     }
 
     /**
-     * @param \DateTime $modificationDate
+     * {@inheritdoc}
      */
-    public function setModificationDate(\DateTime $modificationDate)
+    public function setModificationDate(\DateTime $modificationDate): void
     {
         $this->modificationDate = $modificationDate;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAlt():? string
     {
@@ -96,7 +96,7 @@ abstract class Image implements ImageInterface
     }
 
     /**
-     * @param string $alt
+     * {@inheritdoc}
      */
     public function setAlt(string $alt): void
     {
@@ -104,7 +104,7 @@ abstract class Image implements ImageInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getUrl():? string
     {
@@ -112,9 +112,9 @@ abstract class Image implements ImageInterface
     }
 
     /**
-     * @param string $url
+     * {@inheritdoc}
      */
-    public function setUrl(string $url)
+    public function setUrl(string $url): void
     {
         $this->url = $url;
     }

@@ -38,12 +38,32 @@ interface ImageInterface
     /**
      * @return null|string
      */
+    public function getModificationDate():? string;
+
+    /**
+     * @param \DateTime $modificationDate
+     */
+    public function setModificationDate(\DateTime $modificationDate): void;
+
+    /**
+     * @return null|string
+     */
     public function getAlt():? string;
 
     /**
      * @param string $alt
      */
     public function setAlt(string $alt): void;
+
+    /**
+     * @return null|string
+     */
+    public function getUrl():? string;
+
+    /**
+     * @param string $url
+     */
+    public function setUrl(string $url): void;
 
     /**
      * @return UserInterface

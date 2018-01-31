@@ -157,6 +157,8 @@ class UserBuilder implements UserBuilderInterface
     {
         $this->user->setProfileImage($profileImage);
 
+        $profileImage->setUser($this->user);
+
         return $this;
     }
 

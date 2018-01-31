@@ -23,13 +23,33 @@ use Psr\Http\Message\StreamInterface;
 interface CloudStorageRetrieverHelperInterface
 {
     /**
+     * Allow to check if a file exist before calling the retrieving methods.
+     *
+     * @param string $bucketName    The name of the bucket.
+     * @param string $fileName      The name of the file.
+     *
+     * @return bool                 Whether or not the file exist.
+     */
+    public function checkFileExistence(string $bucketName, string $fileName): bool;
+
+    /**
      * Allow to retrieve a file as a physical file using StreamInterface.
      *
-     * @param string $bucketName the name of the Bucket
-     * @param string $fileName   the name of the file
-     * @param string $filePath   the path of the file
+     * @param string $bucketName    The name of the Bucket
+     * @param string $fileName      The name of the file
+     * @param string $filePath      The path of the file
      *
-     * @return StreamInterface the file as stream
+     * @return StreamInterface      The file as stream
      */
-    public function retrieve(string $bucketName, string $fileName, string $filePath): StreamInterface;
+    public function retrieveAsFile(string $bucketName, string $fileName, string $filePath): StreamInterface;
+
+    /**
+     * Allow to retrieve a file as a string.
+     *
+     * @param string $bucketName    The name of the bucket to fetch.
+     * @param string $fileName      The name of the file.
+     *
+     * @return string               The public url of the file.
+     */
+    public function retrieveAsString(string $bucketName, string $fileName): string;
 }

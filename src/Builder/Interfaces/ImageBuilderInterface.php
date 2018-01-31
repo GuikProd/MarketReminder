@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Builder\Interfaces;
 
+use App\Models\Interfaces\UserInterface;
 use App\Models\Interfaces\ImageInterface;
 
 /**
@@ -35,11 +36,32 @@ interface ImageBuilderInterface
     public function withCreationDate(\DateTime $creationDate): self;
 
     /**
+     * @param \DateTime $modificationDate
+     *
+     * @return ImageBuilderInterface
+     */
+    public function withModificationDate(\DateTime $modificationDate): self;
+
+    /**
      * @param string $alt
      *
      * @return ImageBuilderInterface
      */
     public function withAlt(string $alt): self;
+
+    /**
+     * @param string $publicUrl
+     *
+     * @return ImageBuilderInterface
+     */
+    public function withPublicUrl(string $publicUrl): self;
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return ImageBuilderInterface
+     */
+    public function withUser(UserInterface $user): self;
 
     /**
      * @return ImageInterface

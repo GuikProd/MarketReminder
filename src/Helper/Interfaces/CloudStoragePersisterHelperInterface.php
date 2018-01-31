@@ -25,9 +25,9 @@ interface CloudStoragePersisterHelperInterface
     /**
      * Allow to persist a new file into a given bucket.
      *
-     * @param string    $bucketName
-     * @param string    $fileName
-     * @param array     $options
+     * @param string  $bucketName    The name of the bucket.
+     * @param string  $fileName      The name of the file.
+     * @param array   $options       The options used during the upload.
      *
      * @return StorageObject
      */

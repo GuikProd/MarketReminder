@@ -31,7 +31,6 @@ class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterfac
 
     /**
      * CloudStorageRetrieverHelper constructor.
-     *
      * @param CloudStorageBridgeInterface $cloudStorageBridge
      */
     public function __construct(CloudStorageBridgeInterface $cloudStorageBridge)
@@ -42,7 +41,20 @@ class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterfac
     /**
      * {@inheritdoc}
      */
-    public function retrieve(string $bucketName, string $fileName, string $filePath): StreamInterface
+    public function checkFileExistence(string $bucketName, string $fileName): bool
+    {
+        return $this->cloudStorageBridge
+                    ->getServiceBuilder()
+                    ->storage()
+                    ->bucket($bucketName)
+                    ->object($fileName)
+                    ->exists();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveAsFile(string $bucketName, string $fileName, string $filePath): StreamInterface
     {
         return $this->cloudStorageBridge
                     ->getServiceBuilder()
@@ -50,5 +62,24 @@ class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterfac
                     ->bucket($bucketName)
                     ->object($fileName)
                     ->downloadToFile($filePath);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveAsString(string $bucketName, string $fileName): string
+    {
+        var_dump($this->cloudStorageBridge
+            ->getServiceBuilder()
+            ->storage()
+            ->bucket($bucketName)
+            ->object($fileName)->info());
+
+        return $this->cloudStorageBridge
+                    ->getServiceBuilder()
+                    ->storage()
+                    ->bucket($bucketName)
+                    ->object($fileName)
+                    ->downloadAsString();
     }
 }

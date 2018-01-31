@@ -48,7 +48,5 @@ App\Interactor\UserInteractor:
     oneToOne:
         profileImage:
             targetEntity: App\Interactor\ImageInteractor
-            inversedBy: user
-            joinColumn:
-                name: image_id
-                referencedColumnName: id
+            mappedBy: user
+            cascade: ['persist', 'remove']
