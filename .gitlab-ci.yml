@@ -68,6 +68,7 @@ phpunit:
         - php composer.phar dump-autoload --optimize --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
+        - cp phpunit.xml.dist phpunit.xml
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test

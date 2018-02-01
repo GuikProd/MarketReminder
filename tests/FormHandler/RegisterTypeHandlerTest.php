@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Handler;
+namespace tests\FormHandler;
 
 use PHPUnit\Framework\TestCase;
 use Doctrine\ORM\EntityManagerInterface;

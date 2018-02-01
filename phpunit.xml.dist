@@ -13,13 +13,30 @@
         <env name="APP_ENV" value="test" />
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="s$cretf0rt3st" />
-        <!-- define your env variables for the test env here -->
 
-        <!-- ###+ doctrine/doctrine-bundle ### -->
-        <!-- Format described at http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url -->
-        <!-- For an SQLite database, use: "sqlite:///%kernel.project_dir%/var/data.db" -->
-        <!-- Set "serverVersion" to your server version to avoid edge-case exceptions and extra database calls -->
-        <env name="DATABASE_URL_DEV" value="pgsql://marketReminder:marketReminder@172.20.0.1:5432/marketReminder?charset=utf8" />
+        <!-- DB Configuration -->
+        <env name="POSTGRES_DB" value="marketReminder" />
+        <env name="POSTGRES_USER" value="marketReminder" />
+        <env name="POSTGRES_PASSWORD" value="marketReminder" />
+        <env name="POSTGRES_PORT" value="5432" />
+
+        <!-- DB Dev configuration -->
+        <env name="DB_HOST" value="172.20.0.1" />
+        <env name="DB_DRIVER_DEV" value="pdo_pgsql" />
+        <env name="DB_CHARSET_DEV" value="utf8" />
+        <env name="DB_VERSION_DEV" value="9.6" />
+        <env name="DATABASE_URL_DEV" value="pgsql://marketReminder:marketReminder@172.19.0.1:5432/marketReminder" />
+
+        <!-- DB Test configuration -->
+        <env name="DB_CHARSET_TEST" value="utf8mb4" />
+        <env name="DB_VERSION_TEST" value="5.7" />
+        <env name="DB_DRIVER_TEST" value="pdo_sqlite" />
+        <env name="DATABASE_URL_TEST" value="sqlite:///%kernel.project_dir%/var/data.db" />
+
+        <!-- Redis configuration -->
+        <env name="REDIS_PORT" value="6379" />
+        <env name="REDIS_URL" value="redis://localhost"/>
+
         <!-- ###- doctrine/doctrine-bundle ### -->
         <!-- ###+ lexik/jwt-authentication-bundle ### -->
         <!-- Key paths should be relative to the project directory -->
@@ -27,18 +44,6 @@
         <env name="JWT_PUBLIC_KEY_PATH" value="config/jwt/public.pem" />
         <env name="JWT_PASSPHRASE" value="f7ece5879922f89abaf6e0a3ade8f3de" />
         <!-- ###- lexik/jwt-authentication-bundle ### -->
-
-        <!-- ###+ symfony/framework-bundle ### -->
-        <env name="APP_ENV" value="dev"/>
-        <env name="APP_SECRET" value="fa2dda48d44a40bd0dee9568fa215f94"/>
-        <!-- env name="TRUSTED_PROXIES" value="127.0.0.1,127.0.0.2" -->
-        <!-- env name="TRUSTED_HOSTS" value="localhost,example.com" -->
-        <!-- ###- symfony/framework-bundle ### -->
-
-        <!-- ###+ snc/redis-bundle ### -->
-        <!-- passwords that contain special characters (@, %, :, +) must be urlencoded -->
-        <env name="REDIS_URL" value="redis://localhost"/>
-        <!-- ###- snc/redis-bundle ### -->
     </php>
 
     <testsuites>

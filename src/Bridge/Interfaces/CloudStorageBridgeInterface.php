@@ -23,14 +23,25 @@ use Google\Cloud\Core\ServiceBuilder;
 interface CloudStorageBridgeInterface
 {
     /**
+     * Allow to return a ServiceBuilder configured with the credentials.
+     *
      * @return ServiceBuilder
      */
     public function getServiceBuilder(): ServiceBuilder;
 
     /**
+     * Allow to load the credentials linked to this bridge.
+     *
      * @return CloudStorageBridgeInterface
      */
     public function loadCredentialsFile(): CloudStorageBridgeInterface;
+
+    /**
+     * Allow to get the credentials.
+     *
+     * @return null|array
+     */
+    public function getCredentials():? array;
 
     /**
      * Allow to close the connexion via ths service account.

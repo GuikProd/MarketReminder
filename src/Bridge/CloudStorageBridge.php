@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Bridge;
 
-use Symfony\Component\Finder\Finder;
 use Google\Cloud\Core\ServiceBuilder;
+use Symfony\Component\Config\FileLocator;
 use App\Bridge\Interfaces\CloudStorageBridgeInterface;
 
 /**
@@ -30,7 +30,7 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
     private $credentials;
 
     /**
-     * @var \SplFileInfo
+     * @var string
      */
     private $bucketCredentialsFolder;
 
@@ -59,19 +59,23 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
      */
     public function loadCredentialsFile(): CloudStorageBridgeInterface
     {
-        $finder = new Finder();
+        $fileLocator = new FileLocator($this->bucketCredentialsFolder);
 
-        $files = $finder->in($this->bucketCredentialsFolder)
-                        ->files()
-                        ->name('*.json');
-
-        foreach ($files as $file) {
-            if ($file->getFilename() === 'credentials.json') {
-                $this->credentials = json_decode($file->getContents(), true);
-            }
-        }
+        $this->credentials = json_decode(
+            file_get_contents(
+                $fileLocator->locate('credentials.json')
+            ), true
+        );
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCredentials():? array
+    {
+        return $this->credentials;
     }
 
     /**
