@@ -116,6 +116,9 @@
     "google/cloud-storage": {
         "version": "v1.3.3"
     },
+    "grpc/grpc": {
+        "version": "1.6.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.3.0"
     },
