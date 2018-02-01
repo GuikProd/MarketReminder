@@ -36,8 +36,8 @@ phpspec:
         - php -r "unlink('composer-setup.php');"
         - php composer.phar install --optimize-autoloader --classmap-authoritative
         - php composer.phar dump-autoload --optimize --classmap-authoritative
-        - cp ./Gitlab/.env.gitlab.dist ./.env
-        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
+        - cp docker/gitlab/.env.gitlab.dist ./.env
+        - cp docker/gitlab/.env.gitlab.dist ./.env.behat
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
@@ -64,8 +64,8 @@ phpunit:
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
-        - cp ./Gitlab/.env.gitlab.dist ./.env
-        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
+        - cp docker/gitlab/.env.gitlab.dist ./.env
+        - cp docker/gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
         - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
         - cp phpunit.xml.dist phpunit.xml
@@ -96,8 +96,8 @@ behat:
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
-        - cp ./Gitlab/.env.gitlab.dist ./.env
-        - cp ./Gitlab/.env.gitlab.dist ./.env.behat
+        - cp docker/gitlab/.env.gitlab.dist ./.env
+        - cp docker/gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
         - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
     script:

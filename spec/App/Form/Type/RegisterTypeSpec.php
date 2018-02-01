@@ -18,11 +18,11 @@ use Symfony\Component\Form\FormTypeInterface;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
 
 /**
- * Class RegisterType.
+ * Class RegisterTypeSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisterType extends ObjectBehavior
+class RegisterTypeSpec extends ObjectBehavior
 {
     public function it_implement(ProfileImageSubscriberInterface $profileImageSubscriber)
     {
