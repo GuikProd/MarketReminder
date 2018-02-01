@@ -33,6 +33,8 @@ jobs:
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
             - run: cp phpunit.xml.dist phpunit.xml
+            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
+            - run: echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:

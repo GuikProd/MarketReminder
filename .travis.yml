@@ -14,7 +14,6 @@ before_script:
     - cp .env.dist .env
     - cp .env.behat.dist .env.behat
     - cp phpunit.xml.dist phpunit.xml
-    - mkdir -p /docker/config/google
     - echo $GCP_PROJECT_KEY > /docker/config/google/credentials.json
 script:
     - ./bin/console d:d:c --env=test
