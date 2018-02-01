@@ -64,8 +64,6 @@ phpunit:
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
-        - php composer.phar install --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
@@ -98,8 +96,6 @@ behat:
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
-        - php composer.phar install --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - cp ./Gitlab/.env.gitlab.dist ./.env
         - cp ./Gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
