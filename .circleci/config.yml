@@ -24,6 +24,7 @@ jobs:
             - image: redis
         steps:
             - checkout
+            - setup_remote_docker
             - run: sudo composer self-update
             - restore_cache:
                 keys:
@@ -51,6 +52,7 @@ jobs:
             - image: redis
         steps:
             - checkout
+            - setup_remote_docker
             - run: sudo composer self-update
             - restore_cache:
                 keys:
