@@ -15,13 +15,13 @@ namespace App\Form\Type;
 
 use App\Models\Interfaces\UserInterface;
 use Symfony\Component\Form\AbstractType;
-use App\Subscriber\Form\ProfileImageSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
 
 /**
  * Class RegisterType.
@@ -31,16 +31,16 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 class RegisterType extends AbstractType
 {
     /**
-     * @var ProfileImageSubscriber
+     * @var ProfileImageSubscriberInterface
      */
     private $profileImageSubscriber;
 
     /**
      * RegisterType constructor.
      *
-     * @param ProfileImageSubscriber $profileImageSubscriber
+     * @param ProfileImageSubscriberInterface $profileImageSubscriber
      */
-    public function __construct(ProfileImageSubscriber $profileImageSubscriber)
+    public function __construct(ProfileImageSubscriberInterface $profileImageSubscriber)
     {
         $this->profileImageSubscriber = $profileImageSubscriber;
     }

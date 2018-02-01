@@ -15,16 +15,18 @@ namespace spec\App\Form\Type;
 
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Form\FormTypeInterface;
+use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
 
 /**
- * Class RegisterType
+ * Class RegisterType.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class RegisterType extends ObjectBehavior
 {
-    public function it_implement()
+    public function it_implement(ProfileImageSubscriberInterface $profileImageSubscriber)
     {
+        $this->beConstructedWith($profileImageSubscriber);
         $this->shouldImplement(FormTypeInterface::class);
     }
 }
