@@ -78,7 +78,7 @@ phpunit:
         paths:
             - vendor/
 
-behat:
+behat_web:
     stage: functional_tests
     image: php:7.1-fpm
     services:
@@ -103,7 +103,8 @@ behat:
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
-        - vendor/bin/behat
+        - vendor/bin/behat --profile fr
+        - vendor/bin/behat --profile en
         - rm -rf var/data.db
     cache:
         paths:

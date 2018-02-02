@@ -1,7 +1,30 @@
-default:
+fr:
     suites:
         core:
-            paths: ['%paths.base%/features/core']
+            paths: ['%paths.base%/features/fr']
+            contexts:
+                - DatabaseContext:
+                    doctrine: '@doctrine'
+                    kernel: '@kernel'
+                    encoder: '@security.password_encoder'
+                - FeatureContext:
+                    kernel: '@kernel'
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: features/bootstrap/bootstrap.php
+                class: App\Kernel
+        Behat\MinkExtension:
+            files_path: '%paths.base%/features/assets'
+            goutte: ~
+            sessions:
+                default:
+                    symfony2: ~
+
+en:
+    suites:
+        core:
+            paths: ['%paths.base%/features/en']
             contexts:
                 - DatabaseContext:
                     doctrine: '@doctrine'

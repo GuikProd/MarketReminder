@@ -1,1 +1,5 @@
+This value is too short: This value is too short !
+This value is too long: This value is too long !
+This credentials already exist !: This credentials already exist !
+Your account was created ! Please check your mail to validate it.: Your account was created ! Please check your mail to validate it.
 form.format_error: This format is invalid ! Please retry using a valid one !

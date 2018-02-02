@@ -11,7 +11,7 @@ index:
     defaults:
         _controller: App\Action\Core\HomeAction
     requirements:
-        _locale: '%locale%'
+        _locale: 'fr|en'
 
 web_register:
     path:    /{_locale}/register
@@ -20,4 +20,4 @@ web_register:
         _controller: App\Action\Security\RegisterAction
         _locale: '%locale%'
     requirements:
-        _locale: '%locale%'
+        _locale: 'fr|en'
