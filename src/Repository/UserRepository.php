@@ -15,14 +15,14 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use App\Models\Interfaces\UserInterface;
-use App\Repository\Interfaces\UserGatewayInterface;
+use App\Repository\Interfaces\UserRepositoryInterface;
 
 /**
  * Class UserRepository.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserRepository extends EntityRepository implements UserGatewayInterface
+class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
     /**
      * {@inheritdoc}

@@ -16,11 +16,11 @@ namespace App\Repository\Interfaces;
 use App\Models\Interfaces\UserInterface;
 
 /**
- * Interface UserGatewayInterface.
+ * Interface UserRepositoryInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface UserGatewayInterface
+interface UserRepositoryInterface
 {
     /**
      * @param string $username
