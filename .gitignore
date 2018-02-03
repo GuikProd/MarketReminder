@@ -16,4 +16,5 @@ coverage/**/
 
 # Google Cloud
 config/credentials/google/bucket/
+config/credentials/google/vision/
 public/images/profiles/
