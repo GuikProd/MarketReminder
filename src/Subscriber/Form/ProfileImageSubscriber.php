@@ -17,7 +17,9 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Translation\TranslatorInterface;
+use App\Helper\Interfaces\ImageUploaderHelperInterface;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 
 /**
  * Class ProfileImageSubscriber.
@@ -34,13 +36,30 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
     private $translatorInterface;
 
     /**
+     * @var ImageUploaderHelperInterface
+     */
+    private $imageUploaderHelperInterface;
+
+    /**
+     * @var CloudVisionAnalyserHelperInterface
+     */
+    private $cloudVisionAnalyserInterface;
+
+    /**
      * ProfileImageSubscriber constructor.
      *
-     * @param TranslatorInterface $translatorInterface
+     * @param TranslatorInterface                   $translatorInterface
+     * @param ImageUploaderHelperInterface          $imageUploaderHelperInterface
+     * @param CloudVisionAnalyserHelperInterface    $cloudVisionAnalyserInterface
      */
-    public function __construct(TranslatorInterface $translatorInterface)
-    {
+    public function __construct(
+        TranslatorInterface $translatorInterface,
+        ImageUploaderHelperInterface $imageUploaderHelperInterface,
+        CloudVisionAnalyserHelperInterface $cloudVisionAnalyserInterface
+    ) {
         $this->translatorInterface = $translatorInterface;
+        $this->imageUploaderHelperInterface = $imageUploaderHelperInterface;
+        $this->cloudVisionAnalyserInterface = $cloudVisionAnalyserInterface;
     }
 
     /**
@@ -49,7 +68,8 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::SUBMIT => 'onSubmit'
+            FormEvents::SUBMIT => 'onSubmit',
+            FormEvents::POST_SUBMIT => 'uploadAndAnalyseImage'
         ];
     }
 
@@ -71,5 +91,28 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
                 )
             );
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function uploadAndAnalyseImage(FormEvent $event): bool
+    {
+        if ($event->getData() === null) {
+            return false;
+        }
+
+        $this->imageUploaderHelperInterface
+             ->store($event->getData());
+
+        $analysedImage = $this->cloudVisionAnalyserInterface
+                              ->analyse(
+                                  $this->imageUploaderHelperInterface->getFilePath()
+                                  .
+                                  $this->imageUploaderHelperInterface->getFileName(),
+                                  'LABEL_DETECTION'
+                              );
+
+        $this->cloudVisionAnalyserInterface->describe($analysedImage);
     }
 }

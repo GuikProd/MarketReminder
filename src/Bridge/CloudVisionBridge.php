@@ -16,33 +16,33 @@ namespace App\Bridge;
 use Google\Cloud\Core\ServiceBuilder;
 use Symfony\Component\Config\FileLocator;
 use App\Bridge\Interfaces\CloudBridgeInterface;
-use App\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Bridge\Interfaces\CloudVisionBridgeInterface;
 
 /**
- * Class CloudStorageBridge.
- *
+ * Class CloudVisionBridge.
+ * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudStorageBridge implements CloudStorageBridgeInterface
+class CloudVisionBridge implements CloudVisionBridgeInterface
 {
     /**
      * @var array
      */
-    private $credentials;
+    private $visionCredentials;
 
     /**
      * @var string
      */
-    private $bucketCredentialsFolder;
+    private $visionCredentialsFolder;
 
     /**
-     * CloudStorageBridge constructor.
+     * CloudVisionBridge constructor.
      *
-     * @param string $bucketCredentialsFolder
+     * @param string $visionCredentialsFolder
      */
-    public function __construct(string $bucketCredentialsFolder)
+    public function __construct(string $visionCredentialsFolder)
     {
-        $this->bucketCredentialsFolder = $bucketCredentialsFolder;
+        $this->visionCredentialsFolder = $visionCredentialsFolder;
     }
 
     /**
@@ -51,7 +51,7 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
     public function getServiceBuilder(): ServiceBuilder
     {
         return new ServiceBuilder([
-            'keyFile' => $this->credentials
+            'keyFile' => $this->visionCredentials
         ]);
     }
 
@@ -60,9 +60,9 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
      */
     public function loadCredentialsFile(): CloudBridgeInterface
     {
-        $fileLocator = new FileLocator($this->bucketCredentialsFolder);
+        $fileLocator = new FileLocator($this->visionCredentialsFolder);
 
-        $this->credentials = json_decode(
+        $this->visionCredentials = json_decode(
             file_get_contents(
                 $fileLocator->locate('credentials.json')
             ), true
@@ -74,9 +74,9 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
     /**
      * {@inheritdoc}
      */
-    public function getCredentials():? array
+    public function getCredentials(): ? array
     {
-        return $this->credentials;
+        return $this->visionCredentials;
     }
 
     /**
@@ -84,6 +84,6 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
      */
     public function closeConnexion(): void
     {
-        $this->credentials = null;
+        $this->visionCredentials = null;
     }
 }

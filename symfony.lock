@@ -116,6 +116,18 @@
     "google/cloud-storage": {
         "version": "v1.3.3"
     },
+    "google/cloud-vision": {
+        "version": "v0.9.1"
+    },
+    "google/gax": {
+        "version": "0.30.0"
+    },
+    "google/proto-client": {
+        "version": "0.32.0"
+    },
+    "google/protobuf": {
+        "version": "v3.5.1.1"
+    },
     "grpc/grpc": {
         "version": "1.6.0"
     },

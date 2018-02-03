@@ -16,6 +16,7 @@ namespace spec\App\Form\Type;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Form\FormTypeInterface;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
 
 /**
  * Class RegisterTypeSpec.
@@ -24,9 +25,15 @@ use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
  */
 class RegisterTypeSpec extends ObjectBehavior
 {
-    public function it_implement(ProfileImageSubscriberInterface $profileImageSubscriber)
-    {
-        $this->beConstructedWith($profileImageSubscriber);
+    /**
+     * @param ProfileImageSubscriberInterface|\PhpSpec\Wrapper\Collaborator $profileImageSubscriber
+     * @param RegisterCredentialsSubscriberInterface|\PhpSpec\Wrapper\Collaborator $registerCredentialsSubscriber
+     */
+    public function it_implement(
+        ProfileImageSubscriberInterface $profileImageSubscriber,
+        RegisterCredentialsSubscriberInterface $registerCredentialsSubscriber
+    ) {
+        $this->beConstructedWith($profileImageSubscriber, $registerCredentialsSubscriber);
         $this->shouldImplement(FormTypeInterface::class);
     }
 }

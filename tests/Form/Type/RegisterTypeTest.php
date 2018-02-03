@@ -15,12 +15,15 @@ namespace tests\Form\Type;
 
 use App\Builder\UserBuilder;
 use App\Form\Type\RegisterType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\PreloadedExtension;
 use App\Subscriber\Form\ProfileImageSubscriber;
 use App\Builder\Interfaces\UserBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use App\Subscriber\Form\RegisterCredentialsSubscriber;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
 
 /**
  * Class RegisterTypeTest
@@ -44,13 +47,30 @@ class RegisterTypeTest extends TypeTestCase
     private $profileImageSubscriber;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManagerInterface;
+
+    /**
+     * @var RegisterCredentialsSubscriberInterface
+     */
+    private $registerCredentialsSubscriber;
+
+    /**
      * {@inheritdoc}
      */
     public function setUp()
     {
         $this->translatorInterface = $this->createMock(TranslatorInterface::class);
 
+        $this->entityManagerInterface = $this->createMock(EntityManagerInterface::class);
+
         $this->profileImageSubscriber = new ProfileImageSubscriber($this->translatorInterface);
+
+        $this->registerCredentialsSubscriber = new RegisterCredentialsSubscriber(
+                                                   $this->translatorInterface,
+                                                   $this->entityManagerInterface
+                                               );
 
         $this->userBuilderInterface = new UserBuilder();
 
@@ -59,7 +79,7 @@ class RegisterTypeTest extends TypeTestCase
 
     public function getExtensions()
     {
-        $type = new RegisterType($this->profileImageSubscriber);
+        $type = new RegisterType($this->profileImageSubscriber, $this->registerCredentialsSubscriber);
 
         return [
             new PreloadedExtension(

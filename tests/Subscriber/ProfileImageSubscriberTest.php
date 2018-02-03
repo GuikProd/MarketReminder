@@ -11,13 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Bridge\Interfaces;
+namespace tests\Subscriber;
+
+
+use PHPUnit\Framework\TestCase;
 
 /**
- * Interface CloudStorageBridgeInterface.
+ * Class ProfileImageSubscriberTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface CloudStorageBridgeInterface extends CloudBridgeInterface
+class ProfileImageSubscriberTest extends TestCase
 {
+
 }

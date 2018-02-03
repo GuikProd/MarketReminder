@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Helper;
 
 use App\Helper\Interfaces\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Helper\Interfaces\CloudStorage\CloudStoragePersisterHelperInterface;
 
 /**
  * Class ImageUploaderHelper.
@@ -116,6 +116,14 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
              );
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilePath(): string
+    {
+        return $this->filePath;
     }
 
     /**

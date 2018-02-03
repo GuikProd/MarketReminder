@@ -95,18 +95,18 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
 
             if ($registerForm->get('profileImage')->getData() !== null) {
                 $this->imageUploaderHelperInterface
-                    ->store($registerForm->get('profileImage')->getData())
-                    ->upload();
+                     ->store($registerForm->get('profileImage')->getData())
+                     ->upload();
 
                 $this->imageBuilderInterface
-                    ->createImage()
-                    ->withCreationDate(new \DateTime())
-                    ->withAlt($this->imageUploaderHelperInterface->getFileName())
-                    ->withPublicUrl(
-                        $this->imageRetrieverHelperInterface->getGoogleStoragePublicUrl()
-                        .
-                        $this->imageUploaderHelperInterface->getFileName()
-                    );
+                     ->createImage()
+                     ->withCreationDate(new \DateTime())
+                     ->withAlt($this->imageUploaderHelperInterface->getFileName())
+                     ->withPublicUrl(
+                         $this->imageRetrieverHelperInterface->getGoogleStoragePublicUrl()
+                         .
+                         $this->imageUploaderHelperInterface->getFileName()
+                     );
 
                 $userBuilder->withProfileImage($this->imageBuilderInterface->getImage());
             }

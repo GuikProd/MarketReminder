@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Helper;
+namespace App\Helper\CloudStorage;
 
 use Google\Cloud\Storage\StorageObject;
 use App\Bridge\Interfaces\CloudStorageBridgeInterface;
-use App\Helper\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Helper\Interfaces\CloudStorage\CloudStoragePersisterHelperInterface;
 
 /**
  * Class CloudStoragePersisterHelper.

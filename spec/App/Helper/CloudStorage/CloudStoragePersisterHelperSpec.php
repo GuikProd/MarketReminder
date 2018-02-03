@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Helper;
+namespace spec\App\Helper\CloudStorage;
 
 use PhpSpec\ObjectBehavior;
 use App\Bridge\Interfaces\CloudStorageBridgeInterface;
-use App\Helper\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Helper\Interfaces\CloudStorage\CloudStoragePersisterHelperInterface;
 
 /**
  * Class CloudStoragePersisterHelperSpec

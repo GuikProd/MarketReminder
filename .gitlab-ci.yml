@@ -70,6 +70,8 @@ phpunit:
         - cp docker/gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
         - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
+        - mkdir -p ./config/credentials/google/vision
+        - echo $GCP_MACHINE_LEARNING_SERVICE_CREDENTIALS > ./config/credentials/google/vision/credentials.json
         - cp phpunit.xml.dist phpunit.xml
     script:
         - ./bin/console d:d:c --env=test
@@ -102,6 +104,8 @@ behat_web:
         - cp docker/gitlab/.env.gitlab.dist ./.env.behat
         - mkdir -p ./config/credentials/google/bucket
         - echo $GCP_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
+        - mkdir -p ./config/credentials/google/vision
+        - echo $GCP_MACHINE_LEARNING_SERVICE_CREDENTIALS > ./config/credentials/google/vision/credentials.json
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test

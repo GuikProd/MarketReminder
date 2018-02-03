@@ -14,18 +14,18 @@ declare(strict_types=1);
 namespace spec\App\Bridge;
 
 use PhpSpec\ObjectBehavior;
-use App\Bridge\Interfaces\CloudBridgeInterface;
+use App\Bridge\Interfaces\CloudVisionBridgeInterface;
 
 /**
- * Class CloudStorageBridgeSpec
+ * Class CloudVisionBridgeSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudStorageBridgeSpec extends ObjectBehavior
+class CloudVisionBridgeSpec extends ObjectBehavior
 {
-    public function it_implement()
+    public function it_implements()
     {
-        $this->beConstructedWith('bucketNameTest');
-        $this->shouldImplement(CloudBridgeInterface::class);
+        $this->beConstructedWith('visionCredentialsFolderTest');
+        $this->shouldImplement(CloudVisionBridgeInterface::class);
     }
 }

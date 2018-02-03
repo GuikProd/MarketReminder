@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Helper;
+namespace App\Helper\CloudStorage;
 
 use Psr\Http\Message\StreamInterface;
 use App\Bridge\Interfaces\CloudStorageBridgeInterface;
-use App\Helper\Interfaces\CloudStorageRetrieverHelperInterface;
+use App\Helper\Interfaces\CloudStorage\CloudStorageRetrieverHelperInterface;
 
 /**
  * Class CloudStorageRetrieverHelper.
@@ -31,6 +31,7 @@ class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterfac
 
     /**
      * CloudStorageRetrieverHelper constructor.
+     *
      * @param CloudStorageBridgeInterface $cloudStorageBridge
      */
     public function __construct(CloudStorageBridgeInterface $cloudStorageBridge)

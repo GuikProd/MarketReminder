@@ -27,4 +27,14 @@ interface ProfileImageSubscriberInterface extends EventSubscriberInterface
      * @param FormEvent $event
      */
     public function onSubmit(FormEvent $event): void;
+
+    /**
+     * Allow to store the image locally, analyse it then if everything's right,
+     * upload the file inside the Google Cloud Bucket.
+     *
+     * @param FormEvent $event    @see FormEvent::POST_SUBMIT
+     *
+     * @return bool               If the process goes right or wrong.
+     */
+    public function uploadAndAnalyseImage(FormEvent $event): bool;
 }

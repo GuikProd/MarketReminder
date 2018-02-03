@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Bridge\Interfaces;
 
 /**
- * Interface CloudStorageBridgeInterface.
+ * Interface CloudVisionBridgeInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface CloudStorageBridgeInterface extends CloudBridgeInterface
+interface CloudVisionBridgeInterface extends CloudBridgeInterface
 {
 }

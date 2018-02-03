@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Helper;
 
 use App\Helper\Interfaces\ImageRetrieverHelperInterface;
-use App\Helper\Interfaces\CloudStorageRetrieverHelperInterface;
+use App\Helper\Interfaces\CloudStorage\CloudStorageRetrieverHelperInterface;
 
 /**
  * Class ImageRetrieverHelper

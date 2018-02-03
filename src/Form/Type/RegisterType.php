@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
 
 /**
  * Class RegisterType.
@@ -36,13 +37,22 @@ class RegisterType extends AbstractType
     private $profileImageSubscriber;
 
     /**
+     * @var RegisterCredentialsSubscriberInterface
+     */
+    private $registerCredentialsSubscriber;
+
+    /**
      * RegisterType constructor.
      *
      * @param ProfileImageSubscriberInterface $profileImageSubscriber
+     * @param RegisterCredentialsSubscriberInterface $registerCredentialsSubscriber
      */
-    public function __construct(ProfileImageSubscriberInterface $profileImageSubscriber)
-    {
+    public function __construct(
+        ProfileImageSubscriberInterface $profileImageSubscriber,
+        RegisterCredentialsSubscriberInterface $registerCredentialsSubscriber
+    ) {
         $this->profileImageSubscriber = $profileImageSubscriber;
+        $this->registerCredentialsSubscriber = $registerCredentialsSubscriber;
     }
 
     /**
@@ -58,6 +68,7 @@ class RegisterType extends AbstractType
                 'mapped' => false,
                 'required' => false
             ])
+            ->addEventSubscriber($this->registerCredentialsSubscriber)
         ;
 
         $builder->get('profileImage')->addEventSubscriber($this->profileImageSubscriber);

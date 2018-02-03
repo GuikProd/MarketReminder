@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Helper\Interfaces;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * Interface ImageUploaderHelperInterface.
  *
@@ -26,9 +28,13 @@ interface ImageUploaderHelperInterface
     public function checkExtension(\SplFileInfo $uploadedFile): void;
 
     /**
-     * @param \SplFileInfo $uploadedFile
+     * Store the file locally using UploadedFile::move().
      *
-     * @return ImageUploaderHelperInterface
+     * @param \SplFileInfo $uploadedFile       The actual file.
+     *
+     * @return ImageUploaderHelperInterface    Return itself for fluent call.
+     *
+     * @see UploadedFile
      */
     public function store(\SplFileInfo $uploadedFile): self;
 
@@ -38,9 +44,18 @@ interface ImageUploaderHelperInterface
     public function upload(): self;
 
     /**
+     * Return the name of the file when stored.
+     *
      * @return string
      */
     public function getFileName(): string;
+
+    /**
+     * Return the local path of the file.
+     *
+     * @return string
+     */
+    public function getFilePath(): string;
 
     /**
      * @return string
