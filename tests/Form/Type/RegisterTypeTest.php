@@ -142,7 +142,7 @@ class RegisterTypeTest extends TypeTestCase
             new PreloadedExtension(
                 [$type],
                 []
-            )
+            ),
         ];
     }
 

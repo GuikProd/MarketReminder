@@ -117,8 +117,7 @@ behat_web:
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
-        - vendor/bin/behat --profile fr
-        - vendor/bin/behat --profile en
+        - vendor/bin/behat
         - rm -rf var/data.db
     cache:
         paths:

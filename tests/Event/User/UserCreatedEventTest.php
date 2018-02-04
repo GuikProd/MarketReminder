@@ -18,7 +18,7 @@ use App\Event\User\UserCreatedEvent;
 use App\Models\Interfaces\UserInterface;
 
 /**
- * Class UserCreatedEventTest
+ * Class UserCreatedEventTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

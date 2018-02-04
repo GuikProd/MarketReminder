@@ -125,6 +125,8 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
                     )
                 )
             );
+
+            return;
         }
 
         $this->imageUploaderHelperInterface
@@ -148,6 +150,8 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
                     )
                 )
             );
+
+            return;
         }
 
         $this->imageUploaderHelperInterface->upload();
