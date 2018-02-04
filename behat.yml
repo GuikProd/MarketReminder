@@ -20,6 +20,29 @@ default:
             sessions:
                 default:
                     symfony2: ~
+blackfire:
+    suites:
+        core:
+            paths: ['%paths.base%/features']
+            contexts:
+                - BlackfireContext:
+                - DatabaseContext:
+                    doctrine: '@doctrine'
+                    kernel: '@kernel'
+                    encoder: '@security.password_encoder'
+                - FeatureContext:
+                    kernel: '@kernel'
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: features/bootstrap/bootstrap.php
+                class: App\Kernel
+        Behat\MinkExtension:
+            files_path: '%paths.base%/features/assets'
+            goutte: ~
+            sessions:
+                default:
+                    symfony2: ~
 fr:
     suites:
         core:

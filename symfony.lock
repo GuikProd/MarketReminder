@@ -35,6 +35,12 @@
     "behatch/contexts": {
         "version": "3.0.1"
     },
+    "blackfire/php-sdk": {
+        "version": "v1.11.3"
+    },
+    "composer/ca-bundle": {
+        "version": "1.1.0"
+    },
     "container-interop/container-interop": {
         "version": "1.2.0"
     },
