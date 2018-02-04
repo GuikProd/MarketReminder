@@ -17,7 +17,7 @@ use PhpSpec\ObjectBehavior;
 use App\Models\Interfaces\ImageInterface;
 
 /**
- * Class ImageInteractorSpec
+ * Class ImageInteractorSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

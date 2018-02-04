@@ -26,7 +26,7 @@ use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
 class RegisterTypeSpec extends ObjectBehavior
 {
     /**
-     * @param ProfileImageSubscriberInterface|\PhpSpec\Wrapper\Collaborator $profileImageSubscriber
+     * @param ProfileImageSubscriberInterface|\PhpSpec\Wrapper\Collaborator        $profileImageSubscriber
      * @param RegisterCredentialsSubscriberInterface|\PhpSpec\Wrapper\Collaborator $registerCredentialsSubscriber
      */
     public function it_implement(

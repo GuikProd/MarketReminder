@@ -18,7 +18,7 @@ use App\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Helper\Interfaces\CloudStorage\CloudStorageRetrieverHelperInterface;
 
 /**
- * Class CloudStorageRetrieverHelperSpec
+ * Class CloudStorageRetrieverHelperSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

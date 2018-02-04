@@ -17,10 +17,9 @@ use PhpSpec\ObjectBehavior;
 
 /**
  * Class ImageUploaderHelperSpec.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class ImageUploaderHelperSpec extends ObjectBehavior
 {
-
 }

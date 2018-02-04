@@ -17,10 +17,9 @@ use PhpSpec\ObjectBehavior;
 
 /**
  * Class ImageRetrieverHelperSpec.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class ImageRetrieverHelperSpec extends ObjectBehavior
 {
-
 }

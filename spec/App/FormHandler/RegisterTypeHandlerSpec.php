@@ -24,17 +24,17 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class RegisterTypeHandlerSpec.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class RegisterTypeHandlerSpec extends ObjectBehavior
 {
     /**
-     * @param \PhpSpec\Wrapper\Collaborator|Registry $registry
-     * @param ImageBuilderInterface|\PhpSpec\Wrapper\Collaborator $imageBuilder
-     * @param EntityManagerInterface|\PhpSpec\Wrapper\Collaborator $entityManager
-     * @param ImageUploaderHelperInterface|\PhpSpec\Wrapper\Collaborator $imageUploaderHelper
-     * @param \PhpSpec\Wrapper\Collaborator|UserPasswordEncoderInterface $userPasswordEncoder
+     * @param \PhpSpec\Wrapper\Collaborator|Registry                      $registry
+     * @param ImageBuilderInterface|\PhpSpec\Wrapper\Collaborator         $imageBuilder
+     * @param EntityManagerInterface|\PhpSpec\Wrapper\Collaborator        $entityManager
+     * @param ImageUploaderHelperInterface|\PhpSpec\Wrapper\Collaborator  $imageUploaderHelper
+     * @param \PhpSpec\Wrapper\Collaborator|UserPasswordEncoderInterface  $userPasswordEncoder
      * @param ImageRetrieverHelperInterface|\PhpSpec\Wrapper\Collaborator $imageRetrieverHelper
      */
     public function it_implements(

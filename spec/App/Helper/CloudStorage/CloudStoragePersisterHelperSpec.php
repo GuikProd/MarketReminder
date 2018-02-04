@@ -18,7 +18,7 @@ use App\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Helper\Interfaces\CloudStorage\CloudStoragePersisterHelperInterface;
 
 /**
- * Class CloudStoragePersisterHelperSpec
+ * Class CloudStoragePersisterHelperSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

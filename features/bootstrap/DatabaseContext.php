@@ -86,7 +86,7 @@ class DatabaseContext implements Context
 
             $user = new UserBuilder();
             $user
-                ->create()
+                ->createUser()
                 ->withFirstname($hash['firstname'])
                 ->withLastname($hash['lastname'])
                 ->withUsername($hash['username'])

@@ -17,7 +17,7 @@ use PhpSpec\ObjectBehavior;
 use App\Bridge\Interfaces\CloudBridgeInterface;
 
 /**
- * Class CloudStorageBridgeSpec
+ * Class CloudStorageBridgeSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

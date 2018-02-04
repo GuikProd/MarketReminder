@@ -17,7 +17,7 @@ use PhpSpec\ObjectBehavior;
 use App\Models\Interfaces\UserInterface;
 
 /**
- * Class UserInteractorSpec
+ * Class UserInteractorSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

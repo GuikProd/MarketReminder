@@ -18,7 +18,7 @@ use App\Models\Interfaces\ImageInterface;
 use App\Event\Interfaces\ImageEventInterface;
 
 /**
- * Class ImageAddedEventSpec
+ * Class ImageAddedEventSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
