@@ -5,6 +5,7 @@
 {% block body %}
     <div>
         {{ form_start(registerForm) }}
+        {{ form_errors(registerForm) }}
             {{ form_label(registerForm.username) }}
             {{ form_widget(registerForm.username) }}
             {{ form_errors(registerForm.username) }}

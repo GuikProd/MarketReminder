@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Bridge;
 
-use Google\Cloud\Core\ServiceBuilder;
 use Symfony\Component\Config\FileLocator;
 use App\Bridge\Interfaces\CloudBridgeInterface;
 use App\Bridge\Interfaces\CloudVisionBridgeInterface;
@@ -23,13 +22,8 @@ use App\Bridge\Interfaces\CloudVisionBridgeInterface;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudVisionBridge implements CloudVisionBridgeInterface
+class CloudVisionBridge extends AbstractBridge implements CloudVisionBridgeInterface
 {
-    /**
-     * @var array
-     */
-    private $visionCredentials;
-
     /**
      * @var string
      */
@@ -48,42 +42,16 @@ class CloudVisionBridge implements CloudVisionBridgeInterface
     /**
      * {@inheritdoc}
      */
-    public function getServiceBuilder(): ServiceBuilder
-    {
-        return new ServiceBuilder([
-            'keyFile' => $this->visionCredentials
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function loadCredentialsFile(): CloudBridgeInterface
     {
         $fileLocator = new FileLocator($this->visionCredentialsFolder);
 
-        $this->visionCredentials = json_decode(
+        $this->credentials = json_decode(
             file_get_contents(
                 $fileLocator->locate('credentials.json')
             ), true
         );
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCredentials(): ? array
-    {
-        return $this->visionCredentials;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function closeConnexion(): void
-    {
-        $this->visionCredentials = null;
     }
 }

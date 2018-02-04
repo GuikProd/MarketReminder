@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use App\Models\Interfaces\UserInterface;
 use App\Repository\Interfaces\UserRepositoryInterface;
 
 /**
@@ -27,26 +26,26 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserByUsername(string $username):? UserInterface
+    public function getUserByUsername(string $username):? array
     {
         return $this->createQueryBuilder('user')
                     ->where('user.username = :username')
                     ->setParameter('username', $username)
                     ->setCacheable(true)
                     ->getQuery()
-                    ->getOneOrNullResult();
+                    ->getResult();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getUserByEmail(string $email):? UserInterface
+    public function getUserByEmail(string $email):? array
     {
         return $this->createQueryBuilder('user')
                     ->where('user.email = :email')
                     ->setParameter('email', $email)
                     ->setCacheable(true)
                     ->getQuery()
-                    ->getOneOrNullResult();
+                    ->getResult();
     }
 }

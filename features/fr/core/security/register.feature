@@ -2,8 +2,12 @@ Feature: As a normal user, I want to be able to register myself and create a new
   during this phase, I want to be able to add a profile image.
 
   Background:
-    Given I am on "/fr/register"
-    And I should see "S'enregistrer"
+    Given I load following users:
+      | username     | plainPassword | email           | validationToken    | validated  | active |
+      | HelloWorld   | Ie1FDLGHW     | hello@gmail.com | AZERTYQWERTY       | true       | true   |
+      | Titi         | Ie1FDLTITI    | titi@gmail.com  | helloworldfromTiti | false      | false  |
+    When I am on "/fr/register"
+    Then I should see "S'enregistrer"
 
   Scenario: I want to register myself using a too small username.
     Then I fill in "register_username" with "to"
@@ -67,4 +71,13 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I press "Créer un compte"
     Then I should be on "/fr/register"
     And I should see "Le format est invalide ! Veuillez réessayer avec un nouveau format valide !"
+    And the response status code should be 200
+
+  Scenario: I want to register myself with an account that already exist.
+    Then I fill in "register_username" with "HelloWorld"
+    And I fill in "register_email" with "hello@gmail.com"
+    And I fill in "register_plainPassword" with "Ie1FDLGHW"
+    And I press "Créer un compte"
+    Then I should be on "/fr/register"
+    And I should see "Les identifiants soumis existent déjà, veuillez recommencer votre saisie !"
     And the response status code should be 200

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Repository\Interfaces;
 
-use App\Models\Interfaces\UserInterface;
-
 /**
  * Interface UserRepositoryInterface.
  *
@@ -25,14 +23,14 @@ interface UserRepositoryInterface
     /**
      * @param string $username
      *
-     * @return UserInterface|null
+     * @return array|null
      */
-    public function getUserByUsername(string $username):? UserInterface;
+    public function getUserByUsername(string $username):? array;
 
     /**
      * @param string $email
      *
-     * @return UserInterface|null
+     * @return array|null
      */
-    public function getUserByEmail(string $email):? UserInterface;
+    public function getUserByEmail(string $email):? array;
 }

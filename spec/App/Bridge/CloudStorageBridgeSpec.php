@@ -15,6 +15,7 @@ namespace spec\App\Bridge;
 
 use PhpSpec\ObjectBehavior;
 use App\Bridge\Interfaces\CloudBridgeInterface;
+use App\Bridge\Interfaces\CloudStorageBridgeInterface;
 
 /**
  * Class CloudStorageBridgeSpec.
@@ -27,5 +28,6 @@ class CloudStorageBridgeSpec extends ObjectBehavior
     {
         $this->beConstructedWith('bucketNameTest');
         $this->shouldImplement(CloudBridgeInterface::class);
+        $this->shouldImplement(CloudStorageBridgeInterface::class);
     }
 }

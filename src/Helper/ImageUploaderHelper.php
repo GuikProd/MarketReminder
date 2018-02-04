@@ -123,7 +123,7 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
      */
     public function getFilePath(): string
     {
-        return $this->filePath;
+        return $this->filePath.'/';
     }
 
     /**

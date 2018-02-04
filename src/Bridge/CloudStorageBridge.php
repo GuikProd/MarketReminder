@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Bridge;
 
-use Google\Cloud\Core\ServiceBuilder;
 use Symfony\Component\Config\FileLocator;
 use App\Bridge\Interfaces\CloudBridgeInterface;
 use App\Bridge\Interfaces\CloudStorageBridgeInterface;
@@ -23,13 +22,8 @@ use App\Bridge\Interfaces\CloudStorageBridgeInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudStorageBridge implements CloudStorageBridgeInterface
+class CloudStorageBridge extends AbstractBridge implements CloudStorageBridgeInterface
 {
-    /**
-     * @var array
-     */
-    private $credentials;
-
     /**
      * @var string
      */
@@ -48,16 +42,6 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
     /**
      * {@inheritdoc}
      */
-    public function getServiceBuilder(): ServiceBuilder
-    {
-        return new ServiceBuilder([
-            'keyFile' => $this->credentials
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function loadCredentialsFile(): CloudBridgeInterface
     {
         $fileLocator = new FileLocator($this->bucketCredentialsFolder);
@@ -69,21 +53,5 @@ class CloudStorageBridge implements CloudStorageBridgeInterface
         );
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCredentials():? array
-    {
-        return $this->credentials;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function closeConnexion(): void
-    {
-        $this->credentials = null;
     }
 }

@@ -87,25 +87,22 @@ class DatabaseContext implements Context
             $user = new UserBuilder();
             $user
                 ->createUser()
-                ->withFirstname($hash['firstname'])
-                ->withLastname($hash['lastname'])
                 ->withUsername($hash['username'])
                 ->withEmail($hash['email'])
                 ->withPlainPassword($hash['plainPassword'])
                 ->withPassword(
                     $this->passwordEncoder->encodePassword(
-                        $user->build(),
-                        $user->build()->getPlainPassword()
+                        $user->getUser(),
+                        $user->getUser()->getPlainPassword()
                     )
                 )
                 ->withRole('ROLE_USER')
                 ->withActive((bool) $hash['active'])
                 ->withValidated((bool) $hash['validated'])
                 ->withValidationToken($hash['validationToken'])
-                ->withResetToken((string) $hash['resetToken'])
                 ->withCreationDate(new \DateTime());
 
-            $this->doctrine->getManager()->persist($user->build());
+            $this->doctrine->getManager()->persist($user->getUser());
         }
 
         $this->doctrine->getManager()->flush();

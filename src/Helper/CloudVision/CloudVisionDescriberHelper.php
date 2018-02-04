@@ -14,15 +14,16 @@ declare(strict_types=1);
 namespace App\Helper\CloudVision;
 
 use Google\Cloud\Vision\Image;
+use Google\Cloud\Vision\Annotation;
 use App\Bridge\Interfaces\CloudVisionBridgeInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
+use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
 
 /**
- * Class CloudVisionAnalyserHelper.
- *
+ * Class CloudVisionDescriberHelper.
+ * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudVisionAnalyserHelper implements CloudVisionAnalyserHelperInterface
+class CloudVisionDescriberHelper implements CloudVisionDescriberHelperInterface
 {
     /**
      * @var CloudVisionBridgeInterface
@@ -42,15 +43,12 @@ class CloudVisionAnalyserHelper implements CloudVisionAnalyserHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function analyse(string $imagePath, string $analyseMode): Image
+    public function describe(Image $analysedImage): Annotation
     {
         return $this->cloudVisionBridgeInterface
                     ->loadCredentialsFile()
                     ->getServiceBuilder()
                     ->vision()
-                    ->image(
-                        file_get_contents($imagePath),
-                        [$analyseMode]
-                    );
+                    ->annotate($analysedImage);
     }
 }

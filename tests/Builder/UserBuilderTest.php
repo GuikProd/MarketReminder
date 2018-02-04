@@ -19,7 +19,7 @@ use App\Models\Interfaces\UserInterface;
 
 /**
  * Class UserBuilderTest.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class UserBuilderTest extends TestCase

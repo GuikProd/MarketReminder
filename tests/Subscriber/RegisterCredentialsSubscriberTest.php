@@ -17,10 +17,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class RegisterCredentialsSubscriberTest.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class RegisterCredentialsSubscriberTest extends TestCase
 {
-
 }

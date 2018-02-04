@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace tests\Subscriber;
 
-
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,5 +22,4 @@ use PHPUnit\Framework\TestCase;
  */
 class ProfileImageSubscriberTest extends TestCase
 {
-
 }

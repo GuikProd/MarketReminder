@@ -34,15 +34,4 @@ interface CloudVisionAnalyserHelperInterface
      * @see Image                    Documentation purpose.
      */
     public function analyse(string $imagePath, string $analyseMode): Image;
-
-    /**
-     * Allow to return the image attributes.
-     *
-     * @param Image $analysedImage    The image which's been analysed.
-     *
-     * @return Annotation             The information linked to the image.
-     *
-     * @see Annotation                Documentation purpose.
-     */
-    public function describe(Image $analysedImage): Annotation;
 }
