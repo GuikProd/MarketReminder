@@ -18,6 +18,17 @@ quality_tests:
     only:
         - master
 
+sass:
+    stage: frontend
+    image: node
+    before_script:
+        - yarn install
+    script:
+        - ./node_modules/.bin/encore production
+    cache:
+        - ./node_modules/
+        - ./public/build/
+
 phpspec:
     stage: specifications
     image: php:7.2-fpm-alpine3.7
@@ -35,9 +46,8 @@ phpspec:
           		pdo_pgsql \
           		zip \
           	&& pecl install \
-          		apcu-${APCU_VERSION} \
-          	&& docker-php-ext-enable --ini-name 20-apcu.ini apcu \
-          	&& docker-php-ext-enable --ini-name 05-opcache.ini opcache \
+          		apcu \
+          	&& docker-php-ext-enable apcu opcache \
           	&& runDeps="$( \
           		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
           			| tr ',' '\n' \
@@ -82,9 +92,8 @@ phpunit:
           		pdo_pgsql \
           		zip \
           	&& pecl install \
-          		apcu-${APCU_VERSION} \
-          	&& docker-php-ext-enable --ini-name 20-apcu.ini apcu \
-          	&& docker-php-ext-enable --ini-name 05-opcache.ini opcache \
+          		apcu \
+          	&& docker-php-ext-enable apcu opcache \
           	&& runDeps="$( \
           		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
           			| tr ',' '\n' \
@@ -135,9 +144,8 @@ behat_web:
           		pdo_pgsql \
           		zip \
           	&& pecl install \
-          		apcu-${APCU_VERSION} \
-          	&& docker-php-ext-enable --ini-name 20-apcu.ini apcu \
-          	&& docker-php-ext-enable --ini-name 05-opcache.ini opcache \
+          		apcu \
+          	&& docker-php-ext-enable apcu opcache \
           	&& runDeps="$( \
           		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
           			| tr ',' '\n' \
@@ -186,5 +194,5 @@ cluster_deployment:
         - kubectl apply -f redis-master-deployment.yaml
         - kubectl apply -f redis-master-service.yaml
         - kubectl get services
-#    only:
-#        - master
+    only:
+        - master
