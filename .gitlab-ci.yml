@@ -183,4 +183,8 @@ cluster_deployment:
         - gcloud auth activate-service-account --key-file /tmp/gcp_key.json
         - gcloud container clusters get-credentials $GCK_CLUSTER_NAME --zone $GCK_CLUSTER_ZONE --project $GCP_PROJECT_NAME
     script:
-        - echo "Hello from Kubernetes !"
+        - kubectl apply -f redis-master-deployment.yaml
+        - kubectl apply -f redis-master-service.yaml
+        - kubectl get services
+#    only:
+#        - master
