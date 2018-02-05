@@ -1,7 +1,7 @@
 stages:
     - quality_tests
-    - specifications
     - frontend
+    - specifications
     - unit_tests
     - functional_tests
     - performances_tests
