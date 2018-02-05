@@ -3,7 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}MarketReminder -{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('build/core.css') }}" />
+        {% endblock %}
         <link rel="manifest" href="{{ asset('manifest.json') }}" />
     </head>
     <body>

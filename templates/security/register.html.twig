@@ -10,6 +10,9 @@
 {% block body %}
     <section class="registration-left__bloc">
         <div>
+            <button class="main__button">
+                <a href="{{ path('web_register') }}">Login</a>
+            </button>
             <img src="{{ asset('') }}" />
         </div>
     </section>
@@ -21,18 +24,18 @@
             {{ form_start(registerForm) }}
             {{ form_errors(registerForm) }}
             {{ form_label(registerForm.username) }}
-            {{ form_widget(registerForm.username, {'attr': {'class': 'registration-bloc__form-username'}}) }}
+            {{ form_widget(registerForm.username, {'attr': {'class': 'main__form'}}) }}
             {{ form_errors(registerForm.username) }}
             {{ form_label(registerForm.email) }}
-            {{ form_widget(registerForm.email, {'attr': {'class': 'registration-bloc__form-password'}}) }}
+            {{ form_widget(registerForm.email, {'attr': {'class': 'main__form'}}) }}
             {{ form_errors(registerForm.email) }}
             {{ form_label(registerForm.plainPassword) }}
-            {{ form_widget(registerForm.plainPassword, {'attr': {'class': 'registration-bloc__form-email'}}) }}
+            {{ form_widget(registerForm.plainPassword, {'attr': {'class': 'main__form'}}) }}
             {{ form_errors(registerForm.plainPassword) }}
             {{ form_label(registerForm.profileImage) }}
             {{ form_widget(registerForm.profileImage) }}
             {{ form_errors(registerForm.profileImage) }}
-            <button type="submit" class="registration-bloc__form-button">
+            <button type="submit" class="main__button">
                 {{ "Create an account"|trans }}
             </button>
             {{ form_end(registerForm) }}
