@@ -16,3 +16,8 @@ coverage/**/
 
 # Google Cloud
 public/images/profiles/
+
+###> symfony/webpack-encore-pack ###
+/node_modules/
+/public/build/
+###< symfony/webpack-encore-pack ###
