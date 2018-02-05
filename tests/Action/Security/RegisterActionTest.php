@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace tests\Action\Security;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormView;
 use App\Action\Security\RegisterAction;
+use Symfony\Component\Form\FormInterface;
 use App\Responder\Security\RegisterResponder;
 use Symfony\Component\HttpFoundation\Request;
 use App\Builder\Interfaces\UserBuilderInterface;
@@ -49,6 +51,12 @@ class RegisterActionTest extends TestCase
 
         $registerResponderMock = $this->createMock(RegisterResponder::class);
 
+        $formInterfaceMock = $this->createMock(FormInterface::class);
+
+        $formFactoryMock->method('create')->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('handleRequest')->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('createView')->willReturn(new FormView());
+
         $registerAction = new RegisterAction(
             $formFactoryMock,
             $urlGeneratorMock,
@@ -56,8 +64,7 @@ class RegisterActionTest extends TestCase
             $registerTypeHandlerMock
         );
 
-        static::assertInstanceOf(
-            RegisterResponder::class,
+        static::assertNull(
             $registerAction(
                 $requestMock,
                 $userBuilderMock,
