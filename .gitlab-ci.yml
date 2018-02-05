@@ -5,6 +5,7 @@ stages:
     - unit_tests
     - functional_tests
     - performances_tests
+    - pre-production
     - deployment
 
 quality_tests:
@@ -172,3 +173,14 @@ performances:
     stage: performances_tests
     script:
         - echo 'Hello World'
+
+cluster_deployment:
+    stage: deployment
+    image: google/cloud-sdk
+    before_script:
+        - echo $GCP_KUBERNETES_SERVICE_CREDENTIALS > /tmp/gcp_key.json
+        - gcloud config set project $GCP_PROJECT_NAME
+        - gcloud auth activate-service-account --key-file /tmp/gcp_key.json
+        - gcloud container clusters get-credentials $GCK_CLUSTER_NAME --zone $GCK_CLUSTER_ZONE --project $GCP_PROJECT_NAME
+    script:
+        - echo "Hello from Kubernetes !"
