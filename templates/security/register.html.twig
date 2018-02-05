@@ -2,43 +2,36 @@
 
 {% block title %}{{ "Registration"|trans }}{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('build/registration.css') }}"
-{% endblock %}
-
 {% block body %}
-    <section class="registration-left__bloc">
-        <div>
-            <button class="main__button">
-                <a href="{{ path('web_register') }}">Login</a>
-            </button>
-            <img src="{{ asset('') }}" />
-        </div>
-    </section>
-    <section class="registration-right__bloc">
-        <div>
-            <h1 class="right__bloc-welcome">Create an account</h1>
-        </div>
-        <div class="registration-bloc__form">
-            {{ form_start(registerForm) }}
-            {{ form_errors(registerForm) }}
-            {{ form_label(registerForm.username) }}
-            {{ form_widget(registerForm.username, {'attr': {'class': 'main__form'}}) }}
-            {{ form_errors(registerForm.username) }}
-            {{ form_label(registerForm.email) }}
-            {{ form_widget(registerForm.email, {'attr': {'class': 'main__form'}}) }}
-            {{ form_errors(registerForm.email) }}
-            {{ form_label(registerForm.plainPassword) }}
-            {{ form_widget(registerForm.plainPassword, {'attr': {'class': 'main__form'}}) }}
-            {{ form_errors(registerForm.plainPassword) }}
-            {{ form_label(registerForm.profileImage) }}
-            {{ form_widget(registerForm.profileImage) }}
-            {{ form_errors(registerForm.profileImage) }}
-            <button type="submit" class="main__button">
-                {{ "Create an account"|trans }}
-            </button>
-            {{ form_end(registerForm) }}
+    <section>
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell__12-col mdl-card mdl-shadow-4dp">
+                <div class="mdl-card__title">
+                    <p class="mdl-card__title-text">
+                        Create an account
+                    </p>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    {{ form_start(registerForm) }}
+                    {{ form_errors(registerForm) }}
+                    {{ form_label(registerForm.username) }}
+                    {{ form_widget(registerForm.username, {'attr': {'class': 'main__form'}}) }}
+                    {{ form_errors(registerForm.username) }}
+                    {{ form_label(registerForm.email) }}
+                    {{ form_widget(registerForm.email, {'attr': {'class': 'main__form'}}) }}
+                    {{ form_errors(registerForm.email) }}
+                    {{ form_label(registerForm.plainPassword) }}
+                    {{ form_widget(registerForm.plainPassword, {'attr': {'class': 'main__form'}}) }}
+                    {{ form_errors(registerForm.plainPassword) }}
+                    {{ form_label(registerForm.profileImage) }}
+                    {{ form_widget(registerForm.profileImage) }}
+                    {{ form_errors(registerForm.profileImage) }}
+                    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        {{ "Create an account"|trans }}
+                    </button>
+                    {{ form_end(registerForm) }}
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}
