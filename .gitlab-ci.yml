@@ -66,21 +66,36 @@ phpspec:
 
 phpunit:
     stage: unit_tests
-    image: php:7.1-fpm
+    image: php:7.2-fpm-alpine3.7
     services:
         - redis
     before_script:
-        - apt-get update -y
-        - apt-get install -y libssl-dev
-        - pecl install apcu xdebug
-        - apt-get install -y libpq-dev
-        - docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-        - docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql
-        - docker-php-ext-enable apcu xdebug
-        - apt-get install zip unzip git -y
+        - set -xe \
+          	&& apk add --no-cache --virtual .build-deps \
+          		$PHPIZE_DEPS \
+          		icu-dev \
+          		postgresql-dev \
+          		zlib-dev \
+          	&& docker-php-ext-install \
+          		intl \
+          		pdo_pgsql \
+          		zip \
+          	&& pecl install \
+          		apcu-${APCU_VERSION} \
+          	&& docker-php-ext-enable --ini-name 20-apcu.ini apcu \
+          	&& docker-php-ext-enable --ini-name 05-opcache.ini opcache \
+          	&& runDeps="$( \
+          		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+          			| tr ',' '\n' \
+          			| sort -u \
+          			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+          	)" \
+          	&& apk add --no-cache --virtual .php-phpexts-rundeps $runDeps \
+          	&& apk del .build-deps
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
+        - php composer.phar global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative
         - rm -rf vendor/*
         - rm -rf var/cache/*
         - php composer.phar install --optimize-autoloader --classmap-authoritative
