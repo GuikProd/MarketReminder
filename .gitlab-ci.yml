@@ -50,6 +50,7 @@ phpspec:
         - php -r "unlink('composer-setup.php');"
         - rm -rf vendor/*
         - rm -rf var/cache/*
+        - php composer.phar global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative
         - php composer.phar install --optimize-autoloader --classmap-authoritative
         - php composer.phar dump-autoload --optimize --classmap-authoritative
         - cp docker/gitlab/.env.gitlab.dist ./.env
