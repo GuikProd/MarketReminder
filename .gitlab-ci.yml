@@ -26,8 +26,9 @@ sass:
     script:
         - ./node_modules/.bin/encore production
     cache:
-        - ./node_modules/
-        - ./public/build/
+        paths:
+            - ./node_modules/
+            - ./public/build/
 
 phpspec:
     stage: specifications
