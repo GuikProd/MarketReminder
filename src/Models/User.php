@@ -213,7 +213,7 @@ abstract class User implements UserInterface, \Serializable
      */
     public function getCreationDate(): ? string
     {
-        return $this->creationDate->format('d-m-Y h:i:s');
+        return $this->creationDate->format('D d-m-Y h:i:s');
     }
 
     /**
@@ -229,7 +229,7 @@ abstract class User implements UserInterface, \Serializable
      */
     public function getValidationDate(): ? string
     {
-        return $this->validationDate->format('d-m-Y h:i:s');
+        return $this->validationDate->format('D d-m-Y h:i:s');
     }
 
     /**

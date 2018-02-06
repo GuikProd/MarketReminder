@@ -60,7 +60,7 @@ abstract class Image implements ImageInterface
      */
     public function getCreationDate(): string
     {
-        return $this->creationDate->format('d-m-Y');
+        return $this->creationDate->format('D d-m-Y h:i:s');
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class Image implements ImageInterface
      */
     public function getModificationDate(): ? string
     {
-        return $this->modificationDate->format('d-m-Y');
+        return $this->modificationDate->format('D d-m-Y h:i:s');
     }
 
     /**
