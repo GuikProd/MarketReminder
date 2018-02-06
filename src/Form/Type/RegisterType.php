@@ -61,21 +61,9 @@ class RegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
-                'attr' => [
-                    'placeholder' => 'Username'
-                ]
-            ])
-            ->add('email', EmailType::class, [
-                'attr' => [
-                    'placeholder' => 'Email'
-                ]
-            ])
-            ->add('plainPassword', PasswordType::class, [
-                'attr' => [
-                    'placeholder' => 'Password'
-                ]
-            ])
+            ->add('username', TextType::class)
+            ->add('email', EmailType::class)
+            ->add('plainPassword', PasswordType::class)
             ->add('profileImage', FileType::class, [
                 'mapped' => false,
                 'required' => false
@@ -83,7 +71,8 @@ class RegisterType extends AbstractType
             ->addEventSubscriber($this->registerCredentialsSubscriber)
         ;
 
-        $builder->get('profileImage')->addEventSubscriber($this->profileImageSubscriber);
+        $builder->get('profileImage')
+                ->addEventSubscriber($this->profileImageSubscriber);
     }
 
     /**

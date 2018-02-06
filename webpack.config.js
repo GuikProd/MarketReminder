@@ -10,6 +10,8 @@ Encore
     .enableSassLoader()
     .addStyleEntry('core', './assets/scss/public/core.scss')
     .addStyleEntry('registration', './assets/scss/public/registration.scss')
+
+    .addEntry('form', './assets/javascript/components/form.js')
 ;
 
 module.exports = Encore.getWebpackConfig();
