@@ -36,6 +36,14 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I should see "Cette valeur est trop longue !"
     And the response status code should be 200
 
+  Scenario: I want to register myself using a wrong email.
+    Then I fill in "register_username" with "Toto"
+    And I fill in "register_email" with "toto.com"
+    And I fill in "register_plainPassword" with "Ie1FDLDLP"
+    And I press "Créer un compte"
+    Then I should be on "/fr/register"
+    And the response status code should be 200
+
   Scenario: I want to register myself using a too small password.
     Then I fill in "register_username" with "Toto"
     And I fill in "register_email" with "toto@gmail.com"
