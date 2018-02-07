@@ -24,7 +24,7 @@ use App\Bridge\Interfaces\CloudStorageBridgeInterface;
  */
 class CloudStorageBridgeSpec extends ObjectBehavior
 {
-    public function it_implement()
+    public function it_implements()
     {
         $this->beConstructedWith('bucketNameTest');
         $this->shouldImplement(CloudBridgeInterface::class);

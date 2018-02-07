@@ -16,6 +16,8 @@ namespace spec\App\FormHandler;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Workflow\Registry;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
+use App\Builder\Interfaces\UserBuilderInterface;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -38,5 +40,23 @@ class RegisterTypeHandlerSpec extends ObjectBehavior
     ) {
         $this->beConstructedWith($registry, $entityManager, $userPasswordEncoder);
         $this->shouldImplement(RegisterTypeHandlerInterface::class);
+    }
+
+    /**
+     * @param Registry                     $registry
+     * @param EntityManagerInterface       $entityManager
+     * @param UserPasswordEncoderInterface $userPasswordEncoder
+     * @param FormInterface                $form
+     * @param UserBuilderInterface         $userBuilder
+     */
+    public function should_return_false(
+        Registry $registry,
+        EntityManagerInterface $entityManager,
+        UserPasswordEncoderInterface $userPasswordEncoder,
+        FormInterface $form,
+        UserBuilderInterface $userBuilder
+    ) {
+        $this->beConstructedWith($registry, $entityManager, $userPasswordEncoder);
+        $this->handle($form, $userBuilder)->shouldReturn(false);
     }
 }

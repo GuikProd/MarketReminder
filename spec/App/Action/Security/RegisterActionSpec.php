@@ -11,20 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Interactor;
+namespace spec\App\Action\Security;
 
 use PhpSpec\ObjectBehavior;
-use App\Models\Interfaces\ImageInterface;
 
 /**
- * Class ImageInteractorSpec.
- *
+ * Class RegisterActionSpec.
+ * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ImageInteractorSpec extends ObjectBehavior
+class RegisterActionSpec extends ObjectBehavior
 {
-    public function it_implements()
-    {
-        $this->shouldImplement(ImageInterface::class);
-    }
+
 }

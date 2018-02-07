@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace spec\App\Interactor;
 
 use PhpSpec\ObjectBehavior;
-use App\Models\Interfaces\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * Class UserInteractorSpec.
@@ -23,8 +23,8 @@ use App\Models\Interfaces\UserInterface;
  */
 class UserInteractorSpec extends ObjectBehavior
 {
-    public function it_implement()
+    public function it_implements()
     {
-        $this->shouldImplement(UserInterface::class);
+        $this->shouldImplement(AdvancedUserInterface::class);
     }
 }

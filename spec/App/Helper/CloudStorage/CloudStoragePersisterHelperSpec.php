@@ -24,7 +24,7 @@ use App\Helper\Interfaces\CloudStorage\CloudStoragePersisterHelperInterface;
  */
 class CloudStoragePersisterHelperSpec extends ObjectBehavior
 {
-    public function it_implement(CloudStorageBridgeInterface $cloudStorageBridge)
+    public function it_implements(CloudStorageBridgeInterface $cloudStorageBridge)
     {
         $this->beConstructedWith($cloudStorageBridge);
         $this->shouldImplement(CloudStoragePersisterHelperInterface::class);
