@@ -1,3 +1,9 @@
 swiftmailer:
-    url: '%env(MAILER_URL)%'
-    spool: { type: 'memory' }
+    transport: '%env(SENDGRID_TRANSPORT)%'
+    host:      '%env(SENDGRID_HOST)%'
+    username:  '%env(SENDGRID_USERNAME)%'
+    password:  '%env(SENDGRID_API_KEY)%'
+    port:      '%env(SENDGRID_PORT)%'
+    encryption: '%env(SENDGRID_ENCRYPTION)%'
+    spool:
+        type: "memory"
