@@ -7,14 +7,14 @@ layers:
     collectors:
       - type: className
         regex: .*Action.*
-  - name: Repository
-    collectors:
-      - type: className
-        regex: .*Repository.*
   - name: Helper
     collectors:
       - type: className
         regex: .*Helper.*
+  - name: Repository
+    collectors:
+      - type: className
+        regex: .*Repository.*
   - name: Subscriber
     collectors:
       - type: className
@@ -26,5 +26,6 @@ ruleset:
     - Repository
   Service:
     - Repository
-  Repository:
-    - Action
+  Subscriber:
+    - Helper
+    - Repository
