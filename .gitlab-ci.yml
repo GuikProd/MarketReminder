@@ -109,18 +109,10 @@ deptrac:
           	)" \
           	&& apk add --no-cache --virtual .php-phpexts-rundeps $runDeps \
           	&& apk del .build-deps
-        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        - php composer-setup.php
-        - php -r "unlink('composer-setup.php');"
-        - rm -rf vendor/*
-        - rm -rf var/cache/*
-        - php composer.phar global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative
-        - php composer.phar install --optimize-autoloader --classmap-authoritative
-        - php composer.phar dump-autoload --optimize --classmap-authoritative
         - cp docker/gitlab/.env.gitlab.dist ./.env
         - cp docker/gitlab/.env.gitlab.dist ./.env.behat
     script:
-        - deptrac -v
+        - /usr/local/bin/deptrac -v
     cache:
         paths:
             - src/
