@@ -8,6 +8,10 @@
 # Docker
 docker/nginx/logs/
 
+# Frontend
+/node_modules/
+/public/build/
+
 # Global
 coverage/**/
 ###> phpunit/phpunit ###
@@ -17,7 +21,5 @@ coverage/**/
 # Google Cloud
 public/images/profiles/
 
-###> symfony/webpack-encore-pack ###
-/node_modules/
-/public/build/
-###< symfony/webpack-encore-pack ###
+# Behat
+.env.behat
