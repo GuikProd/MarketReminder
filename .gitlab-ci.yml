@@ -89,7 +89,6 @@ deptrac:
           		icu-dev \
           		postgresql-dev \
           		zlib-dev \
-          		graphviz \
           	&& docker-php-ext-install \
           		intl \
           		pdo_pgsql \
@@ -105,10 +104,10 @@ deptrac:
           	)" \
           	&& apk add --no-cache --virtual .php-phpexts-rundeps $runDeps \
           	&& apk del .build-deps
-        - curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar \
-            && chmod +x deptrac.phar \
-            && mv deptrac.phar /usr/local/bin/deptrac
-            && apt-get install -y graphviz \
+        - curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
+        - chmod +x deptrac.phar
+        - mv deptrac.phar /usr/local/bin/deptrac
+        - apk add --no-cache graphviz
         - cp docker/gitlab/.env.gitlab.dist ./.env
         - cp docker/gitlab/.env.gitlab.dist ./.env.behat
     script:
