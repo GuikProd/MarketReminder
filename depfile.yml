@@ -15,9 +15,15 @@ layers:
     collectors:
       - type: className
         regex: .*Helper.*
+  - name: Subscriber
+    collectors:
+      - type: className
+        regex: .*Subscriber.*
 ruleset:
-  Controller:
+  Action:
     - Helper
+    - Subscriber
+    - Repository
   Service:
     - Repository
   Repository:

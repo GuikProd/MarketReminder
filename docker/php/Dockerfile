@@ -58,6 +58,7 @@ RUN wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer 
     && curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar \
     && chmod +x deptrac.phar \
     && mv deptrac.phar /usr/local/bin/deptrac
+    && apt-get install -y graphviz
 
 RUN mkdir -p ${WORKPATH}
 
