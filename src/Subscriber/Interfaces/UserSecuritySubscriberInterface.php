@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Subscriber\Interfaces;
 
-use App\Event\User\UserCreatedEvent;
+use App\Event\Interfaces\UserEventInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -27,11 +27,11 @@ interface UserSecuritySubscriberInterface extends EventSubscriberInterface
      * Allow to send a mail linked to the account creation,
      * this mail contain the validation token used in order to terminate the process.
      *
-     * @param UserCreatedEvent $event
+     * @param UserEventInterface    $event
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig_Error_Loader   @see Environment
+     * @throws \Twig_Error_Runtime  @see Environment
+     * @throws \Twig_Error_Syntax   @see Environment
      */
-    public function onUserCreated(UserCreatedEvent $event): void;
+    public function onUserCreated(UserEventInterface $event): void;
 }

@@ -34,7 +34,7 @@ class UserCreatedEvent extends Event implements UserEventInterface
     /**
      * UserCreatedEvent constructor.
      *
-     * @param UserInterface $user
+     * @param UserInterface $user    The user who has create an account.
      */
     public function __construct(UserInterface $user)
     {
@@ -42,7 +42,7 @@ class UserCreatedEvent extends Event implements UserEventInterface
     }
 
     /**
-     * @return UserInterface
+     * {@inheritdoc}
      */
     public function getUser(): UserInterface
     {

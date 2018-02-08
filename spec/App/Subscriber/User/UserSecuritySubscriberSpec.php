@@ -13,14 +13,53 @@ declare(strict_types=1);
 
 namespace spec\App\Subscriber\User;
 
+use Twig\Environment;
 use PhpSpec\ObjectBehavior;
+use App\Event\User\UserCreatedEvent;
+use App\Subscriber\Interfaces\UserSecuritySubscriberInterface;
 
 /**
- * Class UserSecuritySubscriberSpec;
+ * Class UserSecuritySubscriberSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class UserSecuritySubscriberSpec extends ObjectBehavior
 {
+    /**
+     * @param \PhpSpec\Wrapper\Collaborator|Environment   $twig
+     * @param \PhpSpec\Wrapper\Collaborator|\Swift_Mailer $mailer
+     */
+    public function it_implements(
+        Environment $twig,
+        \Swift_Mailer $mailer
+    ) {
+        $this->beConstructedWith($twig, 'test@test.fr', $mailer);
+        $this->shouldImplement(UserSecuritySubscriberInterface::class);
+    }
 
+    /**
+     * @param Environment   $twig
+     * @param \Swift_Mailer $mailer
+     */
+    public function should_subscribed_to(
+        Environment $twig,
+        \Swift_Mailer $mailer
+    ) {
+        $this->beConstructedWith($twig, 'test@test.fr', $mailer);
+        $this::getSubscribedEvents()->shouldContain('onUserCreated');
+    }
+
+    /**
+     * @param Environment      $twig
+     * @param \Swift_Mailer    $mailer
+     * @param UserCreatedEvent $event
+     */
+    public function should_return_void(
+        Environment $twig,
+        \Swift_Mailer $mailer,
+        UserCreatedEvent $event
+    ) {
+        $this->beConstructedWith($twig, 'test@test.fr', $mailer);
+        $this->onUserCreated($event)->shouldReturn(null);
+    }
 }

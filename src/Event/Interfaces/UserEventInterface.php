@@ -23,6 +23,8 @@ use App\Models\Interfaces\UserInterface;
 interface UserEventInterface
 {
     /**
+     * Allow to access the user instance.
+     *
      * @return UserInterface
      */
     public function getUser(): UserInterface;

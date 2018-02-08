@@ -15,6 +15,7 @@ namespace App\Subscriber\User;
 
 use Twig\Environment;
 use App\Event\User\UserCreatedEvent;
+use App\Event\Interfaces\UserEventInterface;
 use App\Subscriber\Interfaces\UserSecuritySubscriberInterface;
 
 /**
@@ -69,23 +70,20 @@ class UserSecuritySubscriber implements UserSecuritySubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public function onUserCreated(UserCreatedEvent $event): void
+    public function onUserCreated(UserEventInterface $event): void
     {
-        if (!$event->getUser()) {
-            return;
-        }
-
         $registrationMail =  (new \Swift_Message)
                               ->setFrom($this->emailSender)
                               ->setTo($event->getUser()->getEmail())
                               ->setBody(
                                   $this->twig
-                                       ->render('emails/security/registrationMail.html.twig', [
+                                       ->render('emails/security/registration_mail.html.twig', [
                                            'user' => $event->getUser(),
                                        ]),
                                   'text/html'
                               );
 
-        $this->swiftMailer->send($registrationMail);
+        $this->swiftMailer
+             ->send($registrationMail);
     }
 }

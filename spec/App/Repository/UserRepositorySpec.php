@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\Interfaces\UserRepositoryInterface;
 
 /**
- * Class UserRepositorySpec;
+ * Class UserRepositorySpec;.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
