@@ -53,7 +53,7 @@ class HomeResponder
 
         return $response->setCache([
             's_maxage' => 600,
-            'private' => true,
+            'public' => true,
         ]);
     }
 }
