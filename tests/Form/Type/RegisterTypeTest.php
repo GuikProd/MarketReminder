@@ -134,6 +134,9 @@ class RegisterTypeTest extends TypeTestCase
         parent::setUp();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getExtensions()
     {
         $type = new RegisterType($this->profileImageSubscriber, $this->registerCredentialsSubscriber);

@@ -67,7 +67,7 @@ class RegisterCredentialsSubscriber implements RegisterCredentialsSubscriberInte
      */
     public function checkCredentials(FormEvent $event): void
     {
-        if (!$event->getData()) {
+        if (!$event->getData() || null === $event->getData()) {
             return;
         }
 

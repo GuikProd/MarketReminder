@@ -37,6 +37,10 @@
         <env name="REDIS_PORT" value="6379" />
         <env name="REDIS_URL" value="redis://localhost"/>
 
+        <!-- Google Storage configuration -->
+        <env name="GOOGLE_BUCKET_NAME" value="marketreminder-dev" />
+        <env name="GOOGLE_STORAGE_URL" value="=https://storage.googleapis.com/" />
+
         <!-- ###- doctrine/doctrine-bundle ### -->
         <!-- ###+ lexik/jwt-authentication-bundle ### -->
         <!-- Key paths should be relative to the project directory -->
@@ -51,6 +55,7 @@
         <!-- Delivery is disabled by default via "null://localhost" -->
         <env name="MAILER_URL" value="null://localhost"/>
         <!-- ###- symfony/swiftmailer-bundle ### -->
+
     </php>
 
     <testsuites>
