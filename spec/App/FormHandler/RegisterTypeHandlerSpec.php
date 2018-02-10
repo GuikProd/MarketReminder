@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace spec\App\FormHandler;
 
 use PhpSpec\ObjectBehavior;
-use Symfony\Component\Workflow\Registry;
+use Symfony\Component\Workflow\Workflow;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use App\Builder\Interfaces\UserBuilderInterface;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Workflow\Workflow;
 
 /**
  * Class RegisterTypeHandlerSpec.
