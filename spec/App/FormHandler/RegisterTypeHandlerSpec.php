@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormInterface;
 use App\Builder\Interfaces\UserBuilderInterface;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Workflow\Workflow;
 
 /**
  * Class RegisterTypeHandlerSpec.
@@ -29,12 +30,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class RegisterTypeHandlerSpec extends ObjectBehavior
 {
     /**
-     * @param \PhpSpec\Wrapper\Collaborator|Registry                     $registry
+     * @param \PhpSpec\Wrapper\Collaborator|Workflow                     $registry
      * @param EntityManagerInterface|\PhpSpec\Wrapper\Collaborator       $entityManager
      * @param \PhpSpec\Wrapper\Collaborator|UserPasswordEncoderInterface $userPasswordEncoder
      */
     public function it_implements(
-        Registry $registry,
+        Workflow $registry,
         EntityManagerInterface $entityManager,
         UserPasswordEncoderInterface $userPasswordEncoder
     ) {
@@ -43,14 +44,14 @@ class RegisterTypeHandlerSpec extends ObjectBehavior
     }
 
     /**
-     * @param Registry                     $registry
+     * @param Workflow                     $registry
      * @param EntityManagerInterface       $entityManager
      * @param UserPasswordEncoderInterface $userPasswordEncoder
      * @param FormInterface                $form
      * @param UserBuilderInterface         $userBuilder
      */
     public function should_return_false(
-        Registry $registry,
+        Workflow $registry,
         EntityManagerInterface $entityManager,
         UserPasswordEncoderInterface $userPasswordEncoder,
         FormInterface $form,
