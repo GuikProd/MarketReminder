@@ -68,7 +68,7 @@ class RegisterCredentialsSubscriberTest extends KernelTestCase
         );
     }
 
-    public function testCredentialsCheck()
+    public function testRightCredentialsCheck()
     {
         $eventsMock = $this->createMock(FormEvent::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
@@ -80,6 +80,32 @@ class RegisterCredentialsSubscriberTest extends KernelTestCase
 
         $userInteractorMock->method('getEmail')
                            ->willReturn('toto@gmail.com');
+
+        $eventsMock->method('getData')
+                   ->willReturn($userInteractorMock);
+
+        $eventsMock->method('getForm')
+                   ->willReturn($formInterfaceMock);
+
+        $subscriber = new RegisterCredentialsSubscriber($translatorMock, $this->entityManager);
+
+        static::assertNull(
+            $subscriber->checkCredentials($eventsMock)
+        );
+    }
+
+    public function testWrongCredentialsCheck()
+    {
+        $eventsMock = $this->createMock(FormEvent::class);
+        $formInterfaceMock = $this->createMock(FormInterface::class);
+        $userInteractorMock = $this->createMock(UserInteractor::class);
+        $translatorMock = $this->createMock(TranslatorInterface::class);
+
+        $userInteractorMock->method('getUsername')
+                           ->willReturn('HP');
+
+        $userInteractorMock->method('getEmail')
+                           ->willReturn('hp@gmail.com');
 
         $eventsMock->method('getData')
                    ->willReturn($userInteractorMock);
