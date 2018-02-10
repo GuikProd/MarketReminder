@@ -69,6 +69,7 @@
             <directory>./src/*</directory>
             <exclude>
                 <directory>src/DataFixtures</directory>
+                <directory>src/**/Interfaces</directory>
             </exclude>
         </whitelist>
     </filter>

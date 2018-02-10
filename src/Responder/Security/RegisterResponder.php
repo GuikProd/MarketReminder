@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RegisterResponder.
+ * Class RegisterResponderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -30,7 +30,7 @@ class RegisterResponder
     private $twig;
 
     /**
-     * RegisterResponder constructor.
+     * RegisterResponderTest constructor.
      *
      * @param Environment $twig
      */

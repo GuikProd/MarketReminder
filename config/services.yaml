@@ -18,6 +18,7 @@ services:
             $bucketName: "%env(GOOGLE_BUCKET_NAME)%"
             $googleStoragePublicUrl: "%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%/"
             $emailSender: "%email.sender_address%"
+            $workflowRegistry: "@workflow.user_status"
 
     App\:
         resource: '../src/*'
