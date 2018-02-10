@@ -159,6 +159,7 @@ phpunit:
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
+        - ./bin/console d:f:l -n --env=test
         - vendor/bin/phpunit -v
         - rm -rf var/data.db
     cache:
@@ -211,6 +212,7 @@ behat_web:
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
+        - ./bin/console d:f:l -n --env=test
         - vendor/bin/behat
         - rm -rf var/data.db
     cache:
