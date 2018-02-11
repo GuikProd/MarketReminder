@@ -30,33 +30,33 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     /**
      * @var Workflow
      */
-    private $workflowRegistry;
+    private $workflow;
 
     /**
      * @var EntityManagerInterface
      */
-    private $entityManagerInterface;
+    private $entityManager;
 
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $userPasswordEncoderInterface;
+    private $userPasswordEncoder;
 
     /**
      * RegisterTypeHandler constructor.
      *
      * @param Workflow $workflowRegistry
-     * @param EntityManagerInterface $entityManagerInterface
-     * @param UserPasswordEncoderInterface $userPasswordEncoderInterface
+     * @param EntityManagerInterface $entityManager
+     * @param UserPasswordEncoderInterface $userPasswordEncoder
      */
     public function __construct(
         Workflow $workflowRegistry,
-        EntityManagerInterface $entityManagerInterface,
-        UserPasswordEncoderInterface $userPasswordEncoderInterface
+        EntityManagerInterface $entityManager,
+        UserPasswordEncoderInterface $userPasswordEncoder
     ) {
-        $this->workflowRegistry = $workflowRegistry;
-        $this->entityManagerInterface = $entityManagerInterface;
-        $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
+        $this->workflow = $workflowRegistry;
+        $this->entityManager = $entityManager;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     /**
@@ -69,7 +69,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
             $userBuilder
                 ->withCreationDate(new \DateTime())
                 ->withPassword(
-                    $this->userPasswordEncoderInterface
+                    $this->userPasswordEncoder
                          ->encodePassword(
                              $userBuilder->getUser(),
                              $userBuilder->getUser()->getPlainPassword()
@@ -90,10 +90,10 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 ->withValidated(false)
             ;
 
-            $this->workflowRegistry->apply($userBuilder->getUser(), 'to_validate');
+            $this->workflow->apply($userBuilder->getUser(), 'to_validate');
 
-            $this->entityManagerInterface->persist($userBuilder->getUser());
-            $this->entityManagerInterface->flush();
+            $this->entityManager->persist($userBuilder->getUser());
+            $this->entityManager->flush();
 
             return true;
         }

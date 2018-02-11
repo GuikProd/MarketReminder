@@ -23,9 +23,10 @@ use App\Builder\Interfaces\UserBuilderInterface;
 use App\Builder\Interfaces\ImageBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use App\Subscriber\Form\RegisterCredentialsSubscriber;
-use App\Helper\Interfaces\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\ImageRetrieverHelperInterface;
+use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
+use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
 use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
@@ -41,17 +42,37 @@ class RegisterTypeTest extends TypeTestCase
     /**
      * @var TranslatorInterface
      */
-    private $translatorInterface;
+    private $translator;
 
     /**
      * @var UserBuilderInterface
      */
-    private $userBuilderInterface;
+    private $userBuilder;
 
     /**
      * @var ImageBuilderInterface
      */
-    private $imageBuilderInterface;
+    private $imageBuilder;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var ImageTypeCheckerHelperInterface
+     */
+    private $imageTypeChecker;
+
+    /**
+     * @var ImageUploaderHelperInterface
+     */
+    private $imageUploaderHelper;
+
+    /**
+     * @var ImageRetrieverHelperInterface
+     */
+    private $imageRetrieverHelper;
 
     /**
      * @var ProfileImageSubscriberInterface
@@ -59,19 +80,19 @@ class RegisterTypeTest extends TypeTestCase
     private $profileImageSubscriber;
 
     /**
-     * @var EntityManagerInterface
+     * @var CloudVisionVoterHelperInterface
      */
-    private $entityManagerInterface;
+    private $cloudVisionVoterHelper;
 
     /**
-     * @var ImageUploaderHelperInterface
+     * @var CloudVisionAnalyserHelperInterface
      */
-    private $imageUploaderHelperInterface;
+    private $cloudVisionAnalyserHelper;
 
     /**
-     * @var ImageRetrieverHelperInterface
+     * @var CloudVisionDescriberHelperInterface
      */
-    private $imageRetrieverHelperInterface;
+    private $cloudVisionDescriberHelper;
 
     /**
      * @var RegisterCredentialsSubscriberInterface
@@ -79,57 +100,37 @@ class RegisterTypeTest extends TypeTestCase
     private $registerCredentialsSubscriber;
 
     /**
-     * @var CloudVisionVoterHelperInterface
-     */
-    private $cloudVisionVoterHelperInterface;
-
-    /**
-     * @var CloudVisionAnalyserHelperInterface
-     */
-    private $cloudVisionAnalyserHelperInterface;
-
-    /**
-     * @var CloudVisionDescriberHelperInterface
-     */
-    private $cloudVisionDescriberHelperInterface;
-
-    /**
      * {@inheritdoc}
      */
     public function setUp()
     {
-        $this->translatorInterface = $this->createMock(TranslatorInterface::class);
-
-        $this->imageBuilderInterface = $this->createMock(ImageBuilderInterface::class);
-
-        $this->entityManagerInterface = $this->createMock(EntityManagerInterface::class);
-
-        $this->imageUploaderHelperInterface = $this->createMock(ImageUploaderHelperInterface::class);
-
-        $this->imageRetrieverHelperInterface = $this->createMock(ImageRetrieverHelperInterface::class);
-
-        $this->cloudVisionVoterHelperInterface = $this->createMock(CloudVisionVoterHelperInterface::class);
-
-        $this->cloudVisionAnalyserHelperInterface = $this->createMock(CloudVisionAnalyserHelperInterface::class);
-
-        $this->cloudVisionDescriberHelperInterface = $this->createMock(CloudVisionDescriberHelperInterface::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->imageBuilder = $this->createMock(ImageBuilderInterface::class);
+        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $this->imageTypeChecker = $this->createMock(ImageTypeCheckerHelperInterface::class);
+        $this->imageUploaderHelper = $this->createMock(ImageUploaderHelperInterface::class);
+        $this->imageRetrieverHelper = $this->createMock(ImageRetrieverHelperInterface::class);
+        $this->cloudVisionVoterHelper = $this->createMock(CloudVisionVoterHelperInterface::class);
+        $this->cloudVisionAnalyserHelper = $this->createMock(CloudVisionAnalyserHelperInterface::class);
+        $this->cloudVisionDescriberHelper = $this->createMock(CloudVisionDescriberHelperInterface::class);
 
         $this->profileImageSubscriber = new ProfileImageSubscriber(
-                                            $this->translatorInterface,
-                                            $this->imageBuilderInterface,
-                                            $this->cloudVisionVoterHelperInterface,
-                                            $this->imageUploaderHelperInterface,
-                                            $this->cloudVisionAnalyserHelperInterface,
-                                            $this->imageRetrieverHelperInterface,
-                                            $this->cloudVisionDescriberHelperInterface
+                                            $this->translator,
+                                            $this->imageBuilder,
+                                            $this->imageUploaderHelper,
+                                            $this->cloudVisionAnalyserHelper,
+                                            $this->imageRetrieverHelper,
+                                            $this->cloudVisionDescriberHelper,
+                                            $this->cloudVisionVoterHelper,
+                                            $this->imageTypeChecker
                                         );
 
         $this->registerCredentialsSubscriber = new RegisterCredentialsSubscriber(
-                                                   $this->translatorInterface,
-                                                   $this->entityManagerInterface
+                                                   $this->translator,
+                                                   $this->entityManager
                                                );
 
-        $this->userBuilderInterface = new UserBuilder();
+        $this->userBuilder = new UserBuilder();
 
         parent::setUp();
     }
@@ -151,7 +152,7 @@ class RegisterTypeTest extends TypeTestCase
 
     public function testDataSubmission()
     {
-        $userBuilder = $this->userBuilderInterface
+        $userBuilder = $this->userBuilder
                             ->createUser()
                             ->withUsername('Tototo')
                             ->withEmail('toto@gmail.com')

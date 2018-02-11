@@ -18,9 +18,10 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use App\Builder\Interfaces\ImageBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use App\Helper\Interfaces\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\ImageRetrieverHelperInterface;
+use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
+use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
@@ -32,17 +33,35 @@ use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
  */
 class ProfileImageSubscriber implements ProfileImageSubscriberInterface
 {
-    const AVAILABLE_TYPES = ['image/jpeg', 'image/png'];
-
     /**
      * @var TranslatorInterface
      */
-    private $translatorInterface;
+    private $translator;
 
     /**
      * @var ImageBuilderInterface
      */
-    private $imageBuilderInterface;
+    private $imageBuilder;
+
+    /**
+     * @var ImageUploaderHelperInterface
+     */
+    private $imageUploaderHelper;
+
+    /**
+     * @var CloudVisionAnalyserHelperInterface
+     */
+    private $cloudVisionAnalyser;
+
+    /**
+     * @var ImageRetrieverHelperInterface
+     */
+    private $imageRetrieverHelper;
+
+    /**
+     * @var CloudVisionDescriberHelperInterface
+     */
+    private $cloudVisionDescriber;
 
     /**
      * @var CloudVisionVoterHelperInterface
@@ -50,52 +69,40 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
     private $cloudVisionVoterHelper;
 
     /**
-     * @var ImageUploaderHelperInterface
+     * @var ImageTypeCheckerHelperInterface
      */
-    private $imageUploaderHelperInterface;
-
-    /**
-     * @var CloudVisionAnalyserHelperInterface
-     */
-    private $cloudVisionAnalyserInterface;
-
-    /**
-     * @var ImageRetrieverHelperInterface
-     */
-    private $imageRetrieverHelperInterface;
-
-    /**
-     * @var CloudVisionDescriberHelperInterface
-     */
-    private $cloudVisionDescriberInterface;
+    private $imageTypeCheckerHelper;
 
     /**
      * ProfileImageSubscriber constructor.
      *
-     * @param TranslatorInterface                    $translatorInterface
-     * @param ImageBuilderInterface                  $imageBuilderInterface
-     * @param CloudVisionVoterHelperInterface        $cloudVisionVoterHelper
-     * @param ImageUploaderHelperInterface           $imageUploaderHelperInterface
-     * @param CloudVisionAnalyserHelperInterface     $cloudVisionAnalyserInterface
-     * @param ImageRetrieverHelperInterface          $imageRetrieverHelperInterface
-     * @param CloudVisionDescriberHelperInterface    $cloudVisionDescriberInterface
+     * @param TranslatorInterface                 $translator
+     * @param ImageBuilderInterface               $imageBuilder
+     * @param ImageUploaderHelperInterface        $imageUploaderHelper
+     * @param CloudVisionAnalyserHelperInterface  $cloudVisionAnalyser
+     * @param ImageRetrieverHelperInterface       $imageRetrieverHelper
+     * @param CloudVisionDescriberHelperInterface $cloudVisionDescriber
+     * @param CloudVisionVoterHelperInterface     $cloudVisionVoterHelper
+     * @param ImageTypeCheckerHelperInterface     $imageTypeCheckerHelper
      */
     public function __construct(
-        TranslatorInterface $translatorInterface,
-        ImageBuilderInterface $imageBuilderInterface,
+        TranslatorInterface $translator,
+        ImageBuilderInterface $imageBuilder,
+        ImageUploaderHelperInterface $imageUploaderHelper,
+        CloudVisionAnalyserHelperInterface $cloudVisionAnalyser,
+        ImageRetrieverHelperInterface $imageRetrieverHelper,
+        CloudVisionDescriberHelperInterface $cloudVisionDescriber,
         CloudVisionVoterHelperInterface $cloudVisionVoterHelper,
-        ImageUploaderHelperInterface $imageUploaderHelperInterface,
-        CloudVisionAnalyserHelperInterface $cloudVisionAnalyserInterface,
-        ImageRetrieverHelperInterface $imageRetrieverHelperInterface,
-        CloudVisionDescriberHelperInterface $cloudVisionDescriberInterface
+        ImageTypeCheckerHelperInterface $imageTypeCheckerHelper
     ) {
-        $this->translatorInterface = $translatorInterface;
-        $this->imageBuilderInterface = $imageBuilderInterface;
+        $this->translator = $translator;
+        $this->imageBuilder = $imageBuilder;
+        $this->imageUploaderHelper = $imageUploaderHelper;
+        $this->cloudVisionAnalyser = $cloudVisionAnalyser;
+        $this->imageRetrieverHelper = $imageRetrieverHelper;
+        $this->cloudVisionDescriber = $cloudVisionDescriber;
         $this->cloudVisionVoterHelper = $cloudVisionVoterHelper;
-        $this->imageUploaderHelperInterface = $imageUploaderHelperInterface;
-        $this->cloudVisionAnalyserInterface = $cloudVisionAnalyserInterface;
-        $this->imageRetrieverHelperInterface = $imageRetrieverHelperInterface;
-        $this->cloudVisionDescriberInterface = $cloudVisionDescriberInterface;
+        $this->imageTypeCheckerHelper = $imageTypeCheckerHelper;
     }
 
     /**
@@ -117,10 +124,10 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
             return;
         }
 
-        if (!in_array($event->getData()->getMimeType(), self::AVAILABLE_TYPES)) {
+        if (!$this->imageTypeCheckerHelper->checkType($event->getData())) {
             $event->getForm()->addError(
                 new FormError(
-                    $this->translatorInterface->trans(
+                    $this->translator->trans(
                         'form.format_error', [], 'validators'
                     )
                 )
@@ -129,23 +136,23 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
             return;
         }
 
-        $this->imageUploaderHelperInterface
+        $this->imageUploaderHelper
              ->store($event->getData());
 
-        $analysedImage = $this->cloudVisionAnalyserInterface
+        $analysedImage = $this->cloudVisionAnalyser
                               ->analyse(
-                                  $this->imageUploaderHelperInterface->getFilePath()
+                                  $this->imageUploaderHelper->getFilePath()
                                   .
-                                  $this->imageUploaderHelperInterface->getFileName(),
+                                  $this->imageUploaderHelper->getFileName(),
                                   'LABEL_DETECTION'
                               );
 
-        $labels = $this->cloudVisionDescriberInterface->describe($analysedImage)->labels();
+        $labels = $this->cloudVisionDescriber->describe($analysedImage)->labels();
 
         if (!$this->cloudVisionVoterHelper->obtainLabel($labels)->vote()) {
             $event->getForm()->addError(
                 new FormError(
-                    $this->translatorInterface->trans(
+                    $this->translator->trans(
                         'form.image.label_error', [], 'validators'
                     )
                 )
@@ -154,21 +161,21 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
             return;
         }
 
-        $this->imageUploaderHelperInterface->upload();
+        $this->imageUploaderHelper->upload();
 
-        $this->imageBuilderInterface
+        $this->imageBuilder
              ->createImage()
              ->withCreationDate(new \DateTime())
-             ->withAlt($this->imageUploaderHelperInterface->getFileName())
+             ->withAlt($this->imageUploaderHelper->getFileName())
              ->withPublicUrl(
-                 $this->imageRetrieverHelperInterface->getGoogleStoragePublicUrl()
+                 $this->imageRetrieverHelper->getGoogleStoragePublicUrl()
                  .
-                 $this->imageUploaderHelperInterface->getFileName()
+                 $this->imageUploaderHelper->getFileName()
              );
 
         $event->getForm()
               ->getParent()
               ->getData()
-              ->setProfileImage($this->imageBuilderInterface->getImage());
+              ->setProfileImage($this->imageBuilder->getImage());
     }
 }

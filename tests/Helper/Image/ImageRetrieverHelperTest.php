@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace tests\Helper;
 
-use App\Helper\ImageRetrieverHelper;
+use App\Helper\Image\ImageRetrieverHelper;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Helper\CloudStorage\CloudStorageRetrieverHelper;
 

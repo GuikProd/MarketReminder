@@ -35,46 +35,46 @@ class RegisterAction
     /**
      * @var FormFactoryInterface
      */
-    private $formFactoryInterface;
+    private $formFactory;
 
     /**
      * @var UrlGeneratorInterface
      */
-    private $urlGeneratorInterface;
+    private $urlGenerator;
 
     /**
      * @var EventDispatcherInterface
      */
-    private $eventDispatcherInterface;
+    private $eventDispatcher;
 
     /**
      * @var RegisterTypeHandlerInterface
      */
-    private $registerTypeHandlerInterface;
+    private $registerTypeHandler;
 
     /**
      * RegisterAction constructor.
      *
-     * @param FormFactoryInterface         $formFactoryInterface
-     * @param UrlGeneratorInterface        $urlGeneratorInterface
-     * @param EventDispatcherInterface     $eventDispatcherInterface
-     * @param RegisterTypeHandlerInterface $registerTypeHandlerInterface
+     * @param FormFactoryInterface         $formFactory
+     * @param UrlGeneratorInterface        $urlGenerator
+     * @param EventDispatcherInterface     $eventDispatcher
+     * @param RegisterTypeHandlerInterface $registerTypeHandler
      */
     public function __construct(
-        FormFactoryInterface $formFactoryInterface,
-        UrlGeneratorInterface $urlGeneratorInterface,
-        EventDispatcherInterface $eventDispatcherInterface,
-        RegisterTypeHandlerInterface $registerTypeHandlerInterface
+        FormFactoryInterface $formFactory,
+        UrlGeneratorInterface $urlGenerator,
+        EventDispatcherInterface $eventDispatcher,
+        RegisterTypeHandlerInterface $registerTypeHandler
     ) {
-        $this->formFactoryInterface = $formFactoryInterface;
-        $this->urlGeneratorInterface = $urlGeneratorInterface;
-        $this->eventDispatcherInterface = $eventDispatcherInterface;
-        $this->registerTypeHandlerInterface = $registerTypeHandlerInterface;
+        $this->formFactory = $formFactory;
+        $this->urlGenerator = $urlGenerator;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->registerTypeHandler = $registerTypeHandler;
     }
 
     /**
      * @param Request              $request
-     * @param UserBuilderInterface $userBuilderInterface
+     * @param UserBuilderInterface $userBuilder
      * @param SessionInterface     $session
      * @param RegisterResponder    $responder
      *
@@ -86,19 +86,19 @@ class RegisterAction
      */
     public function __invoke(
         Request $request,
-        UserBuilderInterface $userBuilderInterface,
+        UserBuilderInterface $userBuilder,
         SessionInterface $session,
         RegisterResponder $responder
     ) {
-        $userBuilderInterface->createUser();
+        $userBuilder->createUser();
 
-        $registerType = $this->formFactoryInterface
-                             ->create(RegisterType::class, $userBuilderInterface->getUser())
+        $registerType = $this->formFactory
+                             ->create(RegisterType::class, $userBuilder->getUser())
                              ->handleRequest($request);
 
-        if ($this->registerTypeHandlerInterface->handle($registerType, $userBuilderInterface)) {
-            $userCreatedEvent = new UserCreatedEvent($userBuilderInterface->getUser());
-            $this->eventDispatcherInterface->dispatch(UserCreatedEvent::NAME, $userCreatedEvent);
+        if ($this->registerTypeHandler->handle($registerType, $userBuilder)) {
+            $userCreatedEvent = new UserCreatedEvent($userBuilder->getUser());
+            $this->eventDispatcher->dispatch(UserCreatedEvent::NAME, $userCreatedEvent);
 
             $session
                 ->getFlashBag()
@@ -108,7 +108,7 @@ class RegisterAction
                 );
 
             return new RedirectResponse(
-                $this->urlGeneratorInterface->generate('index')
+                $this->urlGenerator->generate('index')
             );
         }
 

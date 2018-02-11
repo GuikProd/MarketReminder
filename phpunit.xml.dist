@@ -77,7 +77,4 @@
     <logging>
         <log type="coverage-text" target="php://stdout"/>
     </logging>
-    <logging>
-        <log type="coverage-clover" target="clover.xml"/>
-    </logging>
 </phpunit>

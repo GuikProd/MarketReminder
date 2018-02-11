@@ -21,8 +21,9 @@ use App\Builder\Interfaces\ImageBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Helper\Interfaces\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\ImageRetrieverHelperInterface;
+use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
+use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
+use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
@@ -40,6 +41,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $imageBuilderMock = $this->createMock(ImageBuilderInterface::class);
         $imageUploaderMock = $this->createMock(ImageUploaderHelperInterface::class);
         $imageRetrieverMock = $this->createMock(ImageRetrieverHelperInterface::class);
+        $imageTypeCheckerMock = $this->createMock(ImageTypeCheckerHelperInterface::class);
         $cloudVisionVoterMock = $this->createMock(CloudVisionVoterHelperInterface::class);
         $cloudVisionAnalyserMock = $this->createMock(CloudVisionAnalyserHelperInterface::class);
         $cloudVisionDescriberMock = $this->createMock(CloudVisionDescriberHelperInterface::class);
@@ -47,11 +49,12 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $profileImageSubscriber = new ProfileImageSubscriber(
             $translatorMock,
             $imageBuilderMock,
-            $cloudVisionVoterMock,
             $imageUploaderMock,
             $cloudVisionAnalyserMock,
             $imageRetrieverMock,
-            $cloudVisionDescriberMock
+            $cloudVisionDescriberMock,
+            $cloudVisionVoterMock,
+            $imageTypeCheckerMock
         );
 
         static::assertArrayHasKey(
@@ -68,6 +71,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $imageBuilderMock = $this->createMock(ImageBuilderInterface::class);
         $imageUploaderMock = $this->createMock(ImageUploaderHelperInterface::class);
         $imageRetrieverMock = $this->createMock(ImageRetrieverHelperInterface::class);
+        $imageTypeCheckerMock = $this->createMock(ImageTypeCheckerHelperInterface::class);
         $cloudVisionVoterMock = $this->createMock(CloudVisionVoterHelperInterface::class);
         $cloudVisionAnalyserMock = $this->createMock(CloudVisionAnalyserHelperInterface::class);
         $cloudVisionDescriberMock = $this->createMock(CloudVisionDescriberHelperInterface::class);
@@ -78,11 +82,12 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $profileImageSubscriber = new ProfileImageSubscriber(
             $translatorMock,
             $imageBuilderMock,
-            $cloudVisionVoterMock,
             $imageUploaderMock,
             $cloudVisionAnalyserMock,
             $imageRetrieverMock,
-            $cloudVisionDescriberMock
+            $cloudVisionDescriberMock,
+            $cloudVisionVoterMock,
+            $imageTypeCheckerMock
         );
 
         static::assertNull(
@@ -99,6 +104,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $imageBuilderMock = $this->createMock(ImageBuilderInterface::class);
         $imageUploaderMock = $this->createMock(ImageUploaderHelperInterface::class);
         $imageRetrieverMock = $this->createMock(ImageRetrieverHelperInterface::class);
+        $imageTypeCheckerMock = $this->createMock(ImageTypeCheckerHelperInterface::class);
         $cloudVisionVoterMock = $this->createMock(CloudVisionVoterHelperInterface::class);
         $cloudVisionAnalyserMock = $this->createMock(CloudVisionAnalyserHelperInterface::class);
         $cloudVisionDescriberMock = $this->createMock(CloudVisionDescriberHelperInterface::class);
@@ -115,11 +121,12 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $profileImageSubscriber = new ProfileImageSubscriber(
             $translatorMock,
             $imageBuilderMock,
-            $cloudVisionVoterMock,
             $imageUploaderMock,
             $cloudVisionAnalyserMock,
             $imageRetrieverMock,
-            $cloudVisionDescriberMock
+            $cloudVisionDescriberMock,
+            $cloudVisionVoterMock,
+            $imageTypeCheckerMock
         );
 
         static::assertNull(

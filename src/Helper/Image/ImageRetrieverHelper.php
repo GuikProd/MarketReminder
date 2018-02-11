@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Helper;
+namespace App\Helper\Image;
 
-use App\Helper\Interfaces\ImageRetrieverHelperInterface;
+use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Helper\Interfaces\CloudStorage\CloudStorageRetrieverHelperInterface;
 
 /**
