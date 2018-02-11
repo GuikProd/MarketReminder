@@ -12,7 +12,7 @@
 namespace App\Models;
 
 /**
- * Class Products
+ * Class Products.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -79,7 +79,7 @@ class Products
     /**
      * @return int
      */
-    public function getId():? int
+    public function getId(): ? int
     {
         return $this->id;
     }
@@ -101,11 +101,11 @@ class Products
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getEntryDate(): \DateTime
+    public function getEntryDate(): string
     {
-        return $this->entryDate;
+        return $this->entryDate->format('d-m-Y h:i:s');
     }
 
     /**
@@ -117,11 +117,11 @@ class Products
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getModificationDate():? \DateTime
+    public function getModificationDate(): ? string
     {
-        return $this->modificationDate;
+        return $this->modificationDate->format('d-m-Y h:i:s');
     }
 
     /**
@@ -133,11 +133,11 @@ class Products
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getOutDate():? \DateTime
+    public function getOutDate(): ? string
     {
-        return $this->outDate;
+        return $this->outDate->format('d-m-Y h:i:s');
     }
 
     /**
@@ -181,11 +181,11 @@ class Products
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getLimiteConsumptionDate(): \DateTime
+    public function getLimiteConsumptionDate(): ? string
     {
-        return $this->limiteConsumptionDate;
+        return $this->limiteConsumptionDate->format('d-m-Y h:i:s');
     }
 
     /**
@@ -197,11 +197,11 @@ class Products
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getLimiteUsageDate(): \DateTime
+    public function getLimiteUsageDate(): ? string
     {
-        return $this->limiteUsageDate;
+        return $this->limiteUsageDate->format('d-m-Y h:i:s');
     }
 
     /**

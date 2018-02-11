@@ -1,3 +1,9 @@
+# CI/CD
+.circleci
+
+# Project
+contributing
+
 docker/nginx/logs/
 
 # Global

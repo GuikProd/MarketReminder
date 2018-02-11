@@ -1,0 +1,31 @@
+paths:
+  - ./src
+exclude_files:
+  - .*test.*
+layers:
+  - name: Action
+    collectors:
+      - type: className
+        regex: .*Action.*
+  - name: Helper
+    collectors:
+      - type: className
+        regex: .*Helper.*
+  - name: Repository
+    collectors:
+      - type: className
+        regex: .*Repository.*
+  - name: Subscriber
+    collectors:
+      - type: className
+        regex: .*Subscriber.*
+ruleset:
+  Action:
+    - Helper
+    - Subscriber
+    - Repository
+  Service:
+    - Repository
+  Subscriber:
+    - Helper
+    - Repository

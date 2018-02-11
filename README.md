@@ -4,9 +4,11 @@ The source code of the web application/API used for MarketReminder mobile applic
 
 ## Build
 
-- Insight :
-
-- Blackfire :
+[![Build Status](https://travis-ci.org/Guikingone/MarketReminder.svg?branch=master)](https://travis-ci.org/Guikingone/MarketReminder)
+[![CircleCI](https://circleci.com/gh/Guikingone/MarketReminder.svg?style=svg)](https://circleci.com/gh/Guikingone/MarketReminder)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0975d1e66031b5235e08/maintainability)](https://codeclimate.com/github/Guikingone/MarketReminder/maintainability)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d2ba90dea73e4225ba366d2495391865)](https://www.codacy.com/app/Guikingone/MarketReminder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Guikingone/MarketReminder&amp;utm_campaign=Badge_Grade)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Guikingone/MarketReminder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Guikingone/MarketReminder/?branch=master)
 
 ## Usage
 
@@ -47,7 +49,7 @@ docker exec -it project_php-fpm sh
 # Use Composer inside the container for better performances.
 composer install
 composer clear-cache
-composer dump-autoload --optimize --classmap-authoritative --no-dev
+composer dump-autoload --optimize --classmap-authoritative
 
 # Configure BDD
 ./bin/console d:s:c # for classic users

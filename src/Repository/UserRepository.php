@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the MarketReminder project.
  *
@@ -12,13 +14,38 @@
 namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use App\Repository\Interfaces\UserRepositoryInterface;
 
 /**
- * Class UserRepository
+ * Class UserRepository.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserRepository extends EntityRepository
+class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserByUsername(string $username):? array
+    {
+        return $this->createQueryBuilder('user')
+                    ->where('user.username = :username')
+                    ->setParameter('username', $username)
+                    ->setCacheable(true)
+                    ->getQuery()
+                    ->getResult();
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserByEmail(string $email):? array
+    {
+        return $this->createQueryBuilder('user')
+                    ->where('user.email = :email')
+                    ->setParameter('email', $email)
+                    ->setCacheable(true)
+                    ->getQuery()
+                    ->getResult();
+    }
 }

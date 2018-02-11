@@ -1,0 +1,34 @@
+App\Interactor\ImageInteractor:
+    type: entity
+    repositoryClass: App\Repository\ImageRepository
+    table: marketReminder_image
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        creationDate:
+            type: datetime
+            nullable: false
+        modificationDate:
+            type: datetime
+            nullable: true
+        alt:
+            type: string
+            length: 50
+            nullable: false
+            unique: true
+        url:
+            type: string
+            length: 200
+            nullable: false
+            unique: true
+
+    oneToOne:
+        user:
+            targetEntity: App\Interactor\UserInteractor
+            inversedBy: profileImage
+            joinColumn:
+                name: user_id
+                referencedColumnName: id

@@ -1,0 +1,23 @@
+Stock:
+    type: object
+    config:
+        description: "A stock who contain products and who's linked to an user"
+        fields:
+            id:
+                type: "Int"
+                description: "The identifier of the stock"
+            creationDate:
+                type: "String"
+                description: "The creation date of the stock"
+            modificationDate:
+                type: "String"
+                description: "The modification date of the stock"
+            status:
+                type: "String"
+                description: "The status of the stock"
+            user:
+                type: "User"
+                description: "The user who own the stock"
+            products:
+                type: "[Products]"
+                description: "The products contained by the stock"

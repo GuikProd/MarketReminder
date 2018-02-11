@@ -14,11 +14,10 @@ namespace App\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class ImageRepository
+ * Class ImageRepository.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class ImageRepository extends EntityRepository
 {
-
 }

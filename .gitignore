@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 .env
 /public/bundles/
@@ -6,13 +5,22 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> behat/symfony2-extension ###
-behat.yml
-###< behat/symfony2-extension ###
-
-
 # Docker
 docker/nginx/logs/
 
+# Frontend
+/node_modules/
+/public/build/
+
 # Global
 coverage/**/
+report/*
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###
+
+# Google Cloud
+public/images/profiles/
+
+# Behat
+.env.behat

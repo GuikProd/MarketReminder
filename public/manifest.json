@@ -1,0 +1,7 @@
+{
+  "name": "MarketReminder - Inventory Manager",
+  "short_name": "MarketReminder",
+  "start_url": "/",
+  "scope": ".",
+  "display": "standalone"
+}

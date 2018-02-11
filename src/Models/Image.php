@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the MarketReminder project.
  *
@@ -11,136 +13,109 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\ImageInterface;
+
 /**
- * Class Image
- * 
+ * Class Image.
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class Image
+abstract class Image implements ImageInterface
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \DateTime
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
      * @var \DateTime
      */
-    private $modificationDate;
+    protected $modificationDate;
 
     /**
      * @var string
      */
-    private $alt;
+    protected $alt;
 
     /**
      * @var string
      */
-    private $url;
+    protected $url;
 
     /**
-     * @var User
+     * {@inheritdoc}
      */
-    private $user;
-
-    /**
-     * Image constructor.
-     */
-    public function __construct()
-    {
-        $this->creationDate = new \DateTime();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId():? int
+    public function getId(): ? int
     {
         return $this->id;
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
-    public function getCreationDate(): \DateTime
+    public function getCreationDate(): string
     {
-        return $this->creationDate;
+        return $this->creationDate->format('D d-m-Y h:i:s');
     }
 
     /**
-     * @param \DateTime $creationDate
+     * {@inheritdoc}
      */
-    public function setCreationDate(\DateTime $creationDate)
+    public function setCreationDate(\DateTime $creationDate): void
     {
         $this->creationDate = $creationDate;
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
-    public function getModificationDate():? \DateTime
+    public function getModificationDate(): ? string
     {
-        return $this->modificationDate;
+        return $this->modificationDate->format('D d-m-Y h:i:s');
     }
 
     /**
-     * @param \DateTime $modificationDate
+     * {@inheritdoc}
      */
-    public function setModificationDate(\DateTime $modificationDate)
+    public function setModificationDate(\DateTime $modificationDate): void
     {
         $this->modificationDate = $modificationDate;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getAlt(): string
+    public function getAlt():? string
     {
         return $this->alt;
     }
 
     /**
-     * @param string $alt
+     * {@inheritdoc}
      */
-    public function setAlt(string $alt)
+    public function setAlt(string $alt): void
     {
         $this->alt = $alt;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getUrl(): string
+    public function getUrl():? string
     {
         return $this->url;
     }
 
     /**
-     * @param string $url
+     * {@inheritdoc}
      */
-    public function setUrl(string $url)
+    public function setUrl(string $url): void
     {
         $this->url = $url;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
     }
 }

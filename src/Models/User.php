@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the MarketReminder project.
  *
@@ -11,395 +13,280 @@
 
 namespace App\Models;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use App\Models\Interfaces\UserInterface;
+use App\Models\Interfaces\ImageInterface;
 
 /**
- * Class User
+ * Class User.
  *
- * @author Guillaume Loulier <contact@guiollaumeloulier.fr>
+ * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class User implements AdvancedUserInterface, \Serializable
+abstract class User implements UserInterface, \Serializable
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $firstname;
+    protected $username;
 
     /**
      * @var string
      */
-    private $lastname;
+    protected $email;
 
     /**
      * @var string
      */
-    private $username;
+    protected $plainPassword;
 
     /**
      * @var string
      */
-    private $email;
-
-    /**
-     * @var string
-     */
-    private $plainPassword;
-
-    /**
-     * @var string
-     */
-    private $password;
+    protected $password;
 
     /**
      * @var array
      */
-    private $roles;
-
-    /**
-     * @var \DateTime
-     */
-    private $creationDate;
-
-    /**
-     * @var \DateTime
-     */
-    private $validationDate;
+    protected $roles;
 
     /**
      * @var bool
      */
-    private $validated;
+    protected $active;
+
+    /**
+     * @var array
+     */
+    protected $currentState;
+
+    /**
+     * @var \DateTime
+     */
+    protected $creationDate;
+
+    /**
+     * @var \DateTime
+     */
+    protected $validationDate;
 
     /**
      * @var bool
      */
-    private $active;
+    protected $validated;
 
     /**
      * @var string
      */
-    private $apiToken;
+    protected $validationToken;
 
     /**
-     * @var Image
+     * @var ImageInterface
      */
-    private $image;
+    protected $profileImage;
 
     /**
-     * @var ArrayCollection
+     * {@inheritdoc}
      */
-    private $stocks;
-
-    /**
-     * User constructor.
-     */
-    public function __construct()
-    {
-        $this->stocks = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId():? int
+    public function getId(): ? int
     {
         return $this->id;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getFirstname():? string
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * @param string $firstname
-     */
-    public function setFirstname(string $firstname)
-    {
-        $this->firstname = $firstname;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastname():? string
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * @param string $lastname
-     */
-    public function setLastname(string $lastname)
-    {
-        $this->lastname = $lastname;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername()
+    public function getUsername(): ? string
     {
         return $this->username;
     }
 
     /**
-     * @param string $username
+     * {@inheritdoc}
      */
-    public function setUsername(string $username)
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getEmail(): string
+    public function getEmail(): ? string
     {
         return $this->email;
     }
 
     /**
-     * @param string $email
+     * {@inheritdoc}
      */
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getPlainPassword(): string
+    public function getPlainPassword(): ? string
     {
         return $this->plainPassword;
     }
 
     /**
-     * @param string $plainPassword
+     * {@inheritdoc}
      */
-    public function setPlainPassword(string $plainPassword)
+    public function setPlainPassword(string $plainPassword): void
     {
         $this->plainPassword = $plainPassword;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getPassword()
+    public function getPassword(): ? string
     {
         return $this->password;
     }
 
     /**
-     * @param string $password
+     * {@inheritdoc}
      */
-    public function setPassword(string $password)
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
 
     /**
-     * @param string $role
-     */
-    public function setRole(string $role)
-    {
-        $this->roles[] = $role;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreationDate(): \DateTime
-    {
-        return $this->creationDate;
-    }
-
-    /**
-     * @param \DateTime $creationDate
-     */
-    public function setCreationDate(\DateTime $creationDate)
-    {
-        $this->creationDate = $creationDate;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getValidationDate():? \DateTime
-    {
-        return $this->validationDate;
-    }
-
-    /**
-     * @param \DateTime $validationDate
-     */
-    public function setValidationDate(\DateTime $validationDate)
-    {
-        $this->validationDate = $validationDate;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getValidated(): bool
-    {
-        return $this->validated;
-    }
-
-    /**
-     * @param bool $validated
-     */
-    public function setValidated(bool $validated)
-    {
-        $this->validated = $validated;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getActive(): bool
-    {
-        return $this->active;
-    }
-
-    /**
-     * @param bool $active
-     */
-    public function setActive(bool $active)
-    {
-        $this->active = $active;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiToken():? string
-    {
-        return $this->apiToken;
-    }
-
-    /**
-     * @param string $apiToken
-     */
-    public function setApiToken(string $apiToken)
-    {
-        $this->apiToken = $apiToken;
-    }
-
-    /**
-     * @return Image
-     */
-    public function getImage(): Image
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param Image $image
-     */
-    public function setImage(Image $image)
-    {
-        $this->image = $image;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getStocks(): ArrayCollection
-    {
-        return $this->stocks;
-    }
-
-    /**
-     * @param Stock $stock
-     */
-    public function addStock(Stock $stock)
-    {
-        $this->stocks[] = $stock;
-    }
-
-    /**
-     * @param Stock $stock
-     */
-    public function removeStock(Stock $stock)
-    {
-        $this->stocks->removeElement($stock);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function isAccountNonExpired()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function isAccountNonLocked()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function isCredentialsNonExpired()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function isEnabled()
-    {
-        return $this->active;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function getRoles()
+    public function getRoles(): ? array
     {
         return $this->roles;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
-    public function getSalt()
+    public function setRole(string $role): void
     {
-        return null;
+        $this->roles[] = $role;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
-    public function eraseCredentials() {}
+    public function getActive(): ? bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCurrentState(): ? array
+    {
+        return $this->currentState;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCurrentState(array $currentState): void
+    {
+        $this->currentState = $currentState;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreationDate(): ? string
+    {
+        return $this->creationDate->format('D d-m-Y h:i:s');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreationDate(\DateTime $creationDate): void
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidationDate(): ? string
+    {
+        return $this->validationDate->format('D d-m-Y h:i:s');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValidationDate(\DateTime $validationDate): void
+    {
+        $this->validationDate = $validationDate;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidated(): ? bool
+    {
+        return $this->validated;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValidated(bool $validated): void
+    {
+        $this->validated = $validated;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValidationToken(string $validationToken): void
+    {
+        $this->validationToken = $validationToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidationToken(): ? string
+    {
+        return $this->validationToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProfileImage(): ? ImageInterface
+    {
+        return $this->profileImage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProfileImage(ImageInterface $profileImage): void
+    {
+        $this->profileImage = $profileImage;
+    }
 
     /**
      * {@inheritdoc}
@@ -412,7 +299,8 @@ class User implements AdvancedUserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
-            $this->active
+            $this->email,
+            $this->active,
         ]);
     }
 
@@ -428,6 +316,6 @@ class User implements AdvancedUserInterface, \Serializable
             $this->username,
             $this->password,
             $this->active
-        ) = unserialize($serialized);
+            ) = unserialize($serialized);
     }
 }
