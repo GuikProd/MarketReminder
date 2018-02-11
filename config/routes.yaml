@@ -11,7 +11,7 @@ index:
     defaults:
         _controller: App\Action\Core\HomeAction
     requirements:
-        _locale: 'fr|en'
+        _locale: '%accepted_locales%'
 
 web_register:
     path:    /{_locale}/register
@@ -20,4 +20,14 @@ web_register:
         _controller: App\Action\Security\RegisterAction
         _locale: '%locale%'
     requirements:
-        _locale: 'fr|en'
+        _locale: '%accepted_locales%'
+
+web_validation:
+    path: /{_locale}/validation/{token}
+    methods: ['GET']
+    defaults:
+        _controller: App\Action\Security\ValidationTokenAction
+        _locale: '%locale%'
+    requirements:
+        _locale: '%accepted_locales%'
+        _token: "^[a-zA-Z0-9]+"

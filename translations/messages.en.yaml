@@ -7,3 +7,8 @@ Plain password: Password
 Profile image: Profile image
 Create an account: Create an account
 Already have an account ?: Already have an account ?
+
+# Security | Account validation
+security.validation_success: Account validated ! Time to start your stock management !
+security.validation_failure.already_validated: Oops, this token was already validated ! Please try to log yourself or reset your password.
+security.validation_failure.notFound_token: Oops, looks like the validation token isn't valid, please retry !

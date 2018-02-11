@@ -15,6 +15,7 @@ namespace App\Subscriber\User;
 
 use Twig\Environment;
 use App\Event\User\UserCreatedEvent;
+use App\Event\User\UserValidatedEvent;
 use App\Event\Interfaces\UserEventInterface;
 use App\Subscriber\Interfaces\UserSecuritySubscriberInterface;
 
@@ -64,6 +65,7 @@ class UserSecuritySubscriber implements UserSecuritySubscriberInterface
     {
         return [
             UserCreatedEvent::NAME => 'onUserCreated',
+            UserValidatedEvent::NAME => 'onUserValidated'
         ];
     }
 
@@ -85,5 +87,25 @@ class UserSecuritySubscriber implements UserSecuritySubscriberInterface
 
         $this->swiftMailer
              ->send($registrationMail);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onUserValidated(UserEventInterface $event): void
+    {
+        $validationMail =  (new \Swift_Message)
+                            ->setFrom($this->emailSender)
+                            ->setTo($event->getUser()->getEmail())
+                            ->setBody(
+                                $this->twig
+                                    ->render('emails/security/registration_mail.html.twig', [
+                                        'user' => $event->getUser(),
+                                    ]),
+                                'text/html'
+                            );
+
+        $this->swiftMailer
+             ->send($validationMail);
     }
 }

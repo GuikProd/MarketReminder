@@ -34,4 +34,12 @@ interface UserSecuritySubscriberInterface extends EventSubscriberInterface
      * @throws \Twig_Error_Syntax   @see Environment
      */
     public function onUserCreated(UserEventInterface $event): void;
+
+    /**
+     * Allow to validated the user account and send an email in order
+     * to invite the user to start his journey.
+     *
+     * @param UserEventInterface $event
+     */
+    public function onUserValidated(UserEventInterface $event): void;
 }

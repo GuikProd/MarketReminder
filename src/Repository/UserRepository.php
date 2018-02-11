@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use App\Models\Interfaces\UserInterface;
 use App\Repository\Interfaces\UserRepositoryInterface;
 
 /**
@@ -47,5 +48,18 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
                     ->setCacheable(true)
                     ->getQuery()
                     ->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserByToken(string $token):? UserInterface
+    {
+        return $this->createQueryBuilder('user')
+                    ->where('user.validationToken = :token')
+                    ->setParameter('token', $token)
+                    ->setCacheable(true)
+                    ->getQuery()
+                    ->getOneOrNullResult();
     }
 }

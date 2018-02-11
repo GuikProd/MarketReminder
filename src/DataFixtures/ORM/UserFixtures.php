@@ -91,8 +91,40 @@ class UserFixtures extends Fixture
         );
         $userBuilder_II->withPassword($password);
 
+        $userBuilder_III = new UserBuilder();
+
+        $userBuilder_III
+            ->createUser()
+            ->withUsername('Guik')
+            ->withEmail('guik@gmail.com')
+            ->withPlainPassword('Ie1DDLGuik')
+            ->withRole('ROLE_USER')
+            ->withCreationDate(new \DateTime('2017-03-22'))
+            ->withValidated(false)
+            ->withActive(false)
+            ->withValidationToken(
+                crypt(
+                    str_rot13(
+                        str_shuffle(
+                            $userBuilder_II->getUser()->getEmail()
+                        )
+                    ),
+                    $userBuilder_II->getUser()->getUsername()
+                )
+            )
+            ->withCurrentState(['toValidated']);
+
+        $this->setReference('user_III', $userBuilder_III->getUser());
+
+        $password = $passwordEncoder->encodePassword(
+            $userBuilder_III->getUser(),
+            $userBuilder_III->getUser()->getPlainPassword()
+        );
+        $userBuilder_III->withPassword($password);
+
         $manager->persist($userBuilder->getUser());
         $manager->persist($userBuilder_II->getUser());
+        $manager->persist($userBuilder_III->getUser());
 
         $manager->flush();
     }

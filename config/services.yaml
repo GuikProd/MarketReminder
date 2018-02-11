@@ -1,5 +1,6 @@
 parameters:
     locale: 'fr'
+    accepted_locales: 'fr|en'
     kernel.docker_dir: "%kernel.project_dir%/docker/config"
     kernel.images_dir: "%kernel.project_dir%/public/images/profiles"
     cloud.storage_credentials: "%kernel.project_dir%/config/credentials/google/bucket"

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Repository\Interfaces;
 
+use App\Models\Interfaces\UserInterface;
+
 /**
  * Interface UserRepositoryInterface.
  *
@@ -33,4 +35,13 @@ interface UserRepositoryInterface
      * @return array|null
      */
     public function getUserByEmail(string $email):? array;
+
+    /**
+     * @param string $token
+     *
+     * @return UserInterface|null
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getUserByToken(string $token):? UserInterface;
 }
