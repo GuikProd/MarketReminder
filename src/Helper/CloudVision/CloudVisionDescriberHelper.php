@@ -31,6 +31,11 @@ class CloudVisionDescriberHelper implements CloudVisionDescriberHelperInterface
     private $cloudVisionBridgeInterface;
 
     /**
+     * @var array
+     */
+    private $labels;
+
+    /**
      * CloudVisionAnalyserHelper constructor.
      *
      * @param CloudVisionBridgeInterface $cloudVisionBridgeInterface
@@ -50,5 +55,25 @@ class CloudVisionDescriberHelper implements CloudVisionDescriberHelperInterface
                     ->getServiceBuilder()
                     ->vision()
                     ->annotate($analysedImage);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function obtainLabel(array $labels): CloudVisionDescriberHelperInterface
+    {
+        foreach ($labels as $label) {
+            $this->labels[] = $label->description();
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabels(): array
+    {
+        return $this->labels;
     }
 }

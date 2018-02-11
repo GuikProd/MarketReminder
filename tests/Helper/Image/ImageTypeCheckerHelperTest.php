@@ -30,10 +30,8 @@ class ImageTypeCheckerHelperTest extends TestCase
         $uploadedFileMock->method('getMimeType')
                          ->willReturn('image/png');
 
-        $imageTypeCheckerMock = new ImageTypeCheckerHelper();
-
         static::assertTrue(
-            $imageTypeCheckerMock->checkType($uploadedFileMock)
+            ImageTypeCheckerHelper::checkType($uploadedFileMock)
         );
     }
 
@@ -43,10 +41,8 @@ class ImageTypeCheckerHelperTest extends TestCase
         $uploadedFileMock->method('getMimeType')
                          ->willReturn('image/gif');
 
-        $imageTypeCheckerMock = new ImageTypeCheckerHelper();
-
         static::assertFalse(
-            $imageTypeCheckerMock->checkType($uploadedFileMock)
+            ImageTypeCheckerHelper::checkType($uploadedFileMock)
         );
     }
 }

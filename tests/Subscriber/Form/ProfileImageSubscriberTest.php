@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace tests\Subscriber\Form;
 
+use Google\Cloud\Vision\Annotation;
+use Google\Cloud\Vision\Annotation\Entity;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -23,8 +25,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
-use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
 
@@ -41,8 +41,6 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $imageBuilderMock = $this->createMock(ImageBuilderInterface::class);
         $imageUploaderMock = $this->createMock(ImageUploaderHelperInterface::class);
         $imageRetrieverMock = $this->createMock(ImageRetrieverHelperInterface::class);
-        $imageTypeCheckerMock = $this->createMock(ImageTypeCheckerHelperInterface::class);
-        $cloudVisionVoterMock = $this->createMock(CloudVisionVoterHelperInterface::class);
         $cloudVisionAnalyserMock = $this->createMock(CloudVisionAnalyserHelperInterface::class);
         $cloudVisionDescriberMock = $this->createMock(CloudVisionDescriberHelperInterface::class);
 
@@ -52,9 +50,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
             $imageUploaderMock,
             $cloudVisionAnalyserMock,
             $imageRetrieverMock,
-            $cloudVisionDescriberMock,
-            $cloudVisionVoterMock,
-            $imageTypeCheckerMock
+            $cloudVisionDescriberMock
         );
 
         static::assertArrayHasKey(
@@ -71,8 +67,6 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $imageBuilderMock = $this->createMock(ImageBuilderInterface::class);
         $imageUploaderMock = $this->createMock(ImageUploaderHelperInterface::class);
         $imageRetrieverMock = $this->createMock(ImageRetrieverHelperInterface::class);
-        $imageTypeCheckerMock = $this->createMock(ImageTypeCheckerHelperInterface::class);
-        $cloudVisionVoterMock = $this->createMock(CloudVisionVoterHelperInterface::class);
         $cloudVisionAnalyserMock = $this->createMock(CloudVisionAnalyserHelperInterface::class);
         $cloudVisionDescriberMock = $this->createMock(CloudVisionDescriberHelperInterface::class);
 
@@ -85,9 +79,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
             $imageUploaderMock,
             $cloudVisionAnalyserMock,
             $imageRetrieverMock,
-            $cloudVisionDescriberMock,
-            $cloudVisionVoterMock,
-            $imageTypeCheckerMock
+            $cloudVisionDescriberMock
         );
 
         static::assertNull(
@@ -104,8 +96,6 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $imageBuilderMock = $this->createMock(ImageBuilderInterface::class);
         $imageUploaderMock = $this->createMock(ImageUploaderHelperInterface::class);
         $imageRetrieverMock = $this->createMock(ImageRetrieverHelperInterface::class);
-        $imageTypeCheckerMock = $this->createMock(ImageTypeCheckerHelperInterface::class);
-        $cloudVisionVoterMock = $this->createMock(CloudVisionVoterHelperInterface::class);
         $cloudVisionAnalyserMock = $this->createMock(CloudVisionAnalyserHelperInterface::class);
         $cloudVisionDescriberMock = $this->createMock(CloudVisionDescriberHelperInterface::class);
 
@@ -124,9 +114,57 @@ class ProfileImageSubscriberTest extends KernelTestCase
             $imageUploaderMock,
             $cloudVisionAnalyserMock,
             $imageRetrieverMock,
-            $cloudVisionDescriberMock,
-            $cloudVisionVoterMock,
-            $imageTypeCheckerMock
+            $cloudVisionDescriberMock
+        );
+
+        static::assertNull(
+            $profileImageSubscriber->onSubmit($eventsMock)
+        );
+    }
+
+    public function testRightImageExtension()
+    {
+        $eventsMock = $this->createMock(FormEvent::class);
+        $formMock = $this->createMock(FormInterface::class);
+        $uploadedFileMock = $this->createMock(UploadedFile::class);
+        $translatorMock = $this->createMock(TranslatorInterface::class);
+        $imageBuilderMock = $this->createMock(ImageBuilderInterface::class);
+        $imageUploaderMock = $this->createMock(ImageUploaderHelperInterface::class);
+        $imageRetrieverMock = $this->createMock(ImageRetrieverHelperInterface::class);
+        $cloudVisionAnalyserMock = $this->createMock(CloudVisionAnalyserHelperInterface::class);
+        $cloudVisionDescriberMock = $this->createMock(CloudVisionDescriberHelperInterface::class);
+
+        $uploadedFileMock->method('getMimeType')
+                        ->willReturn('image/png');
+
+        $eventsMock->method('getForm')
+                   ->willReturn($formMock);
+
+        $eventsMock->method('getData')
+                   ->willReturn($uploadedFileMock);
+
+        $annotationTest = new Annotation([
+            'labelAnnotations' => [
+                'test' => [
+                    'test'
+                ],
+                'troll' => [
+                    'troll'
+                ]
+            ]
+        ]);
+
+        $cloudVisionDescriberMock->method('obtainLabel')
+                                 ->with([$annotationTest])
+                                 ->willReturnSelf();
+
+        $profileImageSubscriber = new ProfileImageSubscriber(
+            $translatorMock,
+            $imageBuilderMock,
+            $imageUploaderMock,
+            $cloudVisionAnalyserMock,
+            $imageRetrieverMock,
+            $cloudVisionDescriberMock
         );
 
         static::assertNull(

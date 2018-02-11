@@ -20,20 +20,15 @@ use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ImageTypeCheckerHelper implements ImageTypeCheckerHelperInterface
+abstract class ImageTypeCheckerHelper implements ImageTypeCheckerHelperInterface
 {
     const ALLOWED_TYPES = ['image/png', 'image/jpeg'];
 
     /**
-     * @var bool
-     */
-    private $allowedToBeSaved;
-
-    /**
      * {@inheritdoc}
      */
-    public function checkType(\SplFileInfo $uploadedFile): bool
+    public static function checkType(\SplFileInfo $uploadedFile): bool
     {
-        return $this->allowedToBeSaved ?? in_array($uploadedFile->getMimeType(), self::ALLOWED_TYPES);
+        return in_array($uploadedFile->getMimeType(), self::ALLOWED_TYPES);
     }
 }

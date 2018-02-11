@@ -11,15 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Helper;
+namespace spec\App\Helper\Image;
 
 use PhpSpec\ObjectBehavior;
 
 /**
- * Class ImageRetrieverHelperSpec.
+ * Class ImageUploaderHelperSpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ImageRetrieverHelperSpec extends ObjectBehavior
+class ImageUploaderHelperSpec extends ObjectBehavior
 {
+
 }

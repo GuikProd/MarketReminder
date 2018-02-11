@@ -23,11 +23,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface ImageUploaderHelperInterface
 {
     /**
-     * @param \SplFileInfo $uploadedFile
-     */
-    public function checkExtension(\SplFileInfo $uploadedFile): void;
-
-    /**
      * Store the file locally using UploadedFile::move().
      *
      * @param \SplFileInfo $uploadedFile       The actual file.
@@ -61,9 +56,4 @@ interface ImageUploaderHelperInterface
      * @return string
      */
     public function getFileExtension(): string;
-
-    /**
-     * @return bool
-     */
-    public function getAllowedToSave(): bool;
 }

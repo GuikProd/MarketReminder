@@ -27,5 +27,5 @@ interface ImageTypeCheckerHelperInterface
      *
      * @return bool    Whether or not the file has a correct extension.
      */
-    public function checkType(\SplFileInfo $uploadedFile): bool;
+    public static function checkType(\SplFileInfo $uploadedFile): bool;
 }

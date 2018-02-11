@@ -33,4 +33,18 @@ interface CloudVisionDescriberHelperInterface
      * @see Annotation                Documentation purpose.
      */
     public function describe(Image $analysedImage): Annotation;
+
+    /**
+     * Allow to store every label inside the class for future check and vote.
+     *
+     * @param array $labels  The labels that need to be stored.
+     *
+     * @return  CloudVisionDescriberHelperInterface
+     */
+    public function obtainLabel(array $labels): self;
+
+    /**
+     * @return array
+     */
+    public function getLabels(): array;
 }

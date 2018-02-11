@@ -16,13 +16,13 @@ namespace App\Subscriber\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use App\Helper\Image\ImageTypeCheckerHelper;
 use App\Builder\Interfaces\ImageBuilderInterface;
+use App\Helper\CloudVision\CloudVisionVoterHelper;
 use Symfony\Component\Translation\TranslatorInterface;
 use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
-use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
 
@@ -64,16 +64,6 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
     private $cloudVisionDescriber;
 
     /**
-     * @var CloudVisionVoterHelperInterface
-     */
-    private $cloudVisionVoterHelper;
-
-    /**
-     * @var ImageTypeCheckerHelperInterface
-     */
-    private $imageTypeCheckerHelper;
-
-    /**
      * ProfileImageSubscriber constructor.
      *
      * @param TranslatorInterface                 $translator
@@ -82,8 +72,6 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
      * @param CloudVisionAnalyserHelperInterface  $cloudVisionAnalyser
      * @param ImageRetrieverHelperInterface       $imageRetrieverHelper
      * @param CloudVisionDescriberHelperInterface $cloudVisionDescriber
-     * @param CloudVisionVoterHelperInterface     $cloudVisionVoterHelper
-     * @param ImageTypeCheckerHelperInterface     $imageTypeCheckerHelper
      */
     public function __construct(
         TranslatorInterface $translator,
@@ -91,9 +79,7 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
         ImageUploaderHelperInterface $imageUploaderHelper,
         CloudVisionAnalyserHelperInterface $cloudVisionAnalyser,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
-        CloudVisionDescriberHelperInterface $cloudVisionDescriber,
-        CloudVisionVoterHelperInterface $cloudVisionVoterHelper,
-        ImageTypeCheckerHelperInterface $imageTypeCheckerHelper
+        CloudVisionDescriberHelperInterface $cloudVisionDescriber
     ) {
         $this->translator = $translator;
         $this->imageBuilder = $imageBuilder;
@@ -101,8 +87,6 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
         $this->cloudVisionAnalyser = $cloudVisionAnalyser;
         $this->imageRetrieverHelper = $imageRetrieverHelper;
         $this->cloudVisionDescriber = $cloudVisionDescriber;
-        $this->cloudVisionVoterHelper = $cloudVisionVoterHelper;
-        $this->imageTypeCheckerHelper = $imageTypeCheckerHelper;
     }
 
     /**
@@ -124,7 +108,7 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
             return;
         }
 
-        if (!$this->imageTypeCheckerHelper->checkType($event->getData())) {
+        if (!ImageTypeCheckerHelper::checkType($event->getData())) {
             $event->getForm()->addError(
                 new FormError(
                     $this->translator->trans(
@@ -147,18 +131,24 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
                                   'LABEL_DETECTION'
                               );
 
-        $labels = $this->cloudVisionDescriber->describe($analysedImage)->labels();
+        $labels = $this->cloudVisionDescriber
+                       ->describe($analysedImage)
+                       ->labels();
 
-        if (!$this->cloudVisionVoterHelper->obtainLabel($labels)->vote()) {
-            $event->getForm()->addError(
-                new FormError(
-                    $this->translator->trans(
-                        'form.image.label_error', [], 'validators'
+        $this->cloudVisionDescriber->obtainLabel($labels);
+
+        foreach ($this->cloudVisionDescriber->getLabels() as $label) {
+            if (!CloudVisionVoterHelper::vote($label)) {
+                $event->getForm()->addError(
+                    new FormError(
+                        $this->translator->trans(
+                            'form.image.label_error', [], 'validators'
+                        )
                     )
-                )
-            );
+                );
 
-            return;
+                return;
+            }
         }
 
         $this->imageUploaderHelper->upload();

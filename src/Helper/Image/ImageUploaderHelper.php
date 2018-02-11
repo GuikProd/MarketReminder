@@ -44,11 +44,6 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     private $fileExtension;
 
     /**
-     * @var bool
-     */
-    private $allowedToSave;
-
-    /**
      * @var CloudStoragePersisterHelperInterface
      */
     private $cloudStoragePersister;
@@ -73,32 +68,11 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function checkExtension(\SplFileInfo $uploadedFile): void
-    {
-        $this->fileExtension = $uploadedFile->guessExtension();
-
-        switch ($this->fileExtension) {
-            case !'.png' || !'.jpg':
-                $this->allowedToSave = false;
-                break;
-            default:
-                $this->allowedToSave = true;
-                break;
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function store(\SplFileInfo $uploadedFile): ImageUploaderHelperInterface
     {
-        $this->checkExtension($uploadedFile);
+        $this->fileName = md5(str_rot13(uniqid())).'.'.$uploadedFile->guessExtension();
 
-        if ($this->getAllowedToSave()) {
-            $this->fileName = md5(str_rot13(uniqid())).'.'.$uploadedFile->guessExtension();
-
-            $uploadedFile->move($this->filePath, $this->fileName);
-        }
+        $uploadedFile->move($this->filePath, $this->fileName);
 
         return $this;
     }
@@ -140,13 +114,5 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     public function getFileExtension(): string
     {
         return $this->fileExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAllowedToSave(): bool
-    {
-        return $this->allowedToSave;
     }
 }

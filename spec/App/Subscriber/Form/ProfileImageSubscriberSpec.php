@@ -17,9 +17,10 @@ use PhpSpec\ObjectBehavior;
 use Symfony\Component\Form\FormEvent;
 use App\Builder\Interfaces\ImageBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use App\Helper\Interfaces\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\ImageRetrieverHelperInterface;
+use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
+use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
@@ -34,29 +35,32 @@ class ProfileImageSubscriberSpec extends ObjectBehavior
     /**
      * @param \PhpSpec\Wrapper\Collaborator|TranslatorInterface                 $translator
      * @param ImageBuilderInterface|\PhpSpec\Wrapper\Collaborator               $imageBuilder
-     * @param CloudVisionVoterHelperInterface|\PhpSpec\Wrapper\Collaborator     $cloudVisionVoterHelper
      * @param ImageUploaderHelperInterface|\PhpSpec\Wrapper\Collaborator        $imageUploaderHelper
      * @param CloudVisionAnalyserHelperInterface|\PhpSpec\Wrapper\Collaborator  $cloudVisionAnalyserHelper
      * @param ImageRetrieverHelperInterface|\PhpSpec\Wrapper\Collaborator       $imageRetrieverHelper
      * @param CloudVisionDescriberHelperInterface|\PhpSpec\Wrapper\Collaborator $cloudVisionDescriberHelper
+     * @param CloudVisionVoterHelperInterface|\PhpSpec\Wrapper\Collaborator     $cloudVisionVoterHelper
+     * @param ImageTypeCheckerHelperInterface|\PhpSpec\Wrapper\Collaborator     $imageTypeCheckerHelper
      */
     public function it_implements(
         TranslatorInterface $translator,
         ImageBuilderInterface $imageBuilder,
-        CloudVisionVoterHelperInterface $cloudVisionVoterHelper,
         ImageUploaderHelperInterface $imageUploaderHelper,
         CloudVisionAnalyserHelperInterface $cloudVisionAnalyserHelper,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
-        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper
+        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper,
+        CloudVisionVoterHelperInterface $cloudVisionVoterHelper,
+        ImageTypeCheckerHelperInterface $imageTypeCheckerHelper
     ) {
         $this->beConstructedWith(
             $translator,
             $imageBuilder,
-            $cloudVisionVoterHelper,
             $imageUploaderHelper,
             $cloudVisionAnalyserHelper,
             $imageRetrieverHelper,
-            $cloudVisionDescriberHelper
+            $cloudVisionDescriberHelper,
+            $cloudVisionVoterHelper,
+            $imageTypeCheckerHelper
         );
         $this->shouldImplement(ProfileImageSubscriberInterface::class);
     }
@@ -64,29 +68,32 @@ class ProfileImageSubscriberSpec extends ObjectBehavior
     /**
      * @param TranslatorInterface                 $translator
      * @param ImageBuilderInterface               $imageBuilder
-     * @param CloudVisionVoterHelperInterface     $cloudVisionVoterHelper
      * @param ImageUploaderHelperInterface        $imageUploaderHelper
      * @param CloudVisionAnalyserHelperInterface  $cloudVisionAnalyserHelper
      * @param ImageRetrieverHelperInterface       $imageRetrieverHelper
      * @param CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper
+     * @param CloudVisionVoterHelperInterface     $cloudVisionVoterHelper
+     * @param ImageTypeCheckerHelperInterface     $imageTypeCheckerHelper
      */
     public function should_return_events(
         TranslatorInterface $translator,
         ImageBuilderInterface $imageBuilder,
-        CloudVisionVoterHelperInterface $cloudVisionVoterHelper,
         ImageUploaderHelperInterface $imageUploaderHelper,
         CloudVisionAnalyserHelperInterface $cloudVisionAnalyserHelper,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
-        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper
+        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper,
+        CloudVisionVoterHelperInterface $cloudVisionVoterHelper,
+        ImageTypeCheckerHelperInterface $imageTypeCheckerHelper
     ) {
         $this->beConstructedWith(
             $translator,
             $imageBuilder,
-            $cloudVisionVoterHelper,
             $imageUploaderHelper,
             $cloudVisionAnalyserHelper,
             $imageRetrieverHelper,
-            $cloudVisionDescriberHelper
+            $cloudVisionDescriberHelper,
+            $cloudVisionVoterHelper,
+            $imageTypeCheckerHelper
         );
         $this::getSubscribedEvents()->shouldBeArray();
         $this::getSubscribedEvents()->shouldContain('onSubmit');
@@ -95,31 +102,34 @@ class ProfileImageSubscriberSpec extends ObjectBehavior
     /**
      * @param TranslatorInterface                 $translator
      * @param ImageBuilderInterface               $imageBuilder
-     * @param CloudVisionVoterHelperInterface     $cloudVisionVoterHelper
      * @param ImageUploaderHelperInterface        $imageUploaderHelper
      * @param CloudVisionAnalyserHelperInterface  $cloudVisionAnalyserHelper
      * @param ImageRetrieverHelperInterface       $imageRetrieverHelper
      * @param CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper
+     * @param CloudVisionVoterHelperInterface     $cloudVisionVoterHelper
+     * @param ImageTypeCheckerHelperInterface     $imageTypeCheckerHelper
      * @param FormEvent                           $event
      */
     public function should_return_void(
         TranslatorInterface $translator,
         ImageBuilderInterface $imageBuilder,
-        CloudVisionVoterHelperInterface $cloudVisionVoterHelper,
         ImageUploaderHelperInterface $imageUploaderHelper,
         CloudVisionAnalyserHelperInterface $cloudVisionAnalyserHelper,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
         CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper,
+        CloudVisionVoterHelperInterface $cloudVisionVoterHelper,
+        ImageTypeCheckerHelperInterface $imageTypeCheckerHelper,
         FormEvent $event
     ) {
         $this->beConstructedWith(
             $translator,
             $imageBuilder,
-            $cloudVisionVoterHelper,
             $imageUploaderHelper,
             $cloudVisionAnalyserHelper,
             $imageRetrieverHelper,
-            $cloudVisionDescriberHelper
+            $cloudVisionDescriberHelper,
+            $cloudVisionVoterHelper,
+            $imageTypeCheckerHelper
         );
         $this->onSubmit($event)->shouldReturn(null);
     }

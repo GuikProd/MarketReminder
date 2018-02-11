@@ -20,46 +20,15 @@ use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudVisionVoterHelper implements CloudVisionVoterHelperInterface
+abstract class CloudVisionVoterHelper implements CloudVisionVoterHelperInterface
 {
     const FORBIDDEN_LABELS = ['drugs', 'gun', 'money', 'sex'];
 
     /**
-     * @var array
-     */
-    private $labels;
-
-    /**
      * {@inheritdoc}
      */
-    public function obtainLabel(array $labels): CloudVisionVoterHelperInterface
+    public static function vote(string $label): bool
     {
-        foreach ($labels as $label) {
-            $this->labels[] = $label->description();
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function vote(): bool
-    {
-        foreach ($this->labels as $label) {
-            if (in_array($label, self::FORBIDDEN_LABELS)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLabels(): array
-    {
-        return $this->labels;
+        return !in_array($label, self::FORBIDDEN_LABELS);
     }
 }
