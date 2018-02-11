@@ -138,7 +138,6 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface
         $this->cloudVisionDescriber->obtainLabel($labels);
 
         foreach ($this->cloudVisionDescriber->getLabels() as $label) {
-            var_dump($label);
             if (!CloudVisionVoterHelper::vote($label)) {
                 $event->getForm()->addError(
                     new FormError(
