@@ -28,6 +28,8 @@ class ValidationTokenResponderTest extends TestCase
     public function testReturn()
     {
         $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
+        $urlGeneratorMock->method('generate')
+                         ->willReturn('/fr/');
 
         $responder = new ValidationTokenResponder($urlGeneratorMock);
 
