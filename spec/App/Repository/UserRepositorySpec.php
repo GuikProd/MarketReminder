@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\Interfaces\UserRepositoryInterface;
 
 /**
- * Class UserRepositorySpec;.
+ * Class UserRepositorySpec.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -41,11 +41,35 @@ class UserRepositorySpec extends ObjectBehavior
      * @param EntityManagerInterface $entityManager
      * @param ClassMetadata          $classMetadata
      */
+    public function should_return_user_by_username(
+        EntityManagerInterface $entityManager,
+        ClassMetadata $classMetadata
+    ) {
+        $this->beConstructedWith($entityManager, $classMetadata);
+        $this->getUserByUsername('Ttoto')->shouldReturn(null);
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param ClassMetadata          $classMetadata
+     */
     public function should_return_null(
         EntityManagerInterface $entityManager,
         ClassMetadata $classMetadata
     ) {
         $this->beConstructedWith($entityManager, $classMetadata);
         $this->getUserByEmail('Toto@gmail.com')->shouldReturn(null);
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param ClassMetadata          $classMetadata
+     */
+    public function should_return_user_by_token(
+        EntityManagerInterface $entityManager,
+        ClassMetadata $classMetadata
+    ) {
+        $this->beConstructedWith($entityManager, $classMetadata);
+        $this->getUserByToken('titnnaoadn4191')->shouldReturn(null);
     }
 }

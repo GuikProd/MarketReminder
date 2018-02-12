@@ -10,5 +10,4 @@ Already have an account ?: Compte déjà créé ?
 
 # Security | Account validation
 security.validation_success: Compte validé, il est temps de commencer votre aventure !
-security.validation_failure.already_validated: Ce token a déjà été validé, veuillez vous connecter ou réinitialiser votre mot de passe.
-security.validation_failure.notFound_token: Ce token n'existe pas, veuillez réssayer !
+security.validation_failure.notFound_token: Ce token n'existe pas ou a déjà été validé, veuillez réssayer !

@@ -99,7 +99,7 @@ class DatabaseContext implements Context
                 ->withRole('ROLE_USER')
                 ->withActive((bool) $hash['active'])
                 ->withValidated((bool) $hash['validated'])
-                ->withValidationToken($hash['validationToken'])
+                ->withValidationToken((string) $hash['validationToken'])
                 ->withCreationDate(new \DateTime());
 
             $this->doctrine->getManager()->persist($user->getUser());

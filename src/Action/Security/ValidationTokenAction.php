@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Action\Security;
 
-use App\Interactor\UserInteractor;
 use App\Event\User\UserValidatedEvent;
 use App\Helper\User\UserValidatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -71,7 +70,7 @@ class ValidationTokenAction
     }
 
     /**
-     * @param Request $request
+     * @param Request                  $request
      * @param ValidationTokenResponder $responder
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -80,35 +79,9 @@ class ValidationTokenAction
         Request $request,
         ValidationTokenResponder $responder
     ) {
-        $user = $this->entityManager
-                     ->getRepository(UserInteractor::class)
-                     ->getUserbyToken($request->attributes->get('token'));
+        UserValidatorHelper::validate($request->attributes->get('user'));
 
-        if (!$user) {
-            $this->session
-                 ->getFlashBag()
-                 ->add(
-                     'failure',
-                     $this->translator
-                          ->trans('security.validation_failure.notFound_token', [], 'messages')
-                 );
-
-            return $responder();
-        } elseif ($user->getValidated()) {
-            $this->session
-                 ->getFlashBag()
-                 ->add(
-                     'failure',
-                     $this->translator
-                          ->trans('security.validation_failure.already_validated', [], 'messages')
-                 );
-
-            return $responder();
-        }
-
-        UserValidatorHelper::validate($user);
-
-        $event = new UserValidatedEvent($user);
+        $event = new UserValidatedEvent($request->attributes->get('user'));
         $this->eventDispatcher->dispatch(UserValidatedEvent::NAME, $event);
 
         $this->entityManager->flush();

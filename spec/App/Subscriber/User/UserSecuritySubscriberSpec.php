@@ -16,6 +16,7 @@ namespace spec\App\Subscriber\User;
 use Twig\Environment;
 use PhpSpec\ObjectBehavior;
 use App\Event\User\UserCreatedEvent;
+use App\Event\User\UserValidatedEvent;
 use App\Subscriber\Interfaces\UserSecuritySubscriberInterface;
 
 /**
@@ -54,12 +55,26 @@ class UserSecuritySubscriberSpec extends ObjectBehavior
      * @param \Swift_Mailer    $mailer
      * @param UserCreatedEvent $event
      */
-    public function should_return_void(
+    public function should_send_welcome_email(
         Environment $twig,
         \Swift_Mailer $mailer,
         UserCreatedEvent $event
     ) {
         $this->beConstructedWith($twig, 'test@test.fr', $mailer);
         $this->onUserCreated($event)->shouldReturn(null);
+    }
+
+    /**
+     * @param Environment $twig
+     * @param \Swift_Mailer $mailer
+     * @param UserValidatedEvent $event
+     */
+    public function should_send_post_validation_email(
+        Environment $twig,
+        \Swift_Mailer $mailer,
+        UserValidatedEvent $event
+    ) {
+        $this->beConstructedWith($twig, 'test@test.fr', $mailer);
+        $this->onUserValidated($event)->shouldReturn(null);
     }
 }
