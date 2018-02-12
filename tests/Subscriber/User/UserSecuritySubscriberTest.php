@@ -16,6 +16,7 @@ namespace tests\Subscriber\User;
 use Twig\Environment;
 use PHPUnit\Framework\TestCase;
 use App\Event\User\UserCreatedEvent;
+use App\Event\User\UserValidatedEvent;
 use App\Models\Interfaces\UserInterface;
 use App\Subscriber\User\UserSecuritySubscriber;
 use App\Subscriber\Interfaces\UserSecuritySubscriberInterface;
@@ -84,6 +85,40 @@ class UserSecuritySubscriberTest extends TestCase
 
         static::assertNull(
             $userSecuritySubscriber->onUserCreated($userCreatedEventMock)
+        );
+    }
+
+    public function testValidationEmailSuccess()
+    {
+        $twigMock = $this->createMock(Environment::class);
+        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
+
+        $userInterfaceMock = $this->createMock(UserInterface::class);
+        $userInterfaceMock->method('getEmail')
+                          ->willReturn('toto@gmail.com');
+
+        $userValidatedEvent = $this->createMock(UserValidatedEvent::class);
+        $userValidatedEvent->method('getUser')
+                           ->willReturn($userInterfaceMock);
+
+        $userSecuritySubscriber = new UserSecuritySubscriber($twigMock, 'test@marketReminder.com', $swiftMailerMock);
+
+        static::assertNull(
+            $userSecuritySubscriber->onUserValidated($userValidatedEvent)
+        );
+    }
+
+    public function testValidationEmailFailure()
+    {
+        $twigMock = $this->createMock(Environment::class);
+        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
+
+        $userValidedEvent = $this->createMock(UserValidatedEvent::class);
+
+        $userSecuritySubscriber = new UserSecuritySubscriber($twigMock, 'test@marketReminder.com', $swiftMailerMock);
+
+        static::assertNull(
+            $userSecuritySubscriber->onUserCreated($userValidedEvent)
         );
     }
 }
