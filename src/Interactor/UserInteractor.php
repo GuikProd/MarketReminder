@@ -26,6 +26,16 @@ class UserInteractor extends User implements AdvancedUserInterface
     /**
      * {@inheritdoc}
      */
+    public function validate(): void
+    {
+        $this->validated = true;
+        $this->validationToken = '';
+        $this->validationDate = new \DateTime();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isAccountNonExpired()
     {
         return true;

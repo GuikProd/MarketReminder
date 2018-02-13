@@ -14,6 +14,15 @@ declare(strict_types=1);
 namespace tests\Action\Security;
 
 use PHPUnit\Framework\TestCase;
+use App\Models\Interfaces\UserInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use App\Action\Security\ValidationTokenAction;
+use App\Responder\Security\ValidationTokenResponder;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 /**
  * Class ValidationTokenActionTest.
@@ -22,8 +31,31 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidationTokenActionTest extends TestCase
 {
+    /**
+     * Allow to test the validation of an account using a "mock" of the Request.
+     */
     public function testReturn()
     {
+        $session = new Session(new MockArraySessionStorage());
+        $translator = $this->createMock(TranslatorInterface::class);
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $validationTokenResponder = $this->createMock(ValidationTokenResponder::class);
 
+        $userMock = $this->createMock(UserInterface::class);
+
+        $requestMock = new Request([], [], ['token' => 'ToFEGARRdjLs2', 'user' => $userMock]);
+
+        $validationTokenAction = new ValidationTokenAction(
+            $session,
+            $translator,
+            $entityManagerMock,
+            $eventDispatcherMock
+        );
+
+        static::assertInstanceOf(
+            ValidationTokenResponder::class,
+            $validationTokenAction($requestMock, $validationTokenResponder)
+        );
     }
 }

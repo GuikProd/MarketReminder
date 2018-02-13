@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Action\Security;
 
 use App\Event\User\UserValidatedEvent;
-use App\Helper\User\UserValidatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Responder\Security\ValidationTokenResponder;
@@ -79,9 +78,11 @@ class ValidationTokenAction
         Request $request,
         ValidationTokenResponder $responder
     ) {
-        UserValidatorHelper::validate($request->attributes->get('user'));
+        $user = $request->attributes->get('user');
 
-        $event = new UserValidatedEvent($request->attributes->get('user'));
+        $user->validate();
+
+        $event = new UserValidatedEvent($user);
         $this->eventDispatcher->dispatch(UserValidatedEvent::NAME, $event);
 
         $this->entityManager->flush();

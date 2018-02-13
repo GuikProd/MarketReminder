@@ -11,6 +11,7 @@
         "lexik/jwt-authentication-bundle": "^2.4",
         "overblog/graphql-bundle": "^0.9.1",
         "predis/predis": "^1.1",
+        "sensiolabs/security-checker": "^4.1",
         "snc/redis-bundle": "^2.0",
         "symfony/asset": "^3.3",
         "symfony/console": "^3.3",
@@ -69,7 +70,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
+            "security-checker security:check": "script"
         },
         "post-install-cmd": [
             "@auto-scripts"

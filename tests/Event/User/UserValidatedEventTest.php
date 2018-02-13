@@ -32,7 +32,7 @@ class UserValidatedEventTest extends TestCase
 
         static::assertInstanceOf(
             UserInterface::class,
-            $event
+            $event->getUser()
         );
     }
 }

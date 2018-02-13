@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use App\Interactor\UserInteractor;
 
 /**
- * Class UserInteractorTest;
+ * Class UserInteractorTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -26,7 +26,7 @@ class UserInteractorTest extends TestCase
     public function testSecurityMethods()
     {
         $userInteractor = new UserInteractor();
-        $userInteractor->setActive(true);
+        $userInteractor->setValidated(true);
 
         static::assertNull($userInteractor->getSalt());
         static::assertTrue($userInteractor->isEnabled());
@@ -34,5 +34,14 @@ class UserInteractorTest extends TestCase
         static::assertTrue($userInteractor->isAccountNonLocked());
         static::assertTrue($userInteractor->isAccountNonExpired());
         static::assertTrue($userInteractor->isCredentialsNonExpired());
+    }
+
+    public function testUserValidation()
+    {
+        $userInteractor = new UserInteractor();
+        $userInteractor->validate();
+
+        static::assertTrue($userInteractor->getValidated());
+        static::assertSame('', $userInteractor->getValidationToken());
     }
 }

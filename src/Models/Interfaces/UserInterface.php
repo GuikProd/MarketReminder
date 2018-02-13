@@ -144,4 +144,9 @@ interface UserInterface
      * @return null|ImageInterface
      */
     public function getProfileImage():? ImageInterface;
+
+    /**
+     * Allow to validate the user once he's registered.
+     */
+    public function validate(): void;
 }
