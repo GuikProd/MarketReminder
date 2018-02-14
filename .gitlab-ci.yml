@@ -8,16 +8,6 @@ stages:
     - pre-production
     - deployment
 
-quality_tests:
-    stage: quality_tests
-    image: php:fpm
-    before_script:
-        - curl -o insight.phar -s http://get.insight.sensiolabs.com/insight.phar
-    script:
-        - php insight.phar analyze --no-interaction --no-ansi $INSIGHT_PROJECT_ID --reference=$CI_COMMIT_SHA --user-uuid="$INSIGHT_USER_UID" --api-token="$INSIGHT_USER_TOKEN"
-    only:
-        - master
-
 sass:
     stage: frontend
     image: node
@@ -66,11 +56,7 @@ phpspec:
         - php composer.phar global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative
         - php composer.phar install --optimize-autoloader --classmap-authoritative
         - php composer.phar dump-autoload --optimize --classmap-authoritative
-        - cp docker/gitlab/.env.gitlab.dist ./.env
-        - cp docker/gitlab/.env.gitlab.dist ./.env.behat
     script:
-        - ./bin/console d:d:c --env=test
-        - ./bin/console d:s:c --env=test
         - vendor/bin/phpspec run
         - rm -rf var/data.db
     cache:
@@ -155,7 +141,7 @@ phpunit:
         - echo $GCP_BUCKET_SERVICE_CREDENTIALS > ./config/credentials/google/bucket/credentials.json
         - mkdir -p ./config/credentials/google/vision
         - echo $GCP_MACHINE_LEARNING_SERVICE_CREDENTIALS > ./config/credentials/google/vision/credentials.json
-        - cp phpunit.xml.dist phpunit.xml
+        - cp docker/gitlab/phpunit.xml.gitlab.dist phpunit.xml
     script:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
