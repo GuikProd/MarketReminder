@@ -81,6 +81,16 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I should see "This format is invalid ! Please retry using a valid one !"
     And the response status code should be 200
 
+  Scenario: I want to register myself using a wrong image which contains wrong labels.
+    Then I fill in "register_username" with "Toto"
+    And I fill in "register_email" with "toto@gmail.com"
+    And I fill in "register_plainPassword" with "Ie1FDLDLMR"
+    And I attach the file "test_money.jpg" to "register_profileImage"
+    And I press "Create an account"
+    Then I should be on "/en/register"
+    And I should see "The submitted image contains explicit or forbidden content, please retry !"
+    And the response status code should be 200
+
   Scenario: I want to register myself with an account that already exist.
     Then I fill in "register_username" with "HelloWorld"
     And I fill in "register_email" with "hello@gmail.com"

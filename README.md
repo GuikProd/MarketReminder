@@ -104,6 +104,24 @@ http://localhost:8000
 
 **The commands listed before stay available and needed for this approach**
 
+
+### Tests
+
+This project use PHPUnit, PHPSpec, Behat and Blackfire in order to test and validate his internal logic, 
+here the listing of available commands for testing purpose:
+
+```
+docker exec -it project_php-fpm sh
+
+vendor/bin/phpspec run # PHPSpec
+
+vendor/bin/phpunit -v --exclude-group blackfire # PHPUnit without Blackfire
+vendor/bin/phpunit -v --group blackfire # PHPUnit with Blackfire
+
+vendor/bin/behat # Behat suites
+vendor/bin/behat --profile coverage # Behat suites with coverage
+```
+
 ## Contributing 
 
 See [Contributing](contributing/contribution.md)
