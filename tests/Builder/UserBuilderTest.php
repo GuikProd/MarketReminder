@@ -55,6 +55,7 @@ class UserBuilderTest extends TestCase
         static::assertSame('Ie1FDLTOTO', $userBuilder->getUser()->getPassword());
         static::assertSame('toto@gmail.com', $userBuilder->getUser()->getEmail());
         static::assertSame(0, $userBuilder->getUser()->getProfileImage()->getId());
+        static::assertEquals(0, $userBuilder->getUser()->getProfileImage()->getId());
         static::assertSame('Ie1FDLTOTO', $userBuilder->getUser()->getPlainPassword());
         static::assertContains('toValidate', $userBuilder->getUser()->getCurrentState());
         static::assertSame('Ie1FDLTOTO', $userBuilder->getUser()->getValidationToken());
