@@ -149,7 +149,7 @@ phpunit:
         - ./bin/console d:d:c --env=test
         - ./bin/console d:s:c --env=test
         - ./bin/console d:f:l -n --env=test
-        - vendor/bin/phpunit -v --exclude-group Blackfire
+        - vendor/bin/phpunit -v --exclude-group blackfire
         - rm -rf var/data.db
     cache:
         paths:

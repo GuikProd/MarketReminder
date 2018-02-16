@@ -110,7 +110,7 @@ http://localhost:8000
 This project use PHPUnit, PHPSpec, Behat and Blackfire in order to test and validate his internal logic, 
 here the listing of available commands for testing purpose:
 
-```
+```bash
 docker exec -it project_php-fpm sh
 
 vendor/bin/phpspec run # PHPSpec

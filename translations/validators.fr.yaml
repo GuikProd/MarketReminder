@@ -4,4 +4,4 @@ This credentials already exist !: Ces identifiants existent déjà !
 Your account was created ! Please check your mail to validate it.: Votre profil a été créé ! Veuillez vérifier votre boîte mail afin de valider ce dernier.
 form.format_error: Le format est invalide ! Veuillez réessayer avec un nouveau format valide !
 form.credentials_error: Les identifiants soumis existent déjà, veuillez recommencer votre saisie !
-form.image.label_error: L'image soumise contient du contenu inadapté, veuillez recommancer !
+form.image.label_error: L'image soumise contient du contenu inadapté, veuillez recommencer !
