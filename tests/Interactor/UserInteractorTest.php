@@ -23,6 +23,15 @@ use App\Interactor\UserInteractor;
  */
 class UserInteractorTest extends TestCase
 {
+    public function testUserValidation()
+    {
+        $userInteractor = new UserInteractor();
+        $userInteractor->validate();
+
+        static::assertTrue($userInteractor->getValidated());
+        static::assertSame('', $userInteractor->getValidationToken());
+    }
+
     public function testSecurityMethods()
     {
         $userInteractor = new UserInteractor();
@@ -34,14 +43,5 @@ class UserInteractorTest extends TestCase
         static::assertTrue($userInteractor->isAccountNonLocked());
         static::assertTrue($userInteractor->isAccountNonExpired());
         static::assertTrue($userInteractor->isCredentialsNonExpired());
-    }
-
-    public function testUserValidation()
-    {
-        $userInteractor = new UserInteractor();
-        $userInteractor->validate();
-
-        static::assertTrue($userInteractor->getValidated());
-        static::assertSame('', $userInteractor->getValidationToken());
     }
 }

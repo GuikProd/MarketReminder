@@ -78,11 +78,9 @@ class ValidationTokenAction
         Request $request,
         ValidationTokenResponder $responder
     ) {
-        $user = $request->attributes->get('user');
+        $request->attributes->get('user')->validate();
 
-        $user->validate();
-
-        $event = new UserValidatedEvent($user);
+        $event = new UserValidatedEvent($request->attributes->get('user'));
         $this->eventDispatcher->dispatch(UserValidatedEvent::NAME, $event);
 
         $this->entityManager->flush();

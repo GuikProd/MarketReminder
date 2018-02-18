@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Builder;
 
 use App\Interactor\UserInteractor;
-use App\Models\Interfaces\ImageInterface;
 use App\Models\Interfaces\UserInterface;
+use App\Models\Interfaces\ImageInterface;
 use App\Builder\Interfaces\UserBuilderInterface;
 
 /**

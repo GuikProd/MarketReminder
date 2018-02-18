@@ -16,6 +16,7 @@ default:
                 class: App\Kernel
         Behat\MinkExtension:
             files_path: '%paths.base%/features/assets'
+            base_url: 'http://localhost:8080/'
             goutte: ~
             sessions:
                 default:

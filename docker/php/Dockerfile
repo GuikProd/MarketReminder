@@ -25,9 +25,10 @@ RUN pecl install apcu \
                  xdebug \
                  grpc \
                  protobuf \
+                 mongodb \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql mysqli \
-    && docker-php-ext-enable apcu xdebug grpc protobuf mysqli
+    && docker-php-ext-enable apcu xdebug grpc protobuf mysqli mongodb.so
 
 # Composer
 COPY ./install-composer.sh /usr/local/bin/docker-app-install-composer
@@ -57,7 +58,7 @@ RUN wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer 
     && mv php-cs-fixer /usr/local/bin/php-cs-fixer \
     && curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar \
     && chmod +x deptrac.phar \
-    && mv deptrac.phar /usr/local/bin/deptrac
+    && mv deptrac.phar /usr/local/bin/deptrac \
     && apt-get install -y graphviz
 
 RUN mkdir -p ${WORKPATH}
