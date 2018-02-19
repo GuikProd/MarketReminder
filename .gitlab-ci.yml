@@ -39,7 +39,8 @@ phpspec:
           		zip \
           	&& pecl install \
           		apcu \
-          	&& docker-php-ext-enable apcu opcache \
+          		mongodb \
+          	&& docker-php-ext-enable apcu opcache mongodb.so \
           	&& runDeps="$( \
           		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
           			| tr ',' '\n' \
@@ -76,13 +77,15 @@ deptrac:
           		icu-dev \
           		postgresql-dev \
           		zlib-dev \
+          		graphviz \
           	&& docker-php-ext-install \
           		intl \
           		pdo_pgsql \
           		zip \
           	&& pecl install \
           		apcu \
-          	&& docker-php-ext-enable apcu opcache \
+          		mongodb \
+          	&& docker-php-ext-enable apcu opcache mongodb.so \
           	&& runDeps="$( \
           		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
           			| tr ',' '\n' \
@@ -120,7 +123,8 @@ phpunit:
           		zip \
           	&& pecl install \
           		apcu \
-          	&& docker-php-ext-enable apcu opcache \
+          		mongodb \
+          	&& docker-php-ext-enable apcu opcache mongodb.so \
           	&& runDeps="$( \
           		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
           			| tr ',' '\n' \
@@ -175,7 +179,8 @@ behat_web:
           		zip \
           	&& pecl install \
           		apcu \
-          	&& docker-php-ext-enable apcu opcache \
+          		mongodb \
+          	&& docker-php-ext-enable apcu opcache mongodb.so \
           	&& runDeps="$( \
           		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
           			| tr ',' '\n' \

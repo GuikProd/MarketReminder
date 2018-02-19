@@ -27,7 +27,13 @@ if ($_SERVER['APP_DEBUG'] ?? false) {
     Debug::enable();
 }
 
-Request::setTrustedProxies(['0.0.0.0/0'], Request::HEADER_X_FORWARDED_ALL);
+if ($trustedProxies = $_SERVER['MAIN_PROXIES']) {
+    Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL);
+}
+
+if ($trustedHosts = $_SERVER['MAIN_HOSTS']) {
+    Request::setTrustedHosts(explode(',', $trustedHosts));
+}
 
 $kernel = new Kernel($_SERVER['APP_ENV'] ?? 'dev', $_SERVER['APP_DEBUG'] ?? false);
 $request = Request::createFromGlobals();
