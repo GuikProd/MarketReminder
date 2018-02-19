@@ -5,6 +5,7 @@
     "license": "proprietary",
     "require": {
         "php": "^7.0.8",
+        "ext-mongodb": "^1.4",
         "alcaeus/mongo-php-adapter": "^1.1",
         "doctrine/mongodb-odm-bundle": "^3.4",
         "google/cloud-storage": "^1.3",
