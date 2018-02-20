@@ -8,6 +8,12 @@ backend default {
     .port = "8080";
 }
 
+# Production
+# backend default {
+#     .host = "localhost";
+#     .port = "8080";
+# }
+
 # Used in order to check the ports used.
 sub vcl_recv {
     if (req.http.X-Forwarded-Proto == "https" ) {

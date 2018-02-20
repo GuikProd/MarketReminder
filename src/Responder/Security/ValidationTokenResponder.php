@@ -43,8 +43,14 @@ class ValidationTokenResponder
      */
     public function __invoke()
     {
-        return new RedirectResponse(
-            $this->urlGenerator->generate('index')
+        $response = new RedirectResponse(
+            $this->urlGenerator->generate('index'),
+            RedirectResponse::HTTP_PERMANENTLY_REDIRECT
         );
+
+        return $response->setCache([
+            's_maxage' => 32800,
+            'public' => true
+        ]);
     }
 }
