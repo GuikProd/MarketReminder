@@ -25,10 +25,9 @@ RUN pecl install apcu \
                  xdebug \
                  grpc \
                  protobuf \
-                 mongodb \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql mysqli \
-    && docker-php-ext-enable apcu xdebug grpc protobuf mysqli mongodb.so
+    && docker-php-ext-enable apcu xdebug grpc protobuf mysqli
 
 # Composer
 COPY ./install-composer.sh /usr/local/bin/docker-app-install-composer

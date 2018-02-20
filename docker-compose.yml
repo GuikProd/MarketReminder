@@ -53,13 +53,12 @@ services:
     varnish:
         container_name: ${CONTAINER_NAME}_varnish
         build: './docker/varnish'
-        links:
-            - debian
         volumes:
-            - './:${WORKPATH}:rw'
             - './docker/varnish/conf:/etc/varnish:rw'
         ports:
             - '${VARNISH_PORT}:80'
+        depends_on:
+            - nginx
         restart: always
 
     redis:
@@ -100,31 +99,5 @@ services:
             - './:${WORKPATH}:rw'
         restart: always
 
-    # Testing configuration
-    selenium-hub:
-        container_name: ${CONTAINER_NAME}_selenium-hub
-        image: selenium/hub
-        ports:
-            - '${SELENIUM_PORT}:4444'
-
-    chrome:
-        container_name: ${CONTAINER_NAME}_chrome
-        image: selenium/node-chrome
-        links:
-            - selenium-hub:hub
-            - php-fpm
-        volumes:
-            - /dev/shm:/dev/shm
-
-    firefox:
-        container_name: ${CONTAINER_NAME}_firefox
-        image: selenium/node-firefox
-        environment:
-            HUB_PORT_4444_TCP_ADDR: hub
-        links:
-            - selenium-hub:hub
-            - php-fpm
-
 volumes:
     marketReminder:
-    mongo_marketReminder:

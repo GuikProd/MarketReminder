@@ -4,14 +4,8 @@ import std;
 
 # Default port
 backend default {
-    .host = "marketReminder_nginx";
-    .port = "80";
-}
-
-# List of hosts authorized to purge request/
-acl local {
-  "localhost";
-  "marketReminder_php-fpm";
+    .host = "172.19.0.1";
+    .port = "8080";
 }
 
 # Used in order to check the ports used.
@@ -21,4 +15,12 @@ sub vcl_recv {
     } else {
         set req.http.X-Forwarded-Port = "80";
     }
+}
+
+sub vcl_backend_response {
+
+}
+
+sub vcl_deliver {
+
 }
