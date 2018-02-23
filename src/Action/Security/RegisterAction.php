@@ -17,6 +17,7 @@ use App\Form\Type\RegisterType;
 use App\Event\User\UserCreatedEvent;
 use App\Responder\Security\RegisterResponder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Builder\Interfaces\UserBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,6 +30,18 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Class RegisterAction.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ *
+ * @Route(
+ *     name="web_registration",
+ *     path="/{_locale}/register",
+ *     methods={"GET", "POST"},
+ *     defaults={
+ *         "_locale": "%locale%"
+ *     },
+ *     requirements={
+ *         "_locale": "%accepted_locales%"
+ *     }
+ * )
  */
 class RegisterAction
 {

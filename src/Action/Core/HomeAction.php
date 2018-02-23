@@ -14,11 +14,21 @@ declare(strict_types=1);
 namespace App\Action\Core;
 
 use App\Responder\Core\HomeResponder;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class HomeAction.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ *
+ * @Route(
+ *     name="index",
+ *     path="/{_locale}/",
+ *     methods={"GET"},
+ *     requirements={
+ *         "_locale": "%accepted_locales%"
+ *     }
+ * )
  */
 class HomeAction
 {

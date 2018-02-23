@@ -16,6 +16,7 @@ namespace App\Action\Security;
 use App\Event\User\UserValidatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Responder\Security\ValidationTokenResponder;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -25,6 +26,19 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Class ValidationTokenAction;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ *
+ * @Route(
+ *     name="web_validation",
+ *     path="/{_locale}/validation/{token}",
+ *     methods={"GET"},
+ *     defaults={
+ *         "_locale": "%locale%"
+ *     },
+ *     requirements={
+ *         "_locale": "%accepted_locales%",
+ *         "token": "^[a-zA-Z0-9]+"
+ *     }
+ * )
  */
 class ValidationTokenAction
 {
