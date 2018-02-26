@@ -58,7 +58,7 @@ class RegisterCredentialsSubscriber implements RegisterCredentialsSubscriberInte
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::SUBMIT => 'checkCredentials'
+            FormEvents::SUBMIT => 'checkCredentials',
         ];
     }
 

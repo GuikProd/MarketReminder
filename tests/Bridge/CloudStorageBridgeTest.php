@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace tests\Bridge;
 
 use App\Bridge\CloudStorageBridge;
-use Blackfire\Profile\Configuration;
 use Google\Cloud\Core\ServiceBuilder;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use App\Bridge\Interfaces\CloudStorageBridgeInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -27,8 +25,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class CloudStorageBridgeTest extends KernelTestCase
 {
-    use TestCaseTrait;
-
     /**
      * @var string
      */
@@ -41,24 +37,6 @@ class CloudStorageBridgeTest extends KernelTestCase
     {
         $this->bucketCredentials = static::bootKernel()->getContainer()
                                                        ->getParameter('cloud.storage_credentials');
-    }
-
-    /**
-     * @group blackfire
-     *
-     * @requires extension blackfire
-     */
-    public function testBlackfireServiceBuilder()
-    {
-        $config = new Configuration();
-        $config->assert('main.peak_memory < 10mb', 'Memory usage');
-
-        $this->assertBlackfire($config, function () {
-            $cloudStorage = new CloudStorageBridge($this->bucketCredentials);
-            $cloudStorage
-                ->loadCredentialsFile()
-                ->getServiceBuilder();
-        });
     }
 
     public function testReturnServiceBuilder()

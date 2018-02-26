@@ -20,7 +20,9 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Action\Security\ValidationTokenAction;
 use App\Responder\Security\ValidationTokenResponder;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -32,7 +34,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 class ValidationTokenActionTest extends TestCase
 {
     /**
-     * Allow to test the validation of an account using a "mock" of the Request.
+     * Allow to test the validation of an account using a "mock" of the Request and Session.
      */
     public function testReturn()
     {
@@ -40,7 +42,6 @@ class ValidationTokenActionTest extends TestCase
         $translator = $this->createMock(TranslatorInterface::class);
         $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
-        $validationTokenResponder = $this->createMock(ValidationTokenResponder::class);
 
         $userMock = $this->createMock(UserInterface::class);
 
@@ -53,8 +54,14 @@ class ValidationTokenActionTest extends TestCase
             $eventDispatcherMock
         );
 
+        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
+        $urlGeneratorMock->method('generate')
+                         ->willReturn('/fr/');
+
+        $validationTokenResponder = new ValidationTokenResponder($urlGeneratorMock);
+
         static::assertInstanceOf(
-            ValidationTokenResponder::class,
+            RedirectResponse::class,
             $validationTokenAction($requestMock, $validationTokenResponder)
         );
     }

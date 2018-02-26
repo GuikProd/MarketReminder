@@ -28,6 +28,7 @@ class UserInteractor extends User implements AdvancedUserInterface
      */
     public function validate(): void
     {
+        $this->active = true;
         $this->validated = true;
         $this->validationToken = '';
         $this->validationDate = new \DateTime();

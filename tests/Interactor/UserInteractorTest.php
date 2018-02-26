@@ -28,6 +28,8 @@ class UserInteractorTest extends TestCase
         $userInteractor = new UserInteractor();
         $userInteractor->validate();
 
+        static::assertTrue($userInteractor->getActive());
+        static::assertTrue($userInteractor->isEnabled());
         static::assertTrue($userInteractor->getValidated());
         static::assertSame('', $userInteractor->getValidationToken());
     }
@@ -38,7 +40,6 @@ class UserInteractorTest extends TestCase
         $userInteractor->setValidated(true);
 
         static::assertNull($userInteractor->getSalt());
-        static::assertTrue($userInteractor->isEnabled());
         static::assertNull($userInteractor->eraseCredentials());
         static::assertTrue($userInteractor->isAccountNonLocked());
         static::assertTrue($userInteractor->isAccountNonExpired());

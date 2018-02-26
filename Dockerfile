@@ -9,8 +9,8 @@ RUN set -xe \
           		icu-dev \
           		postgresql-dev \
           		zlib-dev \
-          		graphviz \
           		gnupg \
+          		graphviz \
           	&& docker-php-ext-install \
           		intl \
           		pdo_pgsql \
@@ -53,8 +53,7 @@ RUN wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer 
     && mv php-cs-fixer /usr/local/bin/php-cs-fixer \
     && curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar \
     && chmod +x deptrac.phar \
-    && mv deptrac.phar /usr/local/bin/deptrac \
-    && apk add --update --no-cache graphviz
+    && mv deptrac.phar /usr/local/bin/deptrac
 
 RUN mkdir -p ${WORKPATH}
 
