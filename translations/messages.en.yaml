@@ -13,3 +13,5 @@ Already have an account ?: Already have an account ?
 # Security | Account validation
 security.validation_success: Account validated ! Time to start your stock management !
 security.validation_failure.notFound_token: Oops, looks like the validation token isn't valid or has already been validated, please retry !
+security.login: Login
+security.login_failure: The submitted credentials seems invalid, please verify and retry.

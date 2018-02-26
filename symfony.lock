@@ -494,6 +494,9 @@
             "ref": "34eb245ce4194e7ae713558084180e2c532e7afd"
         }
     },
+    "symfony/security-csrf": {
+        "version": "v3.4.4"
+    },
     "symfony/serializer": {
         "version": "v3.4.3"
     },

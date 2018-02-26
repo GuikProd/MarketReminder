@@ -1,7 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}{{ "security.login"|trans }}{% endblock %}
 
 {% block body %}
-
+    <section>
+        <div>
+            {% if errors %}
+                <p>
+                    {{ "security.login_failure"|trans }}
+                </p>
+            {% endif %}
+        </div>
+        <div>
+            <form action="{{ path('web_login') }}" method="post">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="_username" value="{{ username }}" />
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="_password" />
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                <button type="submit">{{ "security.login"|trans }}</button>
+            </form>
+        </div>
+    </section>
 {% endblock %}

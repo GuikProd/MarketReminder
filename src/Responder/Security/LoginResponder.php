@@ -49,11 +49,11 @@ class LoginResponder
      * @throws \Twig_Error_Syntax
      */
     public function __invoke(
-        \Exception $exception,
-        string $username
+        \Exception $exception = null,
+        string $username = null
     ) {
         $response = new Response(
-            $this->twig->render('', [
+            $this->twig->render('security/login.html.twig', [
                 'username' => $username,
                 'errors' => $exception
             ])
