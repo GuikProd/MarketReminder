@@ -18,7 +18,7 @@ use App\Event\Image\ImageAddedEvent;
 use App\Models\Interfaces\ImageInterface;
 
 /**
- * Class ImageAddedEventTest;
+ * Class ImageAddedEventTest;.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

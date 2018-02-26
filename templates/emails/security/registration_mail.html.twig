@@ -5,10 +5,12 @@
     </head>
     <body>
         <section>
-            <h2>Welcome to MarketReminder !</h2>
+            <h2>
+                {{ "account.welcome"|trans }}
+            </h2>
             <div>
                 <p>
-                    Welcome to MarketReminder !
+                    {{ "account.welcome"|trans }}
                 </p>
                 <p>
                     As we're extremely happy to see on board, we've sent your this email, this way, we can start
@@ -16,9 +18,10 @@
                     First, thanks again for your interest in the platform !
                 </p>
                 <p>
-                    In a second time, we need you to validated your account in order to access the full platform.
-                    For this, here's a link : , once you've activate your account, you're gonna be able to log
-                    and create your first stock and manage it.
+                    In a second time, we need you to validate your account in order to access the full platform.
+                    For this, here's a <a href="{{ url('web_validation', {'token': user.validationToken}) }}">link</a> ,
+                    once you've activate your account,
+                    you're gonna be able to log and create your first stock and manage it.
                 </p>
             </div>
         </section>

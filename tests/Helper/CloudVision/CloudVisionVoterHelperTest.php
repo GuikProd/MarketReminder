@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use App\Helper\CloudVision\CloudVisionVoterHelper;
 
 /**
- * Class CloudVisionVoterHelperTest;
+ * Class CloudVisionVoterHelperTest;.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

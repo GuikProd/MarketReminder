@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use App\Models\Interfaces\UserInterface;
 
 /**
- * Class ImageBuilderTest;
+ * Class ImageBuilderTest;.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

@@ -15,25 +15,25 @@ namespace tests\Responder\Core;
 
 use Twig\Environment;
 use PHPUnit\Framework\TestCase;
-use App\Responder\Core\HomeResponder;
+use App\Responder\Core\ContactResponder;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class HomeResponderTest;.
+ * Class ContactResponderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class HomeResponderTest extends TestCase
+class ContactResponderTest extends TestCase
 {
-    public function testReturn()
+    public function testInvokeReturn()
     {
-        $environmentMock = $this->createMock(Environment::class);
+        $twigMock = $this->createMock(Environment::class);
 
-        $homeResponder = new HomeResponder($environmentMock);
+        $contactResponder = new ContactResponder($twigMock);
 
         static::assertInstanceOf(
             Response::class,
-            $homeResponder()
+            $contactResponder()
         );
     }
 }
