@@ -132,4 +132,46 @@ class KernelSubscriberTest extends KernelTestCase
             $kernelSubscriber->onUserValidation($kernelRequestEvent)
         );
     }
+
+    public function testUserPasswordResetCredentialsWrongPath()
+    {
+        $requestMock = new Request();
+        $requestMock->attributes->set('_route', 'web_register');
+
+        $kernelRequestEvent = $this->createMock(GetResponseEvent::class);
+        $kernelRequestEvent->method('getRequest')
+                           ->willReturn($requestMock);
+
+        $kernelSubscriber = new KernelSubscriber(
+            $this->session,
+            $this->translator,
+            $this->urlGenerator,
+            $this->entityManager
+        );
+
+        static::assertNull(
+            $kernelSubscriber->onUserAskResetPassword($kernelRequestEvent)
+        );
+    }
+
+    public function testUserPasswordResetCredentialsGoodPath()
+    {
+        $requestMock = new Request();
+        $requestMock->attributes->set('_route', 'web_ask_reset_password');
+
+        $kernelRequestEvent = $this->createMock(GetResponseEvent::class);
+        $kernelRequestEvent->method('getRequest')
+            ->willReturn($requestMock);
+
+        $kernelSubscriber = new KernelSubscriber(
+            $this->session,
+            $this->translator,
+            $this->urlGenerator,
+            $this->entityManager
+        );
+
+        static::assertNull(
+            $kernelSubscriber->onUserAskResetPassword($kernelRequestEvent)
+        );
+    }
 }

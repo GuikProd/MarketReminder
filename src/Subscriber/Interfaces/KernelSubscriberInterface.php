@@ -35,4 +35,9 @@ interface KernelSubscriberInterface
      * @param GetResponseEvent $event
      */
     public function onUserValidation(GetResponseEvent $event): void;
+
+    /**
+     * @param GetResponseEvent $event
+     */
+    public function onUserAskResetPassword(GetResponseEvent $event): void;
 }

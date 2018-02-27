@@ -29,7 +29,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class KernelSubscriber implements EventSubscriberInterface, KernelSubscriberInterface
+class KernelSubscriber implements
+      EventSubscriberInterface,
+      KernelSubscriberInterface
 {
     /**
      * @var SessionInterface
@@ -110,5 +112,17 @@ class KernelSubscriber implements EventSubscriberInterface, KernelSubscriberInte
         }
 
         $event->getRequest()->attributes->set('user', $user);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onUserAskResetPassword(GetResponseEvent $event): void
+    {
+        if ($event->getRequest()->attributes->get('_route') !== 'web_ask_reset_password') {
+            return;
+        }
+
+
     }
 }
