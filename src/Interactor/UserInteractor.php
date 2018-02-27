@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Interactor;
 
 use App\Models\User;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
@@ -21,7 +23,9 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserInteractor extends User implements AdvancedUserInterface
+class UserInteractor extends User implements
+      EquatableInterface,
+      AdvancedUserInterface
 {
     /**
      * {@inheritdoc}
@@ -79,5 +83,13 @@ class UserInteractor extends User implements AdvancedUserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        return $this->username === $user->getUsername();
     }
 }

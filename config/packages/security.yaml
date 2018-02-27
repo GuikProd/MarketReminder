@@ -1,11 +1,10 @@
 security:
-    # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     encoders:
         App\Interactor\UserInteractor:
-            encoder: bcrypt
+            algorithm: bcrypt
 
     providers:
-        entity_provider:
+        db_provider:
             entity:
                 class: App\Interactor\UserInteractor
     firewalls:
@@ -14,8 +13,12 @@ security:
             security: false
         main:
             anonymous: ~
-            provider: entity_provider
+            provider: db_provider
+            logout_on_user_change: true
             form_login:
                 login_path: web_login
                 check_path: web_login
                 csrf_token_generator: security.csrf.token_manager
+            logout:
+                path: logout
+                target: index

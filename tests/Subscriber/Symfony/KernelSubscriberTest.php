@@ -74,7 +74,7 @@ class KernelSubscriberTest extends KernelTestCase
 
         $kernelRequestEvent = $this->createMock(GetResponseEvent::class);
         $kernelRequestEvent->method('getRequest')
-            ->willReturn($requestMock);
+                           ->willReturn($requestMock);
 
         $kernelSubscriber = new KernelSubscriber(
                                 $this->session,

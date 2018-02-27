@@ -15,6 +15,7 @@ namespace tests\Interactor;
 
 use PHPUnit\Framework\TestCase;
 use App\Interactor\UserInteractor;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class UserInteractorTest.
@@ -36,13 +37,19 @@ class UserInteractorTest extends TestCase
 
     public function testSecurityMethods()
     {
+        $userInterfaceMock = $this->createMock(UserInterface::class);
+        $userInterfaceMock->method('getUsername')
+                          ->willReturn('Toto');
+
         $userInteractor = new UserInteractor();
         $userInteractor->setValidated(true);
+        $userInteractor->setUsername('Toto');
 
         static::assertNull($userInteractor->getSalt());
         static::assertNull($userInteractor->eraseCredentials());
         static::assertTrue($userInteractor->isAccountNonLocked());
         static::assertTrue($userInteractor->isAccountNonExpired());
         static::assertTrue($userInteractor->isCredentialsNonExpired());
+        static::assertTrue($userInteractor->isEqualTo($userInterfaceMock));
     }
 }

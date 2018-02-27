@@ -38,7 +38,7 @@ class UserRepository extends EntityRepository implements
                     ->setParameter('email', $username)
                     ->setCacheable(true)
                     ->getQuery()
-                    ->getResult();
+                    ->getOneOrNullResult();
     }
 
     /**

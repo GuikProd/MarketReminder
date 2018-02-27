@@ -13,6 +13,7 @@ services:
         autoconfigure: true
         public: false
         bind:
+            $defaultLocale: "%locale%"
             $bucketCredentialsFolder: "%cloud.storage_credentials%"
             $visionCredentialsFolder: "%cloud.vision_credentials%"
             $filePath: "%kernel.images_dir%"

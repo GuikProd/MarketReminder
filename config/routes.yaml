@@ -8,3 +8,6 @@ root:
         _controller: FrameworkBundle:Redirect:redirect
         route: 'index'
         permanent: true
+
+logout:
+    path: /logout

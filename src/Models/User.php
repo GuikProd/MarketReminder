@@ -315,6 +315,7 @@ abstract class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->email,
             $this->active
             ) = unserialize($serialized);
     }
