@@ -7,7 +7,7 @@ pipelines:
           - composer
         script:
           - docker-php-ext-install opcache json mysqli
-          - docker-php-ext-enable apcu opcache mysqli
+          - docker-php-ext-enable apcu mysqli
           - cp docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           - composer install -a -o
