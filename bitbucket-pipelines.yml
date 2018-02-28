@@ -2,11 +2,11 @@ image: php:fpm-alpine
 
 pipelines:
   default:
-    - step:
-        caches:
-          - composer
-        script:
-          - set -xe \
+      - step:
+          caches:
+              - composer
+          script:
+              - set -xe \
                 && apk add --no-cache --virtual .build-deps \
                 	$PHPIZE_DEPS \
                 	icu-dev \
@@ -28,11 +28,11 @@ pipelines:
                 )" \
                 && apk add --no-cache --virtual .php-phpexts-rundeps $runDeps \
                 && apk del .build-deps
-          - cp docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
-          - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          - php composer-setup.php
-          - php -r "unlink('composer-setup.php');"
-          - php composer.phar global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative
-          - php composer.phar install --optimize-autoloader --classmap-authoritative
-          - php composer.phar dump-autoload --optimize --classmap-authoritative
-          - vendor/bin/phpspec run
+              - cp docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
+              - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+              - php composer-setup.php
+              - php -r "unlink('composer-setup.php');"
+              - php composer.phar global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative
+              - php composer.phar install --optimize-autoloader --classmap-authoritative
+              - php composer.phar dump-autoload --optimize --classmap-authoritative
+              - vendor/bin/phpspec run
