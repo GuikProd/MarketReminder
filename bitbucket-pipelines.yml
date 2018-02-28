@@ -6,7 +6,8 @@ pipelines:
         caches:
           - composer
         script:
+          - pecl install apcu opcache
           - cp docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-          - composer install
-          - vendor/bin/phpunit
+          - composer install -a -o
+          - vendor/bin/phpspec run
