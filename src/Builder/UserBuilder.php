@@ -133,6 +133,16 @@ class UserBuilder implements UserBuilderInterface
     /**
      * {@inheritdoc}
      */
+    public function withResetPasswordToken(string $resetPasswordToken): UserBuilderInterface
+    {
+        $this->user->setResetPasswordToken($resetPasswordToken);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function withActive(bool $active): UserBuilderInterface
     {
         $this->user->setActive($active);

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace tests\Interactor;
 
-use PHPUnit\Framework\TestCase;
 use App\Interactor\UserInteractor;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**

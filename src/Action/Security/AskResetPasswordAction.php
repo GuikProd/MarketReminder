@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace App\Action\Security;
 
+use App\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
+use App\Responder\Security\AskResetPasswordResponder;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,5 +38,44 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AskResetPasswordAction
 {
+    /**
+     * @var SessionInterface
+     */
+    private $session;
 
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var AskResetPasswordTypeHandlerInterface
+     */
+    private $askResetPasswordTypeHandler;
+
+    /**
+     * AskResetPasswordAction constructor.
+     *
+     * @param SessionInterface $session
+     * @param FormFactoryInterface $formFactory
+     * @param EntityManagerInterface $entityManager
+     * @param AskResetPasswordTypeHandlerInterface $askResetPasswordTypeHandler
+     */
+    public function __construct(SessionInterface $session, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager, AskResetPasswordTypeHandlerInterface $askResetPasswordTypeHandler)
+    {
+        $this->session = $session;
+        $this->formFactory = $formFactory;
+        $this->entityManager = $entityManager;
+        $this->askResetPasswordTypeHandler = $askResetPasswordTypeHandler;
+    }
+
+    public function __invoke(AskResetPasswordResponder $responder)
+    {
+        return $responder();
+    }
 }

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Builder\Interfaces;
 
-use App\Models\Interfaces\ImageInterface;
 use App\Models\Interfaces\UserInterface;
+use App\Models\Interfaces\ImageInterface;
 
 /**
  * Interface UserBuilderInterface.
@@ -90,6 +90,13 @@ interface UserBuilderInterface
      * @return UserBuilderInterface
      */
     public function withValidationToken(string $validationToken): self;
+
+    /**
+     * @param string $resetPasswordToken
+     *
+     * @return UserBuilderInterface
+     */
+    public function withResetPasswordToken(string $resetPasswordToken): self;
 
     /**
      * @param bool $active

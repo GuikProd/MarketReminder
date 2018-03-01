@@ -21,6 +21,11 @@ namespace App\Models\Interfaces;
 interface UserInterface
 {
     /**
+     * @param string $resetPassword
+     */
+    public function askForPasswordReset(string $resetPassword): void;
+
+    /**
      * @return int|null
      */
     public function getId(): ? int;
@@ -134,6 +139,11 @@ interface UserInterface
      * @return null|string
      */
     public function getValidationToken(): ? string;
+
+    /**
+     * @return null|string
+     */
+    public function getResetPasswordToken():? string;
 
     /**
      * @param ImageInterface $profileImage

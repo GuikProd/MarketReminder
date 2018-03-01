@@ -19,7 +19,7 @@ RUN apk add --no-cache --virtual build-dependencies icu-dev postgresql-dev icu-d
 
 COPY docker/php/conf/php.ini /usr/local/etc/php/php.ini
 
-# COPY conf/production/php.ini /usr/local/etc/php/php.ini -> Ony for production usage.
+# COPY conf/production/php.ini /usr/local/etc/php/php.ini -> Only for production usage.
 
 # Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1

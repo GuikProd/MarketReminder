@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Form\Type;
+namespace App\Tests\Form\Type;
 
 use App\Builder\UserBuilder;
 use App\Form\Type\RegisterType;

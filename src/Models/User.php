@@ -84,9 +84,22 @@ abstract class User implements UserInterface, \Serializable
     protected $validationToken;
 
     /**
+     * @var string
+     */
+    protected $resetPasswordToken;
+
+    /**
      * @var ImageInterface
      */
     protected $profileImage;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function askForPasswordReset(string $resetPasswordToken): void
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+    }
 
     /**
      * {@inheritdoc}
@@ -270,6 +283,14 @@ abstract class User implements UserInterface, \Serializable
     public function getValidationToken(): ? string
     {
         return $this->validationToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResetPasswordToken(): ? string
+    {
+        return $this->resetPasswordToken;
     }
 
     /**

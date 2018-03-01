@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace App\Subscriber\Symfony;
 
 use App\Interactor\UserInteractor;
+use App\Subscriber\Interfaces\KernelSubscriberInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Translation\TranslatorInterface;
-use App\Subscriber\Interfaces\KernelSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class KernelSubscriber.
@@ -56,10 +56,10 @@ class KernelSubscriber implements
     /**
      * KernelSubscriber constructor.
      *
-     * @param SessionInterface $session
-     * @param TranslatorInterface $translator
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param EntityManagerInterface $entityManager
+     * @param SessionInterface        $session
+     * @param TranslatorInterface     $translator
+     * @param UrlGeneratorInterface   $urlGenerator
+     * @param EntityManagerInterface  $entityManager
      */
     public function __construct(
         SessionInterface $session,
