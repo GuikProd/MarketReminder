@@ -63,14 +63,16 @@
         "psr-4": {
             "App\\": "src/",
             "App\\Domain\\DTO\\": "src/Domain/DTO/",
-            "App\\Form\\Type\\": "src/Form/Type/"
+            "App\\Form\\Type\\": "src/Form/Type/",
+            "App\\Infra\\Helper\\Security\\": "src/Infra/Helper/Security/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "App\\Tests\\": "tests/",
             "App\\Tests\\Domain\\DTO\\": "tests/Domain/DTO/",
-            "App\\Tests\\Form\\Type\\": "tests/Form/Type/"
+            "App\\Tests\\Form\\Type\\": "tests/Form/Type/",
+            "App\\Tests\\Infra\\Helper\\Security\\": "tests/Infra/Helper/Security/"
         }
     },
     "scripts": {

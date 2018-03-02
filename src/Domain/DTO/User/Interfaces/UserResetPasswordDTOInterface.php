@@ -20,10 +20,4 @@ namespace App\Domain\DTO\User\Interfaces;
  */
 interface UserResetPasswordDTOInterface
 {
-    /**
-     * Return the final reset token (based on username and email of the User).
-     *
-     * @return string
-     */
-    public function getResetToken(): string;
 }

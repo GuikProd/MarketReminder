@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace App\Subscriber\Interfaces;
 
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Interface RegisterCredentialsSubscriberInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface RegisterCredentialsSubscriberInterface extends EventSubscriberInterface
+interface RegisterCredentialsSubscriberInterface
 {
     /**
      * @param FormEvent $event

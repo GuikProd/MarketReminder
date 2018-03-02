@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Subscriber\Form;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -31,7 +32,7 @@ use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ProfileImageSubscriber implements ProfileImageSubscriberInterface
+class ProfileImageSubscriber implements ProfileImageSubscriberInterface, EventSubscriberInterface
 {
     /**
      * @var TranslatorInterface

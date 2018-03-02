@@ -14,19 +14,20 @@ declare(strict_types=1);
 namespace App\Subscriber\Form;
 
 use App\Interactor\UserInteractor;
+use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
 
 /**
  * Class RegisterCredentialsSubscriber.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisterCredentialsSubscriber implements RegisterCredentialsSubscriberInterface
+class RegisterCredentialsSubscriber implements RegisterCredentialsSubscriberInterface, EventSubscriberInterface
 {
     /**
      * @var TranslatorInterface

@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace App\Subscriber\Interfaces;
 
 use App\Event\Interfaces\UserEventInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Interface UserSecuritySubscriberInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface UserSecuritySubscriberInterface extends EventSubscriberInterface
+interface UserSecuritySubscriberInterface
 {
     /**
      * Allow to send a mail linked to the account creation,

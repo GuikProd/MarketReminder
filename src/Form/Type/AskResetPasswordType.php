@@ -46,6 +46,7 @@ class AskResetPasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'validation_groups' => ['resetPassword'],
             'data_class' => UserResetPasswordDTOInterface::class,
             'empty_data' => function (FormInterface $form) {
                 return new UserResetPasswordDTO(

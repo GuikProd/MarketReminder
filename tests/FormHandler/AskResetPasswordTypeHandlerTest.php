@@ -13,39 +13,112 @@ declare(strict_types=1);
 
 namespace tests\FormHandler;
 
+use App\Domain\DTO\User\UserResetPasswordDTO;
 use App\FormHandler\AskResetPasswordTypeHandler;
+use App\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class AskResetPasswordTypeHandlerTest
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class AskResetPasswordTypeHandlerTest extends TestCase
+class AskResetPasswordTypeHandlerTest extends KernelTestCase
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        static::bootKernel();
+
+        $this->entityManager = static::$kernel->getContainer()
+                                                       ->get('doctrine.orm.entity_manager');
+    }
+
     public function testWrongHandlingProcess()
     {
+        $sessionInterface = $this->createMock(SessionInterface::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $translatorInterface = $this->createMock(TranslatorInterface::class);
 
-        $askResetPasswordTypeHandler = new AskResetPasswordTypeHandler($entityManagerMock);
+        $askResetPasswordTypeHandler = new AskResetPasswordTypeHandler(
+                                                           $sessionInterface,
+                                                           $translatorInterface,
+                                                           $this->entityManager
+                                                       );
+
+        static::assertInstanceOf(
+            AskResetPasswordTypeHandlerInterface::class,
+            $askResetPasswordTypeHandler
+        );
 
         static::assertFalse(
             $askResetPasswordTypeHandler->handle($formInterfaceMock)
         );
     }
 
-    public function testRightHandlingProcess()
+    public function testRightHandlingProcessWithWrongUser()
     {
+        $userPasswordResetDTOMock = new UserResetPasswordDTO('toto@gmail.com', 'Toto');
+
+        $sessionMock = new Session(new MockArraySessionStorage());
+
         $formInterfaceMock = $this->createMock(FormInterface::class);
         $formInterfaceMock->method('isValid')->willReturn(true);
         $formInterfaceMock->method('isSubmitted')->willReturn(true);
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $formInterfaceMock->method('getData')->willReturn($userPasswordResetDTOMock);
+        $translatorInterface = $this->createMock(TranslatorInterface::class);
 
-        $askResetPasswordTypeHandler = new AskResetPasswordTypeHandler($entityManagerMock);
+        $askResetPasswordTypeHandler = new AskResetPasswordTypeHandler(
+                                                           $sessionMock,
+                                                           $translatorInterface,
+                                                           $this->entityManager
+                                                       );
 
+        static::assertInstanceOf(
+            AskResetPasswordTypeHandlerInterface::class,
+            $askResetPasswordTypeHandler
+        );
+
+        static::assertFalse(
+            $askResetPasswordTypeHandler->handle($formInterfaceMock)
+        );
+    }
+
+    public function testRightHandlingProcessWithRightUser()
+    {
+        $userPasswordResetDTOMock = new UserResetPasswordDTO('hp@gmail.com', 'HP');
+
+        $sessionMock = new Session(new MockArraySessionStorage());
+
+        $formInterfaceMock = $this->createMock(FormInterface::class);
+        $formInterfaceMock->method('isValid')->willReturn(true);
+        $formInterfaceMock->method('isSubmitted')->willReturn(true);
+        $formInterfaceMock->method('getData')->willReturn($userPasswordResetDTOMock);
+        $translatorInterface = $this->createMock(TranslatorInterface::class);
+
+        $askResetPasswordTypeHandler = new AskResetPasswordTypeHandler(
+            $sessionMock,
+            $translatorInterface,
+            $this->entityManager
+        );
+
+        static::assertInstanceOf(
+            AskResetPasswordTypeHandlerInterface::class,
+            $askResetPasswordTypeHandler
+        );
 
         static::assertTrue(
             $askResetPasswordTypeHandler->handle($formInterfaceMock)

@@ -24,17 +24,25 @@ interface UserRepositoryInterface
 {
     /**
      * @param string $username
+     * @param string $email
      *
-     * @return array|null
+     * @return UserInterface|null
      */
-    public function getUserByUsername(string $username):? array;
+    public function getUserByUsernameAndEmail(string $username, string $email):? UserInterface;
+
+    /**
+     * @param string $username
+     *
+     * @return UserInterface|null
+     */
+    public function getUserByUsername(string $username):? UserInterface;
 
     /**
      * @param string $email
      *
-     * @return array|null
+     * @return UserInterface|null
      */
-    public function getUserByEmail(string $email):? array;
+    public function getUserByEmail(string $email):? UserInterface;
 
     /**
      * @param string $token

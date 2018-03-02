@@ -13,18 +13,19 @@ declare(strict_types=1);
 
 namespace App\Subscriber\User;
 
-use Twig\Environment;
+use App\Event\Interfaces\UserEventInterface;
 use App\Event\User\UserCreatedEvent;
 use App\Event\User\UserValidatedEvent;
-use App\Event\Interfaces\UserEventInterface;
 use App\Subscriber\Interfaces\UserSecuritySubscriberInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Twig\Environment;
 
 /**
  * Class UserSecuritySubscriber.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserSecuritySubscriber implements UserSecuritySubscriberInterface
+class UserSecuritySubscriber implements UserSecuritySubscriberInterface, EventSubscriberInterface
 {
     /**
      * @var Environment

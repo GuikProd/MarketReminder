@@ -35,6 +35,11 @@ class AskResetPasswordTypeTest extends TypeTestCase
             $form
         );
 
+        static::assertArrayHasKey(
+            'validation_groups',
+            $form->getConfig()->getOptions()
+        );
+
         static::assertInstanceOf(
             UserResetPasswordDTOInterface::class,
             $form->getData()

@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace App\Subscriber\Interfaces;
 
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Interface ProfileImageSubscriberInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface ProfileImageSubscriberInterface extends EventSubscriberInterface
+interface ProfileImageSubscriberInterface
 {
     /**
      * @param FormEvent $event

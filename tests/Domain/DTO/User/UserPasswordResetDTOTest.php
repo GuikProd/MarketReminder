@@ -27,8 +27,8 @@ class UserPasswordResetDTOTest extends TestCase
     public function testPasswordResetToken()
     {
         $userPasswordResetDTO = new UserResetPasswordDTO(
-                                                 "Toto",
-                                                 'toto@gmail.com'
+                                                 "toto@gmail.com",
+                                                 'Toto'
                                              );
 
         static::assertInstanceOf(
@@ -36,8 +36,14 @@ class UserPasswordResetDTOTest extends TestCase
             $userPasswordResetDTO
         );
 
-        static::assertNotNull(
-            $userPasswordResetDTO->getResetToken()
+        static::assertSame(
+            'Toto',
+            $userPasswordResetDTO->username
+        );
+
+        static::assertSame(
+            'toto@gmail.com',
+            $userPasswordResetDTO->email
         );
     }
 }

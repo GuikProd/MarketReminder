@@ -33,11 +33,6 @@ class UserResetPasswordDTO implements UserResetPasswordDTOInterface
     public $username;
 
     /**
-     * @var string
-     */
-    private $resetToken;
-
-    /**
      * UserResetPasswordDTO constructor.
      *
      * @param string $email       The email of the User who reset his password.
@@ -47,20 +42,5 @@ class UserResetPasswordDTO implements UserResetPasswordDTOInterface
     {
         $this->email = $email;
         $this->username = $username;
-    }
-
-    /**
-     * @return string
-     */
-    public function getResetToken(): string
-    {
-        return $this->resetToken = str_rot13(
-            md5(
-                crypt(
-                    $this->username,
-                    $this->email
-                )
-            )
-        );
     }
 }

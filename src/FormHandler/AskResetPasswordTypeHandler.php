@@ -14,8 +14,12 @@ declare(strict_types=1);
 namespace App\FormHandler;
 
 use App\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
+use App\Infra\Helper\Security\TokenGeneratorHelper;
+use App\Interactor\UserInteractor;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class AskResetPasswordTypeHandler
@@ -25,6 +29,16 @@ use Symfony\Component\Form\FormInterface;
 class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterface
 {
     /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @var EntityManagerInterface
      */
     private $entityManager;
@@ -32,10 +46,17 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
     /**
      * AskResetPasswordTypeHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param SessionInterface           $session
+     * @param TranslatorInterface       $translator
+     * @param EntityManagerInterface  $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        SessionInterface $session,
+        TranslatorInterface $translator,
+        EntityManagerInterface $entityManager
+    ) {
+        $this->session = $session;
+        $this->translator = $translator;
         $this->entityManager = $entityManager;
     }
 
@@ -46,8 +67,29 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
     {
         if ($askResetPasswordType->isSubmitted() && $askResetPasswordType->isValid()) {
 
+            $user = $this->entityManager->getRepository(UserInteractor::class)
+                                        ->getUserByUsernameAndEmail(
+                                            $askResetPasswordType->getData()->username,
+                                            $askResetPasswordType->getData()->email
+                                        );
 
-            $this->entityManager->persist($askResetPasswordType->getData());
+            if (!$user) {
+                $this->session->getFlashBag()
+                              ->add(
+                                  'failure',
+                                  $this->translator->trans('user.not_found')
+                              );
+
+                return false;
+            }
+
+            $user->askForPasswordReset(
+                TokenGeneratorHelper::generateResetPasswordToken(
+                    $askResetPasswordType->getData()->username,
+                    $askResetPasswordType->getData()->email
+                )
+            );
+
             $this->entityManager->flush();
 
             return true;

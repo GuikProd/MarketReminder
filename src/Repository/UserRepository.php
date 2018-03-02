@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use App\Models\Interfaces\UserInterface;
 use App\Repository\Interfaces\UserRepositoryInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
 /**
@@ -44,27 +44,41 @@ class UserRepository extends EntityRepository implements
     /**
      * {@inheritdoc}
      */
-    public function getUserByUsername(string $username):? array
+    public function getUserByUsernameAndEmail(string $username, string $email): ? UserInterface
+    {
+        return $this->createQueryBuilder('user')
+                    ->where('user.username = :username AND user.email = :email')
+                    ->setParameter('username', $username)
+                    ->setParameter('email', $email)
+                    ->setCacheable(true)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserByUsername(string $username):? UserInterface
     {
         return $this->createQueryBuilder('user')
                     ->where('user.username = :username')
                     ->setParameter('username', $username)
                     ->setCacheable(true)
                     ->getQuery()
-                    ->getResult();
+                    ->getOneOrNullResult();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getUserByEmail(string $email):? array
+    public function getUserByEmail(string $email):? UserInterface
     {
         return $this->createQueryBuilder('user')
                     ->where('user.email = :email')
                     ->setParameter('email', $email)
                     ->setCacheable(true)
                     ->getQuery()
-                    ->getResult();
+                    ->getOneOrNullResult();
     }
 
     /**
