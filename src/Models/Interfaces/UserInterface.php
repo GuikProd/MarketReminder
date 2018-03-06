@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Models\Interfaces;
 
+use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
+
 /**
  * Interface UserInterface.
  *
@@ -21,9 +23,9 @@ namespace App\Models\Interfaces;
 interface UserInterface
 {
     /**
-     * @param string $resetPassword
+     * @param UserResetPasswordToken $userPasswordReset
      */
-    public function askForPasswordReset(string $resetPassword): void;
+    public function askForPasswordReset(UserResetPasswordToken $userPasswordReset): void;
 
     /**
      * @return int|null

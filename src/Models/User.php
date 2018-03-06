@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Models\Interfaces\UserInterface;
+use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Models\Interfaces\ImageInterface;
+use App\Models\Interfaces\UserInterface;
 
 /**
  * Class User.
@@ -96,9 +97,9 @@ abstract class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function askForPasswordReset(string $resetPasswordToken): void
+    public function askForPasswordReset(UserResetPasswordToken $resetPasswordToken): void
     {
-        $this->resetPasswordToken = $resetPasswordToken;
+        $this->resetPasswordToken = $resetPasswordToken->getResetPasswordToken();
     }
 
     /**

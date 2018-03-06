@@ -1,5 +1,5 @@
 controllers:
-    resource: ../src/Action/
+    resource: ../src/UI/Action/
     type: annotation
 
 root:

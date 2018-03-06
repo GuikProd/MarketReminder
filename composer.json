@@ -63,16 +63,30 @@
         "psr-4": {
             "App\\": "src/",
             "App\\Domain\\DTO\\": "src/Domain/DTO/",
+            "App\\Domain\\UseCase\\UserResetPassword\\DTO\\": "src/Domain/UseCase/ResetPassword/DTO/",
+            "App\\Domain\\UseCase\\UserResetPassword\\Model\\": "src/Domain/UseCase/ResetPassword/Model/",
             "App\\Form\\Type\\": "src/Form/Type/",
-            "App\\Infra\\Helper\\Security\\": "src/Infra/Helper/Security/"
+            "App\\Infra\\Form\\FormHandler\\": "src/Infra/Form/FormHandler/",
+            "App\\Infra\\Helper\\Security\\": "src/Infra/Helper/Security/",
+            "App\\UI\\Action\\Core\\": "src/UI/Action/Core/",
+            "App\\UI\\Action\\Security\\": "src/UI/Action/Security/",
+            "App\\UI\\Responder\\Security\\": "src/UI/Responder/Security/",
+            "App\\UI\\Form\\Type\\": "src/UI/Form/Type/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "App\\Tests\\": "tests/",
             "App\\Tests\\Domain\\DTO\\": "tests/Domain/DTO/",
+            "App\\Tests\\Domain\\UseCase\\UserResetPassword\\DTO\\": "tests/Domain/UseCase/ResetPassword/DTO/",
+            "App\\Tests\\Domain\\UseCase\\UserResetPassword\\Model\\": "tests/Domain/UseCase/ResetPassword/Model/",
             "App\\Tests\\Form\\Type\\": "tests/Form/Type/",
-            "App\\Tests\\Infra\\Helper\\Security\\": "tests/Infra/Helper/Security/"
+            "App\\Tests\\Infra\\Form\\FormHandler\\": "tests/Infra/Form/FormHandler/",
+            "App\\Tests\\Infra\\Helper\\Security\\": "tests/Infra/Helper/Security/",
+            "App\\Tests\\UI\\Action\\Core\\": "tests/UI/Action/Core/",
+            "App\\Tests\\UI\\Action\\Security\\": "tests/UI/Action/Security/",
+            "App\\Tests\\UI\\Responder\\Security\\": "tests/UI/Responder/Security/",
+            "App\\Tests\\UI\\Form\\Type\\": "tests/UI/Form/Type/"
         }
     },
     "scripts": {
