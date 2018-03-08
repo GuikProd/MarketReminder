@@ -11,32 +11,29 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\UI\Action\Core;
+namespace App\Tests\UI\Responder\Core;
 
-use App\UI\Action\Core\ContactAction;
-use App\UI\Responder\Core\ContactResponder;
+use App\Responder\Core\HomeResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * Class ContactActionTest.
+ * Class HomeResponderTest
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ContactActionTest extends TestCase
+class HomeResponderTest extends TestCase
 {
-    public function testInvokeReturn()
+    public function testResponseIsReturned()
     {
         $twigMock = $this->createMock(Environment::class);
 
-        $contactAction = new ContactAction();
-
-        $contactResponder = new ContactResponder($twigMock);
+        $homeResponder = new HomeResponder($twigMock);
 
         static::assertInstanceOf(
             Response::class,
-            $contactAction($contactResponder)
+            $homeResponder()
         );
     }
 }

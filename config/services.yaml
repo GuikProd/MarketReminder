@@ -26,8 +26,8 @@ services:
         resource: '../src/*'
         exclude: '../src/{Domain,Migrations,Repository}'
 
-    App\Action\:
-        resource: '../src/Action'
+    App\UI\Action\:
+        resource: '../src/UI/Action'
         tags: ['controller.service_arguments']
 #
 #    graphql.image_resolver:

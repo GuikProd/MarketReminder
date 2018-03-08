@@ -1,12 +1,12 @@
 security:
     encoders:
-        App\Interactor\UserInteractor:
+        App\Domain\Models\User:
             algorithm: bcrypt
 
     providers:
         db_provider:
             entity:
-                class: App\Interactor\UserInteractor
+                class: App\Domain\Models\User
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

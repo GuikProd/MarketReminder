@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security;
 
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 /**
  * Class AskResetPasswordResponder
@@ -24,6 +27,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class AskResetPasswordResponder
 {
     /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
@@ -31,26 +39,47 @@ class AskResetPasswordResponder
     /**
      * AskResetPasswordResponder constructor.
      *
+     * @param Environment $twig
      * @param UrlGeneratorInterface $urlGenerator
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        Environment $twig,
+        UrlGeneratorInterface $urlGenerator
+    ) {
+        $this->twig = $twig;
         $this->urlGenerator = $urlGenerator;
     }
 
     /**
-     * @return RedirectResponse
+     * @param FormView $askResetPasswordTokenFormView
+     * @param bool $isRedirect
+     * @param string $urlToRedirect
+     * @param string $templateName
+     *
+     * @return Response
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-    public function __invoke()
-    {
-        $response = new RedirectResponse(
-            $this->urlGenerator->generate('index'),
-            RedirectResponse::HTTP_PERMANENTLY_REDIRECT
-        );
+    public function __invoke(
+        FormView $askResetPasswordTokenFormView = null,
+        $isRedirect = false,
+        $urlToRedirect = 'index',
+        string $templateName = 'security/askResetPasswordToken.html.twig'
+    ) {
+
+        $isRedirect
+            ? $response = new RedirectResponse($this->urlGenerator->generate($urlToRedirect))
+            : $response = new Response(
+                $this->twig->render($templateName, [
+                    'askResetPasswordTokenForm' => $askResetPasswordTokenFormView
+                ])
+            );
 
         return $response->setCache([
-            's_maxage' => 32000,
-            'public' => true
+            'public' => true,
+            's_maxage' => 3600
         ]);
     }
 }

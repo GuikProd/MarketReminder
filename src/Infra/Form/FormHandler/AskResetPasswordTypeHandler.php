@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Infra\Form\FormHandler;
 
+use App\Domain\Models\User;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Infra\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use App\Infra\Helper\Security\TokenGeneratorHelper;
-use App\Interactor\UserInteractor;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -68,7 +68,7 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
     {
         if ($askResetPasswordType->isSubmitted() && $askResetPasswordType->isValid()) {
 
-            $user = $this->entityManager->getRepository(UserInteractor::class)
+            $user = $this->entityManager->getRepository(User::class)
                                         ->getUserByUsernameAndEmail(
                                             $askResetPasswordType->getData()->username,
                                             $askResetPasswordType->getData()->email

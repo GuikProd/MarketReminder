@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Core;
 
-use App\Responder\Core\ContactResponder;
+use App\UI\Responder\Core\ContactResponder;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**

@@ -63,15 +63,20 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "App\\Domain\\DTO\\": "src/Domain/DTO/",
+            "App\\Application\\": "src/Application/",
+            "App\\Application\\Symfony\\Events\\": "src/Application/Symfony/Events/",
             "App\\Domain\\Models\\": "src/Domain/Models/",
+            "App\\Domain\\Models\\Interfaces\\": "src/Domain/Models/Interfaces/",
+            "App\\Domain\\UseCase\\": "src/Domain/UseCase/",
             "App\\Domain\\UseCase\\UserResetPassword\\DTO\\": "src/Domain/UseCase/ResetPassword/DTO/",
+            "App\\Domain\\UseCase\\UserResetPassword\\DTO\\Interfaces\\": "src/Domain/UseCase/ResetPassword/DTO/Interfaces/",
             "App\\Domain\\UseCase\\UserResetPassword\\Model\\": "src/Domain/UseCase/ResetPassword/Model/",
             "App\\Form\\Type\\": "src/Form/Type/",
             "App\\Infra\\Form\\FormHandler\\": "src/Infra/Form/FormHandler/",
             "App\\Infra\\Helper\\Security\\": "src/Infra/Helper/Security/",
             "App\\UI\\Action\\Core\\": "src/UI/Action/Core/",
             "App\\UI\\Action\\Security\\": "src/UI/Action/Security/",
+            "App\\UI\\Responder\\Core\\": "src/UI/Responder/Core/",
             "App\\UI\\Responder\\Security\\": "src/UI/Responder/Security/",
             "App\\UI\\Form\\Type\\": "src/UI/Form/Type/"
         }
@@ -79,6 +84,7 @@
     "autoload-dev": {
         "psr-4": {
             "App\\Tests\\": "tests/",
+            "App\\Tests\\Application\\": "tests/Application/",
             "App\\Tests\\Domain\\DTO\\": "tests/Domain/DTO/",
             "App\\Tests\\Domain\\UseCase\\UserResetPassword\\DTO\\": "tests/Domain/UseCase/ResetPassword/DTO/",
             "App\\Tests\\Domain\\UseCase\\UserResetPassword\\Model\\": "tests/Domain/UseCase/ResetPassword/Model/",

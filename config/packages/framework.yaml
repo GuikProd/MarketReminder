@@ -1,12 +1,8 @@
 framework:
     secret: '%env(APP_SECRET)%'
-    #default_locale: en
-    #http_method_override: true
-    #trusted_hosts: ~
+    default_locale: fr
     session:
         handler_id: ~
-    #esi: ~
-    #fragments: ~
     csrf_protection:
         enabled: true
     validation:

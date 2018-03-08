@@ -16,13 +16,14 @@ namespace App\Domain\Models;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\Models\Interfaces\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 
 /**
  * Class User.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class User implements UserInterface, \Serializable
+class User implements SecurityUserInterface, UserInterface, \Serializable
 {
     /**
      * @var int
@@ -319,6 +320,21 @@ class User implements UserInterface, \Serializable
     public function setProfileImage(ImageInterface $profileImage): void
     {
         $this->profileImage = $profileImage;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function eraseCredentials()
+    {
     }
 
     /**

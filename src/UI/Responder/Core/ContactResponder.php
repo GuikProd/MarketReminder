@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Responder\Core;
+namespace App\UI\Responder\Core;
 
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;

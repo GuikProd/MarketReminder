@@ -15,8 +15,11 @@ namespace App\Tests\UI\Action\Security;
 
 use App\UI\Responder\Security\AskResetPasswordResponder;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 /**
  * Class AskResetPasswordResponderTest
@@ -25,22 +28,41 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class AskResetPasswordResponderTest extends TestCase
 {
-    public function testInvokeReturn()
+    public function testResponseIsReturned()
     {
+        $formViewMock = $this->createMock(FormView::class);
+        $twigMock = $this->createMock(Environment::class);
         $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
+
         $urlGeneratorMock->method('generate')
                          ->willReturn('/fr/');
 
-        $askResetPasswordResponder = new AskResetPasswordResponder($urlGeneratorMock);
+        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
+
+        static::assertInstanceOf(
+            Response::class,
+            $askResetPasswordResponder($formViewMock)
+        );
+    }
+
+    public function testRedirectResponseIsReturned()
+    {
+        $formViewMock = $this->createMock(FormView::class);
+        $twigMock = $this->createMock(Environment::class);
+        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
+
+        $urlGeneratorMock->method('generate')
+            ->willReturn('/fr/');
+
+        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
 
         static::assertInstanceOf(
             RedirectResponse::class,
-            $askResetPasswordResponder()
-        );
-
-        static::assertSame(
-            '/fr/',
-            $askResetPasswordResponder($urlGeneratorMock)->getTargetUrl()
+            $askResetPasswordResponder(
+                null,
+                true,
+                'index',
+                '')
         );
     }
 }
