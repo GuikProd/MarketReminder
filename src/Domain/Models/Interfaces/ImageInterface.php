@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Models\Interfaces;
+namespace App\Domain\Models\Interfaces;
 
 /**
  * Interface ImageInterface.
@@ -64,14 +64,4 @@ interface ImageInterface
      * @param string $url
      */
     public function setUrl(string $url): void;
-
-    /**
-     * @return UserInterface
-     */
-    public function getUser(): UserInterface;
-
-    /**
-     * @param UserInterface $user
-     */
-    public function setUser(UserInterface $user): void;
 }

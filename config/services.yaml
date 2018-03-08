@@ -24,7 +24,7 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Models,Migrations,Repository}'
+        exclude: '../src/{Domain,Migrations,Repository}'
 
     App\Action\:
         resource: '../src/Action'

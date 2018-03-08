@@ -11,88 +11,99 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Models;
+namespace App\Domain\Models;
 
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
-use App\Models\Interfaces\ImageInterface;
-use App\Models\Interfaces\UserInterface;
+use App\Domain\Models\Interfaces\ImageInterface;
+use App\Domain\Models\Interfaces\UserInterface;
 
 /**
  * Class User.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-abstract class User implements UserInterface, \Serializable
+class User implements UserInterface, \Serializable
 {
     /**
      * @var int
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string
      */
-    protected $username;
+    private $username;
 
     /**
      * @var string
      */
-    protected $email;
+    private $email;
 
     /**
      * @var string
      */
-    protected $plainPassword;
+    private $plainPassword;
 
     /**
      * @var string
      */
-    protected $password;
+    private $password;
 
     /**
      * @var array
      */
-    protected $roles;
+    private $roles;
 
     /**
      * @var bool
      */
-    protected $active;
+    private $active;
 
     /**
      * @var array
      */
-    protected $currentState;
+    private $currentState;
 
     /**
      * @var \DateTime
      */
-    protected $creationDate;
+    private $creationDate;
 
     /**
      * @var \DateTime
      */
-    protected $validationDate;
+    private $validationDate;
 
     /**
      * @var bool
      */
-    protected $validated;
+    private $validated;
 
     /**
      * @var string
      */
-    protected $validationToken;
+    private $validationToken;
 
     /**
      * @var string
      */
-    protected $resetPasswordToken;
+    private $resetPasswordToken;
 
     /**
      * @var ImageInterface
      */
-    protected $profileImage;
+    private $profileImage;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate(): void
+    {
+        $this->active = true;
+        $this->validated = true;
+        $this->validationToken = '';
+        $this->validationDate = time();
+    }
 
     /**
      * {@inheritdoc}

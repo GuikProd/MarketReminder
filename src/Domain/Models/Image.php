@@ -11,41 +11,67 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Models;
+namespace App\Domain\Models;
 
-use App\Models\Interfaces\ImageInterface;
+use App\Domain\Models\Interfaces\ImageInterface;
+use App\Domain\Models\Interfaces\UserInterface;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class Image.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-abstract class Image implements ImageInterface
+class Image implements ImageInterface
 {
     /**
      * @var int
      */
-    protected $id;
+    private $id;
 
     /**
-     * @var \DateTime
+     * @var int
      */
-    protected $creationDate;
+    private $creationDate;
 
     /**
-     * @var \DateTime
+     * @var int
      */
-    protected $modificationDate;
-
-    /**
-     * @var string
-     */
-    protected $alt;
+    private $modificationDate;
 
     /**
      * @var string
      */
-    protected $url;
+    private $alt;
+
+    /**
+     * @var string
+     */
+    private $url;
+
+    /**
+     * @var UserInterface
+     */
+    private $user;
+
+    /**
+     * Image constructor.
+     *
+     * @param string         $alt   The replacement text defined for the image display.
+     * @param string         $url   The public URL of the image.
+     * @param UserInterface  $user  The user who own this image (If profile image).
+     */
+    public function __construct(
+        string $alt,
+        string $url,
+        UserInterface $user = null
+    ) {
+        $this->id = Uuid::uuid4();
+        $this->creationDate = time();
+        $this->alt = $alt;
+        $this->url = $url;
+        $this->user = $user;
+    }
 
     /**
      * {@inheritdoc}

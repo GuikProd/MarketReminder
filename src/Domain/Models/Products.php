@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the MarketReminder project.
  *
@@ -9,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Models;
+namespace App\Domain\Models;
 
 /**
  * Class Products.

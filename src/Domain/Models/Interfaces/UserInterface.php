@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Models\Interfaces;
+namespace App\Domain\Models\Interfaces;
 
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 

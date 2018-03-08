@@ -7,7 +7,7 @@ framework:
                 arguments:
                     - 'currentState'
             supports:
-                - App\Interactor\UserInteractor
+                - App\Domain\Models\User
             places:
                 - registered
                 - toValidate

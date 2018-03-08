@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+>
+    <entity name="App\Domain\Models\User" table="marketReminder_user" repository-class="App\Repository\UserRepository">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="username" type="string" length="25" unique="true" nullable="false" />
+        <field name="email" type="string" length="50" unique="true" nullable="false" />
+        <field name="password" type="string" length="60" unique="false" nullable="false" />
+        <field name="roles" type="array" nullable="false" unique="false" />
+        <field name="creationDate" type="datetime" nullable="false" />
+        <field name="validationDate" type="datetime" nullable="true" unique="true" />
+        <field name="validated" type="boolean" nullable="false" />
+        <field name="validationToken" type="string" length="35" nullable="true" unique="true" />
+        <field name="resetPasswordToken" type="string" length="10" unique="true" nullable="true" />
+        <field name="active" type="boolean" nullable="false" />
+        <field name="currentState" type="array" nullable="false" unique="false" />
+
+        <one-to-one field="profileImage" target-entity="App\Domain\Models\Image" mapped-by="user">
+            <cascade>
+                <cascade-persist />
+                <cascade-remove />
+            </cascade>
+        </one-to-one>
+
+        <indexes>
+            <index columns="username" name="user_username" />
+            <index columns="email" name="user_email" />
+        </indexes>
+        
+    </entity>
+</doctrine-mapping>

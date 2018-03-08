@@ -272,6 +272,9 @@
     "psr/simple-cache": {
         "version": "1.0.0"
     },
+    "ramsey/uuid": {
+        "version": "3.7.3"
+    },
     "rize/uri-template": {
         "version": "0.3.2"
     },
