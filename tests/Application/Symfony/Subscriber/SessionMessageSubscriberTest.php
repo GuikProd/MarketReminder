@@ -17,6 +17,7 @@ use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Application\Symfony\Subscriber\Interfaces\SessionMessageSubscriberInterface;
 use App\Application\Symfony\Subscriber\SessionMessageSubscriber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -48,6 +49,11 @@ class SessionMessageSubscriberTest extends KernelTestCase
         $sessionMock = new Session(new MockArraySessionStorage());
 
         $sessionMessageSubscriber = new SessionMessageSubscriber($sessionMock, $this->translator);
+
+        static::assertInstanceOf(
+            EventSubscriberInterface::class,
+            $sessionMessageSubscriber
+        );
 
         static::assertInstanceOf(
             SessionMessageSubscriberInterface::class,
