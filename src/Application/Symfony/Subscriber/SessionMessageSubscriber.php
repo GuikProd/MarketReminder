@@ -14,15 +14,17 @@ declare(strict_types=1);
 namespace App\Application\Symfony\Subscriber;
 
 use App\Application\Symfony\Events\SessionMessageEvent;
+use App\Application\Symfony\Subscriber\Interfaces\SessionMessageSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class SessionMessageSubscriber
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class SessionMessageSubscriber implements EventSubscriberInterface
+class SessionMessageSubscriber implements EventSubscriberInterface, SessionMessageSubscriberInterface
 {
     /**
      * @var SessionInterface
@@ -30,13 +32,22 @@ class SessionMessageSubscriber implements EventSubscriberInterface
     private $session;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * SessionMessageSubscriber constructor.
      *
      * @param SessionInterface $session
+     * @param TranslatorInterface $translator
      */
-    public function __construct(SessionInterface $session)
-    {
+    public function __construct(
+        SessionInterface $session,
+        TranslatorInterface $translator
+    ) {
         $this->session = $session;
+        $this->translator = $translator;
     }
 
     /**
@@ -49,10 +60,20 @@ class SessionMessageSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onSessionMessage(SessionMessageEvent $event)
+    /**
+     * {@inheritdoc}
+     */
+    public function onSessionMessage(SessionMessageEvent $event): void
     {
-        if ($event->getMessage() === '') {
+        if ($event->getMessage() === '' || !$event->getFlashBag()) {
             return;
         }
+
+        $this->session->getFlashBag()
+                      ->add(
+                          $event->getFlashBag(),
+                          $this->translator
+                               ->trans($event->getMessage(), [], 'messages')
+                      );
     }
 }

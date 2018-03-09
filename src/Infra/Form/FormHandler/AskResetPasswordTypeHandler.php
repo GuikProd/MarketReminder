@@ -13,14 +13,15 @@ declare(strict_types=1);
 
 namespace App\Infra\Form\FormHandler;
 
+use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Domain\Models\User;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Infra\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use App\Infra\Helper\Security\TokenGeneratorHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class AskResetPasswordTypeHandler
@@ -35,30 +36,30 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
     private $session;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * @var EntityManagerInterface
      */
     private $entityManager;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * AskResetPasswordTypeHandler constructor.
      *
-     * @param SessionInterface        $session
-     * @param TranslatorInterface     $translator
-     * @param EntityManagerInterface  $entityManager
+     * @param SessionInterface $session
+     * @param EntityManagerInterface $entityManager
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         SessionInterface $session,
-        TranslatorInterface $translator,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->session = $session;
-        $this->translator = $translator;
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -75,11 +76,10 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
                                         );
 
             if (!$user) {
-                $this->session->getFlashBag()
-                              ->add(
-                                  'failure',
-                                  $this->translator->trans('user.not_found')
-                              );
+                $this->eventDispatcher->dispatch(
+                    SessionMessageEvent::NAME,
+                    new SessionMessageEvent('failure', 'user.not_found')
+                );
 
                 return false;
             }

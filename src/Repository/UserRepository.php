@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Models\Interfaces\UserInterface;
+use App\Domain\Models\Interfaces\UserInterface;
 use App\Repository\Interfaces\UserRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;

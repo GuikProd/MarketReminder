@@ -14,23 +14,52 @@ declare(strict_types=1);
 namespace App\Tests\Application\Symfony\Subscriber;
 
 use App\Application\Symfony\Events\SessionMessageEvent;
+use App\Application\Symfony\Subscriber\Interfaces\SessionMessageSubscriberInterface;
 use App\Application\Symfony\Subscriber\SessionMessageSubscriber;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class SessionMessageSubscriberTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class SessionMessageSubscriberTest extends TestCase
+class SessionMessageSubscriberTest extends KernelTestCase
 {
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        static::bootKernel();
+
+        $this->translator = static::$kernel->getContainer()->get('translator');
+    }
+
+    public function testItImplements()
+    {
+        $sessionMock = new Session(new MockArraySessionStorage());
+
+        $sessionMessageSubscriber = new SessionMessageSubscriber($sessionMock, $this->translator);
+
+        static::assertInstanceOf(
+            SessionMessageSubscriberInterface::class,
+            $sessionMessageSubscriber
+        );
+    }
+
     public function testSubscribedEvents()
     {
         $sessionMock = new Session(new MockArraySessionStorage());
 
-        $sessionMessageSubscriber = new SessionMessageSubscriber($sessionMock);
+        $sessionMessageSubscriber = new SessionMessageSubscriber($sessionMock, $this->translator);
 
         static::assertArrayHasKey(
             SessionMessageEvent::NAME,
@@ -46,10 +75,45 @@ class SessionMessageSubscriberTest extends TestCase
         $sessionMessageEventMock->method('getMessage')
                                 ->willReturn('');
 
-        $sessionMessageSubscriber = new SessionMessageSubscriber($sessionMock);
+        $sessionMessageSubscriber = new SessionMessageSubscriber($sessionMock, $this->translator);
 
         static::assertNull(
             $sessionMessageSubscriber->onSessionMessage($sessionMessageEventMock)
+        );
+    }
+
+    public function testSessionKeyIsNotDefined()
+    {
+        $sessionMock = new Session(new MockArraySessionStorage());
+        $sessionMessageEventMock = $this->createMock(SessionMessageEvent::class);
+
+        $sessionMessageEventMock->method('getFlashBag')
+                                ->willReturn('');
+
+        $sessionMessageSubscriber = new SessionMessageSubscriber($sessionMock, $this->translator);
+
+        static::assertNull(
+            $sessionMessageSubscriber->onSessionMessage($sessionMessageEventMock)
+        );
+    }
+
+    public function testSessionMessageIsInjected()
+    {
+        $sessionMock = new Session(new MockArraySessionStorage());
+        $sessionMessageEventMock = $this->createMock(SessionMessageEvent::class);
+
+        $sessionMessageEventMock->method('getFlashBag')
+                                ->willReturn('success');
+
+        $sessionMessageEventMock->method('getMessage')
+                                ->willReturn('user.not_found');
+
+        $sessionMessageSubscriber = new SessionMessageSubscriber($sessionMock, $this->translator);
+        $sessionMessageSubscriber->onSessionMessage($sessionMessageEventMock);
+
+        static::assertSame(
+            ['Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie.'],
+            $sessionMock->getFlashBag()->get('success')
         );
     }
 }

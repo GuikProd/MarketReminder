@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Repository\Interfaces;
 
-use App\Models\Interfaces\UserInterface;
+use App\Domain\Models\Interfaces\UserInterface;
 
 /**
  * Interface UserRepositoryInterface.
