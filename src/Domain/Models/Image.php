@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Domain\Models;
 
 use App\Domain\Models\Interfaces\ImageInterface;
-use App\Domain\Models\Interfaces\UserInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -50,27 +49,19 @@ class Image implements ImageInterface
     private $url;
 
     /**
-     * @var UserInterface
-     */
-    private $user;
-
-    /**
      * Image constructor.
      *
-     * @param string         $alt   The replacement text defined for the image display.
-     * @param string         $url   The public URL of the image.
-     * @param UserInterface  $user  The user who own this image (If profile image).
+     * @param string $alt  The replacement text defined for the image display.
+     * @param string $url  The public URL of the image.
      */
     public function __construct(
         string $alt,
-        string $url,
-        UserInterface $user = null
+        string $url
     ) {
         $this->id = Uuid::uuid4();
         $this->creationDate = time();
         $this->alt = $alt;
         $this->url = $url;
-        $this->user = $user;
     }
 
     /**

@@ -20,6 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class AskResetPasswordTypeSubscriber
@@ -29,6 +30,11 @@ use Symfony\Component\Form\FormEvents;
 class AskResetPasswordTypeSubscriber implements EventSubscriberInterface, AskResetPasswordTypeSubscriberInterface
 {
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @var EntityManagerInterface
      */
     private $entityManager;
@@ -36,10 +42,14 @@ class AskResetPasswordTypeSubscriber implements EventSubscriberInterface, AskRes
     /**
      * AskResetPasswordTypeSubscriber constructor.
      *
+     * @param TranslatorInterface $translator
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        EntityManagerInterface $entityManager
+    ) {
+        $this->translator = $translator;
         $this->entityManager = $entityManager;
     }
 
@@ -67,7 +77,8 @@ class AskResetPasswordTypeSubscriber implements EventSubscriberInterface, AskRes
         if (!$user) {
             $event->getForm()->addError(
                 new FormError(
-                    ''
+                    $this->translator
+                         ->trans('user.not_found', [], 'messages')
                 )
             );
         }

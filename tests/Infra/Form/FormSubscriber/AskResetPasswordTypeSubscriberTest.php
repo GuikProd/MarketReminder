@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Form\FormSubscriber;
 
-use App\Domain\UseCase\UserResetPassword\DTO\Interfaces\UserResetPasswordDTOInterface;
-use App\Domain\UseCase\UserResetPassword\DTO\UserResetPasswordDTO;
 use App\Infra\Form\FormSubscriber\AskResetPasswordTypeSubscriber;
 use App\Infra\Form\FormSubscriber\Interfaces\AskResetPasswordTypeSubscriberInterface;
+use App\UI\Form\Type\AskResetPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class AskResetPasswordTypeSubscriberTest
@@ -31,6 +31,16 @@ use Symfony\Component\Form\FormInterface;
  */
 class AskResetPasswordTypeSubscriberTest extends KernelTestCase
 {
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
     /**
      * @var EntityManagerInterface
      */
@@ -43,13 +53,21 @@ class AskResetPasswordTypeSubscriberTest extends KernelTestCase
     {
         static::bootKernel();
 
+        $this->translator = static::$kernel->getContainer()
+                                           ->get('translator');
+
+        $this->formFactory = static::$kernel->getContainer()
+                                            ->get('form.factory');
+
         $this->entityManager = static::$kernel->getContainer()
                                               ->get('doctrine.orm.entity_manager');
     }
 
     public function testItImplements()
     {
-        $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber($this->entityManager);
+        $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber(
+                                                $this->entityManager
+                                              );
 
         static::assertInstanceOf(
             EventSubscriberInterface::class,
@@ -64,7 +82,10 @@ class AskResetPasswordTypeSubscriberTest extends KernelTestCase
 
     public function testSubscribedEvents()
     {
-        $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber($this->entityManager);
+        $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber(
+                                                  $this->translator,
+                                                $this->entityManager
+                                              );
 
         static::assertArrayHasKey(
             FormEvents::SUBMIT,
@@ -74,25 +95,67 @@ class AskResetPasswordTypeSubscriberTest extends KernelTestCase
 
     public function testWrongSubmittedData()
     {
+        $askResetPasswordType = $this->formFactory->create(AskResetPasswordType::class);
         $formEventMock = $this->createMock(FormEvent::class);
-        $formInterfaceMock = $this->createMock(FormInterface::class);
 
-        $userResetPasswordDTOMock = new UserResetPasswordDTO('tutu@gmail.com', 'Tutu');
+        $askResetPasswordType->submit(['username' => 'Tutu', 'email' => 'tutu@gmail.com']);
 
         $formEventMock->method('getData')
-                      ->willReturn($userResetPasswordDTOMock);
+                      ->willReturn($askResetPasswordType->getData());
 
         $formEventMock->method('getForm')
-                      ->willReturn($formInterfaceMock);
+                      ->willReturn($askResetPasswordType);
 
-        $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber($this->entityManager);
+        $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber(
+                                                  $this->translator,
+                                                $this->entityManager
+                                              );
         $askResetPasswordTypeSubscriber->onSubmit($formEventMock);
 
         var_dump($formEventMock->getForm()->getErrors());
 
         static::assertGreaterThan(
             0,
-            $formEventMock->getForm()->getErrors()
+            $formEventMock->getForm()->getErrors()->count()
+        );
+    }
+
+    /**
+     * Allow to test the subscriber with correct data, the last test is locked to
+     * less than "2" due to the CSRF protection.
+     */
+    public function testRightSubmittedData()
+    {
+        $askResetPasswordType = $this->formFactory->create(AskResetPasswordType::class);
+        $formEventMock = $this->createMock(FormEvent::class);
+
+        $askResetPasswordType->submit(['username' => 'Toto', 'email' => 'toto@gmail.com']);
+
+        $formEventMock->method('getData')
+                      ->willReturn($askResetPasswordType->getData());
+
+        $formEventMock->method('getForm')
+                      ->willReturn($askResetPasswordType);
+
+        $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber(
+                                                  $this->translator,
+                                                  $this->entityManager
+                                              );
+        $askResetPasswordTypeSubscriber->onSubmit($formEventMock);
+
+        static::assertSame(
+            'Toto',
+            $formEventMock->getData()->username
+        );
+
+        static::assertSame(
+            'toto@gmail.com',
+            $formEventMock->getData()->email
+        );
+
+        static::assertLessThan(
+            2,
+            $formEventMock->getForm()->getErrors()->count()
         );
     }
 }

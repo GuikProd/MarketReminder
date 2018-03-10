@@ -16,6 +16,7 @@ namespace App\Domain\Models;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\Models\Interfaces\UserInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 
 /**
@@ -96,6 +97,45 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $profileImage;
 
     /**
+     * User constructor.
+     *
+     * @param string         $email
+     * @param string         $username
+     * @param string         $password
+     * @param array          $currentState
+     * @param string         $validationToken
+     * @param ImageInterface $profileImage
+     */
+    public function __construct(
+        string $email,
+        string $username,
+        string $password,
+        array $currentState,
+        string $validationToken,
+        ImageInterface $profileImage = null
+    ) {
+        $this->id = Uuid::uuid4();
+        $this->creationDate = time();
+        $this->active = false;
+        $this->validated = false;
+        $this->roles[] = 'ROLE_USER';
+        $this->email = $email;
+        $this->username = $username;
+        $this->plainPassword = $password;
+        $this->currentState = $currentState;
+        $this->validationToken = $validationToken;
+        $this->profileImage = $profileImage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function defineFinalPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function validate(): void
@@ -133,25 +173,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function setUsername(string $username): void
-    {
-        $this->username = $username;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getEmail(): ? string
     {
         return $this->email;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
     }
 
     /**
@@ -165,25 +189,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function setPlainPassword(string $plainPassword): void
-    {
-        $this->plainPassword = $plainPassword;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getPassword(): ? string
     {
         return $this->password;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
     }
 
     /**
@@ -197,25 +205,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function setRole(string $role): void
-    {
-        $this->roles[] = $role;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getActive(): ? bool
     {
         return $this->active;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActive(bool $active): void
-    {
-        $this->active = $active;
     }
 
     /**
@@ -229,25 +221,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function setCurrentState(array $currentState): void
-    {
-        $this->currentState = $currentState;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCreationDate(): ? string
     {
         return $this->creationDate->format('D d-m-Y h:i:s');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCreationDate(\DateTime $creationDate): void
-    {
-        $this->creationDate = $creationDate;
     }
 
     /**

@@ -23,6 +23,11 @@ use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 interface UserInterface
 {
     /**
+     * @param string $password
+     */
+    public function defineFinalPassword(string $password): void;
+
+    /**
      * @param UserResetPasswordToken $userPasswordReset
      */
     public function askForPasswordReset(UserResetPasswordToken $userPasswordReset): void;
@@ -38,19 +43,9 @@ interface UserInterface
     public function getUsername(): ? string;
 
     /**
-     * @param string $username
-     */
-    public function setUsername(string $username): void;
-
-    /**
      * @return null|string
      */
     public function getEmail(): ? string;
-
-    /**
-     * @param string $email
-     */
-    public function setEmail(string $email): void;
 
     /**
      * @return null|string
@@ -58,19 +53,9 @@ interface UserInterface
     public function getPlainPassword(): ? string;
 
     /**
-     * @param string $plainPassword
-     */
-    public function setPlainPassword(string $plainPassword): void;
-
-    /**
      * @return null|string
      */
     public function getPassword(): ? string;
-
-    /**
-     * @param string $password
-     */
-    public function setPassword(string $password): void;
 
     /**
      * @return array
@@ -78,24 +63,9 @@ interface UserInterface
     public function getRoles(): ? array;
 
     /**
-     * @param string $role
-     */
-    public function setRole(string $role): void;
-
-    /**
      * @return bool
      */
     public function getActive(): ? bool;
-
-    /**
-     * @param bool $active
-     */
-    public function setActive(bool $active): void;
-
-    /**
-     * @param \DateTime $creationDate
-     */
-    public function setCreationDate(\DateTime $creationDate): void;
 
     /**
      * @return string
@@ -113,19 +83,9 @@ interface UserInterface
     public function getValidationDate(): ? string;
 
     /**
-     * @param array $currentState
-     */
-    public function setCurrentState(array $currentState): void;
-
-    /**
      * @return array
      */
     public function getCurrentState(): ? array;
-
-    /**
-     * @param bool $validated
-     */
-    public function setValidated(bool $validated): void;
 
     /**
      * @return bool

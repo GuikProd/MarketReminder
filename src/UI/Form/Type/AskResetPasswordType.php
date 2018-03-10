@@ -15,6 +15,7 @@ namespace App\UI\Form\Type;
 
 use App\Domain\UseCase\UserResetPassword\DTO\Interfaces\UserResetPasswordDTOInterface;
 use App\Domain\UseCase\UserResetPassword\DTO\UserResetPasswordDTO;
+use App\Infra\Form\FormSubscriber\Interfaces\AskResetPasswordTypeSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,6 +31,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class AskResetPasswordType extends AbstractType
 {
     /**
+     * @var AskResetPasswordTypeSubscriberInterface
+     */
+    private $askResetPasswordTypeSubscriber;
+
+    /**
+     * AskResetPasswordType constructor.
+     *
+     * @param AskResetPasswordTypeSubscriberInterface $askResetPasswordTypeSubscriber
+     */
+    public function __construct(AskResetPasswordTypeSubscriberInterface $askResetPasswordTypeSubscriber)
+    {
+        $this->askResetPasswordTypeSubscriber = $askResetPasswordTypeSubscriber;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -38,6 +54,8 @@ class AskResetPasswordType extends AbstractType
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
         ;
+
+        $builder->addEventSubscriber($this->askResetPasswordTypeSubscriber);
     }
 
     /**

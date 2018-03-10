@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Repository;
+namespace App\Domain\Repository;
 
 use App\Domain\Models\Interfaces\UserInterface;
-use App\Repository\Interfaces\UserRepositoryInterface;
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
@@ -23,9 +23,7 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserRepository extends EntityRepository implements
-      UserLoaderInterface,
-      UserRepositoryInterface
+class UserRepository extends EntityRepository implements UserLoaderInterface, UserRepositoryInterface
 {
     /**
      * {@inheritdoc}

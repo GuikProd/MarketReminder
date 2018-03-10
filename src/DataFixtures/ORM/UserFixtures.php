@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the MarketReminder project.
  *
@@ -11,7 +13,7 @@
 
 namespace App\DataFixtures\ORM;
 
-use App\Builder\UserBuilder;
+use App\Domain\Models\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -29,102 +31,67 @@ class UserFixtures extends Fixture
     {
         $passwordEncoder = $this->container->get('security.password_encoder');
 
-        $userBuilder = new UserBuilder();
-
-        $userBuilder
-            ->createUser()
-            ->withUsername('HP')
-            ->withEmail('hp@gmail.com')
-            ->withPlainPassword('Ie1FDLHPP')
-            ->withRole('ROLE_WIZARD')
-            ->withCreationDate(new \DateTime('2017-03-21'))
-            ->withValidated(true)
-            ->withActive(true)
-            ->withValidationToken(
-                crypt(
-                    str_rot13(
-                        str_shuffle(
-                            $userBuilder->getUser()->getEmail()
-                        )
-                    ),
-                    $userBuilder->getUser()->getUsername()
-                )
+        $userI = new User(
+            'hp@gmail.com',
+            'HP',
+            'Ie1FDLHPP',
+            ['active'],
+            crypt(
+                str_rot13(
+                    str_shuffle(
+                        'hp@gmail.com'
+                    )
+                ),
+                'Ie1FDLHPP'
             )
-            ->withCurrentState(['active']);
-
-        $this->setReference('user', $userBuilder->getUser());
-
-        $password = $passwordEncoder->encodePassword(
-            $userBuilder->getUser(),
-            $userBuilder->getUser()->getPlainPassword()
         );
-        $userBuilder->withPassword($password);
 
-        $userBuilder_II = new UserBuilder();
+        $userI->defineFinalPassword($passwordEncoder->encodePassword($userI, 'Ie1FDLHPP'));
 
-        $userBuilder_II
-            ->createUser()
-            ->withUsername('Toto')
-            ->withEmail('toto@gmail.com')
-            ->withPlainPassword('Ie1FDLTOTO')
-            ->withRole('ROLE_USER')
-            ->withCreationDate(new \DateTime('2017-03-21'))
-            ->withValidated(true)
-            ->withActive(true)
-            ->withValidationToken(
-                crypt(
-                    str_rot13(
-                        str_shuffle(
-                            $userBuilder_II->getUser()->getEmail()
-                        )
-                    ),
-                    $userBuilder_II->getUser()->getUsername()
-                )
+        $this->setReference('user', $userI);
+
+        $userII = new User(
+            'toto@gmail.fr',
+            'Toto',
+            'Ie1FDLTOTO',
+            ['active'],
+            crypt(
+                str_rot13(
+                    str_shuffle(
+                        'toto@gmail.com'
+                    )
+                ),
+                'Ie1FDLTOTO'
             )
-            ->withCurrentState(['active']);
 
-        $this->setReference('user_II', $userBuilder_II->getUser());
-
-        $password = $passwordEncoder->encodePassword(
-            $userBuilder_II->getUser(),
-            $userBuilder_II->getUser()->getPlainPassword()
         );
-        $userBuilder_II->withPassword($password);
 
-        $userBuilder_III = new UserBuilder();
+        $userII->defineFinalPassword($passwordEncoder->encodePassword($userII, 'Ie1FDLTOTO'));
 
-        $userBuilder_III
-            ->createUser()
-            ->withUsername('Guik')
-            ->withEmail('guik@gmail.com')
-            ->withPlainPassword('Ie1DDLGuik')
-            ->withRole('ROLE_USER')
-            ->withCreationDate(new \DateTime('2017-03-22'))
-            ->withValidated(false)
-            ->withActive(false)
-            ->withValidationToken(
-                crypt(
-                    str_rot13(
-                        str_shuffle(
-                            $userBuilder_II->getUser()->getEmail()
-                        )
-                    ),
-                    $userBuilder_II->getUser()->getUsername()
-                )
+        $this->setReference('user_II', $userII);
+
+        $userIII = new User(
+            'guik@gmail.com',
+            'Guik',
+            'Ie1FDLGuik',
+            ['toValidate'],
+            crypt(
+                str_rot13(
+                    str_shuffle(
+                        'guik@gmail.com'
+                    )
+                ),
+                'Ie1FDLGuik'
             )
-            ->withCurrentState(['toValidated']);
-
-        $this->setReference('user_III', $userBuilder_III->getUser());
-
-        $password = $passwordEncoder->encodePassword(
-            $userBuilder_III->getUser(),
-            $userBuilder_III->getUser()->getPlainPassword()
         );
-        $userBuilder_III->withPassword($password);
 
-        $manager->persist($userBuilder->getUser());
-        $manager->persist($userBuilder_II->getUser());
-        $manager->persist($userBuilder_III->getUser());
+        $userIII->defineFinalPassword($passwordEncoder->encodePassword($userIII, 'Ie1FDLGuik'));
+
+        $this->setReference('user_III', $userIII);
+
+        $manager->persist($userI);
+        $manager->persist($userII);
+        $manager->persist($userIII);
 
         $manager->flush();
     }
