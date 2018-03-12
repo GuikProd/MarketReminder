@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Event\User;
+namespace App\Tests\Domain\Event\User;
 
+use App\Domain\Event\User\UserCreatedEvent;
+use App\Domain\Models\Interfaces\UserInterface;
 use PHPUnit\Framework\TestCase;
-use App\Event\User\UserCreatedEvent;
-use App\Models\Interfaces\UserInterface;
 
 /**
  * Class UserCreatedEventTest.

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Domain\UseCase\UserPasswordReset\DTO;
+namespace App\Tests\Domain\UseCase\UserResetPassword\DTO;
 
 use App\Domain\UseCase\UserResetPassword\DTO\Interfaces\UserResetPasswordDTOInterface;
 use App\Domain\UseCase\UserResetPassword\DTO\UserResetPasswordDTO;

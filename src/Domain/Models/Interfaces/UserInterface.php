@@ -23,11 +23,6 @@ use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 interface UserInterface
 {
     /**
-     * @param string $password
-     */
-    public function defineFinalPassword(string $password): void;
-
-    /**
      * @param UserResetPasswordToken $userPasswordReset
      */
     public function askForPasswordReset(UserResetPasswordToken $userPasswordReset): void;

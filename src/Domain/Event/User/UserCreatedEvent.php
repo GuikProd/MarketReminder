@@ -11,20 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Event\User;
+namespace App\Domain\Event\User;
 
-use App\Models\Interfaces\UserInterface;
-use App\Event\Interfaces\UserEventInterface;
+use App\Domain\Models\Interfaces\UserInterface;
+use App\Domain\Event\Interfaces\UserEventInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class UserValidatedEvent.
+ * Class UserCreatedEvent.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserValidatedEvent extends Event implements UserEventInterface
+class UserCreatedEvent extends Event implements UserEventInterface
 {
-    const NAME = 'user.validated';
+    const NAME = 'user.registered';
 
     /**
      * @var UserInterface
@@ -32,9 +32,9 @@ class UserValidatedEvent extends Event implements UserEventInterface
     private $user;
 
     /**
-     * UserValidatedEvent constructor.
+     * UserCreatedEvent constructor.
      *
-     * @param UserInterface $user
+     * @param UserInterface $user    The user who has create an account.
      */
     public function __construct(UserInterface $user)
     {

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Subscriber\Interfaces;
 
-use App\Event\Interfaces\UserEventInterface;
+use App\Domain\Event\Interfaces\UserEventInterface;
 
 /**
  * Interface UserSecuritySubscriberInterface.

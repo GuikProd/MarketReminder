@@ -66,8 +66,9 @@ class AskResetPasswordTypeSubscriberTest extends KernelTestCase
     public function testItImplements()
     {
         $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber(
-                                                $this->entityManager
-                                              );
+                                            $this->translator,
+                                            $this->entityManager
+                                          );
 
         static::assertInstanceOf(
             EventSubscriberInterface::class,
@@ -107,12 +108,10 @@ class AskResetPasswordTypeSubscriberTest extends KernelTestCase
                       ->willReturn($askResetPasswordType);
 
         $askResetPasswordTypeSubscriber = new AskResetPasswordTypeSubscriber(
-                                                  $this->translator,
+                                                $this->translator,
                                                 $this->entityManager
                                               );
         $askResetPasswordTypeSubscriber->onSubmit($formEventMock);
-
-        var_dump($formEventMock->getForm()->getErrors());
 
         static::assertGreaterThan(
             0,

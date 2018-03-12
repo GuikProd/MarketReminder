@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Domain\UseCase\UserPasswordReset\Model;
+namespace App\Tests\Domain\UseCase\UserResetPassword\Model;
 
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Infra\Helper\Security\TokenGeneratorHelper;

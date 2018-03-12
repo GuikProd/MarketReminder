@@ -38,15 +38,6 @@
     "blackfire/php-sdk": {
         "version": "v1.11.3"
     },
-    "codeception/codeception": {
-        "version": "2.4.0"
-    },
-    "codeception/phpunit-wrapper": {
-        "version": "6.0.5"
-    },
-    "codeception/stub": {
-        "version": "1.0.2"
-    },
     "composer/ca-bundle": {
         "version": "1.1.0"
     },
@@ -121,9 +112,6 @@
     },
     "fabpot/goutte": {
         "version": "v3.2.2"
-    },
-    "facebook/webdriver": {
-        "version": "1.5.0"
     },
     "firebase/php-jwt": {
         "version": "v5.0.0"

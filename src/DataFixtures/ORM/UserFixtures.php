@@ -35,6 +35,7 @@ class UserFixtures extends Fixture
             'hp@gmail.com',
             'HP',
             'Ie1FDLHPP',
+            $passwordEncoder,
             ['active'],
             crypt(
                 str_rot13(
@@ -46,14 +47,13 @@ class UserFixtures extends Fixture
             )
         );
 
-        $userI->defineFinalPassword($passwordEncoder->encodePassword($userI, 'Ie1FDLHPP'));
-
         $this->setReference('user', $userI);
 
         $userII = new User(
             'toto@gmail.fr',
             'Toto',
             'Ie1FDLTOTO',
+            $passwordEncoder,
             ['active'],
             crypt(
                 str_rot13(
@@ -66,14 +66,13 @@ class UserFixtures extends Fixture
 
         );
 
-        $userII->defineFinalPassword($passwordEncoder->encodePassword($userII, 'Ie1FDLTOTO'));
-
         $this->setReference('user_II', $userII);
 
         $userIII = new User(
             'guik@gmail.com',
             'Guik',
             'Ie1FDLGuik',
+            $passwordEncoder,
             ['toValidate'],
             crypt(
                 str_rot13(
@@ -84,8 +83,6 @@ class UserFixtures extends Fixture
                 'Ie1FDLGuik'
             )
         );
-
-        $userIII->defineFinalPassword($passwordEncoder->encodePassword($userIII, 'Ie1FDLGuik'));
 
         $this->setReference('user_III', $userIII);
 

@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Event\Image;
+namespace App\Domain\Event\Image;
 
-use App\Models\Interfaces\ImageInterface;
-use App\Event\Interfaces\ImageEventInterface;
+use App\Domain\Models\Interfaces\ImageInterface;
+use App\Domain\Event\Interfaces\ImageEventInterface;
 
 /**
  * Class ImageAddedEvent.

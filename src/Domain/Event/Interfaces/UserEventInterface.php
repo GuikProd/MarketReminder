@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Event\Interfaces;
+namespace App\Domain\Event\Interfaces;
 
-use App\Models\Interfaces\UserInterface;
+use App\Domain\Models\Interfaces\UserInterface;
 
 /**
  * Interface UserEventInterface.

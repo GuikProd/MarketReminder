@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Subscriber\User;
 
-use App\Event\Interfaces\UserEventInterface;
-use App\Event\User\UserCreatedEvent;
-use App\Event\User\UserValidatedEvent;
+use App\Domain\Event\Interfaces\UserEventInterface;
+use App\Domain\Event\User\UserCreatedEvent;
+use App\Domain\Event\User\UserValidatedEvent;
 use App\Subscriber\Interfaces\UserSecuritySubscriberInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Twig\Environment;

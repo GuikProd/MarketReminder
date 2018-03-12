@@ -16,5 +16,9 @@ security.validation_failure.notFound_token: Ce token n'existe pas ou a déjà é
 security.login: Se connecter
 security.login_failure: Les identifiants soumis semblent invalides, veuillez vérifier votre saisie.
 
+# Forms
+security.resetPasswordToken_header: Demander un nouveau mot de passe.
+security.resetPasswordToken: Envoyer
+
 # User
 user.not_found: Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie.

@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Repository;
+namespace App\Tests\Domain\Repository;
 
-use App\Interactor\UserInteractor;
-use App\Models\Interfaces\UserInterface;
-use App\Repository\Interfaces\UserRepositoryInterface;
+use App\Domain\Models\Interfaces\UserInterface;
+use App\Domain\Models\User;
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -46,7 +46,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::assertInstanceOf(
             UserRepositoryInterface::class,
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
         );
     }
 
@@ -54,7 +54,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::assertInstanceOf(
             UserInterface::class,
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
                                 ->loadUserByUsername('Toto')
         );
     }
@@ -63,7 +63,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::assertInstanceOf(
             UserInterface::class,
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
                                 ->loadUserByUsername('toto@gmail.com')
         );
     }
@@ -71,7 +71,7 @@ class UserRepositoryTest extends KernelTestCase
     public function testUserIsNotLoadedUsingUsername()
     {
         static::assertNull(
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
                                 ->loadUserByUsername('Tutu')
         );
     }
@@ -79,7 +79,7 @@ class UserRepositoryTest extends KernelTestCase
     public function testUserIsNotLoadedUsingEmail()
     {
         static::assertNull(
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
                                 ->loadUserByUsername('tutu@gmail.com')
         );
     }
@@ -87,7 +87,7 @@ class UserRepositoryTest extends KernelTestCase
     public function testUserIsNotFoundByUsernameAndEmail()
     {
         static::assertNull(
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
                                 ->getUserByUsernameAndEmail('Titi', 'titi@gmail.com')
         );
     }
@@ -96,7 +96,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::assertInstanceOf(
             UserInterface::class,
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
                                 ->getUserByUsernameAndEmail('Toto', 'toto@gmail.com')
         );
     }
@@ -105,7 +105,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::assertInstanceOf(
             UserInterface::class,
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
                                 ->getUserByUsername('Toto')
         );
     }
@@ -114,7 +114,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::assertInstanceOf(
             UserInterface::class,
-            $this->entityManager->getRepository(UserInteractor::class)
+            $this->entityManager->getRepository(User::class)
                                 ->getUserByEmail('toto@gmail.com')
         );
     }

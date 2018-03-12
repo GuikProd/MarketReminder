@@ -101,7 +101,8 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
      *
      * @param string         $email
      * @param string         $username
-     * @param string         $password
+     * @param string         $plainPassword
+     * @param object         $passwordEncoder
      * @param array          $currentState
      * @param string         $validationToken
      * @param ImageInterface $profileImage
@@ -109,7 +110,8 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function __construct(
         string $email,
         string $username,
-        string $password,
+        string $plainPassword,
+        object $passwordEncoder,
         array $currentState,
         string $validationToken,
         ImageInterface $profileImage = null
@@ -121,18 +123,10 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
         $this->roles[] = 'ROLE_USER';
         $this->email = $email;
         $this->username = $username;
-        $this->plainPassword = $password;
+        $this->password = $passwordEncoder->encodePassword($this, $plainPassword);
         $this->currentState = $currentState;
         $this->validationToken = $validationToken;
         $this->profileImage = $profileImage;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function defineFinalPassword(string $password): void
-    {
-        $this->password = $password;
     }
 
     /**

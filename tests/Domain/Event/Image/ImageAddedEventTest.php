@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Event\Image;
+namespace App\Tests\Domain\Event\Image;
 
 use PHPUnit\Framework\TestCase;
-use App\Event\Image\ImageAddedEvent;
-use App\Models\Interfaces\ImageInterface;
+use App\Domain\Event\Image\ImageAddedEvent;
+use App\Domain\Models\Interfaces\ImageInterface;
 
 /**
  * Class ImageAddedEventTest;.

@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace App\Tests\UI\Form\Type;
 
 use App\Domain\UseCase\UserResetPassword\DTO\Interfaces\UserResetPasswordDTOInterface;
+use App\Infra\Form\FormSubscriber\AskResetPasswordTypeSubscriber;
+use App\Infra\Form\FormSubscriber\Interfaces\AskResetPasswordTypeSubscriberInterface;
 use App\UI\Form\Type\AskResetPasswordType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
@@ -25,6 +28,33 @@ use Symfony\Component\Form\Test\TypeTestCase;
  */
 class AskResetPasswordTypeTest extends TypeTestCase
 {
+    /**
+     * @var AskResetPasswordTypeSubscriberInterface
+     */
+    private $askResetPasswordTypeSubscriber;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        $this->askResetPasswordTypeSubscriber = $this->createMock(AskResetPasswordTypeSubscriber::class);
+
+        parent::setUp();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions()
+    {
+        $type = new AskResetPasswordType($this->askResetPasswordTypeSubscriber);
+
+        return [
+            new PreloadedExtension([$type], [])
+        ];
+    }
+
     public function testSubmittedDataIsSentToDTO()
     {
         $form = $this->factory->create(AskResetPasswordType::class);
