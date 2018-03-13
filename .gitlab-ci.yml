@@ -1,6 +1,4 @@
 stages:
-    - php7.1
-    - php7.2
     - quality_tests
     - frontend
     - specifications
@@ -22,8 +20,8 @@ sass:
             - node_modules/
             - public/build/
 
-deptrac:
-    stage: php7.1
+deptrac_php7.1:
+    stage: specifications
     image: php:7.1-fpm-alpine
     services:
         - redis
@@ -60,8 +58,8 @@ deptrac:
     script:
         - deptrac -v
 
-deptrac:
-    stage: php7.2
+deptrac_php7.2:
+    stage: specifications
     image: php:7.2-fpm-alpine3.7
     services:
         - redis
@@ -99,7 +97,7 @@ deptrac:
         - deptrac -v
 
 phpunit:
-    stage: php7.2
+    stage: unit_tests
     image: php:7.2-fpm-alpine3.7
     services:
         - redis
