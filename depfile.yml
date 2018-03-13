@@ -1,12 +1,28 @@
 paths:
   - ./src
 exclude_files:
-  - .*test.*
+  - .*tests.*
 layers:
   - name: Action
     collectors:
       - type: className
-        regex: .*Action.*
+        regex: .*UI\\Action.*
+  - name: Form
+    collectors:
+      - type: className
+        regex: .*UI\\Form.*
+  - name: FormHandler
+    collectors:
+      - type: className
+        regex: .*Infra\\Form\\FormHandler.*
+  - name: FormSubscriber
+    collectors:
+      - type: className
+        regex: .*Infra\\Form\\FormSubscriber.*
+  - name: Models
+    collectors:
+      - type: className
+        regex: .*Domain\\Models.*
   - name: Helper
     collectors:
       - type: className
@@ -15,17 +31,41 @@ layers:
     collectors:
       - type: className
         regex: .*Repository.*
+  - name: Responder
+    collectors:
+      - type: className
+        regex: .*UI\\Responder.*
   - name: Subscriber
     collectors:
       - type: className
         regex: .*Subscriber.*
 ruleset:
   Action:
-    - Helper
-    - Subscriber
-    - Repository
+      - Form
+      - FormHandler
+      - Helper
+      - Repository
+      - Responder
+  Form:
+      - FormSubscriber
+      - Subscriber
+  FormHandler:
+      - Helper
+      - Models
+      - Repository
+      - Service
+  FormSubscriber:
+      - Models
+      - Helper
+      - Repository
+      - Subscriber
+  Models: ~
+  Repository:
+      - Models
   Service:
-    - Repository
+      - Repository
   Subscriber:
-    - Helper
-    - Repository
+      - FormSubscriber
+      - Helper
+      - Models
+      - Repository

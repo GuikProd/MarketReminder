@@ -218,12 +218,6 @@
     "phpmetrics/phpmetrics": {
         "version": "v2.3.2"
     },
-    "phpspec/php-diff": {
-        "version": "v1.1.0"
-    },
-    "phpspec/phpspec": {
-        "version": "4.3.0"
-    },
     "phpspec/prophecy": {
         "version": "1.7.3"
     },
@@ -466,9 +460,6 @@
     },
     "symfony/polyfill-util": {
         "version": "v1.6.0"
-    },
-    "symfony/process": {
-        "version": "v4.0.3"
     },
     "symfony/profiler-pack": {
         "version": "v1.0.3"
