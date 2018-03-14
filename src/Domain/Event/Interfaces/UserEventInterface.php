@@ -23,6 +23,13 @@ use App\Domain\Models\Interfaces\UserInterface;
 interface UserEventInterface
 {
     /**
+     * UserEventInterface constructor.
+     *
+     * @param UserInterface $user
+     */
+    public function __construct(UserInterface $user);
+
+    /**
      * Allow to access the user instance.
      *
      * @return UserInterface

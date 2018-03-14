@@ -4,22 +4,30 @@ import std;
 
 # Default port
 backend default {
-    .host = "172.19.0.1";
-    .port = "8080";
+    .host = "marketReminder_nginx";
+    .port = "80";
 }
 
-# Production
-# backend default {
-#     .host = "localhost";
-#     .port = "8080";
-# }
-
-# Used in order to check the ports used.
 sub vcl_recv {
+
     if (req.http.X-Forwarded-Proto == "https" ) {
         set req.http.X-Forwarded-Port = "443";
     } else {
         set req.http.X-Forwarded-Port = "80";
+    }
+
+    // Remove all cookies except the session ID.
+    if (req.http.Cookie) {
+        set req.http.Cookie = ";" + req.http.Cookie;
+        set req.http.Cookie = regsuball(req.http.Cookie, "; +", ";");
+        set req.http.Cookie = regsuball(req.http.Cookie, ";(PHPSESSID)=", "; \1=");
+        set req.http.Cookie = regsuball(req.http.Cookie, ";[^ ][^;]*", "");
+        set req.http.Cookie = regsuball(req.http.Cookie, "^[; ]+|[; ]+$", "");
+
+        if (req.http.Cookie == "") {
+            // If there are no more cookies, remove the header to get page cached.
+            unset req.http.Cookie;
+        }
     }
 }
 

@@ -23,6 +23,13 @@ use App\Domain\Models\Interfaces\ImageInterface;
 interface ImageEventInterface
 {
     /**
+     * ImageEventInterface constructor.
+     *
+     * @param ImageInterface $image
+     */
+    public function __construct(ImageInterface $image);
+
+    /**
      * @return ImageInterface
      */
     public function getImage(): ImageInterface;

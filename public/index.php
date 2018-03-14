@@ -27,11 +27,11 @@ if ($_SERVER['APP_DEBUG'] ?? false) {
     Debug::enable();
 }
 
-if ($trustedProxies = $_SERVER['MAIN_PROXIES']) {
-    Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL);
+if ($trustedProxies = $_SERVER['MAIN_PROXIES'] ?? false) {
+    Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);
 }
 
-if ($trustedHosts = $_SERVER['MAIN_HOSTS']) {
+if ($trustedHosts = $_SERVER['MAIN_HOSTS'] ?? false) {
     Request::setTrustedHosts(explode(',', $trustedHosts));
 }
 

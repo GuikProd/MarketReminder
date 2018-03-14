@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-use App\Builder\UserBuilder;
+use App\Domain\Models\User;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -84,25 +84,20 @@ class DatabaseContext implements Context
     {
         foreach ($users->getHash() as $hash) {
 
-            $user = new UserBuilder();
-            $user
-                ->createUser()
-                ->withUsername($hash['username'])
-                ->withEmail($hash['email'])
-                ->withPlainPassword($hash['plainPassword'])
-                ->withPassword(
-                    $this->passwordEncoder->encodePassword(
-                        $user->getUser(),
-                        $user->getUser()->getPlainPassword()
-                    )
-                )
-                ->withRole('ROLE_USER')
-                ->withActive((bool) $hash['active'])
-                ->withValidated((bool) $hash['validated'])
-                ->withValidationToken((string) $hash['validationToken'])
-                ->withCreationDate(new \DateTime());
+            $user = new User(
+                $hash['email'],
+                $hash['username'],
+                $hash['plainPassword'],
+                $this->passwordEncoder,
+                [$hash['currentState']],
+                $hash['validationToken']
+            );
 
-            $this->doctrine->getManager()->persist($user->getUser());
+            if ($hash['validated']) {
+                $user->validate();
+            }
+
+            $this->doctrine->getManager()->persist($user);
         }
 
         $this->doctrine->getManager()->flush();

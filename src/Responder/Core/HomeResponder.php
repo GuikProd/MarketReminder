@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Responder\Core;
 
-use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
  * Class HomeResponder.
@@ -53,7 +53,7 @@ class HomeResponder
 
         return $response->setCache([
             's_maxage' => 600,
-            'public' => true,
+            'public' => true
         ]);
     }
 }
