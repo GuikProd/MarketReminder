@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Action\Security;
+namespace App\UI\Action\Security;
 
 use App\Responder\Security\LoginResponder;
 use Symfony\Component\Routing\Annotation\Route;

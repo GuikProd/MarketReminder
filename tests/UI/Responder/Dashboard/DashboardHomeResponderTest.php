@@ -11,32 +11,29 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Action\Dashboard;
+namespace App\Tests\UI\Responder\Dashboard;
 
-use Twig\Environment;
+use App\UI\Responder\Dashboard\DashboardHomeResponder;
 use PHPUnit\Framework\TestCase;
-use App\Action\Dashboard\DashboardHomeAction;
 use Symfony\Component\HttpFoundation\Response;
-use App\Responder\Dashboard\DashboardHomeResponder;
+use Twig\Environment;
 
 /**
- * Class DashboardHomeActionTest.
+ * Class DashboardHomeResponderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class DashboardHomeActionTest extends TestCase
+class DashboardHomeResponderTest extends TestCase
 {
     public function testInvokeReturn()
     {
         $twigMock = $this->createMock(Environment::class);
 
-        $dashboardHomeAction = new DashboardHomeAction();
-
         $dashboardHomeResponder = new DashboardHomeResponder($twigMock);
 
         static::assertInstanceOf(
             Response::class,
-            $dashboardHomeAction($dashboardHomeResponder)
+            $dashboardHomeResponder()
         );
     }
 }

@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -67,6 +68,35 @@ class AskResetPasswordActionTest extends TestCase
 
     public function testRightProcess()
     {
+        $askResetPasswordTypeHandlerMock = $this->createMock(AskResetPasswordTypeHandlerInterface::class);
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $formViewMock = $this->createMock(FormView::class);
+        $formInterfaceMock = $this->createMock(FormInterface::class);
+        $formFactoryMock = $this->createMock(FormFactoryInterface::class);
+        $requestMock = $this->createMock(Request::class);
+        $twigMock = $this->createMock(Environment::class);
+        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
+        $askResetPasswordTypeHandlerMock->method('handle')->willReturn(true);
+        $formFactoryMock->method('create')
+                        ->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('handleRequest')
+                          ->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('createView')
+                          ->willReturn($formViewMock);
+        $urlGeneratorMock->method('generate')->willReturn('/fr/');
+
+        $askResetPasswordAction = new AskResetPasswordAction(
+            $formFactoryMock,
+            $entityManagerMock,
+            $askResetPasswordTypeHandlerMock
+        );
+
+        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
+
+        static::assertInstanceOf(
+            RedirectResponse::class,
+            $askResetPasswordAction($requestMock, $askResetPasswordResponder)
+        );
     }
 }

@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Responder\Dashboard;
+namespace App\UI\Responder\Dashboard;
 
-use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
  * Class DashboardHomeResponder

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Infra\Form\FormHandler;
 
 use App\Application\Symfony\Events\SessionMessageEvent;
+use App\Domain\Event\User\UserResetPasswordEvent;
 use App\Domain\Models\User;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Infra\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
@@ -94,6 +95,16 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
             $user->askForPasswordReset($userResetPasswordToken);
 
             $this->entityManager->flush();
+
+            $this->eventDispatcher->dispatch(
+                UserResetPasswordEvent::NAME,
+                new UserResetPasswordEvent($user)
+            );
+
+            $this->eventDispatcher->dispatch(
+                SessionMessageEvent::NAME,
+                new SessionMessageEvent('success', 'user.reset_password.success')
+            );
 
             return true;
         }

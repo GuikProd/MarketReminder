@@ -11,25 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Action\Security;
+namespace App\Tests\UI\Action\Security;
 
-use Twig\Environment;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Form\FormView;
-use App\Action\Security\RegisterAction;
-use Symfony\Component\Form\FormInterface;
+use App\UI\Action\Security\RegisterAction;
+use App\Builder\Interfaces\UserBuilderInterface;
+use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\Responder\Security\RegisterResponder;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Builder\Interfaces\UserBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Twig\Environment;
 
 /**
  * Class RegisterActionTest.

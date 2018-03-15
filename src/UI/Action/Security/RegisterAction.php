@@ -11,20 +11,21 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Action\Security;
+namespace App\UI\Action\Security;
 
-use App\Form\Type\RegisterType;
-use App\Event\User\UserCreatedEvent;
-use App\Responder\Security\RegisterResponder;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Builder\Interfaces\UserBuilderInterface;
+use App\Domain\Event\User\UserCreatedEvent;
+use App\Domain\Models\User;
+use App\Form\Type\RegisterType;
+use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use App\Responder\Security\RegisterResponder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class RegisterAction.
@@ -110,6 +111,7 @@ class RegisterAction
                              ->handleRequest($request);
 
         if ($this->registerTypeHandler->handle($registerType, $userBuilder)) {
+
             $userCreatedEvent = new UserCreatedEvent($userBuilder->getUser());
             $this->eventDispatcher->dispatch(UserCreatedEvent::NAME, $userCreatedEvent);
 

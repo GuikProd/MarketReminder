@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Action\Dashboard;
+namespace App\UI\Action\Dashboard;
 
+use App\UI\Responder\Dashboard\DashboardHomeResponder;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Responder\Dashboard\DashboardHomeResponder;
 
 /**
  * Class DashboardHomeAction

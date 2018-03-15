@@ -3,9 +3,9 @@ Feature: As a normal user, I want to be able to register myself and create a new
 
   Background:
     Given I load following users:
-      | username     | plainPassword | email           | validationToken    | validated  | active |
-      | HelloWorld   | Ie1FDLGHW     | hello@gmail.com | AZERTYQWERTY       | true       | true   |
-      | Titi         | Ie1FDLTITI    | titi@gmail.com  | helloworldfromTiti | false      | false  |
+      | username     | plainPassword | email           | validationToken  | validated  | active |
+      | HelloWorld   | Ie1FDLGHW     | hello@gmail.com | EdFEDNRanuLs5    | 1          | 1      |
+      | Titi         | Ie1FDLTITI    | titi@gmail.com  | ToFEGARRdjLs2    | 0          | 0      |
     When I am on "/en/register"
     Then I should see "Registration"
 

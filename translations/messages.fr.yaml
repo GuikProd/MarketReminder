@@ -1,7 +1,9 @@
+# Pages title
 Home: Accueil
 account.welcome: Bienvenue sur MarketReminder
 account.greeting: Content de vous voir à bord !
-Registration: S'enregistrer
+resetPassword.title: Demande de réinitialisation du mot de passe
+registration.title: S'enregistrer
 Username: Pseudonyme
 Email: Email
 Password: Mot de passe
@@ -22,3 +24,4 @@ security.resetPasswordToken: Envoyer
 
 # User
 user.not_found: Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie.
+user.reset_password.success: La demande a bien été enregistrée, un email vous a été envoyé.

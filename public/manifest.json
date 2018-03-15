@@ -3,5 +3,6 @@
   "short_name": "MarketReminder",
   "start_url": "/",
   "scope": ".",
-  "display": "standalone"
+  "display": "standalone",
+  "lang": "fr-FR"
 }

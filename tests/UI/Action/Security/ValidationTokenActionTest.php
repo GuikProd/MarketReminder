@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Action\Security;
+namespace App\Tests\UI\Action\Security;
 
+use App\UI\Action\Security\ValidationTokenAction;
+use App\Domain\Models\Interfaces\UserInterface;
+use App\Responder\Security\ValidationTokenResponder;
 use PHPUnit\Framework\TestCase;
-use App\Models\Interfaces\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use App\Action\Security\ValidationTokenAction;
-use App\Responder\Security\ValidationTokenResponder;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\TranslatorInterface;

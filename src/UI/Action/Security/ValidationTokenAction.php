@@ -11,16 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Action\Security;
+namespace App\UI\Action\Security;
 
-use App\Event\User\UserValidatedEvent;
+use App\Domain\Event\User\UserValidatedEvent;
+use App\Responder\Security\ValidationTokenResponder;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Responder\Security\ValidationTokenResponder;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class ValidationTokenAction;

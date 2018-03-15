@@ -75,6 +75,8 @@
             "App\\Domain\\Models\\Interfaces\\": "src/Domain/Models/Interfaces/",
             "App\\Domain\\Repository\\": "src/Domain/Repository/",
             "App\\Domain\\Repository\\Interfaces\\": "src/Domain/Repository/Interfaces/",
+            "App\\Domain\\Subscriber\\": "src/Domain/Subscriber/",
+            "App\\Domain\\Subscriber\\Interfaces\\": "src/Domain/Subscriber/Interfaces/",
             "App\\Domain\\UseCase\\": "src/Domain/UseCase/",
             "App\\Domain\\UseCase\\UserRegistration\\DTO\\": "src/Domain/UseCase/UserRegistration/DTO/",
             "App\\Domain\\UseCase\\UserRegistration\\DTO\\Interfaces\\": "src/Domain/UseCase/UserRegistration/DTO/Interfaces/",
@@ -87,8 +89,10 @@
             "App\\Infra\\Form\\FormSubscriber\\Interfaces\\": "src/Infra/Form/FormSubscriber/Interfaces/",
             "App\\Infra\\Helper\\Security\\": "src/Infra/Helper/Security/",
             "App\\UI\\Action\\Core\\": "src/UI/Action/Core/",
+            "App\\UI\\Action\\Dashboard\\": "src/UI/Action/Dashboard/",
             "App\\UI\\Action\\Security\\": "src/UI/Action/Security/",
             "App\\UI\\Responder\\Core\\": "src/UI/Responder/Core/",
+            "App\\UI\\Responder\\Dashboard\\": "src/UI/Responder/Dashboard/",
             "App\\UI\\Responder\\Security\\": "src/UI/Responder/Security/",
             "App\\UI\\Form\\Type\\": "src/UI/Form/Type/"
         }
@@ -104,6 +108,7 @@
             "App\\Tests\\Domain\\Event\\Image\\": "tests/Domain/Event/Image/",
             "App\\Tests\\Domain\\Event\\User\\": "tests/Domain/Event/User/",
             "App\\Tests\\Domain\\Repository\\": "tests/Domain/Repository/",
+            "App\\Tests\\Domain\\Subscriber\\": "tests/Domain/Subscriber/",
             "App\\Tests\\Domain\\UseCase\\UserRegistration\\DTO\\": "tests/Domain/UseCase/UserRegistration/DTO/",
             "App\\Tests\\Domain\\UseCase\\UserResetPassword\\DTO\\": "tests/Domain/UseCase/UserResetPassword/DTO/",
             "App\\Tests\\Domain\\UseCase\\UserResetPassword\\Model\\": "tests/Domain/UseCase/UserResetPassword/Model/",
@@ -112,7 +117,9 @@
             "App\\Tests\\Infra\\Form\\FormSubscriber\\": "tests/Infra/Form/FormSubscriber/",
             "App\\Tests\\Infra\\Helper\\Security\\": "tests/Infra/Helper/Security/",
             "App\\Tests\\UI\\Action\\Core\\": "tests/UI/Action/Core/",
+            "App\\Tests\\UI\\Action\\Dashboard\\": "tests/UI/Action/Dashboard/",
             "App\\Tests\\UI\\Action\\Security\\": "tests/UI/Action/Security/",
+            "App\\Tests\\UI\\Responder\\Dashboard\\": "tests/UI/Responder/Dashboard/",
             "App\\Tests\\UI\\Responder\\Security\\": "tests/UI/Responder/Security/",
             "App\\Tests\\UI\\Form\\Type\\": "tests/UI/Form/Type/"
         }

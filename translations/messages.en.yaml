@@ -1,7 +1,9 @@
+# Pages title
 Home: Home
 account.welcome: Welcome to MarketReminder !
 account.greeting: nice to see you here !
-Registration: Registration
+resetPassword.title: Ask for password reset
+registration.title: Registration
 Username: Username
 Email: Email
 Password: Password
@@ -16,5 +18,10 @@ security.validation_failure.notFound_token: Oops, looks like the validation toke
 security.login: Login
 security.login_failure: The submitted credentials seems invalid, please verify and retry.
 
+# Forms
+security.resetPasswordToken_header: Ask a new password
+security.resetPasswordToken: Send
+
 # User
-user.not_found: The submitted credentials dooesn't seems sto be linked to an existing user, please retry.
+user.not_found: The submitted credentials doesn't seems to be linked to an existing user, please retry.
+user.reset_password.success: The demand has been saved, please check your emails.
