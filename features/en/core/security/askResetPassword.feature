@@ -29,7 +29,7 @@ Feature: As a registered user, I should be able to reset my password if I lost i
     Then I should be on "/en/reset-password/ask"
     And I should see "The submitted credentials doesn't seems to be linked to an existing user, please retry."
 
-  Scenario: I want to reset my password using a good username.
+  Scenario: I want to reset my password using good credentials.
     Then I fill in "ask_reset_password_username" with "Titi"
     Then I fill in "ask_reset_password_email" with "titi@gmail.com"
     And I press "Send"

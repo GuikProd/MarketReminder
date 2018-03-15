@@ -29,7 +29,7 @@ Feature: As a registered user, I should be able to reset my password if I lost i
     Then I should be on "/fr/reset-password/ask"
     And I should see "Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie."
 
-  Scenario: I want to reset my password using a good username.
+  Scenario: I want to reset my password using good credentials.
     Then I fill in "ask_reset_password_username" with "Titi"
     Then I fill in "ask_reset_password_email" with "titi@gmail.com"
     And I press "Envoyer"
