@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ "Registration"|trans }}{% endblock %}
+{% block title %}{{ "registration.title"|trans }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -32,9 +32,9 @@
                         {{ form_errors(registerForm.email, {'attr': {'class': 'mdl-textfield__error'}}) }}
                     </div>
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        {{ form_label(registerForm.plainPassword, '', {'label_attr': {'class': 'mdl-textfield__label'}}) }}
-                        {{ form_widget(registerForm.plainPassword, {'attr': {'class': 'mdl-textfield__input'}}) }}
-                        {{ form_errors(registerForm.plainPassword, {'attr': {'class': 'mdl-textfield__error'}}) }}
+                        {{ form_label(registerForm.password, '', {'label_attr': {'class': 'mdl-textfield__label'}}) }}
+                        {{ form_widget(registerForm.password, {'attr': {'class': 'mdl-textfield__input'}}) }}
+                        {{ form_errors(registerForm.password, {'attr': {'class': 'mdl-textfield__error'}}) }}
                     </div>
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
                         <input class="mdl-textfield__input" placeholder="{{ "Profile image"|trans }}" type="text" id="uploadFile" readonly/>

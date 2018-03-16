@@ -23,9 +23,36 @@ use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 interface UserInterface
 {
     /**
+     * UserInterface constructor.
+     *
+     * @param string              $email            The email linked to this user.
+     * @param string              $username         The username used by the User.
+     * @param string              $password         The encrypted version of the password.
+     * @param string              $validationToken  The validation token used for validate the user.
+     * @param ImageInterface|null $profileImage     If the user define it, the profile image.
+     *
+     * This constructor should generate an UUID, the creation date, define if the User is
+     * active and validated then define the default role ('ROLE_USER').
+     */
+    public function __construct(
+        string $email,
+        string $username,
+        string $password,
+        string $validationToken,
+        ImageInterface $profileImage = null
+    );
+
+    /**
+     * Allow to store the reset password token once it's generated.
+     *
      * @param UserResetPasswordToken $userPasswordReset
      */
     public function askForPasswordReset(UserResetPasswordToken $userPasswordReset): void;
+
+    /**
+     * Allow to validate the user once he has validate his account.
+     */
+    public function validate(): void;
 
     /**
      * @return int|null
@@ -41,11 +68,6 @@ interface UserInterface
      * @return null|string
      */
     public function getEmail(): ? string;
-
-    /**
-     * @return null|string
-     */
-    public function getPlainPassword(): ? string;
 
     /**
      * @return null|string
@@ -111,9 +133,4 @@ interface UserInterface
      * @return null|ImageInterface
      */
     public function getProfileImage():? ImageInterface;
-
-    /**
-     * Allow to validate the user once he's registered.
-     */
-    public function validate(): void;
 }

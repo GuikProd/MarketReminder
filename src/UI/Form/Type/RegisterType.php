@@ -11,12 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Form\Type;
+namespace App\UI\Form\Type;
 
-use App\Domain\Models\Interfaces\UserInterface;
+use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
-use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -39,22 +38,13 @@ class RegisterType extends AbstractType
     private $profileImageSubscriber;
 
     /**
-     * @var RegisterCredentialsSubscriberInterface
-     */
-    private $registerCredentialsSubscriber;
-
-    /**
      * RegisterType constructor.
      *
      * @param ProfileImageSubscriberInterface $profileImageSubscriber
-     * @param RegisterCredentialsSubscriberInterface $registerCredentialsSubscriber
      */
-    public function __construct(
-        ProfileImageSubscriberInterface $profileImageSubscriber,
-        RegisterCredentialsSubscriberInterface $registerCredentialsSubscriber
-    ) {
+    public function __construct(ProfileImageSubscriberInterface $profileImageSubscriber)
+    {
         $this->profileImageSubscriber = $profileImageSubscriber;
-        $this->registerCredentialsSubscriber = $registerCredentialsSubscriber;
     }
 
     /**
@@ -65,12 +55,11 @@ class RegisterType extends AbstractType
         $builder
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
-            ->add('plainPassword', PasswordType::class)
+            ->add('password', PasswordType::class)
             ->add('profileImage', FileType::class, [
                 'mapped' => false,
                 'required' => false
             ])
-            ->addEventSubscriber($this->registerCredentialsSubscriber)
         ;
 
         $builder->get('profileImage')
@@ -83,19 +72,23 @@ class RegisterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => UserInterface::class,
+            'data_class' => UserRegistrationDTOInterface::class,
             'empty_data' => function (FormInterface $form) {
                 return new UserRegistrationDTO(
                     $form->get('username')->getData(),
                     $form->get('email')->getData(),
-                    $form->get('plainPassword')->getData(),
+                    password_hash(
+                        $form->get('password')->getData(),
+                        PASSWORD_BCRYPT,
+                        ['cost' => 13]
+                    ),
                     md5(
                         crypt(
-                            str_rot13($form->get('username')->getData()
-                            ),
+                            str_rot13($form->get('username')->getData()),
                             $form->get('email')->getData()
                         )
-                    )
+                    ),
+                    $form->get('profileImage')->getData()
                 );
             },
             'validation_groups' => [

@@ -8,6 +8,8 @@ Username: Pseudonyme
 Email: Email
 Password: Mot de passe
 Plain password: Mot de passe
+
+# Pages button
 Profile image: Image de profil
 Create an account: Créer un compte
 Already have an account ?: Compte déjà créé ?
@@ -23,5 +25,7 @@ security.resetPasswordToken_header: Demander un nouveau mot de passe.
 security.resetPasswordToken: Envoyer
 
 # User
+user.account_created: Le compte a bien été créé, un email permettant de valider cette création vous a été envoyé.
+user.invalid_credentials: Les identifiants renseignés semblent invalides, veuillez réessayer.
 user.not_found: Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie.
 user.reset_password.success: La demande a bien été enregistrée, un email vous a été envoyé.

@@ -29,14 +29,10 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $passwordEncoder = $this->container->get('security.password_encoder');
-
         $userI = new User(
             'hp@gmail.com',
             'HP',
-            'Ie1FDLHPP',
-            $passwordEncoder,
-            ['active'],
+            password_hash('Ie1FDLHPP', PASSWORD_BCRYPT, ['cost' => 13]),
             crypt(
                 str_rot13(
                     str_shuffle(
@@ -50,11 +46,10 @@ class UserFixtures extends Fixture
         $this->setReference('user', $userI);
 
         $userII = new User(
-            'toto@gmail.fr',
+            'toto@gmail.com',
             'Toto',
-            'Ie1FDLTOTO',
-            $passwordEncoder,
-            ['active'],
+
+            password_hash('Ie1FDLTOTO', PASSWORD_BCRYPT, ['cost' => 13]),
             crypt(
                 str_rot13(
                     str_shuffle(
@@ -71,9 +66,7 @@ class UserFixtures extends Fixture
         $userIII = new User(
             'guik@gmail.com',
             'Guik',
-            'Ie1FDLGuik',
-            $passwordEncoder,
-            ['toValidate'],
+            password_hash('Ie1FDLGK', PASSWORD_BCRYPT, ['cost' => 13]),
             crypt(
                 str_rot13(
                     str_shuffle(

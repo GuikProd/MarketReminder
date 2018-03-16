@@ -11,26 +11,24 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Form\Type;
+namespace App\Tests\UI\Form\Type;
 
+use App\Builder\Interfaces\ImageBuilderInterface;
+use App\Builder\Interfaces\UserBuilderInterface;
 use App\Builder\UserBuilder;
-use App\Form\Type\RegisterType;
+use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
+use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
+use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
+use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
+use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
+use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
+use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Subscriber\Form\ProfileImageSubscriber;
+use App\UI\Form\Type\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\PreloadedExtension;
-use App\Subscriber\Form\ProfileImageSubscriber;
-use App\Builder\Interfaces\UserBuilderInterface;
-use App\Builder\Interfaces\ImageBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use App\Subscriber\Form\RegisterCredentialsSubscriber;
-use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
-use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
-use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
-use App\Subscriber\Interfaces\RegisterCredentialsSubscriberInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
 
 /**
  * Class RegisterTypeTest.
@@ -95,11 +93,6 @@ class RegisterTypeTest extends TypeTestCase
     private $cloudVisionDescriberHelper;
 
     /**
-     * @var RegisterCredentialsSubscriberInterface
-     */
-    private $registerCredentialsSubscriber;
-
-    /**
      * {@inheritdoc}
      */
     public function setUp()
@@ -125,11 +118,6 @@ class RegisterTypeTest extends TypeTestCase
                                             $this->imageTypeChecker
                                         );
 
-        $this->registerCredentialsSubscriber = new RegisterCredentialsSubscriber(
-                                                   $this->translator,
-                                                   $this->entityManager
-                                               );
-
         $this->userBuilder = new UserBuilder();
 
         parent::setUp();
@@ -140,7 +128,7 @@ class RegisterTypeTest extends TypeTestCase
      */
     public function getExtensions()
     {
-        $type = new RegisterType($this->profileImageSubscriber, $this->registerCredentialsSubscriber);
+        $type = new RegisterType($this->profileImageSubscriber);
 
         return [
             new PreloadedExtension(

@@ -19,16 +19,16 @@ use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\Responder\Security\RegisterResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
@@ -76,23 +76,15 @@ class RegisterActionTest extends TestCase
 
     public function testHandlerProcess()
     {
-        $formFactoryMock = $this->createMock(FormFactoryInterface::class);
-
-        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
-
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
-
-        $registerTypeHandlerMock = $this->createMock(RegisterTypeHandlerInterface::class);
-
-        $requestMock = $this->createMock(Request::class);
-
-        $userBuilderMock = $this->createMock(UserBuilderInterface::class);
-
-        $sessionMock = new Session(new MockArraySessionStorage());
-
-        $registerResponderMock = $this->createMock(RegisterResponder::class);
-
+        $formFactoryMock = $this->createMock(FormFactoryInterface::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
+        $registerTypeHandlerMock = $this->createMock(RegisterTypeHandlerInterface::class);
+        $requestMock = $this->createMock(Request::class);
+        $sessionMock = new Session(new MockArraySessionStorage());
+        $registerResponderMock = $this->createMock(RegisterResponder::class);
+        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
+        $userBuilderMock = $this->createMock(UserBuilderInterface::class);
 
         $formFactoryMock->method('create')->willReturn($formInterfaceMock);
         $formInterfaceMock->method('handleRequest')->willReturn($formInterfaceMock);

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Domain\UseCase\UserRegistration\DTO;
 
+use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 
 /**
@@ -35,7 +36,12 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     /**
      * @var string
      */
-    public $plainPassword;
+    public $password;
+
+    /**
+     * @var ImageInterface
+     */
+    public $profileImage;
 
     /**
      * @var string
@@ -48,12 +54,14 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     public function __construct(
         string $username,
         string $email,
-        string $plainPassword,
-        string $validationToken
+        string $password,
+        string $validationToken,
+        ImageInterface $image = null
     ) {
         $this->username = $username;
         $this->email = $email;
-        $this->plainPassword = $plainPassword;
+        $this->password = $password;
         $this->validationToken = $validationToken;
+        $this->profileImage = $image;
     }
 }

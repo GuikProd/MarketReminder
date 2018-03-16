@@ -15,8 +15,7 @@ namespace App\UI\Action\Security;
 
 use App\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Event\User\UserCreatedEvent;
-use App\Domain\Models\User;
-use App\Form\Type\RegisterType;
+use App\UI\Form\Type\RegisterType;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\Responder\Security\RegisterResponder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -104,16 +103,11 @@ class RegisterAction
         SessionInterface $session,
         RegisterResponder $responder
     ) {
-        $userBuilder->createUser();
-
         $registerType = $this->formFactory
-                             ->create(RegisterType::class, $userBuilder->getUser())
+                             ->create(RegisterType::class)
                              ->handleRequest($request);
 
-        if ($this->registerTypeHandler->handle($registerType, $userBuilder)) {
-
-            $userCreatedEvent = new UserCreatedEvent($userBuilder->getUser());
-            $this->eventDispatcher->dispatch(UserCreatedEvent::NAME, $userCreatedEvent);
+        if ($this->registerTypeHandler->handle($registerType)) {
 
             $session
                 ->getFlashBag()

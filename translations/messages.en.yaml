@@ -23,5 +23,7 @@ security.resetPasswordToken_header: Ask a new password
 security.resetPasswordToken: Send
 
 # User
+user.account_created: The account has been created, a emain has been send in order to validate the creation process.
+user.invalid_credentials: The submitted credentials seems invalid, please retry.
 user.not_found: The submitted credentials doesn't seems to be linked to an existing user, please retry.
 user.reset_password.success: The demand has been saved, please check your emails.

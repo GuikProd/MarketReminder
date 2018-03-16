@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace App\FormHandler;
 
-use Symfony\Component\Workflow\Workflow;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\FormInterface;
-use App\Builder\Interfaces\UserBuilderInterface;
+use App\Application\Symfony\Events\SessionMessageEvent;
+use App\Domain\Event\User\UserCreatedEvent;
+use App\Domain\Models\User;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class RegisterTypeHandler.
@@ -28,14 +31,19 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class RegisterTypeHandler implements RegisterTypeHandlerInterface
 {
     /**
-     * @var Workflow
+     * @var ValidatorInterface
      */
-    private $workflow;
+    private $validator;
 
     /**
      * @var EntityManagerInterface
      */
     private $entityManager;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     /**
      * @var UserPasswordEncoderInterface
@@ -45,55 +53,64 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     /**
      * RegisterTypeHandler constructor.
      *
-     * @param Workflow $workflowRegistry
+     * @param ValidatorInterface $validator
      * @param EntityManagerInterface $entityManager
+     * @param EventDispatcherInterface $eventDispatcher
      * @param UserPasswordEncoderInterface $userPasswordEncoder
      */
     public function __construct(
-        Workflow $workflowRegistry,
+        ValidatorInterface $validator,
         EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher,
         UserPasswordEncoderInterface $userPasswordEncoder
     ) {
-        $this->workflow = $workflowRegistry;
+        $this->validator = $validator;
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(FormInterface $registerForm, UserBuilderInterface $userBuilder): bool
+    public function handle(FormInterface $registerForm): bool
     {
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
 
-            $userBuilder
-                ->withCreationDate(new \DateTime())
-                ->withPassword(
-                    $this->userPasswordEncoder
-                         ->encodePassword(
-                             $userBuilder->getUser(),
-                             $userBuilder->getUser()->getPlainPassword()
-                         )
-                )
-                ->withRole('ROLE_USER')
-                ->withValidationToken(
-                    crypt(
-                        str_rot13(
-                            str_shuffle(
-                                $userBuilder->getUser()->getEmail()
-                            )
-                        ),
-                        $userBuilder->getUser()->getUsername()
+            $user = new User(
+                $registerForm->getData()->email,
+                $registerForm->getData()->username,
+                $registerForm->getData()->password,
+                $registerForm->getData()->validationToken,
+                $registerForm->getData()->profileImage
+            );
+
+            $errors = $this->validator->validate($user, null, 'registration');
+
+            if (count($errors) > 0) {
+                $this->eventDispatcher->dispatch(
+                    SessionMessageEvent::NAME,
+                    new SessionMessageEvent(
+                        'failure',
+                        'user.invalid_credentials'
                     )
+                );
+
+                return false;
+            }
+
+            $this->eventDispatcher->dispatch(
+                UserCreatedEvent::NAME,
+                new UserCreatedEvent($user)
+            );
+
+            $this->eventDispatcher->dispatch(
+                SessionMessageEvent::NAME,
+                new SessionMessageEvent(
+                    'success',
+                    'user.account_created'
                 )
-                ->withActive(false)
-                ->withValidated(false)
-            ;
-
-            $this->workflow->apply($userBuilder->getUser(), 'to_validate');
-
-            $this->entityManager->persist($userBuilder->getUser());
-            $this->entityManager->flush();
+            );
 
             return true;
         }

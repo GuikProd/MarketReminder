@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 
 use App\Domain\Models\User;
+use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -84,13 +85,18 @@ class DatabaseContext implements Context
     {
         foreach ($users->getHash() as $hash) {
 
-            $user = new User(
-                $hash['email'],
+            $userDTO = new UserRegistrationDTO(
                 $hash['username'],
+                $hash['email'],
                 $hash['plainPassword'],
-                $this->passwordEncoder,
-                [$hash['currentState']],
                 $hash['validationToken']
+            );
+
+            $user = new User(
+                $userDTO->email,
+                $userDTO->username,
+                password_hash($userDTO->password, PASSWORD_BCRYPT, ['cost' => 13]),
+                $userDTO->validationToken
             );
 
             if ($hash['validated']) {
