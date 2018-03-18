@@ -57,7 +57,7 @@ interface UserInterface
     /**
      * @return int|null
      */
-    public function getId(): ? int;
+    public function getId(): ? string;
 
     /**
      * @return null|string

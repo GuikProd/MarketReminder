@@ -9,6 +9,6 @@
         <field name="creationDate" type="integer" nullable="false" unique="true" />
         <field name="modificationDate" type="integer" nullable="false" unique="true" />
         <field name="alt" type="string" length="50" unique="true" nullable="false" />
-        <field name="url" type="string" length="200" nullable="false" unique="true" />
+        <field name="publicUrl" type="string" length="200" nullable="false" unique="true" />
     </entity>
 </doctrine-mapping>

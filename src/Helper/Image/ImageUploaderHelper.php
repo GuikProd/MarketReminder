@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Helper\Image;
 
-use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 use App\Helper\Interfaces\CloudStorage\CloudStoragePersisterHelperInterface;
+use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 
 /**
  * Class ImageUploaderHelper.

@@ -15,7 +15,7 @@ namespace App\UI\Form\Type;
 
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
-use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
+use App\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -33,16 +33,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class RegisterType extends AbstractType
 {
     /**
-     * @var ProfileImageSubscriberInterface
+     * @var ImageUploadSubscriberInterface
      */
     private $profileImageSubscriber;
 
     /**
      * RegisterType constructor.
      *
-     * @param ProfileImageSubscriberInterface $profileImageSubscriber
+     * @param ImageUploadSubscriberInterface $profileImageSubscriber
      */
-    public function __construct(ProfileImageSubscriberInterface $profileImageSubscriber)
+    public function __construct(ImageUploadSubscriberInterface $profileImageSubscriber)
     {
         $this->profileImageSubscriber = $profileImageSubscriber;
     }

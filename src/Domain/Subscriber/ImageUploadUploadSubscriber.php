@@ -11,38 +11,32 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Subscriber\Form;
+namespace App\Domain\Subscriber;
 
+use App\Helper\CloudVision\CloudVisionVoterHelper;
+use App\Helper\Image\ImageTypeCheckerHelper;
+use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
+use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
+use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
+use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
+use App\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use App\Helper\Image\ImageTypeCheckerHelper;
-use App\Builder\Interfaces\ImageBuilderInterface;
-use App\Helper\CloudVision\CloudVisionVoterHelper;
 use Symfony\Component\Translation\TranslatorInterface;
-use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
-use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
 
 /**
- * Class ProfileImageSubscriber.
+ * Class ImageUploadUploadSubscriber.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ProfileImageSubscriber implements ProfileImageSubscriberInterface, EventSubscriberInterface
+class ImageUploadUploadSubscriber implements ImageUploadSubscriberInterface, EventSubscriberInterface
 {
     /**
      * @var TranslatorInterface
      */
     private $translator;
-
-    /**
-     * @var ImageBuilderInterface
-     */
-    private $imageBuilder;
 
     /**
      * @var ImageUploaderHelperInterface
@@ -65,10 +59,9 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface, EventSu
     private $cloudVisionDescriber;
 
     /**
-     * ProfileImageSubscriber constructor.
+     * ImageUploadUploadSubscriber constructor.
      *
      * @param TranslatorInterface                 $translator
-     * @param ImageBuilderInterface               $imageBuilder
      * @param ImageUploaderHelperInterface        $imageUploaderHelper
      * @param CloudVisionAnalyserHelperInterface  $cloudVisionAnalyser
      * @param ImageRetrieverHelperInterface       $imageRetrieverHelper
@@ -76,14 +69,12 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface, EventSu
      */
     public function __construct(
         TranslatorInterface $translator,
-        ImageBuilderInterface $imageBuilder,
         ImageUploaderHelperInterface $imageUploaderHelper,
         CloudVisionAnalyserHelperInterface $cloudVisionAnalyser,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
         CloudVisionDescriberHelperInterface $cloudVisionDescriber
     ) {
         $this->translator = $translator;
-        $this->imageBuilder = $imageBuilder;
         $this->imageUploaderHelper = $imageUploaderHelper;
         $this->cloudVisionAnalyser = $cloudVisionAnalyser;
         $this->imageRetrieverHelper = $imageRetrieverHelper;
@@ -121,8 +112,7 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface, EventSu
             return;
         }
 
-        $this->imageUploaderHelper
-             ->store($event->getData());
+        $this->imageUploaderHelper->store($event->getData());
 
         $analysedImage = $this->cloudVisionAnalyser
                               ->analyse(
@@ -132,9 +122,7 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface, EventSu
                                   'LABEL_DETECTION'
                               );
 
-        $labels = $this->cloudVisionDescriber
-                       ->describe($analysedImage)
-                       ->labels();
+        $labels = $this->cloudVisionDescriber->describe($analysedImage)->labels();
 
         $this->cloudVisionDescriber->obtainLabel($labels);
 
@@ -154,19 +142,12 @@ class ProfileImageSubscriber implements ProfileImageSubscriberInterface, EventSu
 
         $this->imageUploaderHelper->upload();
 
-        $this->imageBuilder
-             ->createImage()
-             ->withCreationDate(new \DateTime())
-             ->withAlt($this->imageUploaderHelper->getFileName())
-             ->withPublicUrl(
-                 $this->imageRetrieverHelper->getGoogleStoragePublicUrl()
-                 .
-                 $this->imageUploaderHelper->getFileName()
-             );
+        $imageRegistrationDTO = new ImageRegistrationDTO(
+            $event->getForm()->get('alt')->getData(),
+            $this->imageUploaderHelper->getFileName(),
+            $this->imageUploaderHelper->getFilePath()
+        );
 
-        $event->getForm()
-              ->getParent()
-              ->getData()
-              ->setProfileImage($this->imageBuilder->getImage());
+        $event->getForm()->setData($imageRegistrationDTO);
     }
 }

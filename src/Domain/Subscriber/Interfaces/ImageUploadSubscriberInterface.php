@@ -16,11 +16,11 @@ namespace App\Subscriber\Interfaces;
 use Symfony\Component\Form\FormEvent;
 
 /**
- * Interface ProfileImageSubscriberInterface.
+ * Interface ImageUploadSubscriberInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface ProfileImageSubscriberInterface
+interface ImageUploadSubscriberInterface
 {
     /**
      * @param FormEvent $event

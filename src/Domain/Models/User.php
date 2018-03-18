@@ -136,7 +136,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getId(): ? int
+    public function getId(): ? string
     {
         return $this->id;
     }

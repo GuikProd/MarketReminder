@@ -1,0 +1,7 @@
+App\Domain\UseCase\DTO\UserRegistration\DTO\ImageRegistrationDTO:
+    properties:
+        alt:
+            - NotBlank:
+                message: "image.alt.already_exist"
+                groups: ['imageUpload']
+

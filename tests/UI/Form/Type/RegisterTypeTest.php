@@ -22,8 +22,8 @@ use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
 use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
-use App\Subscriber\Interfaces\ProfileImageSubscriberInterface;
-use App\Subscriber\Form\ProfileImageSubscriber;
+use App\Subscriber\Interfaces\ImageUploadSubscriberInterface;
+use App\Subscriber\Form\ImageUploadSubscriber;
 use App\UI\Form\Type\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -73,7 +73,7 @@ class RegisterTypeTest extends TypeTestCase
     private $imageRetrieverHelper;
 
     /**
-     * @var ProfileImageSubscriberInterface
+     * @var ImageUploadSubscriberInterface
      */
     private $profileImageSubscriber;
 
@@ -107,7 +107,7 @@ class RegisterTypeTest extends TypeTestCase
         $this->cloudVisionAnalyserHelper = $this->createMock(CloudVisionAnalyserHelperInterface::class);
         $this->cloudVisionDescriberHelper = $this->createMock(CloudVisionDescriberHelperInterface::class);
 
-        $this->profileImageSubscriber = new ProfileImageSubscriber(
+        $this->profileImageSubscriber = new ImageUploadSubscriber(
                                             $this->translator,
                                             $this->imageBuilder,
                                             $this->imageUploaderHelper,

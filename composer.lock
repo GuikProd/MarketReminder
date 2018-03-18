@@ -1132,16 +1132,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.17.1",
+            "version": "v1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-core.git",
-                "reference": "2714eb5810188f126afc1f6dfe3d011b863a8e2b"
+                "reference": "9f905c2d7c58db82e311eeff3843cc490ac68f09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/2714eb5810188f126afc1f6dfe3d011b863a8e2b",
-                "reference": "2714eb5810188f126afc1f6dfe3d011b863a8e2b",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/9f905c2d7c58db82e311eeff3843cc490ac68f09",
+                "reference": "9f905c2d7c58db82e311eeff3843cc490ac68f09",
                 "shasum": ""
             },
             "require": {
@@ -1179,7 +1179,7 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
-            "time": "2018-02-26T20:57:20+00:00"
+            "time": "2018-03-16T18:56:38+00:00"
         },
         {
             "name": "google/cloud-storage",
@@ -1270,16 +1270,16 @@
         },
         {
             "name": "google/gax",
-            "version": "0.30.0",
+            "version": "0.30.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "c16fe4fd7d32e21ffbeaeae27a3ec08ee0bd6121"
+                "reference": "dda1f751734fb1ba4bf4f93c7f9335bf652c82bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/c16fe4fd7d32e21ffbeaeae27a3ec08ee0bd6121",
-                "reference": "c16fe4fd7d32e21ffbeaeae27a3ec08ee0bd6121",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/dda1f751734fb1ba4bf4f93c7f9335bf652c82bb",
+                "reference": "dda1f751734fb1ba4bf4f93c7f9335bf652c82bb",
                 "shasum": ""
             },
             "require": {
@@ -1317,7 +1317,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-01-22T21:49:54+00:00"
+            "time": "2018-03-14T16:49:37+00:00"
         },
         {
             "name": "google/proto-client",

@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use App\Helper\Image\ImageUploaderHelper;
 use Symfony\Component\HttpFoundation\File\File;
-use App\Subscriber\Form\ProfileImageSubscriber;
+use App\Subscriber\Form\ImageUploadSubscriber;
 use App\Builder\Interfaces\ImageBuilderInterface;
 use App\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Helper\CloudVision\CloudVisionAnalyserHelper;
@@ -108,7 +108,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $cloudVisionAnalyserMock = $this->createMock(CloudVisionAnalyserHelperInterface::class);
         $cloudVisionDescriberMock = $this->createMock(CloudVisionDescriberHelperInterface::class);
 
-        $profileImageSubscriber = new ProfileImageSubscriber(
+        $profileImageSubscriber = new ImageUploadSubscriber(
             $translatorMock,
             $imageBuilderMock,
             $imageUploaderMock,
@@ -137,7 +137,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $eventsMock->method('getForm')
                    ->willReturn($formMock);
 
-        $profileImageSubscriber = new ProfileImageSubscriber(
+        $profileImageSubscriber = new ImageUploadSubscriber(
             $translatorMock,
             $imageBuilderMock,
             $imageUploaderMock,
@@ -172,7 +172,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $eventsMock->method('getData')
                    ->willReturn($uploadedFileMock);
 
-        $profileImageSubscriber = new ProfileImageSubscriber(
+        $profileImageSubscriber = new ImageUploadSubscriber(
             $translatorMock,
             $imageBuilderMock,
             $imageUploaderMock,
@@ -219,7 +219,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $eventsMock->method('getData')
                    ->willReturn($uploadedFile);
 
-        $profileImageSubscriber = new ProfileImageSubscriber(
+        $profileImageSubscriber = new ImageUploadSubscriber(
             $translatorMock,
             $imageBuilderMock,
             $this->imageUploaderHelper,
@@ -266,7 +266,7 @@ class ProfileImageSubscriberTest extends KernelTestCase
         $eventsMock->method('getData')
                    ->willReturn($uploadedFile);
 
-        $profileImageSubscriber = new ProfileImageSubscriber(
+        $profileImageSubscriber = new ImageUploadSubscriber(
             $translatorMock,
             $imageBuilderMock,
             $this->imageUploaderHelper,

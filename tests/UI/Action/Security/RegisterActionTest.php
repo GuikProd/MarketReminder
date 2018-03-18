@@ -47,7 +47,6 @@ class RegisterActionTest extends TestCase
         $userBuilderMock = $this->createMock(UserBuilderInterface::class);
         $formFactoryMock = $this->createMock(FormFactoryInterface::class);
         $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
-        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $registerTypeHandlerMock = $this->createMock(RegisterTypeHandlerInterface::class);
 
         $formFactoryMock->method('create')->willReturn($formInterfaceMock);
@@ -59,7 +58,6 @@ class RegisterActionTest extends TestCase
         $registerAction = new RegisterAction(
             $formFactoryMock,
             $urlGeneratorMock,
-            $eventDispatcherMock,
             $registerTypeHandlerMock
         );
 
