@@ -11,8 +11,8 @@ Plain password: Mot de passe
 
 # Pages button
 Profile image: Image de profil
-Create an account: Créer un compte
-Already have an account ?: Compte déjà créé ?
+account.creation: Créer un compte
+account.already_exist: Compte déjà créé ?
 
 # Security | Account validation
 security.validation_success: Compte validé, il est temps de commencer votre aventure !

@@ -11,15 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Domain\Subscriber;
+namespace App\Application\Symfony\Subscriber;
 
+use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use App\Helper\CloudVision\CloudVisionVoterHelper;
-use App\Helper\Image\ImageTypeCheckerHelper;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
 use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
-use App\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -27,11 +26,11 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Class ImageUploadUploadSubscriber.
+ * Class ImageUploadSubscriber.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ImageUploadUploadSubscriber implements ImageUploadSubscriberInterface, EventSubscriberInterface
+class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubscriberInterface
 {
     /**
      * @var TranslatorInterface
@@ -59,7 +58,7 @@ class ImageUploadUploadSubscriber implements ImageUploadSubscriberInterface, Eve
     private $cloudVisionDescriber;
 
     /**
-     * ImageUploadUploadSubscriber constructor.
+     * ImageUploadSubscriber constructor.
      *
      * @param TranslatorInterface                 $translator
      * @param ImageUploaderHelperInterface        $imageUploaderHelper
@@ -96,19 +95,7 @@ class ImageUploadUploadSubscriber implements ImageUploadSubscriberInterface, Eve
      */
     public function onSubmit(FormEvent $event): void
     {
-        if ($event->getData() === null) {
-            return;
-        }
-
-        if (!ImageTypeCheckerHelper::checkType($event->getData())) {
-            $event->getForm()->addError(
-                new FormError(
-                    $this->translator->trans(
-                        'form.format_error', [], 'validators'
-                    )
-                )
-            );
-
+        if (is_null($event->getData()['file'])) {
             return;
         }
 

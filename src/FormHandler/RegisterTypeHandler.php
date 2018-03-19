@@ -15,6 +15,7 @@ namespace App\FormHandler;
 
 use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Domain\Event\User\UserCreatedEvent;
+use App\Domain\Models\Image;
 use App\Domain\Models\User;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -81,8 +82,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $registerForm->getData()->email,
                 $registerForm->getData()->username,
                 $registerForm->getData()->password,
-                $registerForm->getData()->validationToken,
-                $registerForm->getData()->profileImage
+                $registerForm->getData()->validationToken
             );
 
             $errors = $this->validator->validate($user, null, 'registration');

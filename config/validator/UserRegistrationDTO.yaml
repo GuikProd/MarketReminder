@@ -1,10 +1,4 @@
 App\Domain\UseCase\DTO\UserRegistration\DTO\UserRegistrationDTO:
-     constraints:
-         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-             fields:
-                 - username
-                 - email
-             message: "credentials.already_exist"
      properties:
          username:
              - NotBlank:
@@ -28,7 +22,7 @@ App\Domain\UseCase\DTO\UserRegistration\DTO\UserRegistrationDTO:
                  groups: ['registration']
              - Email:
                 message: "The value `{{ value }}` must be a valid email !"
-         plainPassword:
+         password:
              - NotBlank:
                  message: "validation.filled"
                  groups: ['registration']

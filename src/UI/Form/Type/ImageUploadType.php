@@ -13,23 +13,33 @@ declare(strict_types=1);
 
 namespace App\UI\Form\Type;
 
-use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
-use App\Domain\UseCase\UserRegistration\DTO\Interfaces\ImageRegistrationDTOInterface;
+use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ImageUploadType
+ * Class ImageUploadType.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class ImageUploadType extends AbstractType
 {
-    private $profile
+    /**
+     * @var ImageUploadSubscriberInterface
+     */
+    private $imageUploadSubscriber;
+
+    /**
+     * ImageUploadType constructor.
+     *
+     * @param ImageUploadSubscriberInterface $imageUploadSubscriber
+     */
+    public function __construct(ImageUploadSubscriberInterface $imageUploadSubscriber)
+    {
+        $this->imageUploadSubscriber = $imageUploadSubscriber;
+    }
 
     /**
      * {@inheritdoc}
@@ -37,8 +47,8 @@ class ImageUploadType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('alt', TextType::class)
             ->add('file', FileType::class)
+            ->addEventSubscriber($this->imageUploadSubscriber)
         ;
     }
 
@@ -48,14 +58,7 @@ class ImageUploadType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'validation_groups' => ['imageUpload'],
-            'data_class' => ImageRegistrationDTOInterface::class,
-            'empty_data' => function (FormInterface $form) {
-                return new ImageRegistrationDTO(
-                    $form->get('alt')->getData(),
-                    $form->getData()->publicUrl
-                );
-            }
+            'validation_groups' => ['imageUpload']
         ]);
     }
 }

@@ -56,9 +56,7 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true,
-        "optimize-autoloader": true,
-        "classmap-authoritative": true
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {

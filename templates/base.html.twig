@@ -35,11 +35,11 @@
             </div>
             <main class="mdl-layout__content">
                 <div class="page-content">
-                    {% for failure in app.flashes('success') %}
-                        <p>{{ failure }}</p>
-                    {% endfor %}
-                    {% for success in app.flashes('failure') %}
+                    {% for success in app.flashes('success') %}
                         <p>{{ success }}</p>
+                    {% endfor %}
+                    {% for failure in app.flashes('failure') %}
+                        <p>{{ failure }}</p>
                     {% endfor %}
                     {% block body %}{% endblock %}
                 </div>

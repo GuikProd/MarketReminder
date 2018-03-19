@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace App\UI\Form\Type;
 
+use App\Domain\UseCase\UserRegistration\DTO\Interfaces\ImageRegistrationDTOInterface;
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
-use App\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -33,21 +32,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class RegisterType extends AbstractType
 {
     /**
-     * @var ImageUploadSubscriberInterface
-     */
-    private $profileImageSubscriber;
-
-    /**
-     * RegisterType constructor.
-     *
-     * @param ImageUploadSubscriberInterface $profileImageSubscriber
-     */
-    public function __construct(ImageUploadSubscriberInterface $profileImageSubscriber)
-    {
-        $this->profileImageSubscriber = $profileImageSubscriber;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -56,14 +40,11 @@ class RegisterType extends AbstractType
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class)
-            ->add('profileImage', FileType::class, [
+            ->add('profileImage', ImageUploadType::class, [
                 'mapped' => false,
                 'required' => false
             ])
         ;
-
-        $builder->get('profileImage')
-                ->addEventSubscriber($this->profileImageSubscriber);
     }
 
     /**
@@ -87,12 +68,12 @@ class RegisterType extends AbstractType
                             str_rot13($form->get('username')->getData()),
                             $form->get('email')->getData()
                         )
-                    ),
-                    $form->get('profileImage')->getData()
+                    )
                 );
             },
             'validation_groups' => [
                 'registration',
+                'imageUpload'
             ],
         ]);
     }

@@ -9,8 +9,8 @@ Email: Email
 Password: Password
 Plain password: Password
 Profile image: Profile image
-Create an account: Create an account
-Already have an account ?: Already have an account ?
+account.creation: Create an account
+account.already_exist: Already have an account ?
 
 # Security | Account validation
 security.validation_success: Account validated ! Time to start your stock management !
