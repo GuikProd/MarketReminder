@@ -4,9 +4,6 @@ account.welcome: Bienvenue sur MarketReminder
 account.greeting: Content de vous voir à bord !
 resetPassword.title: Demande de réinitialisation du mot de passe
 registration.title: S'enregistrer
-Username: Pseudonyme
-Email: Email
-Password: Mot de passe
 Plain password: Mot de passe
 
 # Pages button
@@ -21,6 +18,9 @@ security.login: Se connecter
 security.login_failure: Les identifiants soumis semblent invalides, veuillez vérifier votre saisie.
 
 # Forms
+security.registration_username: Username
+security.registration_email: Email
+security.registration_password: Password
 security.resetPasswordToken_header: Demander un nouveau mot de passe.
 security.resetPasswordToken: Envoyer
 

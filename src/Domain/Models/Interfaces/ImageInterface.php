@@ -30,9 +30,9 @@ interface ImageInterface
     public function __construct(string $alt, string $filename, string $publicUrl);
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getId():? int;
+    public function getId(): int;
 
     /**
      * @return \DateTime
@@ -45,14 +45,14 @@ interface ImageInterface
     public function getModificationDate():? \DateTime;
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getAlt():? string;
+    public function getAlt(): string;
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getPublicUrl():? string;
+    public function getPublicUrl(): string;
 
     /**
      * @return string

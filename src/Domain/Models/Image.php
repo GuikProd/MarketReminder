@@ -71,7 +71,7 @@ class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function getId(): ? int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -95,7 +95,7 @@ class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function getAlt():? string
+    public function getAlt(): string
     {
         return $this->alt;
     }
@@ -103,7 +103,7 @@ class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function getPublicUrl():? string
+    public function getPublicUrl(): string
     {
         return $this->publicUrl;
     }

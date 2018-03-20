@@ -4,8 +4,8 @@ import std;
 
 # Default port
 backend default {
-    .host = "marketReminder_nginx";
-    .port = "80";
+    .host = "172.19.0.1";
+    .port = "8080";
 }
 
 sub vcl_recv {

@@ -12,6 +12,7 @@ Encore
     .addStyleEntry('registration', './assets/scss/public/registration.scss')
 
     .addEntry('form', './assets/javascript/components/form.js')
+    .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')
 ;
 
 module.exports = Encore.getWebpackConfig();

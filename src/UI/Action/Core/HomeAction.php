@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Action\Core;
 
 use App\Responder\Core\HomeResponder;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -41,8 +42,8 @@ class HomeAction
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function __invoke(HomeResponder $responder)
+    public function __invoke(Request $request, HomeResponder $responder)
     {
-        return $responder();
+        return $responder($request);
     }
 }
