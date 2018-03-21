@@ -53,10 +53,8 @@ class HomeResponder
         );
 
         $response->setCache([
-            's_maxage' => 600,
-            'max_age' => 300,
             'etag' => md5(crypt(str_rot13($response->getContent()), $this->twig->getCharset())),
-            'public' => true
+            's_maxage' => 6000
         ]);
 
         $response->isNotModified($request);

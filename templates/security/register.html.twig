@@ -8,9 +8,19 @@
 {% endblock %}
 
 {% block body %}
-    <section class="registration-bloc">
+    <section class="mdc-layout-grid__cell--align-middle registration-bloc">
         {% form_theme registerForm 'form/themes/_registerTypeTheme.html.twig' %}
         {{ form(registerForm) }}
+
+        <div class="mdc-snackbar mdc-snackbar--align-start"
+             aria-live="assertive"
+             aria-atomic="true"
+             aria-hidden="true">
+            <div class="mdc-snackbar__text"></div>
+            <div class="mdc-snackbar__action-wrapper">
+                <button type="button" class="mdc-snackbar__action-button"></button>
+            </div>
+        </div>
     </section>
 {% endblock %}
 
