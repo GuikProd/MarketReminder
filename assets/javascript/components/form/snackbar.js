@@ -1,4 +1,4 @@
-import {MDCSnackbar} from '@material/snackbar';
+import { MDCSnackbar } from '@material/snackbar';
 
 const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 

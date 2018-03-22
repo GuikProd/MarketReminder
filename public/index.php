@@ -35,16 +35,16 @@ if ($debug) {
 }
 
 
-if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
+if ($trustedProxies = $_SERVER['MAIN_PROXIES'] ?? false) {
     Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);
 }
 
-if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
+if ($trustedHosts = $_SERVER['MAIN_HOSTS'] ?? false) {
     Request::setTrustedHosts(explode(',', $trustedHosts));
 }
 
 $kernel = new Kernel($env, $debug);
-$kernel = new CacheKernel($kernel);
+//$kernel = new CacheKernel($kernel);
 
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);

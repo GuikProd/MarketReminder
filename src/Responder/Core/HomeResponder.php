@@ -54,6 +54,7 @@ class HomeResponder
 
         $response->setCache([
             'etag' => md5(crypt(str_rot13($response->getContent()), $this->twig->getCharset())),
+            'public' => false,
             's_maxage' => 6000
         ]);
 

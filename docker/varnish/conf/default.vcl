@@ -5,7 +5,7 @@ import std;
 # Default port
 backend default {
     .host = "172.19.0.1";
-    .port = "8080";
+    .port = "80";
 }
 
 sub vcl_recv {

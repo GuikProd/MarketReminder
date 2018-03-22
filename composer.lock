@@ -1270,16 +1270,16 @@
         },
         {
             "name": "google/gax",
-            "version": "0.30.1",
+            "version": "0.30.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "dda1f751734fb1ba4bf4f93c7f9335bf652c82bb"
+                "reference": "74769e356bd360ea7bd9cc84406e65d297758e16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/dda1f751734fb1ba4bf4f93c7f9335bf652c82bb",
-                "reference": "dda1f751734fb1ba4bf4f93c7f9335bf652c82bb",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/74769e356bd360ea7bd9cc84406e65d297758e16",
+                "reference": "74769e356bd360ea7bd9cc84406e65d297758e16",
                 "shasum": ""
             },
             "require": {
@@ -1317,7 +1317,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-03-14T16:49:37+00:00"
+            "time": "2018-03-21T15:52:11+00:00"
         },
         {
             "name": "google/proto-client",
@@ -5968,16 +5968,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.4.6",
+            "version": "v2.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "d2117ec118c1ff3d28ccddca8212d82787a4809f"
+                "reference": "69aacd44dbbaa3199d5afb68605c996d577896fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d2117ec118c1ff3d28ccddca8212d82787a4809f",
-                "reference": "d2117ec118c1ff3d28ccddca8212d82787a4809f",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/69aacd44dbbaa3199d5afb68605c996d577896fc",
+                "reference": "69aacd44dbbaa3199d5afb68605c996d577896fc",
                 "shasum": ""
             },
             "require": {
@@ -5986,8 +5986,8 @@
             },
             "require-dev": {
                 "psr/container": "^1.0",
-                "symfony/debug": "~2.7",
-                "symfony/phpunit-bridge": "~3.3@dev"
+                "symfony/debug": "^2.7",
+                "symfony/phpunit-bridge": "^3.3"
             },
             "type": "library",
             "extra": {
@@ -6030,7 +6030,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2018-03-03T16:23:01+00:00"
+            "time": "2018-03-20T04:31:17+00:00"
         },
         {
             "name": "webonyx/graphql-php",
@@ -8811,16 +8811,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.71",
+            "version": "v1.0.75",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "51d7ddce85ca8b73a1fc16771f607b7d56692dbd"
+                "reference": "3da0134564f59ffbd060db8f3406e9f3e78df64e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/51d7ddce85ca8b73a1fc16771f607b7d56692dbd",
-                "reference": "51d7ddce85ca8b73a1fc16771f607b7d56692dbd",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/3da0134564f59ffbd060db8f3406e9f3e78df64e",
+                "reference": "3da0134564f59ffbd060db8f3406e9f3e78df64e",
                 "shasum": ""
             },
             "require": {
@@ -8853,7 +8853,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-03-10T21:15:53+00:00"
+            "time": "2018-03-20T07:32:02+00:00"
         },
         {
             "name": "theseer/tokenizer",
