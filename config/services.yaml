@@ -23,7 +23,7 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Domain,Migrations,Repository}'
+        exclude: '../src/{Domain,Migrations,Repository,Kernel.php}'
 
     App\UI\Action\:
         resource: '../src/UI/Action'

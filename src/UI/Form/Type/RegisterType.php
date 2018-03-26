@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\UI\Form\Type;
 
-use App\Domain\UseCase\UserRegistration\DTO\Interfaces\ImageRegistrationDTOInterface;
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use Symfony\Component\Form\AbstractType;

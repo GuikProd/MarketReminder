@@ -5,7 +5,12 @@
         "extract-loader": "^2.0.0",
         "file-loader": "^1.1.11",
         "node-sass": "^4.7.2",
-        "sass-loader": "^6.0.7"
+        "sass-loader": "^6.0.7",
+        "ts-loader": "3.5.0",
+        "typescript": "^2.7.2",
+        "vue": "^2.5.16",
+        "vue-loader": "^14.2.2",
+        "vue-template-compiler": "^2.5.16"
     },
     "license": "UNLICENSED",
     "private": true,

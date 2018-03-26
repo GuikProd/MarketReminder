@@ -99,6 +99,9 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 return false;
             }
 
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
             $this->eventDispatcher->dispatch(
                 UserCreatedEvent::NAME,
                 new UserCreatedEvent($user)
