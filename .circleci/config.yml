@@ -16,14 +16,10 @@ jobs:
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
             - run: cp phpunit.xml.dist phpunit.xml
-            - run: ls -l ${HOME}
-            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
-            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/vision
-            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/bucket/credentials.json
-            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/vision/credentials.json
-            - run: ls -l ${HOME}/project/
-            - run: ls -l ${CIRCLE_WORKING_DIRECTORY}/config
-            - run: ls -l ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:
@@ -54,10 +50,10 @@ jobs:
                     - vendor
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
-            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
-            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/vision
-            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/bucket/credentials.json
-            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/vision/credentials.json
+            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: vendor/bin/behat --profile default
