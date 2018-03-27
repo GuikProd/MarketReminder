@@ -16,11 +16,12 @@ jobs:
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
             - run: cp phpunit.xml.dist phpunit.xml
-            - run: ls -l ${CIRCLE_WORKING_DIRECTORY}
+            - run: ls -l ${HOME}
             - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
             - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/vision
-            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/bucket/credentials.json
-            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/vision/credentials.json
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/config/credentials/google/vision/credentials.json
+            - run: ls -l ${HOME}
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:
@@ -74,7 +75,6 @@ workflows:
     version: 2
     unit_and_spec:
         jobs:
-            - phpspec
             - phpunit
     functional:
         jobs:
