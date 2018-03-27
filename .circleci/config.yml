@@ -21,7 +21,7 @@ jobs:
             - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/vision
             - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/bucket/credentials.json
             - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/vision/credentials.json
-            - run: ls -l ${HOME}/
+            - run: ls -l ${HOME}/project/
             - run: ls -l ${CIRCLE_WORKING_DIRECTORY}/config
             - run: ls -l ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/bucket
             - run: composer install -n --optimize-autoloader --classmap-authoritative
