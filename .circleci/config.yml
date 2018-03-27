@@ -1,23 +1,5 @@
 version: 2
 jobs:
-    phpspec:
-        docker:
-            - image: circleci/php:7.2.2-apache-node-browsers
-        steps:
-            - checkout
-            - run: sudo composer self-update
-            - restore_cache:
-                keys:
-                    - composer-v1-{{ checksum "composer.json" }}
-                    - composer-v1-
-            - run: composer install -n --optimize-autoloader --classmap-authoritative
-            - run: composer dump-autoload --optimize --classmap-authoritative
-            - save_cache:
-                key: composer-v1-{{ checksum "composer.json" }}
-                paths:
-                    - vendor
-            - run: cp .env.dist .env
-            - run: vendor/bin/phpspec run
     phpunit:
         docker:
             - image: circleci/php:7.2.2-apache-node-browsers
@@ -35,8 +17,7 @@ jobs:
             - run: cp .env.behat.dist .env.behat
             - run: cp phpunit.xml.dist phpunit.xml
             - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
-            - run: touch $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
-            - run: echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${CIRCLE_WORKING_DIRECTORY}/config/credentials/google/bucket
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:
