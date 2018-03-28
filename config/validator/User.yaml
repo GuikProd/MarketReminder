@@ -1,8 +1,18 @@
 App\Domain\Models\User:
      constraints:
-         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-             fields:
-                 - username
-                 - email
-             message: "credentials.already_exist"
-             groups: ['registration']
+         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
+         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+     properties:
+         email:
+             - NotBlank:
+                 message: "validation.filled"
+                 groups: ['registration']
+             - Length:
+                 min: 10
+                 minMessage: "validation.length_short"
+                 max: 50
+                 maxMessage: "validation.length_long"
+                 groups: ['registration']
+             - Email:
+                 message: "The value must be a valid email !"
+                 groups: ['registration']

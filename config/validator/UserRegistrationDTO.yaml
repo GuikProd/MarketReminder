@@ -1,4 +1,4 @@
-App\Domain\UseCase\DTO\UserRegistration\DTO\UserRegistrationDTO:
+App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO:
      properties:
          username:
              - NotBlank:

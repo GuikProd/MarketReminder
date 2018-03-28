@@ -88,7 +88,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $registerForm->getData()->validationToken
             );
 
-            $errors = $this->validator->validate($user, null, 'registration');
+            $errors = $this->validator->validate($user, null, ['User', 'registration']);
 
             if (count($errors) > 0) {
                 $this->eventDispatcher->dispatch(
