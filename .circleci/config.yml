@@ -66,15 +66,11 @@ jobs:
             - setup_remote_docker
             - run: sudo yarn install
             - restore_cache:
-                name: Restore Yarn Package Cache
-                    keys:
-                        - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                        - yarn-packages-{{ .Branch }}
-                        - yarn-packages-master
-                        - yarn-packages-
-            - run:
-                name: Install Dependencies
-                command: yarn install
+                keys:
+                    - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                    - yarn-packages-{{ .Branch }}
+                    - yarn-packages-master
+                    - yarn-packages-
             - save_cache:
                 name: Save Yarn Package Cache
                     key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
