@@ -72,11 +72,7 @@ class RegisterType extends AbstractType
                 return new UserRegistrationDTO(
                     $form->get('username')->getData(),
                     $form->get('email')->getData(),
-                    password_hash(
-                        $form->get('password')->getData(),
-                        PASSWORD_BCRYPT,
-                        ['cost' => 13]
-                    ),
+                    $form->get('password')->getData(),
                     md5(
                         crypt(
                             str_rot13($form->get('username')->getData()),

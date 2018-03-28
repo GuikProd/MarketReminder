@@ -34,4 +34,4 @@ Feature: As a registered user, I should be able to reset my password if I lost i
     Then I fill in "ask_reset_password_email" with "titi@gmail.com"
     And I press "Envoyer"
     Then I should be on "/fr/"
-    And I should see "La demande a bien été enregistrée, un email vous a été envoyé. "
+    And I should see "La demande a bien été enregistrée, un email vous a été envoyé."

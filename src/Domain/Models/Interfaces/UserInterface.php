@@ -28,6 +28,7 @@ interface UserInterface
      * @param string              $email            The email linked to this user.
      * @param string              $username         The username used by the User.
      * @param string              $password         The encrypted version of the password.
+     * @param callable            $passwordEncoder  The encoder used to crypt the password, the salt isn't passed.
      * @param string              $validationToken  The validation token used for validate the user.
      * @param ImageInterface|null $profileImage     If the user define it, the profile image.
      *
@@ -38,6 +39,7 @@ interface UserInterface
         string $email,
         string $username,
         string $password,
+        callable $passwordEncoder,
         string $validationToken,
         ImageInterface $profileImage = null
     );

@@ -15,8 +15,6 @@ Encore
 
     .addEntry('form', './assets/javascript/components/form.js')
     .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')
-
-    .addEntry('index', './assets/typescript/vue/index.ts')
 ;
 
 module.exports = Encore.getWebpackConfig();

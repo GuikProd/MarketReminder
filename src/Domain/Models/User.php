@@ -98,6 +98,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
         string $email,
         string $username,
         string $password,
+        callable $passwordEncoder,
         string $validationToken,
         ImageInterface $profileImage = null
     ) {
@@ -108,7 +109,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
         $this->roles[] = 'ROLE_USER';
         $this->email = $email;
         $this->username = $username;
-        $this->password = $password;
+        $this->password = $passwordEncoder($password, null);
         $this->currentState = ['toValidate'];
         $this->validationToken = $validationToken;
         $this->profileImage = $profileImage;

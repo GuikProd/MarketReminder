@@ -21,7 +21,7 @@ use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -47,9 +47,9 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     private $eventDispatcher;
 
     /**
-     * @var UserPasswordEncoderInterface
+     * @var EncoderFactoryInterface
      */
-    private $userPasswordEncoder;
+    private $passwordEncoderFactory;
 
     /**
      * RegisterTypeHandler constructor.
@@ -57,18 +57,18 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
      * @param ValidatorInterface $validator
      * @param EntityManagerInterface $entityManager
      * @param EventDispatcherInterface $eventDispatcher
-     * @param UserPasswordEncoderInterface $userPasswordEncoder
+     * @param EncoderFactoryInterface $passwordEncoderFactory
      */
     public function __construct(
         ValidatorInterface $validator,
         EntityManagerInterface $entityManager,
         EventDispatcherInterface $eventDispatcher,
-        UserPasswordEncoderInterface $userPasswordEncoder
+        EncoderFactoryInterface $passwordEncoderFactory
     ) {
         $this->validator = $validator;
         $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
-        $this->userPasswordEncoder = $userPasswordEncoder;
+        $this->passwordEncoderFactory = $passwordEncoderFactory;
     }
 
     /**
@@ -78,10 +78,13 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     {
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
 
+            $encoder = $this->passwordEncoderFactory->getEncoder(User::class);
+
             $user = new User(
                 $registerForm->getData()->email,
                 $registerForm->getData()->username,
                 $registerForm->getData()->password,
+                \Closure::fromCallable([$encoder, 'encodePassword']),
                 $registerForm->getData()->validationToken
             );
 
