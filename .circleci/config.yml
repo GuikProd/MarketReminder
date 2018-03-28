@@ -93,6 +93,9 @@ jobs:
 
 workflows:
     version: 2
+    frontend:
+        jobs:
+            - encore
     unit_and_spec:
         jobs:
             - phpunit
