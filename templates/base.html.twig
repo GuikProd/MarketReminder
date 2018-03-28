@@ -40,7 +40,7 @@
                 <div class="page-content">
                     <div class="mdc-layout-grid">
                         <div class="mdc-layout-grid__inner">
-                            <div class="mdc-layout-grid__cell--span-12">s
+                            <div class="mdc-layout-grid__cell--span-12">
                                 {% for success in app.flashes('success') %}
                                     <div id="snackbar-content" style="display: none">{{ success }}</div>
                                 {% endfor %}
@@ -57,7 +57,7 @@
         {% block javascripts %}
             <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
             <script defer src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
-            <script src="{{ asset('build/index.js') }}"></script>
+            <script src="{{ asset('build/vue.js') }}"></script>
         {% endblock %}
     </body>
 </html>

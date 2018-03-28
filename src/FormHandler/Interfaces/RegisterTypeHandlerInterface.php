@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace App\FormHandler\Interfaces;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Interface RegisterTypeHandlerInterface.
@@ -22,6 +26,21 @@ use Symfony\Component\Form\FormInterface;
  */
 interface RegisterTypeHandlerInterface
 {
+    /**
+     * RegisterTypeHandlerInterface constructor.
+     *
+     * @param ValidatorInterface $validator
+     * @param EntityManagerInterface $entityManager
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param EncoderFactoryInterface $passwordEncoderFactory
+     */
+    public function __construct(
+        ValidatorInterface $validator,
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher,
+        EncoderFactoryInterface $passwordEncoderFactory
+    );
+
     /**
      * @param FormInterface $registerForm  The RegisterType Form
      *

@@ -6,7 +6,6 @@ default:
                 - DatabaseContext:
                     doctrine: '@doctrine'
                     kernel: '@kernel'
-                    encoder: '@security.password_encoder'
                 - FeatureContext:
                     kernel: '@kernel'
     extensions:
@@ -21,29 +20,6 @@ default:
             sessions:
                 default:
                     symfony2: ~
-coverage:
-    suites:
-        core:
-            paths: ['%paths.base%/features']
-            contexts:
-                - CoverageContext:
-                - DatabaseContext:
-                    doctrine: '@doctrine'
-                    kernel: '@kernel'
-                    encoder: '@security.password_encoder'
-                - FeatureContext:
-                    kernel: '@kernel'
-    extensions:
-        Behat\Symfony2Extension:
-            kernel:
-                bootstrap: features/bootstrap/bootstrap.php
-                class: App\Kernel
-        Behat\MinkExtension:
-            files_path: '%paths.base%/features/assets'
-            goutte: ~
-            sessions:
-                default:
-                    symfony2: ~
 blackfire:
     suites:
         core:
@@ -53,7 +29,6 @@ blackfire:
                 - DatabaseContext:
                     doctrine: '@doctrine'
                     kernel: '@kernel'
-                    encoder: '@security.password_encoder'
                 - FeatureContext:
                     kernel: '@kernel'
     extensions:
@@ -75,7 +50,6 @@ fr:
                 - DatabaseContext:
                     doctrine: '@doctrine'
                     kernel: '@kernel'
-                    encoder: '@security.password_encoder'
                 - FeatureContext:
                     kernel: '@kernel'
     extensions:
@@ -98,7 +72,6 @@ en:
                 - DatabaseContext:
                     doctrine: '@doctrine'
                     kernel: '@kernel'
-                    encoder: '@security.password_encoder'
                 - FeatureContext:
                     kernel: '@kernel'
     extensions:

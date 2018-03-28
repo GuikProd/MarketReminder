@@ -80,6 +80,7 @@ class ImageUploadSubscriberTest extends KernelTestCase
         );
 
         static::assertArrayHasKey(FormEvents::SUBMIT, $imageUploadSubscriber::getSubscribedEvents());
+        static::assertArrayHasKey(FormEvents::POST_SUBMIT, $imageUploadSubscriber::getSubscribedEvents());
     }
 
     public function testOnSubmitWithWrongData()
@@ -92,4 +93,6 @@ class ImageUploadSubscriberTest extends KernelTestCase
             $this->cloudVisionDescriber
         );
     }
+
+    public function
 }

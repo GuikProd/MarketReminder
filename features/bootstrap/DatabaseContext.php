@@ -18,7 +18,7 @@ use Behat\Gherkin\Node\TableNode;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
  * Class DatabaseContext
@@ -43,24 +43,20 @@ class DatabaseContext implements Context
     private $schemaTool;
 
     /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
-
-    /**
      * DatabaseContext constructor.
      *
-     * @param RegistryInterface            $doctrine
-     * @param KernelInterface              $kernel
-     * @param UserPasswordEncoderInterface $encoder
+     * @param RegistryInterface        $doctrine
+     * @param KernelInterface          $kernel
      */
-    public function __construct(RegistryInterface $doctrine, KernelInterface $kernel, UserPasswordEncoderInterface $encoder)
-    {
+    public function __construct(
+        RegistryInterface $doctrine,
+        KernelInterface $kernel
+    ) {
         $this->doctrine = $doctrine;
         $this->kernel = $kernel;
         $this->schemaTool = new SchemaTool($this->doctrine->getManager());
-        $this->passwordEncoder = $encoder;
     }
+
     /**
      * @BeforeScenario
      *
@@ -83,6 +79,8 @@ class DatabaseContext implements Context
      */
     public function iLoadFollowingUsers(TableNode $users)
     {
+        $encoder = new BCryptPasswordEncoder(13);
+
         foreach ($users->getHash() as $hash) {
 
             $userDTO = new UserRegistrationDTO(
@@ -95,7 +93,8 @@ class DatabaseContext implements Context
             $user = new User(
                 $userDTO->email,
                 $userDTO->username,
-                password_hash($userDTO->password, PASSWORD_BCRYPT, ['cost' => 13]),
+                $hash['plainPassword'],
+                Closure::fromCallable([$encoder, 'encodePassword']),
                 $userDTO->validationToken
             );
 

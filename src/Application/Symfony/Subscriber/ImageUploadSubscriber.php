@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Symfony\Subscriber;
 
 use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
+use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
 use App\Helper\CloudVision\CloudVisionVoterHelper;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
@@ -99,7 +100,7 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
             return;
         }
 
-        $this->imageUploaderHelper->store($event->getData());
+        $this->imageUploaderHelper->store($event->getData()['file']);
 
         $analysedImage = $this->cloudVisionAnalyser
                               ->analyse(
@@ -130,11 +131,11 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
         $this->imageUploaderHelper->upload();
 
         $imageRegistrationDTO = new ImageRegistrationDTO(
-            $event->getForm()->get('alt')->getData(),
+            $this->imageUploaderHelper->getFileName(),
             $this->imageUploaderHelper->getFileName(),
             $this->imageUploaderHelper->getFilePath()
         );
 
-        $event->getForm()->setData($imageRegistrationDTO);
+        $event->setData($imageRegistrationDTO);
     }
 }

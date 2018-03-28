@@ -11,33 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Responder\Security;
+namespace App\UI\Responder\Security\Interfaces;
 
-use Twig\Environment;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
- * Class RegisterResponderTest.
+ * Interface RegisterResponderInterface
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisterResponder
+interface RegisterResponderInterface
 {
     /**
-     * @var Environment
-     */
-    private $twig;
-
-    /**
-     * RegisterResponderTest constructor.
+     * RegisterResponderInterface constructor.
      *
      * @param Environment $twig
      */
-    public function __construct(Environment $twig)
-    {
-        $this->twig = $twig;
-    }
+    public function __construct(Environment $twig);
 
     /**
      * @param FormInterface $registerForm
@@ -48,17 +40,5 @@ class RegisterResponder
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function __invoke(FormInterface $registerForm)
-    {
-        $response = new Response(
-            $this->twig->render('security/register.html.twig', [
-                'registerForm' => $registerForm->createView(),
-            ])
-        );
-
-        return $response->setCache([
-            's_maxage' => 600,
-            'private' => true,
-        ]);
-    }
+    public function __invoke(FormInterface $registerForm): Response;
 }

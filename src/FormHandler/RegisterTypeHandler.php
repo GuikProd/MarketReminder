@@ -52,12 +52,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     private $passwordEncoderFactory;
 
     /**
-     * RegisterTypeHandler constructor.
-     *
-     * @param ValidatorInterface $validator
-     * @param EntityManagerInterface $entityManager
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param EncoderFactoryInterface $passwordEncoderFactory
+     * {@inheritdoc}
      */
     public function __construct(
         ValidatorInterface $validator,
@@ -85,7 +80,8 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $registerForm->getData()->username,
                 $registerForm->getData()->password,
                 \Closure::fromCallable([$encoder, 'encodePassword']),
-                $registerForm->getData()->validationToken
+                $registerForm->getData()->validationToken,
+                !null ? $registerForm->get('profileImage')->getData() : null
             );
 
             $errors = $this->validator->validate($user, null, ['User', 'registration']);
