@@ -72,10 +72,9 @@ jobs:
                     - yarn-packages-master
                     - yarn-packages-
             - save_cache:
-                name: Save Yarn Package Cache
-                    key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                    paths:
-                        - node_modules/
+                key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
             - run: ./node_modules/.bin/encore production
     gcloud_kubernetes_check:
         docker:
