@@ -133,7 +133,7 @@ class ImageUploadSubscriberTest extends KernelTestCase
         );
 
         $postSubmitEvent->method('getData')
-                        ->willReturn($uploadedFile);
+                        ->willReturn(['file' => $uploadedFile]);
 
         static::assertInstanceOf(
             ImageRegistrationDTO::class,
