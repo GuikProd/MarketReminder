@@ -14,9 +14,14 @@ declare(strict_types=1);
 namespace tests\Application\Symfony\Subscriber;
 
 use App\Application\Symfony\Subscriber\ImageUploadSubscriber;
+use App\Bridge\CloudStorageBridge;
+use App\Bridge\CloudVisionBridge;
 use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
+use App\Helper\CloudStorage\CloudStoragePersisterHelper;
+use App\Helper\CloudStorage\CloudStorageRetrieverHelper;
+use App\Helper\CloudVision\CloudVisionDescriberHelper;
+use App\Helper\Image\ImageRetrieverHelper;
 use App\Helper\Image\ImageUploaderHelper;
-use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
 use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
@@ -64,10 +69,28 @@ class ImageUploadSubscriberTest extends KernelTestCase
     public function setUp()
     {
         $this->translator = static::bootKernel()->getContainer()->get('translator');
-        $this->imageUploaderHelper = $this->createMock(ImageUploaderHelper::class);
-        $this->cloudVisionAnalyser = $this->createMock(CloudVisionAnalyserHelperInterface::class);
-        $this->imageRetrieverHelper = $this->createMock(ImageRetrieverHelperInterface::class);
-        $this->cloudVisionDescriber = $this->createMock(CloudVisionDescriberHelperInterface::class);
+
+        $cloudStorageBridge = new CloudStorageBridge(static::$kernel->getContainer()->getParameter('cloud.storage_credentials'));
+        $cloudVisionBridge = new CloudVisionBridge(static::$kernel->getContainer()->getParameter('cloud.vision_credentials'));
+
+        $cloudStoragePersisterHelper = new CloudStoragePersisterHelper($cloudStorageBridge);
+        $cloudStorageRetrieverHelper = new CloudStorageRetrieverHelper($cloudStorageBridge);
+
+        $this->imageUploaderHelper = new ImageUploaderHelper(
+            static::$kernel->getContainer()->getParameter('kernel.images_dir'),
+            static::$kernel->getContainer()->getParameter('cloud.storage.bucket_name'),
+            $cloudStoragePersisterHelper
+        );
+
+        $this->cloudVisionAnalyser = new CloudVisionDescriberHelper($cloudVisionBridge);
+
+        $this->imageRetrieverHelper = new ImageRetrieverHelper(
+            static::$kernel->getContainer()->getParameter('cloud.storage.bucket_name'),
+            $cloudStorageRetrieverHelper,
+            static::$kernel->getContainer()->getParameter('cloud.storage.public_url')
+        );
+
+        $this->cloudVisionDescriber = new CloudVisionDescriberHelper($cloudVisionBridge);
 
         parent::setUp();
     }

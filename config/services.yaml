@@ -5,6 +5,8 @@ parameters:
     kernel.images_dir: "%kernel.project_dir%/public/images/profiles"
     cloud.storage_credentials: "%kernel.project_dir%/config/credentials/google/bucket"
     cloud.vision_credentials: "%kernel.project_dir%/config/credentials/google/vision"
+    cloud.storage.bucket_name: "%env(GOOGLE_BUCKET_NAME)%"
+    cloud.storage.public_url: "%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%/"
     email.sender_address: "%env(SENDER_EMAIL_ADDRESS)%"
 
 services:
@@ -17,8 +19,8 @@ services:
             $bucketCredentialsFolder: "%cloud.storage_credentials%"
             $visionCredentialsFolder: "%cloud.vision_credentials%"
             $filePath: "%kernel.images_dir%"
-            $bucketName: "%env(GOOGLE_BUCKET_NAME)%"
-            $googleStoragePublicUrl: "%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%/"
+            $bucketName: "%cloud.storage.bucket_name%"
+            $googleStoragePublicUrl: "%cloud.storage.public_url%"
             $emailSender: "%email.sender_address%"
 
     App\:
