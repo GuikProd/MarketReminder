@@ -23,7 +23,6 @@
         "symfony/intl": "^3.3",
         "symfony/monolog-bundle": "^3.1",
         "symfony/orm-pack": "^1.0",
-        "symfony/phpunit-bridge": "^3.3",
         "symfony/profiler-pack": "^1.0",
         "symfony/routing": "^3.3",
         "symfony/security-bundle": "^3.3",
