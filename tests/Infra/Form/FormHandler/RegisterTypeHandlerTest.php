@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -41,9 +41,9 @@ class RegisterTypeHandlerTest extends KernelTestCase
     private $eventDispatcher;
 
     /**
-     * @var UserPasswordEncoderInterface
+     * @var EncoderFactoryInterface
      */
-    private $userPasswordEncoder;
+    private $encoderFactory;
 
     /**
      * {@inheritdoc}
@@ -56,20 +56,19 @@ class RegisterTypeHandlerTest extends KernelTestCase
         $this->eventDispatcher = static::bootKernel()->getContainer()
                                                      ->get('event_dispatcher');
 
-        $this->userPasswordEncoder = static::bootKernel()->getContainer()
-                                                         ->get('security.password_encoder');
+        $this->encoderFactory = static::bootKernel()->getContainer()
+                                                         ->get('security.encoder_factory');
     }
 
     public function testItImplementsRegisterTypeHandlerInterface()
     {
         $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $userPasswordEncoderMock = $this->createMock(UserPasswordEncoderInterface::class);
 
         $registerTypeHandler = new RegisterTypeHandler(
             $this->validator,
             $entityManagerMock,
             $this->eventDispatcher,
-            $userPasswordEncoderMock
+            $this->encoderFactory
         );
 
         static::assertInstanceOf(
@@ -82,13 +81,12 @@ class RegisterTypeHandlerTest extends KernelTestCase
     {
         $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
-        $userPasswordEncoderMock = $this->createMock(UserPasswordEncoderInterface::class);
 
         $registerTypeHandler = new RegisterTypeHandler(
             $this->validator,
             $entityManagerMock,
             $this->eventDispatcher,
-            $userPasswordEncoderMock
+            $this->encoderFactory
         );
 
         $formInterfaceMock->method('isValid')->willReturn(false);
@@ -102,7 +100,6 @@ class RegisterTypeHandlerTest extends KernelTestCase
     {
         $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
-        $userPasswordEncoderMock = $this->createMock(UserPasswordEncoderInterface::class);
 
         $userRegistrationDTOMock = new UserRegistrationDTO(
             'Toto',
@@ -115,7 +112,7 @@ class RegisterTypeHandlerTest extends KernelTestCase
             $this->validator,
             $entityManagerMock,
             $this->eventDispatcher,
-            $userPasswordEncoderMock
+            $this->encoderFactory
         );
 
         $formInterfaceMock->method('isSubmitted')->willReturn(true);
