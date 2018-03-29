@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -56,8 +57,8 @@ class RegisterTypeHandlerTest extends KernelTestCase
         $this->eventDispatcher = static::bootKernel()->getContainer()
                                                      ->get('event_dispatcher');
 
-        $this->encoderFactory = static::bootKernel()->getContainer()
-                                                         ->get('security.encoder_factory');
+        $this->encoderFactory = $this->createMock(EncoderFactoryInterface::class);
+        $this->encoderFactory->method('getEncoder')->willReturn(new BCryptPasswordEncoder(13));
     }
 
     public function testItImplementsRegisterTypeHandlerInterface()
