@@ -1,4 +1,4 @@
-App\Domain\UseCase\DTO\UserRegistration\DTO\ImageRegistrationDTO:
+App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO:
     properties:
         file:
             - Image:

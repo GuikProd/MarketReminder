@@ -40,8 +40,11 @@ class ImageRegistrationDTO implements ImageRegistrationDTOInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $alt, string $filename, string $publicUrl)
-    {
+    public function __construct(
+        string $alt,
+        string $filename,
+        string $publicUrl
+    ) {
         $this->alt = $alt;
         $this->filename = $filename;
         $this->publicUrl = $publicUrl;

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Symfony\Subscriber;
 
 use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
+use App\Domain\Models\Image;
 use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
 use App\Helper\CloudVision\CloudVisionVoterHelper;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
@@ -87,7 +88,8 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::SUBMIT => 'onSubmit'
+            FormEvents::SUBMIT => 'onSubmit',
+            FormEvents::POST_SUBMIT => ''
         ];
     }
 
@@ -137,5 +139,23 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
         );
 
         $event->setData($imageRegistrationDTO);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onPostSubmit(FormEvent $postSubmitEvent): void
+    {
+        if (!$postSubmitEvent->getData() instanceof ImageRegistrationDTO) {
+            return;
+        }
+
+        $image = new Image(
+            $postSubmitEvent->getData()->alt,
+            $postSubmitEvent->getData()->filename,
+            $postSubmitEvent->getData()->publicUrl
+        );
+
+        $postSubmitEvent->setData($image);
     }
 }

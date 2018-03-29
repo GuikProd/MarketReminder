@@ -14,13 +14,16 @@ declare(strict_types=1);
 namespace tests\Application\Symfony\Subscriber;
 
 use App\Application\Symfony\Subscriber\ImageUploadSubscriber;
+use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
 use App\Helper\Image\ImageUploaderHelper;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
 use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -94,5 +97,47 @@ class ImageUploadSubscriberTest extends KernelTestCase
         );
     }
 
-    public function
+    public function testOnPostSubmitWithWrongData()
+    {
+        $imageUploadSubscriber = new ImageUploadSubscriber(
+            $this->translator,
+            $this->imageUploaderHelper,
+            $this->cloudVisionAnalyser,
+            $this->imageRetrieverHelper,
+            $this->cloudVisionDescriber
+        );
+
+        $postSubmitEvent = $this->createMock(FormEvent::class);
+        $postSubmitEvent->method('getData')
+                        ->willReturn(null);
+
+        static::assertNull(
+            $imageUploadSubscriber->onPostSubmit($postSubmitEvent)
+        );
+    }
+
+    public function testOnPostSubmitWithGoodData()
+    {
+        $imageUploadSubscriber = new ImageUploadSubscriber(
+            $this->translator,
+            $this->imageUploaderHelper,
+            $this->cloudVisionAnalyser,
+            $this->imageRetrieverHelper,
+            $this->cloudVisionDescriber
+        );
+
+        $postSubmitEvent = $this->createMock(FormEvent::class);
+        $uploadedFile = new File(
+            static::$kernel->getContainer()->getParameter('kernel.project_dir').'/tests/_assets/1b6b7932ce444e86daacd4f8c598b001.png',
+            true
+        );
+
+        $postSubmitEvent->method('getData')
+                        ->willReturn($uploadedFile);
+
+        static::assertInstanceOf(
+            ImageRegistrationDTO::class,
+            $imageUploadSubscriber->onSubmit($postSubmitEvent)
+        );
+    }
 }

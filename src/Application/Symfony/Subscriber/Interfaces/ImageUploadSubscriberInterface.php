@@ -26,4 +26,9 @@ interface ImageUploadSubscriberInterface
      * @param FormEvent $event
      */
     public function onSubmit(FormEvent $event): void;
+
+    /**
+     * @param FormEvent $postSubmitEvent
+     */
+    public function onPostSubmit(FormEvent $postSubmitEvent): void;
 }
