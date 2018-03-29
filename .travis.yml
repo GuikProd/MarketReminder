@@ -9,7 +9,8 @@ before_install:
     - docker pull node
     - docker run -d -p 127.0.0.1:6379:6379 redis
     - docker ps -a
-    - echo $GCP_PROJECT_KEY > /config/credentials/google/bucket/credentials.json
+    - ls -l TRAVIS_BUILD_DIR
+    - echo $GCP_PROJECT_KEY > TRAVIS_BUILD_DIR/config/credentials/google/bucket/credentials.json
 before_script:
     - composer install
     - cp .env.dist .env
@@ -18,7 +19,7 @@ before_script:
 script:
     - ./bin/console d:d:c --env=test
     - ./bin/console d:s:c --env=test
-    - vendor/bin/phpspec run
+    - ./bin/console d:f:l -n --env=test
     - vendor/bin/phpunit -v
     - vendor/bin/behat --profile default
 notifications:
