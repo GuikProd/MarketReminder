@@ -19,6 +19,7 @@ use App\Bridge\CloudVisionBridge;
 use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
 use App\Helper\CloudStorage\CloudStoragePersisterHelper;
 use App\Helper\CloudStorage\CloudStorageRetrieverHelper;
+use App\Helper\CloudVision\CloudVisionAnalyserHelper;
 use App\Helper\CloudVision\CloudVisionDescriberHelper;
 use App\Helper\Image\ImageRetrieverHelper;
 use App\Helper\Image\ImageUploaderHelper;
@@ -82,7 +83,7 @@ class ImageUploadSubscriberTest extends KernelTestCase
             $cloudStoragePersisterHelper
         );
 
-        $this->cloudVisionAnalyser = new CloudVisionDescriberHelper($cloudVisionBridge);
+        $this->cloudVisionAnalyser = new CloudVisionAnalyserHelper($cloudVisionBridge);
 
         $this->imageRetrieverHelper = new ImageRetrieverHelper(
             static::$kernel->getContainer()->getParameter('cloud.storage.bucket_name'),
