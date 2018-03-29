@@ -16,6 +16,8 @@ namespace tests\Application\Symfony\Subscriber;
 use App\Application\Symfony\Subscriber\ImageUploadSubscriber;
 use App\Bridge\CloudStorageBridge;
 use App\Bridge\CloudVisionBridge;
+use App\Domain\Builder\ImageBuilder;
+use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
 use App\Helper\CloudStorage\CloudStoragePersisterHelper;
 use App\Helper\CloudStorage\CloudStorageRetrieverHelper;
@@ -43,6 +45,11 @@ class ImageUploadSubscriberTest extends KernelTestCase
      * @var TranslatorInterface
      */
     private $translator;
+
+    /**
+     * @var ImageBuilderInterface
+     */
+    private $imageBuilder;
 
     /**
      * @var ImageUploaderHelperInterface
@@ -77,6 +84,8 @@ class ImageUploadSubscriberTest extends KernelTestCase
         $cloudStoragePersisterHelper = new CloudStoragePersisterHelper($cloudStorageBridge);
         $cloudStorageRetrieverHelper = new CloudStorageRetrieverHelper($cloudStorageBridge);
 
+        $this->imageBuilder = new ImageBuilder();
+
         $this->imageUploaderHelper = new ImageUploaderHelper(
             static::$kernel->getContainer()->getParameter('kernel.images_dir'),
             static::$kernel->getContainer()->getParameter('cloud.storage.bucket_name'),
@@ -100,6 +109,7 @@ class ImageUploadSubscriberTest extends KernelTestCase
     {
         $imageUploadSubscriber = new ImageUploadSubscriber(
             $this->translator,
+            $this->imageBuilder,
             $this->imageUploaderHelper,
             $this->cloudVisionAnalyser,
             $this->imageRetrieverHelper,
@@ -114,6 +124,7 @@ class ImageUploadSubscriberTest extends KernelTestCase
     {
         $imageUploadSubscriber = new ImageUploadSubscriber(
             $this->translator,
+            $this->imageBuilder,
             $this->imageUploaderHelper,
             $this->cloudVisionAnalyser,
             $this->imageRetrieverHelper,
@@ -125,6 +136,7 @@ class ImageUploadSubscriberTest extends KernelTestCase
     {
         $imageUploadSubscriber = new ImageUploadSubscriber(
             $this->translator,
+            $this->imageBuilder,
             $this->imageUploaderHelper,
             $this->cloudVisionAnalyser,
             $this->imageRetrieverHelper,
@@ -144,6 +156,7 @@ class ImageUploadSubscriberTest extends KernelTestCase
     {
         $imageUploadSubscriber = new ImageUploadSubscriber(
             $this->translator,
+            $this->imageBuilder,
             $this->imageUploaderHelper,
             $this->cloudVisionAnalyser,
             $this->imageRetrieverHelper,

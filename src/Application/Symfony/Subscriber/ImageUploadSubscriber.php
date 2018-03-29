@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Symfony\Subscriber;
 
 use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
-use App\Domain\Models\Image;
+use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
 use App\Helper\CloudVision\CloudVisionVoterHelper;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
@@ -40,6 +40,11 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
     private $translator;
 
     /**
+     * @var ImageBuilderInterface
+     */
+    private $imageBuilder;
+
+    /**
      * @var ImageUploaderHelperInterface
      */
     private $imageUploaderHelper;
@@ -60,22 +65,18 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
     private $cloudVisionDescriber;
 
     /**
-     * ImageUploadSubscriber constructor.
-     *
-     * @param TranslatorInterface                 $translator
-     * @param ImageUploaderHelperInterface        $imageUploaderHelper
-     * @param CloudVisionAnalyserHelperInterface  $cloudVisionAnalyser
-     * @param ImageRetrieverHelperInterface       $imageRetrieverHelper
-     * @param CloudVisionDescriberHelperInterface $cloudVisionDescriber
+     * {@inheritdoc}
      */
     public function __construct(
         TranslatorInterface $translator,
+        ImageBuilderInterface $imageBuilder,
         ImageUploaderHelperInterface $imageUploaderHelper,
         CloudVisionAnalyserHelperInterface $cloudVisionAnalyser,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
         CloudVisionDescriberHelperInterface $cloudVisionDescriber
     ) {
         $this->translator = $translator;
+        $this->imageBuilder = $imageBuilder;
         $this->imageUploaderHelper = $imageUploaderHelper;
         $this->cloudVisionAnalyser = $cloudVisionAnalyser;
         $this->imageRetrieverHelper = $imageRetrieverHelper;
@@ -89,7 +90,7 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
     {
         return [
             FormEvents::SUBMIT => 'onSubmit',
-            FormEvents::POST_SUBMIT => ''
+            FormEvents::POST_SUBMIT => 'onPostSubmit'
         ];
     }
 
@@ -150,12 +151,12 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
             return;
         }
 
-        $image = new Image(
+        $this->imageBuilder->build(
             $postSubmitEvent->getData()->alt,
             $postSubmitEvent->getData()->filename,
             $postSubmitEvent->getData()->publicUrl
         );
 
-        $postSubmitEvent->setData($image);
+        $postSubmitEvent->setData($this->imageBuilder->getImage());
     }
 }
