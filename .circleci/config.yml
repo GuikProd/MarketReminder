@@ -46,6 +46,7 @@ jobs:
                     - vendor
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
+            - run: ./bin/console d:f:l -n --env=test
             - run: vendor/bin/phpunit -v
             - run: rm -rf var/data.db
     behat_core:
@@ -74,6 +75,7 @@ jobs:
             - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
+            - run: ./bin/console d:f:l -n --env=test
             - run: vendor/bin/behat --profile default
             - run: rm -rf var/data.db
     gcloud_kubernetes_check:
