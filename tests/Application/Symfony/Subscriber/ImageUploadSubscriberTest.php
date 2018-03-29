@@ -31,6 +31,7 @@ use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -163,18 +164,19 @@ class ImageUploadSubscriberTest extends KernelTestCase
             $this->cloudVisionDescriber
         );
 
-        $postSubmitEvent = $this->createMock(FormEvent::class);
+        $imageUploadType = $this->createMock(FormInterface::class);
         $uploadedFile = new File(
             static::$kernel->getContainer()->getParameter('kernel.project_dir').'/tests/_assets/1b6b7932ce444e86daacd4f8c598b001.png',
             true
         );
 
-        $postSubmitEvent->method('getData')
-                        ->willReturn(['file' => $uploadedFile]);
+        $postSubmitEvent = new FormEvent($imageUploadType, ['file' => $uploadedFile]);
+
+        $imageUploadSubscriber->onSubmit($postSubmitEvent);
 
         static::assertInstanceOf(
             ImageRegistrationDTO::class,
-            $imageUploadSubscriber->onSubmit($postSubmitEvent)
+            $postSubmitEvent->getData()
         );
     }
 }
