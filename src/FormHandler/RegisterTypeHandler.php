@@ -81,7 +81,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $registerForm->getData()->password,
                 \Closure::fromCallable([$encoder, 'encodePassword']),
                 $registerForm->getData()->validationToken,
-                !null == $registerForm->get('profileImage')->getData()
+                !is_array($registerForm->get('profileImage')->getData())
                     ? $registerForm->get('profileImage')->getData()
                     : null
             );
