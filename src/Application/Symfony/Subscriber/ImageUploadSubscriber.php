@@ -133,30 +133,12 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
 
         $this->imageUploaderHelper->upload();
 
-        $imageRegistrationDTO = new ImageRegistrationDTO(
+        $this->imageBuilder->build(
             $this->imageUploaderHelper->getFileName(),
             $this->imageUploaderHelper->getFileName(),
             $this->imageUploaderHelper->getFilePath()
         );
 
-        $event->setData($imageRegistrationDTO);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function onPostSubmit(FormEvent $postSubmitEvent): void
-    {
-        if (!$postSubmitEvent->getData() instanceof ImageRegistrationDTO) {
-            return;
-        }
-
-        $this->imageBuilder->build(
-            $postSubmitEvent->getData()->alt,
-            $postSubmitEvent->getData()->filename,
-            $postSubmitEvent->getData()->publicUrl
-        );
-
-        $postSubmitEvent->setData($this->imageBuilder->getImage());
+        $event->setData($this->imageBuilder->getImage());
     }
 }

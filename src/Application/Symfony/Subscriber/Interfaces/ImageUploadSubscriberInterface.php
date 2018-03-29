@@ -58,11 +58,4 @@ interface ImageUploadSubscriberInterface
      * @param FormEvent $event
      */
     public function onSubmit(FormEvent $event): void;
-
-    /**
-     * Allow to create an Image using the ImageBuilder and set it as a default data.
-     *
-     * @param FormEvent $postSubmitEvent
-     */
-    public function onPostSubmit(FormEvent $postSubmitEvent): void;
 }
