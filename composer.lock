@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "881c7cf3eea1e67cdbf3a66cd2c589b6",
+    "content-hash": "38410b620274c753b4a91a5b12e9ad1a",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -63,16 +63,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288"
+                "reference": "d2c0a83b7533d6912e8d516756ebd34f893e9169"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/943b2c4fcad1ef178d16a713c2468bf7e579c288",
-                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/d2c0a83b7533d6912e8d516756ebd34f893e9169",
+                "reference": "d2c0a83b7533d6912e8d516756ebd34f893e9169",
                 "shasum": ""
             },
             "require": {
@@ -81,7 +81,7 @@
                 "php": "^5.3.2 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35",
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5",
                 "psr/log": "^1.0",
                 "symfony/process": "^2.5 || ^3.0 || ^4.0"
             },
@@ -115,7 +115,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2017-11-29T09:37:33+00:00"
+            "time": "2018-03-29T19:57:20+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1187,16 +1187,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.18.0",
+            "version": "v1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-core.git",
-                "reference": "9f905c2d7c58db82e311eeff3843cc490ac68f09"
+                "reference": "569964869444e91899848f188a8cbd421a37663b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/9f905c2d7c58db82e311eeff3843cc490ac68f09",
-                "reference": "9f905c2d7c58db82e311eeff3843cc490ac68f09",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/569964869444e91899848f188a8cbd421a37663b",
+                "reference": "569964869444e91899848f188a8cbd421a37663b",
                 "shasum": ""
             },
             "require": {
@@ -1207,6 +1207,14 @@
                 "php": ">=5.5",
                 "psr/http-message": "1.0.*",
                 "rize/uri-template": "~0.3"
+            },
+            "require-dev": {
+                "erusev/parsedown": "^1.6",
+                "google/gax": "^0.30",
+                "opis/closure": "^3",
+                "phpdocumentor/reflection": "^3.0",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "squizlabs/php_codesniffer": "2.*"
             },
             "suggest": {
                 "opis/closure": "May be used to serialize closures to process jobs in the batch daemon. Please require version ^3.",
@@ -1220,13 +1228,13 @@
                 "component": {
                     "id": "cloud-core",
                     "target": "GoogleCloudPlatform/google-cloud-php-core.git",
-                    "path": "src/Core",
-                    "entry": "ServiceBuilder.php"
+                    "path": "Core",
+                    "entry": "src/ServiceBuilder.php"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Google\\Cloud\\Core\\": ""
+                    "Google\\Cloud\\Core\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1234,24 +1242,32 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
-            "time": "2018-03-16T18:56:38+00:00"
+            "time": "2018-03-28T16:57:27+00:00"
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.3.4",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-storage.git",
-                "reference": "240de4b1d65fad78983d80ca78bed7b1facd6467"
+                "reference": "9678b22188ca66c94b67e35c909a078611465f4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-storage/zipball/240de4b1d65fad78983d80ca78bed7b1facd6467",
-                "reference": "240de4b1d65fad78983d80ca78bed7b1facd6467",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-storage/zipball/9678b22188ca66c94b67e35c909a078611465f4d",
+                "reference": "9678b22188ca66c94b67e35c909a078611465f4d",
                 "shasum": ""
             },
             "require": {
                 "google/cloud-core": "^1.14"
+            },
+            "require-dev": {
+                "erusev/parsedown": "^1.6",
+                "google/cloud-pubsub": "^1.0",
+                "phpdocumentor/reflection": "^3.0",
+                "phpseclib/phpseclib": "^2",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "squizlabs/php_codesniffer": "2.*"
             },
             "suggest": {
                 "google/cloud-pubsub": "May be used to register a topic to receive bucket notifications.",
@@ -1262,13 +1278,13 @@
                 "component": {
                     "id": "cloud-storage",
                     "target": "GoogleCloudPlatform/google-cloud-php-storage.git",
-                    "path": "src/Storage",
-                    "entry": "StorageClient.php"
+                    "path": "Storage",
+                    "entry": "src/StorageClient.php"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Google\\Cloud\\Storage\\": ""
+                    "Google\\Cloud\\Storage\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1276,7 +1292,7 @@
                 "Apache-2.0"
             ],
             "description": "Cloud Storage Client for PHP",
-            "time": "2018-02-01T16:15:59+00:00"
+            "time": "2018-03-28T16:57:27+00:00"
         },
         {
             "name": "google/cloud-vision",
@@ -1457,16 +1473,16 @@
         },
         {
             "name": "grpc/grpc",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grpc/grpc-php.git",
-                "reference": "a502df7fac0b392dde13ddf157062b5184d0688e"
+                "reference": "741f59bac86c7b5e45818c8f2eec6980921bce23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grpc/grpc-php/zipball/a502df7fac0b392dde13ddf157062b5184d0688e",
-                "reference": "a502df7fac0b392dde13ddf157062b5184d0688e",
+                "url": "https://api.github.com/repos/grpc/grpc-php/zipball/741f59bac86c7b5e45818c8f2eec6980921bce23",
+                "reference": "741f59bac86c7b5e45818c8f2eec6980921bce23",
                 "shasum": ""
             },
             "require": {
@@ -1494,7 +1510,7 @@
             "keywords": [
                 "rpc"
             ],
-            "time": "2018-01-24T21:48:21+00:00"
+            "time": "2018-03-28T22:54:08+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
