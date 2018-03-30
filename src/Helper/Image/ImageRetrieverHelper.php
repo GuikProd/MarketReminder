@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Helper\Image;
 
-use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use App\Helper\Interfaces\CloudStorage\CloudStorageRetrieverHelperInterface;
+use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 
 /**
  * Class ImageRetrieverHelper
@@ -39,11 +39,7 @@ class ImageRetrieverHelper implements ImageRetrieverHelperInterface
     private $googleStoragePublicUrl;
 
     /**
-     * ImageRetrieverHelper constructor.
-     *
-     * @param string $bucketName
-     * @param CloudStorageRetrieverHelperInterface $cloudRetrieverHelper
-     * @param string $googleStoragePublicUrl
+     * {@inheritdoc}
      */
     public function __construct(
         string $bucketName,

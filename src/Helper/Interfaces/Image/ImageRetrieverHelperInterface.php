@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Helper\Interfaces\Image;
 
+use App\Helper\Interfaces\CloudStorage\CloudStorageRetrieverHelperInterface;
+
 /**
  * Interface ImageRetrieverHelperInterface
  *
@@ -21,6 +23,21 @@ namespace App\Helper\Interfaces\Image;
 interface ImageRetrieverHelperInterface
 {
     /**
+     * ImageRetrieverHelperInterface constructor.
+     *
+     * @param string $bucketName
+     * @param CloudStorageRetrieverHelperInterface $cloudRetrieverHelper
+     * @param string $googleStoragePublicUrl
+     */
+    public function __construct(
+        string $bucketName,
+        CloudStorageRetrieverHelperInterface $cloudRetrieverHelper,
+        string $googleStoragePublicUrl
+    );
+
+    /**
+     * Return the public url + the filename.
+     *
      * @param string $fileName    The name of the file to retrieve.
      *
      * @return string             The public url of the file.
@@ -28,11 +45,15 @@ interface ImageRetrieverHelperInterface
     public function getFileAsString(string $fileName): string;
 
     /**
+     * Return the bucket name.
+     *
      * @return string
      */
     public function getBucketName(): string;
 
     /**
+     * Return the public url of the bucket, the filename MUST be append.
+     *
      * @return string
      */
     public function getGoogleStoragePublicUrl(): string;

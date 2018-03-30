@@ -15,7 +15,6 @@ namespace App\Application\Symfony\Subscriber;
 
 use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
-use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
 use App\Helper\CloudVision\CloudVisionVoterHelper;
 use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
@@ -89,8 +88,7 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::SUBMIT => 'onSubmit',
-            FormEvents::POST_SUBMIT => 'onPostSubmit'
+            FormEvents::SUBMIT => 'onSubmit'
         ];
     }
 
@@ -136,7 +134,7 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
         $this->imageBuilder->build(
             $this->imageUploaderHelper->getFileName(),
             $this->imageUploaderHelper->getFileName(),
-            $this->imageUploaderHelper->getFilePath()
+            $this->imageRetrieverHelper->getGoogleStoragePublicUrl().$this->imageUploaderHelper->getFileName()
         );
 
         $event->setData($this->imageBuilder->getImage());

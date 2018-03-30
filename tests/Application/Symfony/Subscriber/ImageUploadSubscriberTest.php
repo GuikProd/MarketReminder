@@ -18,7 +18,7 @@ use App\Bridge\CloudStorageBridge;
 use App\Bridge\CloudVisionBridge;
 use App\Domain\Builder\ImageBuilder;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
-use App\Domain\UseCase\UserRegistration\DTO\ImageRegistrationDTO;
+use App\Domain\Models\Interfaces\ImageInterface;
 use App\Helper\CloudStorage\CloudStoragePersisterHelper;
 use App\Helper\CloudStorage\CloudStorageRetrieverHelper;
 use App\Helper\CloudVision\CloudVisionAnalyserHelper;
@@ -118,7 +118,6 @@ class ImageUploadSubscriberTest extends KernelTestCase
         );
 
         static::assertArrayHasKey(FormEvents::SUBMIT, $imageUploadSubscriber::getSubscribedEvents());
-        static::assertArrayHasKey(FormEvents::POST_SUBMIT, $imageUploadSubscriber::getSubscribedEvents());
     }
 
     public function testOnSubmitWithWrongData()
@@ -131,29 +130,23 @@ class ImageUploadSubscriberTest extends KernelTestCase
             $this->imageRetrieverHelper,
             $this->cloudVisionDescriber
         );
-    }
 
-    public function testOnPostSubmitWithWrongData()
-    {
-        $imageUploadSubscriber = new ImageUploadSubscriber(
-            $this->translator,
-            $this->imageBuilder,
-            $this->imageUploaderHelper,
-            $this->cloudVisionAnalyser,
-            $this->imageRetrieverHelper,
-            $this->cloudVisionDescriber
+        $imageUploadType = $this->createMock(FormInterface::class);
+        $uploadedFile = new File(
+            static::$kernel->getContainer()->getParameter('kernel.project_dir').'/tests/_assets/money-world-orig.jpg',
+            true
         );
 
-        $postSubmitEvent = $this->createMock(FormEvent::class);
-        $postSubmitEvent->method('getData')
-                        ->willReturn(null);
+        $postSubmitEvent = new FormEvent($imageUploadType, ['file' => $uploadedFile]);
+
+        $imageUploadSubscriber->onSubmit($postSubmitEvent);
 
         static::assertNull(
-            $imageUploadSubscriber->onPostSubmit($postSubmitEvent)
+            $postSubmitEvent->getData()
         );
     }
 
-    public function testOnPostSubmitWithGoodData()
+    public function testOnSubmitWithGoodData()
     {
         $imageUploadSubscriber = new ImageUploadSubscriber(
             $this->translator,
@@ -175,7 +168,7 @@ class ImageUploadSubscriberTest extends KernelTestCase
         $imageUploadSubscriber->onSubmit($postSubmitEvent);
 
         static::assertInstanceOf(
-            ImageRegistrationDTO::class,
+            ImageInterface::class,
             $postSubmitEvent->getData()
         );
     }
