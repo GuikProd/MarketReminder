@@ -1,6 +1,6 @@
 {
     "type": "project",
-    "name": "guikingone/marketReminder",
+    "name": "guikingone/market-reminder",
     "description": "The source code of the MarketReminder web/API application",
     "license": "proprietary",
     "require": {
