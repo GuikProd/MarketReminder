@@ -141,8 +141,14 @@ class ImageUploadSubscriberTest extends KernelTestCase
 
         $imageUploadSubscriber->onSubmit($postSubmitEvent);
 
-        static::assertNull(
+        static::assertArrayHasKey(
+            'file',
             $postSubmitEvent->getData()
+        );
+
+        static::assertInstanceOf(
+            \SplFileInfo::class,
+            $postSubmitEvent->getData()['file']
         );
     }
 
