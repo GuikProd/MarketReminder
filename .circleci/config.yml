@@ -78,66 +78,6 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: vendor/bin/behat --profile default
             - run: rm -rf var/data.db
-    phpunit_php7.2.2:
-        docker:
-            - image: circleci/php:7.2.2-apache-node-browsers
-            - image: redis
-        steps:
-            - checkout
-            - setup_remote_docker
-            - run: sudo composer self-update
-            - restore_cache:
-                keys:
-                    - composer-v1-{{ checksum "composer.json" }}
-                    - composer-v1-
-            - run: rm -rf var/cache/*
-            - run: cp .env.dist .env
-            - run: cp .env.behat.dist .env.behat
-            - run: cp phpunit.xml.dist phpunit.xml
-            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
-            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
-            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
-            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
-            - run: composer install -n --optimize-autoloader --classmap-authoritative
-            - run: composer dump-autoload --optimize --classmap-authoritative
-            - save_cache:
-                key: composer-v1-{{ checksum "composer.json" }}
-                paths:
-                    - vendor
-            - run: ./bin/console d:d:c --env=test
-            - run: ./bin/console d:s:c --env=test
-            - run: ./bin/console d:f:l -n --env=test
-            - run: vendor/bin/phpunit -v
-            - run: rm -rf var/data.db
-    behat_core_php7.2.2:
-        docker:
-            - image: circleci/php:7.2.2-apache-node-browsers
-            - image: redis
-        steps:
-            - checkout
-            - setup_remote_docker
-            - run: sudo composer self-update
-            - restore_cache:
-                keys:
-                    - composer-v1-{{ checksum "composer.json" }}
-                    - composer-v1-
-            - run: composer install -n --optimize-autoloader --classmap-authoritative
-            - run: composer dump-autoload --optimize --classmap-authoritative
-            - save_cache:
-                key: composer-v1-{{ checksum "composer.json" }}
-                paths:
-                    - vendor
-            - run: cp .env.dist .env
-            - run: cp .env.behat.dist .env.behat
-            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
-            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
-            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
-            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
-            - run: ./bin/console d:d:c --env=test
-            - run: ./bin/console d:s:c --env=test
-            - run: ./bin/console d:f:l -n --env=test
-            - run: vendor/bin/behat --profile default
-            - run: rm -rf var/data.db
     gcloud_kubernetes_check:
         docker:
             - image: google/cloud-sdk
@@ -160,10 +100,6 @@ workflows:
     functional:
         jobs:
             - behat_core
-    php_7.2.2:
-        jobs:
-            - behat_core_php7.2.2
-            - phpunit_php7.2.2
     staging:
         jobs:
             - gcloud_kubernetes_check:
