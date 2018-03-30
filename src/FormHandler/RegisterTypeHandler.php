@@ -15,10 +15,9 @@ namespace App\FormHandler;
 
 use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Domain\Event\User\UserCreatedEvent;
-use App\Domain\Models\Image;
 use App\Domain\Models\User;
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -37,9 +36,9 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     private $validator;
 
     /**
-     * @var EntityManagerInterface
+     * @var UserRepositoryInterface
      */
-    private $entityManager;
+    private $userRepository;
 
     /**
      * @var EventDispatcherInterface
@@ -56,12 +55,12 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
      */
     public function __construct(
         ValidatorInterface $validator,
-        EntityManagerInterface $entityManager,
+        UserRepositoryInterface $userRepository,
         EventDispatcherInterface $eventDispatcher,
         EncoderFactoryInterface $passwordEncoderFactory
     ) {
         $this->validator = $validator;
-        $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
         $this->eventDispatcher = $eventDispatcher;
         $this->passwordEncoderFactory = $passwordEncoderFactory;
     }
@@ -100,8 +99,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 return false;
             }
 
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $this->userRepository->save($user);
 
             $this->eventDispatcher->dispatch(
                 UserCreatedEvent::NAME,
