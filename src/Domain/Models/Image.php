@@ -17,7 +17,7 @@ use App\Domain\Models\Interfaces\ImageInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class Image.
+ * Class Interfaces.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

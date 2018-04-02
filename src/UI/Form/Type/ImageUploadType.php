@@ -18,7 +18,6 @@ use App\UI\Form\Type\Interfaces\ImageUploadTypeInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\File;
 
 /**
  * Class ImageUploadType.
@@ -33,9 +32,7 @@ class ImageUploadType extends AbstractType implements ImageUploadTypeInterface
     private $imageUploadSubscriber;
 
     /**
-     * ImageUploadType constructor.
-     *
-     * @param ImageUploadSubscriberInterface $imageUploadSubscriber
+     * {@inheritdoc}
      */
     public function __construct(ImageUploadSubscriberInterface $imageUploadSubscriber)
     {
@@ -48,17 +45,7 @@ class ImageUploadType extends AbstractType implements ImageUploadTypeInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', FileType::class, [
-                'constraints' => [
-                    new File([
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png'
-                        ],
-                        'mimeTypesMessage' => 'image.type_forbidden'
-                    ])
-                ]
-            ])
+            ->add('file', FileType::class)
             ->addEventSubscriber($this->imageUploadSubscriber)
         ;
     }

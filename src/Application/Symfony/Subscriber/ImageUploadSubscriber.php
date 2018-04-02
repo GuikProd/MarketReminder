@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace App\Application\Symfony\Subscriber;
 
+use App\Application\Helper\CloudVision\CloudVisionVoterHelper;
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\Application\Helper\Image\ImageTypeCheckerHelper;
+use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
-use App\Helper\CloudVision\CloudVisionVoterHelper;
-use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
-use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -98,6 +99,17 @@ class ImageUploadSubscriber implements ImageUploadSubscriberInterface, EventSubs
     public function onSubmit(FormEvent $event): void
     {
         if (is_null($event->getData()['file'])) {
+            return;
+        }
+
+        if (!ImageTypeCheckerHelper::checkType($event->getData()['file'])) {
+            $event->getForm()->addError(
+                new FormError(
+                    $this->translator->trans(
+                        'form.format_error', [], 'validators'
+                    )
+                )
+            );
             return;
         }
 

@@ -31,7 +31,10 @@ update: ## Update the dependencies
 update: composer.lock
 	     $(COMPOSER) update -a -o
 
-cache-clear: ## Allow to clear the Symfony cache
+autoload: ## Allow to dump the autoload
+	    $(COMPOSER) dump-autoload -a -o
+
+cache: ## Allow to clear the Symfony cache
 	    rm -rf ./var/cache/*
 
 create-schema: ## Allow to create the BDD schema

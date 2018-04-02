@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Application\Symfony\Subscriber\Interfaces;
 
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
-use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
-use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -48,7 +48,7 @@ interface ImageUploadSubscriberInterface
     );
 
     /**
-     * Allow to check the UploadedFile using CloudVision API
+     * Allow to check the UploadedFile using Interfaces API
      * and store it into the GCP bucket, a local copy is created in order
      * to ease the upload process.
      *
