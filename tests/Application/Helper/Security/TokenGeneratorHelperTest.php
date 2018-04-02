@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\Helper\Security;
+namespace App\Tests\Application\Helper\Security;
 
-use App\Infra\Helper\Security\Interfaces\TokenGeneratorHelperInterface;
-use App\Infra\Helper\Security\TokenGeneratorHelper;
+use App\Application\Helper\Security\Interfaces\TokenGeneratorHelperInterface;
+use App\Application\Helper\Security\TokenGeneratorHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
