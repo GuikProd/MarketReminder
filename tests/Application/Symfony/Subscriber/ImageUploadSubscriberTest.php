@@ -13,25 +13,25 @@ declare(strict_types=1);
 
 namespace tests\Application\Symfony\Subscriber;
 
-use App\Application\Symfony\Subscriber\ImageUploadSubscriber;
-use App\Bridge\CloudStorageBridge;
-use App\Bridge\CloudVisionBridge;
 use App\Domain\Builder\ImageBuilder;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Models\Interfaces\ImageInterface;
-use App\Helper\CloudStorage\CloudStoragePersisterHelper;
-use App\Helper\CloudStorage\CloudStorageRetrieverHelper;
-use App\Helper\CloudVision\CloudVisionAnalyserHelper;
-use App\Helper\CloudVision\CloudVisionDescriberHelper;
-use App\Helper\Image\ImageRetrieverHelper;
-use App\Helper\Image\ImageUploaderHelper;
-use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
-use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
-use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
+use App\Application\Bridge\CloudStorageBridge;
+use App\Application\Bridge\CloudVisionBridge;
+use App\Application\Helper\CloudStorage\CloudStoragePersisterHelper;
+use App\Application\Helper\CloudStorage\CloudStorageRetrieverHelper;
+use App\Application\Helper\CloudVision\CloudVisionAnalyserHelper;
+use App\Application\Helper\CloudVision\CloudVisionDescriberHelper;
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\Application\Helper\Image\ImageRetrieverHelper;
+use App\Application\Helper\Image\ImageUploaderHelper;
+use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
+use App\Application\Symfony\Subscriber\ImageUploadSubscriber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Translation\TranslatorInterface;
 
