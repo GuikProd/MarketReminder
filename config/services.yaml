@@ -21,7 +21,6 @@ services:
             $filePath: "%kernel.images_dir%"
             $bucketName: "%cloud.storage.bucket_name%"
             $googleStoragePublicUrl: "%cloud.storage.public_url%"
-            $emailSender: "%email.sender_address%"
 
     App\:
         resource: '../src/*'

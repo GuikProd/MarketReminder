@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Subscriber\Interfaces;
 
-use App\Domain\Event\User\UserResetPasswordEvent;
+use App\Domain\Event\Interfaces\UserEventInterface;
 use Twig\Environment;
 
 /**
@@ -33,9 +33,19 @@ interface UserSubscriberInterface
     public function __construct(string $emailSender, \Swift_Mailer $swiftMailer, Environment $twig);
 
     /**
+     * @param UserEventInterface $event
+     */
+    public function onUserCreated(UserEventInterface $event): void;
+
+    /**
+     * @param UserEventInterface $event
+     */
+    public function onUserValidated(UserEventInterface $event): void;
+
+    /**
      * This method allow to send the email which contain the reset password token.
      *
-     * @param UserResetPasswordEvent $event
+     * @param UserEventInterface $event
      */
-    public function onUserResetPassword(UserResetPasswordEvent $event): void;
+    public function onUserResetPassword(UserEventInterface $event): void;
 }

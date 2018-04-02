@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Subscriber\Symfony;
+namespace App\Tests\Application\Subscriber;
 
+use App\Application\Symfony\Subscriber\LocaleSubscriber;
 use PHPUnit\Framework\TestCase;
-use App\Subscriber\Symfony\LocaleSubscriber;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
  * Class LocaleSubscriberTest.

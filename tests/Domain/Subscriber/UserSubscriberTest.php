@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace tests\Domain\Subscriber;
 
+use App\Domain\Event\User\UserCreatedEvent;
 use App\Domain\Event\User\UserResetPasswordEvent;
+use App\Domain\Event\User\UserValidatedEvent;
 use App\Domain\Subscriber\Interfaces\UserSubscriberInterface;
 use App\Domain\Subscriber\UserSubscriber;
 use PHPUnit\Framework\TestCase;
@@ -47,6 +49,34 @@ class UserSubscriberTest extends TestCase
         static::assertInstanceOf(
             UserSubscriberInterface::class,
             $userSubscriber
+        );
+    }
+
+    public function testUserCreatedEventIsListened()
+    {
+        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
+        $emailSenderMock = 'test@marketReminder.com';
+        $twigMock = $this->createMock(Environment::class);
+
+        $userSubscriber = new UserSubscriber($emailSenderMock, $swiftMailerMock, $twigMock);
+
+        static::assertArrayHasKey(
+            UserCreatedEvent::NAME,
+            $userSubscriber::getSubscribedEvents()
+        );
+    }
+
+    public function testUserValidatedEventIsListened()
+    {
+        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
+        $emailSenderMock = 'test@marketReminder.com';
+        $twigMock = $this->createMock(Environment::class);
+
+        $userSubscriber = new UserSubscriber($emailSenderMock, $swiftMailerMock, $twigMock);
+
+        static::assertArrayHasKey(
+            UserValidatedEvent::NAME,
+            $userSubscriber::getSubscribedEvents()
         );
     }
 

@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Subscriber;
 
+use App\Domain\Event\Interfaces\UserEventInterface;
+use App\Domain\Event\User\UserCreatedEvent;
 use App\Domain\Event\User\UserResetPasswordEvent;
+use App\Domain\Event\User\UserValidatedEvent;
 use App\Domain\Subscriber\Interfaces\UserSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Twig\Environment;
@@ -59,6 +62,8 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     public static function getSubscribedEvents()
     {
         return [
+            UserCreatedEvent::NAME => 'onUserCreated',
+            UserValidatedEvent::NAME => 'onUserValidated',
             UserResetPasswordEvent::NAME => 'onUserResetPassword'
         ];
     }
@@ -66,7 +71,47 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     /**
      * {@inheritdoc}
      */
-    public function onUserResetPassword(UserResetPasswordEvent $event): void
+    public function onUserCreated(UserEventInterface $event): void
+    {
+        $registrationMail =  (new \Swift_Message)
+            ->setFrom($this->emailSender)
+            ->setTo($event->getUser()->getEmail())
+            ->setBody(
+                $this->twig
+                    ->render('emails/security/registration_mail.html.twig', [
+                        'user' => $event->getUser(),
+                    ]),
+                'text/html'
+            );
+
+        $this->swiftMailer
+            ->send($registrationMail);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onUserValidated(UserEventInterface $event): void
+    {
+        $validationMail =  (new \Swift_Message)
+            ->setFrom($this->emailSender)
+            ->setTo($event->getUser()->getEmail())
+            ->setBody(
+                $this->twig
+                    ->render('emails/security/registration_mail.html.twig', [
+                        'user' => $event->getUser(),
+                    ]),
+                'text/html'
+            );
+
+        $this->swiftMailer
+            ->send($validationMail);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onUserResetPassword(UserEventInterface $event): void
     {
         $message = (new \Swift_Message)
                     ->setFrom($this->emailSender)
