@@ -30,6 +30,8 @@ class HomeResponderTest extends TestCase
     {
         $requestMock = $this->createMock(Request::class);
         $twigMock = $this->createMock(Environment::class);
+        $twigMock->method('getCharset')
+                 ->willReturn('UTF-8');
 
         $homeResponder = new HomeResponder($twigMock);
 
