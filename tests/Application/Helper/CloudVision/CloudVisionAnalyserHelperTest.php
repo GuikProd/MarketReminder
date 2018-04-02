@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Helper\CloudVision;
+namespace App\Tests\Application\Helper\CloudVision;
 
+use App\Application\Bridge\Interfaces\CloudVisionBridgeInterface;
+use App\Application\Helper\CloudVision\CloudVisionAnalyserHelper;
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
 use PHPUnit\Framework\TestCase;
-use App\Bridge\Interfaces\CloudVisionBridgeInterface;
-use App\Helper\CloudVision\CloudVisionAnalyserHelper;
-use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
 
 /**
  * Class CloudVisionAnalyserHelperTest.

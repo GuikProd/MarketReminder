@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Bridge;
+namespace App\Tests\Application\Bridge;
 
-use App\Bridge\CloudVisionBridge;
+use App\Application\Bridge\CloudVisionBridge;
+use App\Application\Bridge\Interfaces\CloudVisionBridgeInterface;
 use Google\Cloud\Core\ServiceBuilder;
-use App\Bridge\Interfaces\CloudVisionBridgeInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

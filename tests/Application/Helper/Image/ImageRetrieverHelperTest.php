@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Helper;
+namespace App\Tests\Application\Helper\Image;
 
-use App\Helper\Image\ImageRetrieverHelper;
+use App\Application\Helper\CloudStorage\CloudStorageRetrieverHelper;<
+use App\Application\Helper\Image\ImageRetrieverHelper;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Helper\CloudStorage\CloudStorageRetrieverHelper;
 
 /**
  * Class ImageRetrieverHelperTest.

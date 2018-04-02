@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Helper\CloudVision;
+namespace App\Tests\Application\Helper\CloudVision;
 
+use App\Application\Helper\CloudVision\CloudVisionVoterHelper;
 use PHPUnit\Framework\TestCase;
-use App\Helper\CloudVision\CloudVisionVoterHelper;
 
 /**
  * Class CloudVisionVoterHelperTest;.

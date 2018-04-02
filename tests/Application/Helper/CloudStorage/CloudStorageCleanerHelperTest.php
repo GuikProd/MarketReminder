@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Helper\CloudStorage;
+namespace App\Tests\Application\Helper\CloudStorage;
 
+use App\Application\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Application\Helper\CloudStorage\CloudStorageCleanerHelper;
+use App\Application\Helper\CloudStorage\Interfaces\CloudStorageCleanerHelperInterface;
 use PHPUnit\Framework\TestCase;
-use App\Bridge\Interfaces\CloudStorageBridgeInterface;
-use App\Helper\CloudStorage\CloudStorageCleanerHelper;
-use App\Helper\Interfaces\CloudStorage\CloudStorageCleanerHelperInterface;
 
 /**
  * Class CloudStorageCleanerHelperTest.

@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Helper\Image;
+namespace App\Tests\Application\Helper\Image;
 
+use App\Application\Helper\Image\ImageTypeCheckerHelper;
 use PHPUnit\Framework\TestCase;
-use App\Helper\Image\ImageTypeCheckerHelper;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**

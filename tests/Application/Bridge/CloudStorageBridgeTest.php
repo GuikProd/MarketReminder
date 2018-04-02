@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Bridge;
+namespace App\Tests\Application\Bridge;
 
-use App\Bridge\CloudStorageBridge;
+use App\Application\Bridge\CloudStorageBridge;
+use App\Application\Bridge\Interfaces\CloudStorageBridgeInterface;
 use Google\Cloud\Core\ServiceBuilder;
-use App\Bridge\Interfaces\CloudStorageBridgeInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
