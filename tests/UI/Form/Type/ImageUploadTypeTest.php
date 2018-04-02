@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\UI\Form\Type;
+namespace App\Tests\UI\Form\Type;
 
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\ImageRegistrationDTOInterface;
 use App\UI\Form\Type\ImageUploadType;
