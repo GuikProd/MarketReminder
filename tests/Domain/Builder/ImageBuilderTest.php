@@ -19,7 +19,7 @@ use App\Domain\Models\Interfaces\ImageInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ImageBuilderTest
+ * Class ImageBuilderTest.
  *
  * @author Guillaume Louliefr <contact@guillaumeloulier.fr>
  */

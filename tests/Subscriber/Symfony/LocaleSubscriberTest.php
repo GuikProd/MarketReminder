@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 /**
- * Class LocaleSubscriberTest
+ * Class LocaleSubscriberTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

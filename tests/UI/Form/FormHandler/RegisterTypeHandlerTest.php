@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\Form\FormHandler;
+namespace App\Tests\UI\Form\FormHandler;
 
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
-use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
-use App\FormHandler\RegisterTypeHandler;
+use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use App\UI\Form\FormHandler\RegisterTypeHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

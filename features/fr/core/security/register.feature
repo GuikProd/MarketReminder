@@ -97,5 +97,5 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I fill in "register_password" with "Ie1FDLGHW"
     And I press "Créer un compte"
     Then I should be on "/fr/register"
-    And I should see "Les identifiants soumis existent déjà, veuillez recommencer votre saisie !"
+    And I should see "Les identifiants renseignés semblent invalides, veuillez réessayer."
     And the response status code should be 200

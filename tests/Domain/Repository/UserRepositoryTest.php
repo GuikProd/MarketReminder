@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class UserRepositoryTest
+ * Class UserRepositoryTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

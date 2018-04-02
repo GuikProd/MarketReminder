@@ -18,7 +18,7 @@ use App\Infra\Helper\Security\TokenGeneratorHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class UserResetPasswordTokenTest
+ * Class UserResetPasswordTokenTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

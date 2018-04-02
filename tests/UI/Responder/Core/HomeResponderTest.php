@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * Class HomeResponderTest
+ * Class HomeResponderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

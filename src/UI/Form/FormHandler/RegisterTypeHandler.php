@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\FormHandler;
+namespace App\UI\Form\FormHandler;
 
 use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Domain\Event\User\UserCreatedEvent;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;

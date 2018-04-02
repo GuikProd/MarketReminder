@@ -11,6 +11,8 @@ ENV_BLACKFIRE = $(DOCKER) exec marketReminder_blackfire
 ## Globals commands
 start: ## Allow to create the project
 	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --no-recreate
+	    install
+	    cache-clear
 
 stop: ## Allow to stop the containers
 	    $(DOCKER_COMPOSE) stop
@@ -55,7 +57,10 @@ phpunit: tests
 
 behat: ## Launch all Behat tests
 behat: features
-	    $(ENV_PHP) vendor/bin/behat --profile default
+	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
+
+php-cs: ## Allow to use php-cs-fixer
+	    $(ENV_PHP) php-cs-fixer fix $(FOLDER) --rules=@$(RULES)
 
 ## Varnish commands
 logs: ## Allow to see the varnish logs
@@ -63,4 +68,4 @@ logs: ## Allow to see the varnish logs
 
 ## Blackfire commands
 profiler: ## Allow to profile a page using Blackfire
-	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1/$(PROFILER_URL) --samples $(PROFILER_SAMPLES)
+	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)

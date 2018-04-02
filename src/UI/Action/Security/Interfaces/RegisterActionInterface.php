@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace App\UI\Action\Security\Interfaces;
 
 use App\UI\Responder\Security\Interfaces\RegisterResponderInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Interface RegisterActionInterface
@@ -27,7 +29,11 @@ interface RegisterActionInterface
      * @param Request $request
      * @param RegisterResponderInterface $responder
      *
-     * @return mixed
+     * @return RedirectResponse|Response
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function __invoke(
         Request $request,

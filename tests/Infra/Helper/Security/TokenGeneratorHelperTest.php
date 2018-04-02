@@ -18,7 +18,7 @@ use App\Infra\Helper\Security\TokenGeneratorHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class TokenGeneratorHelperTest
+ * Class TokenGeneratorHelperTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -38,9 +38,9 @@ class TokenGeneratorHelperTest extends TestCase
         );
 
         static::assertTrue(
-            strlen(
+            10 == strlen(
                 $tokenGeneratorHelper::generateResetPasswordToken('Toto', 'toto@gmail.com')
-            ) == 10
+            )
         );
     }
 }

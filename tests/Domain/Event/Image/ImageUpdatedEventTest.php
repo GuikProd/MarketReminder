@@ -19,7 +19,7 @@ use App\Domain\Models\Interfaces\ImageInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ImageUpdatedEventTest
+ * Class ImageUpdatedEventTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

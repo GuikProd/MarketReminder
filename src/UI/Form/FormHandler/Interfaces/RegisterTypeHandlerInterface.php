@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\FormHandler\Interfaces;
+namespace App\UI\Form\FormHandler\Interfaces;
 
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

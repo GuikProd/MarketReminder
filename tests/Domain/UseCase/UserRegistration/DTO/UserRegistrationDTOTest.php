@@ -19,7 +19,7 @@ use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class UserRegistrationDTOTest
+ * Class UserRegistrationDTOTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
 /**
- * Class UserSubscriberTest
+ * Class UserSubscriberTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

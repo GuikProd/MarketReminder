@@ -19,7 +19,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
- * Class ImageUploadTypeTest
+ * Class ImageUploadTypeTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -32,7 +32,6 @@ class ImageUploadTypeTest extends TypeTestCase
 
     public function setUp()
     {
-
     }
 
     public function testWrongDataIsSubmitted()

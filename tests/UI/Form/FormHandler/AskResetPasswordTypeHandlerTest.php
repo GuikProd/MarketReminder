@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\Form\FormHandler;
+namespace App\Tests\UI\Form\FormHandler;
 
 use App\Domain\UseCase\UserResetPassword\DTO\UserResetPasswordDTO;
 use App\Infra\Form\FormHandler\AskResetPasswordTypeHandler;
@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 /**
- * Class AskResetPasswordTypeHandlerTest
+ * Class AskResetPasswordTypeHandlerTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

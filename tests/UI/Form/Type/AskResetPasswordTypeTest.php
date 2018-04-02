@@ -22,7 +22,7 @@ use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
- * Class AskResetPasswordTypeTest
+ * Class AskResetPasswordTypeTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -51,7 +51,7 @@ class AskResetPasswordTypeTest extends TypeTestCase
         $type = new AskResetPasswordType($this->askResetPasswordTypeSubscriber);
 
         return [
-            new PreloadedExtension([$type], [])
+            new PreloadedExtension([$type], []),
         ];
     }
 

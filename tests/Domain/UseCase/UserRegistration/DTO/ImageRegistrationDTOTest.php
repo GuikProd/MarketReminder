@@ -18,7 +18,7 @@ use App\Domain\UseCase\UserRegistration\DTO\Interfaces\ImageRegistrationDTOInter
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ImageRegistrationDTOTest
+ * Class ImageRegistrationDTOTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
