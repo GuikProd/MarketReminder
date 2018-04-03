@@ -17,7 +17,6 @@ use App\UI\Action\Security\RegisterAction;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Responder\Security\RegisterResponder;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -66,7 +65,6 @@ class RegisterActionTest extends TestCase
 
     public function testHandlerProcess()
     {
-        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $formFactoryMock = $this->createMock(FormFactoryInterface::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
         $registerTypeHandlerMock = $this->createMock(RegisterTypeHandlerInterface::class);
@@ -86,7 +84,6 @@ class RegisterActionTest extends TestCase
         $registerAction = new RegisterAction(
             $formFactoryMock,
             $urlGeneratorMock,
-            $eventDispatcherMock,
             $registerTypeHandlerMock
         );
 
