@@ -88,6 +88,8 @@
             "App\\Domain\\Subscriber\\": "src/Domain/Subscriber/",
             "App\\Domain\\Subscriber\\Interfaces\\": "src/Domain/Subscriber/Interfaces/",
             "App\\Domain\\UseCase\\": "src/Domain/UseCase/",
+            "App\\Domain\\UseCase\\ImageUpload\\DTO\\": "src/Domain/UseCase/ImageUpload/DTO/",
+            "App\\Domain\\UseCase\\ImageUpload\\DTO\\Interfaces\\": "src/Domain/UseCase/ImageUpload/DTO/Interfaces/",
             "App\\Domain\\UseCase\\UserRegistration\\DTO\\": "src/Domain/UseCase/UserRegistration/DTO/",
             "App\\Domain\\UseCase\\UserRegistration\\DTO\\Interfaces\\": "src/Domain/UseCase/UserRegistration/DTO/Interfaces/",
             "App\\Domain\\UseCase\\UserResetPassword\\DTO\\": "src/Domain/UseCase/UserResetPassword/DTO/",

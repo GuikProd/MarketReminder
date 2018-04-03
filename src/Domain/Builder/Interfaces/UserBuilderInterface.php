@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Domain\Builder\Interfaces;
 
 use App\Domain\Models\Interfaces\ImageInterface;
+use App\Domain\Models\Interfaces\UserInterface;
 
 /**
  * Interface UserBuilderInterface
@@ -40,4 +41,9 @@ interface UserBuilderInterface
         string $validationToken,
         ImageInterface $profileImage = null
     ): UserBuilderInterface;
+
+    /**
+     * @return UserInterface
+     */
+    public function getUser(): UserInterface;
 }

@@ -12,6 +12,8 @@ services:
             - '${PHP_PORT}:9000'
         volumes:
             - './:${WORKPATH}:rw'
+            - './docker/php/conf/php.ini:/usr/local/etc/php/php.ini'
+            # - './docker/php/conf/production/php.ini:/usr/local/etc/php/php.ini' -> Used for production.
         restart: always
 
     nginx:

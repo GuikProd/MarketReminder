@@ -15,6 +15,8 @@ namespace App\Domain\Builder;
 
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Models\Interfaces\ImageInterface;
+use App\Domain\Models\Interfaces\UserInterface;
+use App\Domain\Models\User;
 
 /**
  * Class UserBuilder
@@ -23,6 +25,14 @@ use App\Domain\Models\Interfaces\ImageInterface;
  */
 class UserBuilder implements UserBuilderInterface
 {
+    /**
+     * @var UserInterface
+     */
+    private $user;
+
+    /**
+     * {@inheritdoc}
+     */
     public function createFromRegistration(
         string $email,
         string $username,
@@ -30,8 +40,18 @@ class UserBuilder implements UserBuilderInterface
         callable $passwordEncoder,
         string $validationToken,
         ImageInterface $profileImage = null
-    ): UserBuilderInterface
-    {
+    ): UserBuilderInterface {
 
+        $this->user = new User($email, $username, $password, $passwordEncoder, $validationToken, $profileImage);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUser(): UserInterface
+    {
+        return $this->user;
     }
 }

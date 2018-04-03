@@ -31,11 +31,20 @@ update: ## Update the dependencies
 update: composer.lock
 	     $(COMPOSER) update -a -o
 
+require: ## Allow to install a new dependencies
+	    $(COMPOSER) req $(PACKAGE) -a -o
+
+remove: ## Allow to remove a dependencie
+	    $(COMPOSER) remove $(PACKAGE) -a -o
+
 autoload: ## Allow to dump the autoload
 	    $(COMPOSER) dump-autoload -a -o
 
 cache: ## Allow to clear the Symfony cache
 	    rm -rf ./var/cache/*
+
+route: ## Allow to debug the route
+	    $(ENV_PHP) ./bin/console d:r
 
 create-schema: ## Allow to create the BDD schema
 	    $(ENV_PHP) ./bin/console d:s:v
@@ -70,5 +79,5 @@ logs: ## Allow to see the varnish logs
 	    $(ENV_VARNISH) varnishlog -b
 
 ## Blackfire commands
-profiler: ## Allow to profile a page using Blackfire
+profile: ## Allow to profile a page using Blackfire
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)

@@ -123,6 +123,8 @@ class RegisterTypeHandlerTest extends KernelTestCase
         $formInterfaceMock->method('isValid')->willReturn(true);
         $formInterfaceMock->method('getData')->willReturn($userRegistrationDTOMock);
 
+
+
         static::assertTrue(
             $registerTypeHandler->handle($formInterfaceMock)
         );
