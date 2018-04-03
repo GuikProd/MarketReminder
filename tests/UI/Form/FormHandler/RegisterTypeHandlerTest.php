@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\FormHandler;
 
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Form\FormHandler\RegisterTypeHandler;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -47,6 +47,11 @@ class RegisterTypeHandlerTest extends KernelTestCase
     private $encoderFactory;
 
     /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
      * {@inheritdoc}
      */
     public function setUp()
@@ -59,15 +64,15 @@ class RegisterTypeHandlerTest extends KernelTestCase
 
         $this->encoderFactory = $this->createMock(EncoderFactoryInterface::class);
         $this->encoderFactory->method('getEncoder')->willReturn(new BCryptPasswordEncoder(13));
+
+        $this->userRepository = $this->createMock(UserRepositoryInterface::class);
     }
 
     public function testItImplementsRegisterTypeHandlerInterface()
     {
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-
         $registerTypeHandler = new RegisterTypeHandler(
             $this->validator,
-            $entityManagerMock,
+            $this->userRepository,
             $this->eventDispatcher,
             $this->encoderFactory
         );
@@ -80,12 +85,11 @@ class RegisterTypeHandlerTest extends KernelTestCase
 
     public function testWrongHandlingProcess()
     {
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
 
         $registerTypeHandler = new RegisterTypeHandler(
             $this->validator,
-            $entityManagerMock,
+            $this->userRepository,
             $this->eventDispatcher,
             $this->encoderFactory
         );
@@ -99,7 +103,6 @@ class RegisterTypeHandlerTest extends KernelTestCase
 
     public function testRightHandlingProcess()
     {
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
 
         $userRegistrationDTOMock = new UserRegistrationDTO(
@@ -111,7 +114,7 @@ class RegisterTypeHandlerTest extends KernelTestCase
 
         $registerTypeHandler = new RegisterTypeHandler(
             $this->validator,
-            $entityManagerMock,
+            $this->userRepository,
             $this->eventDispatcher,
             $this->encoderFactory
         );

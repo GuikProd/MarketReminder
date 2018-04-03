@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Security;
 
+use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\UI\Action\Security\RegisterAction;
-use App\Builder\Interfaces\UserBuilderInterface;
-use App\FormHandler\Interfaces\RegisterTypeHandlerInterface;
-use App\Responder\Security\RegisterResponder;
+use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use App\UI\Responder\Security\RegisterResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
