@@ -11,7 +11,7 @@ before_install:
     - ls -l $TRAVIS_BUILD_DIR
     - echo $GCP_PROJECT_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/bucket/credentials.json
 before_script:
-    - composer install --no-script
+    - composer install --no-scripts -n
     - cp .env.dist .env
     - cp .env.behat.dist .env.behat
     - cp phpunit.xml.dist phpunit.xml

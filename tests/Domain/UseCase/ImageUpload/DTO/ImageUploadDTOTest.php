@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace tests\Domain\UseCase\ImageUpload\DTO;
 
 use App\Domain\UseCase\ImageUpload\DTO\ImageUploadDTO;
+use App\Domain\UseCase\ImageUpload\DTO\Interfaces\ImageUploadDTOInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\File;
 
