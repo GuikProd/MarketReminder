@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\Type;
 
-use App\Builder\Interfaces\ImageBuilderInterface;
-use App\Builder\Interfaces\UserBuilderInterface;
-use App\Builder\UserBuilder;
-use App\Helper\Interfaces\CloudVision\CloudVisionAnalyserHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionDescriberHelperInterface;
-use App\Helper\Interfaces\CloudVision\CloudVisionVoterHelperInterface;
-use App\Helper\Interfaces\Image\ImageUploaderHelperInterface;
-use App\Helper\Interfaces\Image\ImageRetrieverHelperInterface;
-use App\Helper\Interfaces\Image\ImageTypeCheckerHelperInterface;
-use App\Subscriber\Interfaces\ImageUploadSubscriberInterface;
-use App\Subscriber\Form\ImageUploadSubscriber;
+use App\Domain\Builder\Interfaces\ImageBuilderInterface;
+use App\Domain\Builder\Interfaces\UserBuilderInterface;
+use App\Domain\Builder\UserBuilder;
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\Application\Helper\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageTypeCheckerHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
+use App\Application\Symfony\Subscriber\ImageUploadSubscriber;
+use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use App\UI\Form\Type\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
