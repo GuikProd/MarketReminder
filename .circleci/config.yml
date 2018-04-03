@@ -44,6 +44,7 @@ jobs:
                 key: composer-v1-{{ checksum "composer.json" }}
                 paths:
                     - vendor
+            - run: rm -rf var/cache/*
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
@@ -63,18 +64,19 @@ jobs:
                 keys:
                     - composer-v1-{{ checksum "composer.json" }}
                     - composer-v1-
-            - run: composer install -n --optimize-autoloader --classmap-authoritative
-            - run: composer dump-autoload --optimize --classmap-authoritative
-            - save_cache:
-                key: composer-v1-{{ checksum "composer.json" }}
-                paths:
-                    - vendor
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
             - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
             - run: mkdir -p ${HOME}/project/config/credentials/google/vision
             - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
             - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
+            - run: composer install -n --optimize-autoloader --classmap-authoritative
+            - run: composer dump-autoload --optimize --classmap-authoritative
+            - save_cache:
+                key: composer-v1-{{ checksum "composer.json" }}
+                paths:
+                    - vendor
+            - run: rm -rf var/cache/*
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
