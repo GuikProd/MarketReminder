@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Domain\Builder;
 
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
+use App\Domain\Models\Interfaces\ImageInterface;
 
 /**
  * Class UserBuilder
@@ -22,5 +23,15 @@ use App\Domain\Builder\Interfaces\UserBuilderInterface;
  */
 class UserBuilder implements UserBuilderInterface
 {
+    public function createFromRegistration(
+        string $email,
+        string $username,
+        string $password,
+        callable $passwordEncoder,
+        string $validationToken,
+        ImageInterface $profileImage = null
+    ): UserBuilderInterface
+    {
 
+    }
 }

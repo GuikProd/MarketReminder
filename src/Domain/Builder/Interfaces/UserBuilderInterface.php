@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Builder\Interfaces;
 
+use App\Domain\Models\Interfaces\ImageInterface;
+
 /**
  * Interface UserBuilderInterface
  *
@@ -20,4 +22,22 @@ namespace App\Domain\Builder\Interfaces;
  */
 interface UserBuilderInterface
 {
+    /**
+     * @param string               $email
+     * @param string               $username
+     * @param string               $password
+     * @param callable             $passwordEncoder
+     * @param string               $validationToken
+     * @param ImageInterface|null  $profileImage
+     *
+     * @return UserBuilderInterface
+     */
+    public function createFromRegistration(
+        string $email,
+        string $username,
+        string $password,
+        callable $passwordEncoder,
+        string $validationToken,
+        ImageInterface $profileImage = null
+    ): UserBuilderInterface;
 }
