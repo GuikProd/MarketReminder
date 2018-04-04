@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\Type;
 
+use App\Application\Symfony\Subscriber\ImageUploadSubscriber;
 use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\ImageRegistrationDTOInterface;
 use App\UI\Form\Type\ImageUploadType;
@@ -37,7 +38,7 @@ class ImageUploadTypeTest extends TypeTestCase
      */
     public function setUp()
     {
-        $this->imageUploadSubscriber = $this->createMock(ImageUploadSubscriberInterface::class);
+        $this->imageUploadSubscriber = $this->createMock(ImageUploadSubscriber::class);
 
         parent::setUp();
     }

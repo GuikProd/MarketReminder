@@ -126,4 +126,4 @@ workflows:
                     - behat_core
             - gcloud_kubernetes_check:
                 requires:
-                    - behat_core
+                    - gcloud_docker_build
