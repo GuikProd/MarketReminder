@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\Type;
 
+use App\Application\Symfony\Subscriber\Interfaces\ImageUploadSubscriberInterface;
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\ImageRegistrationDTOInterface;
 use App\UI\Form\Type\ImageUploadType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
@@ -26,12 +28,32 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class ImageUploadTypeTest extends TypeTestCase
 {
     /**
-     * @var
+     * @var ImageUploadSubscriberInterface
      */
-    private $fileUploadSubscriber;
+    private $imageUploadSubscriber;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
+        $this->imageUploadSubscriber = $this->createMock(ImageUploadSubscriberInterface::class);
+
+        parent::setUp();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtensions()
+    {
+        $imageUploadType = new ImageUploadType($this->imageUploadSubscriber);
+
+        return [
+            new PreloadedExtension(
+                array($imageUploadType), array()
+            )
+        ];
     }
 
     public function testWrongDataIsSubmitted()
