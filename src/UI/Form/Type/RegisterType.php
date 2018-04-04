@@ -17,6 +17,7 @@ use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterf
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -54,8 +55,7 @@ class RegisterType extends AbstractType
                     'aria-label' => 'security.registration_password'
                 ]
             ])
-            ->add('profileImage', ImageUploadType::class, [
-                'mapped' => false,
+            ->add('profileImage', FileType::class, [
                 'required' => false
             ])
         ;
@@ -78,13 +78,11 @@ class RegisterType extends AbstractType
                             str_rot13($form->get('username')->getData()),
                             $form->get('email')->getData()
                         )
-                    )
+                    ),
+                    $form->get('profileImage')->getData()
                 );
             },
-            'validation_groups' => [
-                'registration',
-                'imageUpload'
-            ],
+            'validation_groups' => ['registration'],
         ]);
     }
 }

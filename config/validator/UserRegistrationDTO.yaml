@@ -32,3 +32,11 @@ App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO:
                  max: 25
                  maxMessage: "validation.length_long"
                  groups: ['registration']
+         profileImage:
+             - Image:
+                 mimeTypes:
+                     - 'image/jpeg'
+                     - 'image/png'
+                     - 'image/jpg'
+                 mimeTypesMessage: 'image.invalid_format'
+                 groups: ['registration']

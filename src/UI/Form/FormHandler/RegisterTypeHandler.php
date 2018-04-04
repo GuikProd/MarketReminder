@@ -72,6 +72,9 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     {
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
 
+            var_dump($registerForm->getData());
+            die();
+
             $encoder = $this->passwordEncoderFactory->getEncoder(User::class);
 
             $user = new User(

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\UseCase\UserRegistration\DTO;
 
-use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use PHPUnit\Framework\TestCase;
@@ -31,15 +30,19 @@ class UserRegistrationDTOTest extends TestCase
         static::assertClassHasAttribute('email', UserRegistrationDTO::class);
         static::assertClassHasAttribute('password', UserRegistrationDTO::class);
         static::assertClassHasAttribute('validationToken', UserRegistrationDTO::class);
+        static::assertClassHasAttribute('profileImage', UserRegistrationDTO::class);
     }
 
     public function testItImplements()
     {
+        $uploadedImage = $this->createMock(\SplFileInfo::class);
+
         $userRegistrationDTO = new UserRegistrationDTO(
                                    'Toto',
                                    'toto@gmail.com',
                                    'Ie1FDLTOTO',
-                                   ''
+                                   '',
+                                   $uploadedImage
                                );
 
         static::assertInstanceOf(
@@ -50,18 +53,18 @@ class UserRegistrationDTOTest extends TestCase
 
     public function testProfileImageIsDefined()
     {
-        $imageMock = $this->createMock(ImageInterface::class);
+        $uploadedImage = $this->createMock(\SplFileInfo::class);
 
         $userRegistrationDTO = new UserRegistrationDTO(
             'Toto',
             'toto@gmail.com',
             'Ie1FDLTOTO',
             '',
-            $imageMock
+            $uploadedImage
         );
 
         static::assertInstanceOf(
-            ImageInterface::class,
+            \SplFileInfo::class,
             $userRegistrationDTO->profileImage
         );
     }

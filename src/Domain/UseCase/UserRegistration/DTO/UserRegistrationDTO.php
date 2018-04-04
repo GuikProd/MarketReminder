@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Domain\UseCase\UserRegistration\DTO;
 
-use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 
 /**
@@ -26,12 +25,12 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     /**
      * @var string
      */
-    public $username;
+    public $email;
 
     /**
      * @var string
      */
-    public $email;
+    public $username;
 
     /**
      * @var string
@@ -39,7 +38,7 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     public $password;
 
     /**
-     * @var ImageInterface
+     * @var \SplFileInfo
      */
     public $profileImage;
 
@@ -56,12 +55,12 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
         string $email,
         string $password,
         string $validationToken,
-        ImageInterface $image = null
+        \SplFileInfo $uploadedImage = null
     ) {
         $this->username = $username;
         $this->email = $email;
         $this->password = $password;
         $this->validationToken = $validationToken;
-        $this->profileImage = $image;
+        $this->profileImage = $uploadedImage;
     }
 }

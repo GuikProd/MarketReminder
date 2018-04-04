@@ -46,7 +46,7 @@ class ImageUploadType extends AbstractType implements ImageUploadTypeInterface
     {
         $builder
             ->add('file', FileType::class)
-            ->addEventSubscriber($this->imageUploadSubscriber)
+            //->addEventSubscriber($this->imageUploadSubscriber)
         ;
     }
 }

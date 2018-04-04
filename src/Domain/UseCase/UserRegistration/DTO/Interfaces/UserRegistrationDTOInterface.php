@@ -12,7 +12,6 @@ declare(strict_types=1);
  */
 
 namespace App\Domain\UseCase\UserRegistration\DTO\Interfaces;
-use App\Domain\Models\Interfaces\ImageInterface;
 
 /**
  * Interface UserRegistrationDTOInterface
@@ -24,17 +23,17 @@ interface UserRegistrationDTOInterface
     /**
      * UserRegistrationDTOInterface constructor.
      *
-     * @param string              $username
-     * @param string              $email
-     * @param string              $password
-     * @param string              $validationToken
-     * @param ImageInterface|null $profileImage
+     * @param string             $username
+     * @param string             $email
+     * @param string             $password
+     * @param string             $validationToken
+     * @param \SplFileInfo|null  $uploadedImage
      */
     public function __construct(
         string $username,
         string $email,
         string $password,
         string $validationToken,
-        ImageInterface $profileImage = null
+        \SplFileInfo $uploadedImage = null
     );
 }
