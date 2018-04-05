@@ -15,14 +15,14 @@ namespace App\Tests\Application\Helper\Image;
 
 use App\Application\Helper\Image\ImageRetrieverHelper;
 use App\Infra\GCP\CloudStorage\CloudStorageRetrieverHelper;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ImageRetrieverHelperTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ImageRetrieverHelperTest extends KernelTestCase
+class ImageRetrieverHelperTest extends TestCase
 {
     /**
      * @var string

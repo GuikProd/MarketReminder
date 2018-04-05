@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Application\Helper\Image\Interfaces;
 
-use App\Application\Helper\CloudStorage\Interfaces\CloudStorageRetrieverHelperInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageRetrieverHelperInterface;
 
 /**
  * Interface ImageRetrieverHelperInterface
