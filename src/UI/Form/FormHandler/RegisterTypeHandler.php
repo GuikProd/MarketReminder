@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace App\UI\Form\FormHandler;
 
+use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Application\Symfony\Events\SessionMessageEvent;
+use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Event\User\UserCreatedEvent;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -30,15 +34,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class RegisterTypeHandler implements RegisterTypeHandlerInterface
 {
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
 
     /**
-     * @var UserRepositoryInterface
+     * @var CloudStoragePersisterHelperInterface
      */
-    private $userRepository;
+    private $cloudStoragePersisterHelper;
 
     /**
      * @var EventDispatcherInterface
@@ -51,18 +51,52 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     private $passwordEncoderFactory;
 
     /**
-     * {@inheritdoc}
+     * @var ImageBuilderInterface
      */
-    public function __construct(
-        ValidatorInterface $validator,
-        UserRepositoryInterface $userRepository,
-        EventDispatcherInterface $eventDispatcher,
-        EncoderFactoryInterface $passwordEncoderFactory
-    ) {
-        $this->validator = $validator;
-        $this->userRepository = $userRepository;
+    private $imageBuilder;
+
+    /**
+     * @var ImageUploaderHelperInterface
+     */
+    private $imageUploaderHelper;
+
+    /**
+     * @var ImageRetrieverHelperInterface
+     */
+    private $imageRetrieverHelper;
+
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    /**
+     * RegisterTypeHandler constructor.
+     *
+     * @param CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param EncoderFactoryInterface $passwordEncoderFactory
+     * @param ImageBuilderInterface $imageBuilder
+     * @param ImageUploaderHelperInterface $imageUploaderHelper
+     * @param ImageRetrieverHelperInterface $imageRetrieverHelper
+     * @param UserRepositoryInterface $userRepository
+     * @param ValidatorInterface $validator
+     */
+    public function __construct(CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper, EventDispatcherInterface $eventDispatcher, EncoderFactoryInterface $passwordEncoderFactory, ImageBuilderInterface $imageBuilder, ImageUploaderHelperInterface $imageUploaderHelper, ImageRetrieverHelperInterface $imageRetrieverHelper, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
+    {
+        $this->cloudStoragePersisterHelper = $cloudStoragePersisterHelper;
         $this->eventDispatcher = $eventDispatcher;
         $this->passwordEncoderFactory = $passwordEncoderFactory;
+        $this->imageBuilder = $imageBuilder;
+        $this->imageUploaderHelper = $imageUploaderHelper;
+        $this->imageRetrieverHelper = $imageRetrieverHelper;
+        $this->userRepository = $userRepository;
+        $this->validator = $validator;
     }
 
     /**
@@ -74,16 +108,28 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
 
             $encoder = $this->passwordEncoderFactory->getEncoder(User::class);
 
+            if (!is_null($registerForm->get('profileImage')->getData())) {
+                $this->imageUploaderHelper->generateFilename($registerForm->get('profileImage')->getData());
+                $this->imageUploaderHelper->upload($registerForm->get('profileImage')->getData());
+
+                $this->imageBuilder->build(
+                    $this->imageUploaderHelper->getFileName(),
+                    $this->imageUploaderHelper->getFileName(),
+                    $this->imageRetrieverHelper->getGoogleStoragePublicUrl().$this->imageUploaderHelper->getFileName()
+                );
+            }
+
             $user = new User(
                 $registerForm->getData()->email,
                 $registerForm->getData()->username,
                 $registerForm->getData()->password,
                 \Closure::fromCallable([$encoder, 'encodePassword']),
                 $registerForm->getData()->validationToken,
-                !is_array($registerForm->get('profileImage')->getData()) || !is_null($registerForm->get('profileImage')->getData())
-                    ? $registerForm->get('profileImage')->getData()
-                    : null
+                $this->imageBuilder->getImage() ?: null
             );
+
+            var_dump($user);
+            die();
 
             $errors = $this->validator->validate($user, null, ['User', 'registration']);
 

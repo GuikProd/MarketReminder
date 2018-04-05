@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Application\Helper\Image\Interfaces;
 
-use App\Application\Helper\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 
 /**
  * Interface ImageUploaderHelperInterface.
@@ -37,7 +37,7 @@ interface ImageUploaderHelperInterface
     );
 
     /**
-     * Store the file locally using UploadedFile::move().
+     * Allow to generate a random filename used when the file is persisted.
      *
      * @param \SplFileInfo $uploadedFile       The actual file.
      *
@@ -45,12 +45,14 @@ interface ImageUploaderHelperInterface
      *
      * @see UploadedFile
      */
-    public function store(\SplFileInfo $uploadedFile): self;
+    public function generateFilename(\SplFileInfo $uploadedFile): self;
 
     /**
+     * @param \SplFileInfo $uploadedImage
+     *
      * @return ImageUploaderHelperInterface
      */
-    public function upload(): self;
+    public function upload(\SplFileInfo $uploadedImage): self;
 
     /**
      * Return the name of the file when stored.
@@ -58,16 +60,4 @@ interface ImageUploaderHelperInterface
      * @return string
      */
     public function getFileName(): string;
-
-    /**
-     * Return the local path of the file.
-     *
-     * @return string
-     */
-    public function getFilePath(): string;
-
-    /**
-     * @return string
-     */
-    public function getFileExtension(): string;
 }

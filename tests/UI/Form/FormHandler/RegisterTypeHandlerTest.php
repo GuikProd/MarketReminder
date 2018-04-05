@@ -109,7 +109,8 @@ class RegisterTypeHandlerTest extends KernelTestCase
             'Toto',
             'toto@gmail.com',
             'Ie1FDLTOTO',
-            'da248z614d2az68d'
+            'da248z614d2az68d',
+            $this->createMock(\SplFileInfo::class)
         );
 
         $registerTypeHandler = new RegisterTypeHandler(

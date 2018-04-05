@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Application\Helper\Image;
 
-use App\Application\Helper\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 
 /**
  * Class ImageUploaderHelper.
@@ -39,11 +39,6 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     private $bucketName;
 
     /**
-     * @var string
-     */
-    private $fileExtension;
-
-    /**
      * @var CloudStoragePersisterHelperInterface
      */
     private $cloudStoragePersister;
@@ -64,11 +59,9 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function store(\SplFileInfo $uploadedFile): ImageUploaderHelperInterface
+    public function generateFilename(\SplFileInfo $uploadedFile): ImageUploaderHelperInterface
     {
         $this->fileName = md5(str_rot13(uniqid())).'.'.$uploadedFile->guessExtension();
-
-        $uploadedFile->move($this->filePath, $this->fileName);
 
         return $this;
     }
@@ -76,12 +69,12 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function upload(): ImageUploaderHelperInterface
+    public function upload(\SplFileInfo $uploadedImage): ImageUploaderHelperInterface
     {
         $this->cloudStoragePersister
              ->persist(
                  $this->bucketName,
-                 $this->filePath.'/'.$this->fileName,
+                 $uploadedImage->getPathname(),
                  ['name' => $this->fileName]
              );
 
@@ -91,24 +84,8 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function getFilePath(): string
-    {
-        return $this->filePath.'/';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getFileName(): string
     {
         return $this->fileName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFileExtension(): string
-    {
-        return $this->fileExtension;
     }
 }

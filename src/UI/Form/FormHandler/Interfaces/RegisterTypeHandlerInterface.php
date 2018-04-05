@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace App\UI\Form\FormHandler\Interfaces;
 
+use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
+use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
+use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -29,16 +33,23 @@ interface RegisterTypeHandlerInterface
     /**
      * RegisterTypeHandlerInterface constructor.
      *
-     * @param ValidatorInterface        $validator
-     * @param UserRepositoryInterface   $entityManager
-     * @param EventDispatcherInterface  $eventDispatcher
-     * @param EncoderFactoryInterface   $passwordEncoderFactory
+     * @param CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param EncoderFactoryInterface $passwordEncoderFactory
+     * @param ImageBuilderInterface $imageBuilder
+     * @param ImageUploaderHelperInterface $imageUploaderHelper
+     * @param ImageRetrieverHelperInterface $imageRetrieverHelper
+     * @param UserRepositoryInterface $userRepository
+     * @param ValidatorInterface $validator
      */
     public function __construct(
-        ValidatorInterface $validator,
-        UserRepositoryInterface $entityManager,
+        CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper,
         EventDispatcherInterface $eventDispatcher,
-        EncoderFactoryInterface $passwordEncoderFactory
+        EncoderFactoryInterface $passwordEncoderFactory,
+        ImageBuilderInterface $imageBuilder,
+        ImageUploaderHelperInterface $imageUploaderHelper,
+        ImageRetrieverHelperInterface $imageRetrieverHelper,
+        UserRepositoryInterface $userRepository, ValidatorInterface $validator
     );
 
     /**
