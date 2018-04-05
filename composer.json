@@ -68,6 +68,8 @@
             "App\\Application\\Symfony\\Events\\": "src/Application/Symfony/Events/",
             "App\\Application\\Symfony\\Subscriber\\": "src/Application/Symfony/Subscriber/",
             "App\\Application\\Symfony\\Subscriber\\Interfaces\\": "src/Application/Symfony/Subscriber/Interfaces/",
+            "App\\Application\\Validator\\": "src/Application/Validator/",
+            "App\\Application\\Validator\\Interfaces\\": "src/Application/Validator/Interfaces/",
             "App\\DataFixtures\\ORM\\": "src/DataFixtures/ORM/",
             "App\\Domain\\Event\\": "src/Domain/Event/",
             "App\\Domain\\Event\\Interfaces\\": "src/Domain/Event/Interfaces/",

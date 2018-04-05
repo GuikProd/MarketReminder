@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\GCP\CloudVision;
+namespace App\Infra\GCP\CloudVision;
 
-use App\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
 use Google\Cloud\Vision\Image;
 
 /**

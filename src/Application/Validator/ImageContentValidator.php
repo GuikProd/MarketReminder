@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\Symfony\Validator;
+namespace App\Application\Validator;
 
-use App\GCP\CloudVision\CloudVisionVoterHelper;
-use App\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
-use App\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
-use App\Application\Symfony\Validator\Interfaces\ImageContentValidatorInterface;
+use App\Infra\GCP\CloudVision\CloudVisionVoterHelper;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\Application\Validator\Interfaces\ImageContentValidatorInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -63,7 +63,7 @@ class ImageContentValidator extends ConstraintValidator implements ImageContentV
     {
         $analysedImage = $this->cloudVisionAnalyser
                               ->analyse(
-                                  $value->getPathname().$value->getBasename,
+                                  $value->getPathname(),
                                   'LABEL_DETECTION'
                               );
 

@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\GCP\CloudVision;
+namespace App\Infra\GCP\CloudVision;
 
-use App\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
 
 /**
  * Class CloudVisionVoterHelper.

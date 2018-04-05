@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\GCP\CloudStorage\Interfaces;
+namespace App\Infra\GCP\CloudStorage\Interfaces;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
 use Psr\Http\Message\StreamInterface;

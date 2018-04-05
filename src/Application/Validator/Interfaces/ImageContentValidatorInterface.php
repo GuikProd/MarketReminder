@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\Symfony\Validator\Interfaces;
+namespace App\Application\Validator\Interfaces;
 
-use App\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
-use App\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**

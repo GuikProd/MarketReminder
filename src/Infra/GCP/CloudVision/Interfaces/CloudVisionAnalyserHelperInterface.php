@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\GCP\CloudVision\Interfaces;
+namespace App\Infra\GCP\CloudVision\Interfaces;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use Google\Cloud\Vision\Image;

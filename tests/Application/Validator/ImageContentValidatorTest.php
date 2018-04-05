@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Application\Symfony\Validator;
+namespace App\Tests\Application\Validator;
 
-use App\Application\Symfony\Validator\ImageContentValidator;
-use App\Application\Symfony\Validator\Interfaces\ImageContentValidatorInterface;
-use App\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
-use App\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\Application\Validator\ImageContentValidator;
+use App\Application\Validator\Interfaces\ImageContentValidatorInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintValidator;

@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Application\Symfony\Validator;
+namespace App\Tests\Application\Validator;
 
-use App\Application\Symfony\Validator\ImageContent;
-use App\Application\Symfony\Validator\Interfaces\ImageContentValidatorInterface;
+use App\Application\Validator\ImageContent;
+use App\Application\Validator\Interfaces\ImageContentValidatorInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 
