@@ -48,12 +48,12 @@ class ImageContentValidatorTest extends TestCase
         );
 
         static::assertClassHasAttribute(
-            'cloudVisionAnalyserHelper',
+            'cloudVisionAnalyser',
             ImageContentValidator::class
         );
 
         static::assertClassHasAttribute(
-            'cloudVisionDescriberHelper',
+            'cloudVisionDescriber',
             ImageContentValidator::class
         );
     }

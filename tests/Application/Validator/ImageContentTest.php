@@ -48,7 +48,7 @@ class ImageContentTest extends TestCase
     {
         $imageContent = new ImageContent();
 
-        static::assertInstanceOf(
+        static::assertSame(
             ImageContentValidatorInterface::class,
             $imageContent->validatedBy()
         );
