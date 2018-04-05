@@ -7,5 +7,5 @@ Your account was created ! Please check your mail to validate it.: Votre profil 
 # Form validations
 form.format_error: Le format est invalide ! Veuillez réessayer avec un nouveau format valide !
 form.credentials_error: Les identifiants soumis existent déjà, veuillez recommencer votre saisie !
-form.image.label_error: L'image soumise contient du contenu inadapté, veuillez recommencer !
-image.type_forbidden: Ce format d'image est interdit, veuillez recommencer votre saisie.
+image.forbidden_content: L'image soumise contient du contenu inadapté, veuillez recommencer !
+image.invalid_format: Ce format d'image est interdit, veuillez recommencer votre saisie.

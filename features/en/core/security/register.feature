@@ -78,7 +78,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I attach the file "test_III.gif" to "register_profileImage"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "This format is invalid ! Please retry using a valid one !"
+    And I should see "The submitted format isn't allowed, please retry !"
     And the response status code should be 200
 
   Scenario: I want to register myself using a wrong image which contains wrong labels.
