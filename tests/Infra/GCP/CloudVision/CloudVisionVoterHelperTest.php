@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudVision;
 
-use App\GCP\CloudVision\CloudVisionVoterHelper;
+use App\Infra\GCP\CloudVision\CloudVisionVoterHelper;
 use PHPUnit\Framework\TestCase;
 
 /**

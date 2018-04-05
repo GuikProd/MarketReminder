@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudStorage;
 
-use App\GCP\CloudStorage\CloudStorageCleanerHelper;
-use App\GCP\CloudStorage\Interfaces\CloudStorageCleanerHelperInterface;
+use App\Infra\GCP\CloudStorage\CloudStorageCleanerHelper;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageCleanerHelperInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
 use PHPUnit\Framework\TestCase;
 
