@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Application\Validator;
 
-use App\Application\Validator\Interfaces\ImageContentValidatorInterface;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -33,6 +32,6 @@ class ImageContent extends Constraint
      */
     public function validatedBy()
     {
-        return ImageContentValidatorInterface::class;
+        return ImageContentValidator::class;
     }
 }

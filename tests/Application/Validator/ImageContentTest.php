@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Application\Validator;
 
 use App\Application\Validator\ImageContent;
-use App\Application\Validator\Interfaces\ImageContentValidatorInterface;
+use App\Application\Validator\ImageContentValidator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 
@@ -49,7 +49,7 @@ class ImageContentTest extends TestCase
         $imageContent = new ImageContent();
 
         static::assertSame(
-            ImageContentValidatorInterface::class,
+            ImageContentValidator::class,
             $imageContent->validatedBy()
         );
     }

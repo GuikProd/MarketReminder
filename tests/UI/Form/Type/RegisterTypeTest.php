@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\Type;
 
-use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 use App\UI\Form\Type\RegisterType;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Form;
@@ -53,7 +52,7 @@ class RegisterTypeTest extends TypeTestCase
         );
     }
 
-    public function testDataSubmission()
+    public function testFormStructure()
     {
         $registerType = $this->factory->create(RegisterType::class);
 
@@ -61,9 +60,6 @@ class RegisterTypeTest extends TypeTestCase
             $registerType->isSynchronized()
         );
 
-        static::assertInstanceOf(
-            UserRegistrationDTOInterface::class,
-            $registerType->getData()
-        );
+        static::assertTrue($registerType->isEmpty());
     }
 }

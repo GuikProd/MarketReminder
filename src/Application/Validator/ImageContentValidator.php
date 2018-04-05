@@ -61,6 +61,10 @@ class ImageContentValidator extends ConstraintValidator implements ImageContentV
      */
     public function validate($value, Constraint $constraint)
     {
+        if (is_null($value)) {
+            return;
+        }
+
         $analysedImage = $this->cloudVisionAnalyser
                               ->analyse(
                                   $value->getPathname(),
