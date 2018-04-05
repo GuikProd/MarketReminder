@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace App\Application\Symfony\Validator;
 
-use App\Application\Helper\CloudVision\CloudVisionVoterHelper;
-use App\Application\Helper\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
-use App\Application\Helper\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\GCP\CloudVision\CloudVisionVoterHelper;
+use App\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use App\Application\Symfony\Validator\Interfaces\ImageContentValidatorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -38,14 +39,21 @@ class ImageContentValidator extends ConstraintValidator implements ImageContentV
     private $cloudVisionDescriber;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
         CloudVisionAnalyserHelperInterface $cloudVisionAnalyserHelper,
-        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper
+        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper,
+        TranslatorInterface $translator
     ) {
         $this->cloudVisionAnalyser = $cloudVisionAnalyserHelper;
         $this->cloudVisionDescriber = $cloudVisionDescriberHelper;
+        $this->translator = $translator;
     }
 
     /**
@@ -65,8 +73,11 @@ class ImageContentValidator extends ConstraintValidator implements ImageContentV
 
         foreach ($this->cloudVisionDescriber->getLabels() as $label) {
             if (!CloudVisionVoterHelper::vote($label)) {
-                $this->context->buildViolation($constraint->payload)
-                              ->addViolation();
+                $this->context
+                     ->buildViolation(
+                         $this->translator
+                              ->trans($constraint->message, [], 'validators')
+                     )->addViolation();
             }
         }
     }

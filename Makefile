@@ -67,6 +67,9 @@ phpunit: ## Launch all PHPUnit tests
 phpunit: tests
 	    $(ENV_PHP) vendor/bin/phpunit
 
+phpunit-blackfire: ## Allow to launch Blackfire tests
+	    $(ENV_PHP) vendor/bin/phpunit --group Blackfire
+
 behat: ## Launch all Behat tests
 behat: features
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)

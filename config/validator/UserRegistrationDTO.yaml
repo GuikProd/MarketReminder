@@ -40,3 +40,5 @@ App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO:
                      - 'image/jpg'
                  mimeTypesMessage: 'image.invalid_format'
                  groups: ['registration']
+             - ImageContent:
+                 groups: ['registration']

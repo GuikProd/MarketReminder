@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Application\Symfony\Validator\Interfaces;
 
-use App\Application\Helper\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
-use App\Application\Helper\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Interface ImageContentValidatorInterface.
@@ -28,9 +29,11 @@ interface ImageContentValidatorInterface
      *
      * @param CloudVisionAnalyserHelperInterface   $cloudVisionAnalyserHelper
      * @param CloudVisionDescriberHelperInterface  $cloudVisionDescriberHelper
+     * @param TranslatorInterface                  $translator
      */
     public function __construct(
         CloudVisionAnalyserHelperInterface $cloudVisionAnalyserHelper,
-        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper
+        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper,
+        TranslatorInterface $translator
     );
 }

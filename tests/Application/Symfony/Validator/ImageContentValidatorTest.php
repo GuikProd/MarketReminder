@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Symfony\Validator;
 
-use App\Application\Helper\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
-use App\Application\Helper\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use App\Application\Symfony\Validator\ImageContentValidator;
 use App\Application\Symfony\Validator\Interfaces\ImageContentValidatorInterface;
+use App\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintValidator;
 
 /**
@@ -31,7 +32,8 @@ class ImageContentValidatorTest extends TestCase
     {
         $imageContentValidator = new ImageContentValidator(
             $this->createMock(CloudVisionAnalyserHelperInterface::class),
-            $this->createMock(CloudVisionDescriberHelperInterface::class)
+            $this->createMock(CloudVisionDescriberHelperInterface::class),
+            $this->createMock(TranslatorInterface::class)
 
         );
 
