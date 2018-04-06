@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\UseCase\UserResetPassword\Model;
 
+use App\Application\Helper\Security\TokenGeneratorHelper;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
-use App\Infra\Helper\Security\TokenGeneratorHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class UserResetPasswordTokenTest
+ * Class UserResetPasswordTokenTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

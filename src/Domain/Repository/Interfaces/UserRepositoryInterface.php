@@ -52,4 +52,12 @@ interface UserRepositoryInterface
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getUserByToken(string $token):? UserInterface;
+
+    /**
+     * @param UserInterface $user
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(UserInterface $user): void;
 }

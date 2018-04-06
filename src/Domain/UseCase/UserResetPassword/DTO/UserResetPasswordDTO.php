@@ -38,8 +38,10 @@ class UserResetPasswordDTO implements UserResetPasswordDTOInterface
      * @param string $email     The email of the User who reset his password.
      * @param string $username  The username of the User who reset his password.
      */
-    public function __construct(string $email, string $username)
-    {
+    public function __construct(
+        string $email,
+        string $username
+    ) {
         $this->email = $email;
         $this->username = $username;
     }

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ "Registration"|trans }}{% endblock %}
+{% block title %}{{ "registration.title"|trans }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -8,52 +8,17 @@
 {% endblock %}
 
 {% block body %}
-    <section class="registration-bloc">
-        <div class="mdl-grid contact-form">
-            <div class="mdl-cell mdl-cell--12-col mdl-card mdl-shadow--4dp">
-                <div class="mdl-card__title">
-                    <h2 class="mdl-card__title-text">
-                        {{ "Create an account"|trans }}
-                    </h2>
-                </div>
-                <div class="mdl-card__media">
-                </div>
-                <div class="mdl-card__supporting-text">
-                    {{ form_start(registerForm) }}
-                    {{ form_errors(registerForm) }}
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        {{ form_label(registerForm.username, '', {'label_attr': {'class': 'mdl-textfield__label'}}) }}
-                        {{ form_widget(registerForm.username, {'attr': {'class': 'mdl-textfield__input'}}) }}
-                        {{ form_errors(registerForm.username, {'attr': {'class': 'mdl-textfield__error'}}) }}
-                    </div>
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        {{ form_label(registerForm.email, '', {'label_attr': {'class': 'mdl-textfield__label'}}) }}
-                        {{ form_widget(registerForm.email, {'attr': {'class': 'mdl-textfield__input'}}) }}
-                        {{ form_errors(registerForm.email, {'attr': {'class': 'mdl-textfield__error'}}) }}
-                    </div>
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        {{ form_label(registerForm.plainPassword, '', {'label_attr': {'class': 'mdl-textfield__label'}}) }}
-                        {{ form_widget(registerForm.plainPassword, {'attr': {'class': 'mdl-textfield__input'}}) }}
-                        {{ form_errors(registerForm.plainPassword, {'attr': {'class': 'mdl-textfield__error'}}) }}
-                    </div>
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
-                        <input class="mdl-textfield__input" placeholder="{{ "Profile image"|trans }}" type="text" id="uploadFile" readonly/>
-                        <div class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-                            <i class="material-icons">attach_file</i>
-                            {{ form_widget(registerForm.profileImage) }}
-                            {{ form_errors(registerForm.profileImage, {'attr': {'class': 'mdl-textfield__error'}}) }}
-                        </div>
-                    </div>
-                    <p>
-                        <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                            {{ "Create an account"|trans }}
-                        </button>
-                    </p>
-                    {{ form_end(registerForm) }}
-                    <p class="registration-bloc__login-text">
-                        <a href="">{{ "Already have an account ?"|trans }}</a>
-                    </p>
-                </div>
+    <section class="mdc-layout-grid__cell--align-middle registration-bloc">
+        {% form_theme registerForm 'form/themes/_registerTypeTheme.html.twig' %}
+        {{ form(registerForm) }}
+
+        <div class="mdc-snackbar mdc-snackbar--align-start"
+             aria-live="assertive"
+             aria-atomic="true"
+             aria-hidden="true">
+            <div class="mdc-snackbar__text"></div>
+            <div class="mdc-snackbar__action-wrapper">
+                <button type="button" class="mdc-snackbar__action-button"></button>
             </div>
         </div>
     </section>
@@ -62,4 +27,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('build/form.js') }}"></script>
+    <script src="{{ asset('build/snackbar.js') }}"></script>
 {% endblock %}

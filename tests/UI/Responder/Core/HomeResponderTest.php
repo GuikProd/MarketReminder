@@ -15,11 +15,12 @@ namespace App\Tests\UI\Responder\Core;
 
 use App\Responder\Core\HomeResponder;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * Class HomeResponderTest
+ * Class HomeResponderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -27,13 +28,16 @@ class HomeResponderTest extends TestCase
 {
     public function testResponseIsReturned()
     {
+        $requestMock = $this->createMock(Request::class);
         $twigMock = $this->createMock(Environment::class);
+        $twigMock->method('getCharset')
+                 ->willReturn('UTF-8');
 
         $homeResponder = new HomeResponder($twigMock);
 
         static::assertInstanceOf(
             Response::class,
-            $homeResponder()
+            $homeResponder($requestMock)
         );
     }
 }

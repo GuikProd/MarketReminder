@@ -12,12 +12,13 @@ declare(strict_types=1);
  */
 
 use App\Domain\Models\User;
+use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
  * Class DatabaseContext
@@ -42,24 +43,20 @@ class DatabaseContext implements Context
     private $schemaTool;
 
     /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
-
-    /**
      * DatabaseContext constructor.
      *
-     * @param RegistryInterface            $doctrine
-     * @param KernelInterface              $kernel
-     * @param UserPasswordEncoderInterface $encoder
+     * @param RegistryInterface        $doctrine
+     * @param KernelInterface          $kernel
      */
-    public function __construct(RegistryInterface $doctrine, KernelInterface $kernel, UserPasswordEncoderInterface $encoder)
-    {
+    public function __construct(
+        RegistryInterface $doctrine,
+        KernelInterface $kernel
+    ) {
         $this->doctrine = $doctrine;
         $this->kernel = $kernel;
         $this->schemaTool = new SchemaTool($this->doctrine->getManager());
-        $this->passwordEncoder = $encoder;
     }
+
     /**
      * @BeforeScenario
      *
@@ -82,15 +79,23 @@ class DatabaseContext implements Context
      */
     public function iLoadFollowingUsers(TableNode $users)
     {
+        $encoder = new BCryptPasswordEncoder(13);
+
         foreach ($users->getHash() as $hash) {
 
-            $user = new User(
-                $hash['email'],
+            $userDTO = new UserRegistrationDTO(
                 $hash['username'],
+                $hash['email'],
                 $hash['plainPassword'],
-                $this->passwordEncoder,
-                [$hash['currentState']],
                 $hash['validationToken']
+            );
+
+            $user = new User(
+                $userDTO->email,
+                $userDTO->username,
+                $hash['plainPassword'],
+                Closure::fromCallable([$encoder, 'encodePassword']),
+                $userDTO->validationToken
             );
 
             if ($hash['validated']) {

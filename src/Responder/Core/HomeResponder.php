@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Responder\Core;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -45,15 +46,20 @@ class HomeResponder
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function __invoke()
+    public function __invoke(Request $request)
     {
         $response = new Response(
             $this->twig->render('core/index.html.twig')
         );
 
-        return $response->setCache([
-            's_maxage' => 600,
-            'public' => true
+        $response->setCache([
+            'etag' => md5(crypt(str_rot13($response->getContent()), $this->twig->getCharset())),
+            'public' => false,
+            's_maxage' => 6000
         ]);
+
+        $response->isNotModified($request);
+
+        return $response;
     }
 }

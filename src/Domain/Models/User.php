@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Models;
 
-use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\Models\Interfaces\UserInterface;
+use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 
@@ -40,11 +40,6 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
      * @var string
      */
     private $email;
-
-    /**
-     * @var string
-     */
-    private $plainPassword;
 
     /**
      * @var string
@@ -97,22 +92,13 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $profileImage;
 
     /**
-     * User constructor.
-     *
-     * @param string         $email
-     * @param string         $username
-     * @param string         $plainPassword
-     * @param object         $passwordEncoder
-     * @param array          $currentState
-     * @param string         $validationToken
-     * @param ImageInterface $profileImage
+     * {@inheritdoc}
      */
     public function __construct(
         string $email,
         string $username,
-        string $plainPassword,
-        object $passwordEncoder,
-        array $currentState,
+        string $password,
+        callable $passwordEncoder,
         string $validationToken,
         ImageInterface $profileImage = null
     ) {
@@ -123,8 +109,8 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
         $this->roles[] = 'ROLE_USER';
         $this->email = $email;
         $this->username = $username;
-        $this->password = $passwordEncoder->encodePassword($this, $plainPassword);
-        $this->currentState = $currentState;
+        $this->password = $passwordEncoder($password, null);
+        $this->currentState = ['toValidate'];
         $this->validationToken = $validationToken;
         $this->profileImage = $profileImage;
     }
@@ -151,7 +137,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getId(): ? int
+    public function getId(): ? string
     {
         return $this->id;
     }
@@ -170,14 +156,6 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function getEmail(): ? string
     {
         return $this->email;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPlainPassword(): ? string
-    {
-        return $this->plainPassword;
     }
 
     /**

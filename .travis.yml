@@ -1,6 +1,5 @@
 language: php
 php:
-    - '7.1'
     - '7.2'
 services:
     - docker
@@ -9,16 +8,18 @@ before_install:
     - docker pull node
     - docker run -d -p 127.0.0.1:6379:6379 redis
     - docker ps -a
-    - echo $GCP_PROJECT_KEY > /config/credentials/google/bucket/credentials.json
+    - ls -l $TRAVIS_BUILD_DIR
+    - echo $GCP_PROJECT_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/bucket/credentials.json
+    - echo $GCP_VISION_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/vision/credentials.json
 before_script:
-    - composer install
+    - composer install --no-scripts -n
     - cp .env.dist .env
     - cp .env.behat.dist .env.behat
     - cp phpunit.xml.dist phpunit.xml
 script:
     - ./bin/console d:d:c --env=test
     - ./bin/console d:s:c --env=test
-    - vendor/bin/phpspec run
+    - ./bin/console d:f:l -n --env=test
     - vendor/bin/phpunit -v
     - vendor/bin/behat --profile default
 notifications:

@@ -25,7 +25,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Class AskResetPasswordTypeSubscriberTest
+ * Class AskResetPasswordTypeSubscriberTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

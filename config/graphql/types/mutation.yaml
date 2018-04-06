@@ -39,9 +39,9 @@ Mutation:
                        type: "String!"
                resolve: "@graphql.user_mutator=('drop_user', [args])"
 
-        # Image management
+        # Interfaces management
            add_image:
-               type: "Image"
+               type: "Interfaces"
                args:
                    user:
                        type: "Int!"
