@@ -13,18 +13,16 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Security;
 
-use App\UI\Action\Security\ValidationTokenAction;
 use App\Domain\Models\Interfaces\UserInterface;
-use App\Responder\Security\ValidationTokenResponder;
-use PHPUnit\Framework\TestCase;
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
+use App\UI\Action\Security\Interfaces\ValidationTokenActionInterface;
+use App\UI\Action\Security\ValidationTokenAction;
+use App\UI\Responder\Security\ValidationTokenResponder;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 /**
  * Class ValidationTokenActionTest.
@@ -33,25 +31,37 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  */
 class ValidationTokenActionTest extends TestCase
 {
+    public function testItImplements()
+    {
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $userRepository = $this->createMock(UserRepositoryInterface::class);
+
+        $validationTokenAction = new ValidationTokenAction(
+            $entityManagerMock,
+            $userRepository
+        );
+
+        static::assertInstanceOf(
+            ValidationTokenActionInterface::class,
+            $validationTokenAction
+        );
+    }
+
     /**
      * Allow to test the validation of an account using a "mock" of the Request and Session.
      */
-    public function testReturn()
+    public function testItReturn()
     {
-        $session = new Session(new MockArraySessionStorage());
-        $translator = $this->createMock(TranslatorInterface::class);
         $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $userRepository = $this->createMock(UserRepositoryInterface::class);
 
         $userMock = $this->createMock(UserInterface::class);
 
         $requestMock = new Request([], [], ['token' => 'ToFEGARRdjLs2', 'user' => $userMock]);
 
         $validationTokenAction = new ValidationTokenAction(
-            $session,
-            $translator,
             $entityManagerMock,
-            $eventDispatcherMock
+            $userRepository
         );
 
         $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);

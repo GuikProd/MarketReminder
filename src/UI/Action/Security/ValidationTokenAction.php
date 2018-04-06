@@ -13,14 +13,15 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
+use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Domain\Event\User\UserValidatedEvent;
-use App\Responder\Security\ValidationTokenResponder;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
+use App\UI\Action\Security\Interfaces\ValidationTokenActionInterface;
+use App\UI\Responder\Security\Interfaces\ValidationTokenResponderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ValidationTokenAction;
@@ -40,72 +41,82 @@ use Symfony\Component\Translation\TranslatorInterface;
  *     }
  * )
  */
-class ValidationTokenAction
+class ValidationTokenAction implements ValidationTokenActionInterface
 {
-    /**
-     * @var SessionInterface
-     */
-    private $session;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
     /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
     /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
      * ValidationTokenAction constructor.
      *
-     * @param SessionInterface         $session
-     * @param TranslatorInterface      $translator
-     * @param EntityManagerInterface   $entityManager
      * @param EventDispatcherInterface $eventDispatcher
+     * @param UserRepositoryInterface $userRepository
      */
     public function __construct(
-        SessionInterface $session,
-        TranslatorInterface $translator,
-        EntityManagerInterface $entityManager,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        UserRepositoryInterface $userRepository
     ) {
-        $this->session = $session;
-        $this->translator = $translator;
-        $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
+        $this->userRepository = $userRepository;
     }
 
     /**
-     * @param Request                  $request
-     * @param ValidationTokenResponder $responder
+     * @param Request $request
+     * @param ValidationTokenResponderInterface $responder
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * {@inheritdoc}
      */
     public function __invoke(
         Request $request,
-        ValidationTokenResponder $responder
-    ) {
-        $request->attributes->get('user')->validate();
+        ValidationTokenResponderInterface $responder
+    ): RedirectResponse {
 
-        $event = new UserValidatedEvent($request->attributes->get('user'));
-        $this->eventDispatcher->dispatch(UserValidatedEvent::NAME, $event);
+        if (null === $request->attributes->get('token') || '' === $request->attributes->get('token')) {
+            $this->eventDispatcher->dispatch(
+                SessionMessageEvent::NAME,
+                new SessionMessageEvent(
+                    'failure',
+                    'security.validation_failure.notFound_token'
+                )
+            );
 
-        $this->entityManager->flush();
+            return $responder();
 
-        $this->session
-             ->getFlashBag()
-             ->add(
-                 'success',
-                 $this->translator
-                      ->trans('security.validation_success', [], 'messages')
-             );
+        } elseif (!$user = $this->userRepository->getUserByToken($request->attributes->get('token'))) {
+            $this->eventDispatcher->dispatch(
+                SessionMessageEvent::NAME,
+                new SessionMessageEvent(
+                    'failure',
+                    'security.validation_failure.notFound_token'
+                )
+            );
+
+            return $responder();
+        }
+
+        $user->validate();
+
+        $this->userRepository->flush();
+
+        $this->eventDispatcher->dispatch(
+            UserValidatedEvent::NAME,
+            new UserValidatedEvent($user)
+        );
+
+        $this->eventDispatcher->dispatch(
+            SessionMessageEvent::NAME,
+            new SessionMessageEvent(
+                'success',
+                'security.validation_success'
+            )
+        );
 
         return $responder();
     }

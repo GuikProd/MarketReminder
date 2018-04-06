@@ -11,8 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Responder\Core;
+namespace App\UI\Responder\Core;
 
+use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -22,7 +23,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class HomeResponder
+class HomeResponder implements HomeResponderInterface
 {
     /**
      * @var Environment
@@ -30,9 +31,7 @@ class HomeResponder
     private $twig;
 
     /**
-     * HomeResponder constructor.
-     *
-     * @param Environment $twig
+     * {@inheritdoc}
      */
     public function __construct(Environment $twig)
     {
@@ -58,7 +57,9 @@ class HomeResponder
             's_maxage' => 6000
         ]);
 
-        $response->isNotModified($request);
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
 
         return $response;
     }
