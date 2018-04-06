@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Core;
 
+use App\UI\Responder\Core\Interfaces\ContactResponderInterface;
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ContactResponder
+class ContactResponder implements ContactResponderInterface
 {
     /**
      * @var Environment

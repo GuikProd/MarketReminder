@@ -11,31 +11,23 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\UI\Action\Core;
+namespace App\UI\Action\Core\Interfaces;
 
-use App\UI\Action\Core\Interfaces\ContactActionInterface;
 use App\UI\Responder\Core\Interfaces\ContactResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ContactAction
+ * Interface ContactActionInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
- *
- * @Route(
- *     name="contact",
- *     path="/contact",
- *     methods={"GET", "POST"}
- * )
  */
-class ContactAction implements ContactActionInterface
+interface ContactActionInterface
 {
-    public function __invoke(
-        Request $request,
-        ContactResponderInterface $responder
-    ) : Response {
-        return $responder();
-    }
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function __invoke(Request $request, ContactResponderInterface $responder): Response;
 }
