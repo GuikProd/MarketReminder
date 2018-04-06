@@ -94,9 +94,10 @@ class RegisterTypeHandlerTest extends KernelTestCase
         $this->imageRetrieverHelper = $this->createMock(ImageRetrieverHelperInterface::class);
         $this->userBuilder = $this->createMock(UserBuilderInterface::class);
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
-        $this->validator = static::bootKernel()->getContainer()->get('validator');
+        $this->validator = $this->createMock(ValidatorInterface::class);
 
         $this->passwordEncoderFactory->method('getEncoder')->willReturn(new BCryptPasswordEncoder(13));
+        $this->validator->method('validate')->willReturn([]);
     }
 
     public function testItImplements()
@@ -146,6 +147,7 @@ class RegisterTypeHandlerTest extends KernelTestCase
     public function testRightHandlingProcessWithoutImage()
     {
         $formInterfaceMock = $this->createMock(FormInterface::class);
+        $fileTypeMock = $this->createMock(FormInterface::class);
 
         $userRegistrationDTOMock = new UserRegistrationDTO(
             'Toto',
@@ -169,6 +171,7 @@ class RegisterTypeHandlerTest extends KernelTestCase
         $formInterfaceMock->method('isSubmitted')->willReturn(true);
         $formInterfaceMock->method('isValid')->willReturn(true);
         $formInterfaceMock->method('getData')->willReturn($userRegistrationDTOMock);
+        $fileTypeMock->method('getData')->willReturn(null);
 
         static::assertTrue(
             $registerTypeHandler->handle($formInterfaceMock)
@@ -204,7 +207,7 @@ class RegisterTypeHandlerTest extends KernelTestCase
         $formInterfaceMock->method('isSubmitted')->willReturn(true);
         $formInterfaceMock->method('isValid')->willReturn(true);
         $formInterfaceMock->method('getData')->willReturn($userRegistrationDTOMock);
-        
+
         static::assertTrue(
             $registerTypeHandler->handle($formInterfaceMock)
         );

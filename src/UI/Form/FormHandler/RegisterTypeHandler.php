@@ -114,9 +114,9 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
 
             $encoder = $this->passwordEncoderFactory->getEncoder(User::class);
 
-            if (!is_null($registerForm->get('profileImage')->getData())) {
-                $this->imageUploaderHelper->generateFilename($registerForm->get('profileImage')->getData());
-                $this->imageUploaderHelper->upload($registerForm->get('profileImage')->getData());
+            if (!is_null($registerForm->getData()->profileImage)) {
+                $this->imageUploaderHelper->generateFilename($registerForm->getData()->profileImage);
+                $this->imageUploaderHelper->upload($registerForm->getData()->profileImage);
 
                 $this->imageBuilder->build(
                     $this->imageUploaderHelper->getFileName(),
