@@ -17,6 +17,7 @@ use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
+use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Event\User\UserCreatedEvent;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
@@ -34,7 +35,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class RegisterTypeHandler implements RegisterTypeHandlerInterface
 {
-
     /**
      * @var CloudStoragePersisterHelperInterface
      */
@@ -66,6 +66,11 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     private $imageRetrieverHelper;
 
     /**
+     * @var UserBuilderInterface
+     */
+    private $userBuilder;
+
+    /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
@@ -76,25 +81,26 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     private $validator;
 
     /**
-     * RegisterTypeHandler constructor.
-     *
-     * @param CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param EncoderFactoryInterface $passwordEncoderFactory
-     * @param ImageBuilderInterface $imageBuilder
-     * @param ImageUploaderHelperInterface $imageUploaderHelper
-     * @param ImageRetrieverHelperInterface $imageRetrieverHelper
-     * @param UserRepositoryInterface $userRepository
-     * @param ValidatorInterface $validator
+     * {@inheritdoc}
      */
-    public function __construct(CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper, EventDispatcherInterface $eventDispatcher, EncoderFactoryInterface $passwordEncoderFactory, ImageBuilderInterface $imageBuilder, ImageUploaderHelperInterface $imageUploaderHelper, ImageRetrieverHelperInterface $imageRetrieverHelper, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
-    {
+    public function __construct(
+        CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper,
+        EventDispatcherInterface $eventDispatcher,
+        EncoderFactoryInterface $passwordEncoderFactory,
+        ImageBuilderInterface $imageBuilder,
+        ImageUploaderHelperInterface $imageUploaderHelper,
+        ImageRetrieverHelperInterface $imageRetrieverHelper,
+        UserBuilderInterface $userBuilder,
+        UserRepositoryInterface $userRepository,
+        ValidatorInterface $validator
+    ) {
         $this->cloudStoragePersisterHelper = $cloudStoragePersisterHelper;
         $this->eventDispatcher = $eventDispatcher;
         $this->passwordEncoderFactory = $passwordEncoderFactory;
         $this->imageBuilder = $imageBuilder;
         $this->imageUploaderHelper = $imageUploaderHelper;
         $this->imageRetrieverHelper = $imageRetrieverHelper;
+        $this->userBuilder = $userBuilder;
         $this->userRepository = $userRepository;
         $this->validator = $validator;
     }
@@ -119,7 +125,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 );
             }
 
-            $user = new User(
+            $this->userBuilder->createFromRegistration(
                 $registerForm->getData()->email,
                 $registerForm->getData()->username,
                 $registerForm->getData()->password,
@@ -128,10 +134,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $this->imageBuilder->getImage() ?: null
             );
 
-            var_dump($user);
-            die();
-
-            $errors = $this->validator->validate($user, null, ['User', 'registration']);
+            $errors = $this->validator->validate($this->userBuilder->getUser(), null, ['User', 'registration']);
 
             if (count($errors) > 0) {
                 $this->eventDispatcher->dispatch(
@@ -145,11 +148,11 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 return false;
             }
 
-            $this->userRepository->save($user);
+            $this->userRepository->save($this->userBuilder->getUser());
 
             $this->eventDispatcher->dispatch(
                 UserCreatedEvent::NAME,
-                new UserCreatedEvent($user)
+                new UserCreatedEvent($this->userBuilder->getUser())
             );
 
             $this->eventDispatcher->dispatch(

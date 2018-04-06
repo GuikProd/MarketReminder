@@ -16,6 +16,7 @@ namespace App\UI\Form\FormHandler\Interfaces;
 use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
+use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -33,14 +34,15 @@ interface RegisterTypeHandlerInterface
     /**
      * RegisterTypeHandlerInterface constructor.
      *
-     * @param CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param EncoderFactoryInterface $passwordEncoderFactory
-     * @param ImageBuilderInterface $imageBuilder
-     * @param ImageUploaderHelperInterface $imageUploaderHelper
-     * @param ImageRetrieverHelperInterface $imageRetrieverHelper
-     * @param UserRepositoryInterface $userRepository
-     * @param ValidatorInterface $validator
+     * @param CloudStoragePersisterHelperInterface  $cloudStoragePersisterHelper
+     * @param EventDispatcherInterface              $eventDispatcher
+     * @param EncoderFactoryInterface               $passwordEncoderFactory
+     * @param ImageBuilderInterface                 $imageBuilder
+     * @param ImageUploaderHelperInterface          $imageUploaderHelper
+     * @param ImageRetrieverHelperInterface         $imageRetrieverHelper
+     * @param UserBuilderInterface                  $userBuilder
+     * @param UserRepositoryInterface               $userRepository
+     * @param ValidatorInterface                    $validator
      */
     public function __construct(
         CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper,
@@ -49,7 +51,9 @@ interface RegisterTypeHandlerInterface
         ImageBuilderInterface $imageBuilder,
         ImageUploaderHelperInterface $imageUploaderHelper,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
-        UserRepositoryInterface $userRepository, ValidatorInterface $validator
+        UserBuilderInterface $userBuilder,
+        UserRepositoryInterface $userRepository,
+        ValidatorInterface $validator
     );
 
     /**
