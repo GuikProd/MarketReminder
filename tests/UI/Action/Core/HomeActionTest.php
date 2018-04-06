@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\UI\Action\Core;
 
 use App\UI\Action\Core\HomeAction;
-use App\Responder\Core\HomeResponder;
+use App\UI\Action\Core\Interfaces\HomeActionInterface;
+use App\UI\Responder\Core\HomeResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,16 @@ use Twig\Environment;
  */
 class HomeActionTest extends TestCase
 {
+    public function testItImplements()
+    {
+        $homeAction = new HomeAction();
+
+        static::assertInstanceOf(
+            HomeActionInterface::class,
+            $homeAction
+        );
+    }
+
     public function testReturn()
     {
         $requestMock = $this->createMock(Request::class);

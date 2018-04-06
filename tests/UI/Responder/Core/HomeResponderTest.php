@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Core;
 
-use App\Responder\Core\HomeResponder;
+use App\UI\Responder\Core\HomeResponder;
+use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +27,20 @@ use Twig\Environment;
  */
 class HomeResponderTest extends TestCase
 {
+    public function testItImplements()
+    {
+        $twigMock = $this->createMock(Environment::class);
+        $twigMock->method('getCharset')
+            ->willReturn('UTF-8');
+
+        $homeResponder = new HomeResponder($twigMock);
+
+        static::assertInstanceOf(
+            HomeResponderInterface::class,
+            $homeResponder
+        );
+    }
+
     public function testResponseIsReturned()
     {
         $requestMock = $this->createMock(Request::class);
