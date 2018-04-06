@@ -28,13 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route(
  *     name="web_ask_reset_password",
- *     path="/{_locale}/reset-password/ask",
- *     defaults={
- *         "_locale": "%locale%"
- *     },
- *     requirements={
- *         "_locale": "%accepted_locales%"
- *     }
+ *     path="/reset-password/ask"
  * )
  */
 class AskResetPasswordAction

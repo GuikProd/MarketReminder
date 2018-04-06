@@ -30,15 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route(
  *     name="web_validation",
- *     path="/{_locale}/validation/{token}",
- *     methods={"GET"},
- *     defaults={
- *         "_locale": "%locale%"
- *     },
- *     requirements={
- *         "_locale": "%accepted_locales%",
- *         "token": "^[a-zA-Z0-9]+"
- *     }
+ *     path="/validation/{token}",
+ *     methods={"GET"}
  * )
  */
 class ValidationTokenAction implements ValidationTokenActionInterface

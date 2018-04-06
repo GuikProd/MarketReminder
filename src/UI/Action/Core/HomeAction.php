@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route(
  *     name="index",
- *     path="/{_locale}/",
+ *     path="/",
  *     methods={"GET"},
  *     requirements={
  *         "_locale": "%accepted_locales%"

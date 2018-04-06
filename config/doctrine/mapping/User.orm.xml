@@ -13,7 +13,7 @@
         <field name="creationDate" type="integer" nullable="false" />
         <field name="validationDate" type="integer" nullable="true" unique="true" />
         <field name="validated" type="boolean" nullable="false" />
-        <field name="validationToken" type="string" length="35" nullable="true" unique="true" />
+        <field name="validationToken" type="string" length="35" nullable="true" unique="false" />
         <field name="resetPasswordToken" type="string" length="10" unique="true" nullable="true" />
         <field name="active" type="boolean" nullable="false" />
         <field name="currentState" type="array" nullable="false" unique="false" />

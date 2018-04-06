@@ -11,8 +11,8 @@ ENV_BLACKFIRE = $(DOCKER) exec marketReminder_blackfire
 ## Globals commands
 start: ## Allow to create the project
 	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --no-recreate
-	    install
-	    cache-clear
+	    make install
+	    make cache-clear
 
 stop: ## Allow to stop the containers
 	    $(DOCKER_COMPOSE) stop
@@ -55,6 +55,9 @@ check-schema: ## Check the mapping
 check-schema: config/doctrine
 	    $(ENV_PHP) ./bin/console d:s:v
 
+update-schema: ## Allow to update the schema
+	    $(ENV_PHP) ./bin/console d:s:u --force
+
 fixtures_test: ## Allow to load the fixtures in the test env
 fixtures_test: src/DataFixtures
 	    $(ENV_PHP) ./bin/console d:f:l -n --env=test
@@ -62,6 +65,10 @@ fixtures_test: src/DataFixtures
 fixtures_dev: ## Allow to load the fixtures in the dev env
 fixtures_dev: src/DataFixtures
 	    $(ENV_PHP) ./bin/console d:f:l -n --env=dev
+
+redis: ## Allow to clean the Redis cache
+	    $(ENV_PHP) ./bin/console doctrine:cache:clear-query
+	    $(ENV_PHP) ./bin/console doctrine:cache:clear-metadata
 
 phpunit: ## Launch all PHPUnit tests
 phpunit: tests
@@ -72,6 +79,9 @@ phpunit-blackfire: ## Allow to launch Blackfire tests
 
 behat: ## Launch all Behat tests
 behat: features
+	    make check-schema
+	    make fixtures_test
+	    make redis
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 php-cs: ## Allow to use php-cs-fixer
