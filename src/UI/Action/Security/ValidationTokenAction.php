@@ -47,10 +47,7 @@ class ValidationTokenAction implements ValidationTokenActionInterface
     private $userRepository;
 
     /**
-     * ValidationTokenAction constructor.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param UserRepositoryInterface $userRepository
+     * {@inheritdoc}
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,

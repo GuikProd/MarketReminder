@@ -40,8 +40,13 @@ remove: ## Allow to remove a dependencie
 autoload: ## Allow to dump the autoload
 	    $(COMPOSER) dump-autoload -a -o
 
+## Symfony commands
+
 cache: ## Allow to clear the Symfony cache
 	    rm -rf ./var/cache/*
+
+container: ## Allow to debug the container
+	    $(ENV_PHP) ./bin/console debug:container $(SERVICE)
 
 route: ## Allow to debug the route
 	    $(ENV_PHP) ./bin/console d:r

@@ -84,8 +84,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
                 'text/html'
             );
 
-        $this->swiftMailer
-            ->send($registrationMail);
+        $this->swiftMailer->send($registrationMail);
     }
 
     /**
@@ -104,8 +103,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
                 'text/html'
             );
 
-        $this->swiftMailer
-            ->send($validationMail);
+        $this->swiftMailer->send($validationMail);
     }
 
     /**

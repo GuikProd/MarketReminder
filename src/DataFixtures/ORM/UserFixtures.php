@@ -37,13 +37,11 @@ class UserFixtures extends Fixture
             'HP',
             'Ie1FDLHPP',
             \Closure::fromCallable([$encoder, 'encodePassword']),
-            crypt(
-                str_rot13(
-                    str_shuffle(
-                        'hp@gmail.com'
-                    )
-                ),
-                'Ie1FDLHPP'
+            md5(
+                crypt(
+                    str_rot13('HP'),
+                    "hp@gmail.com"
+                )
             )
         );
 
@@ -54,15 +52,12 @@ class UserFixtures extends Fixture
             'Toto',
             'Ie1FDLTOTO',
             \Closure::fromCallable([$encoder, 'encodePassword']),
-            crypt(
-                str_rot13(
-                    str_shuffle(
-                        'toto@gmail.com'
-                    )
-                ),
-                'Ie1FDLTOTO'
+            md5(
+                crypt(
+                    str_rot13('Toto'),
+                    "toto@gmail.com"
+                )
             )
-
         );
 
         $this->setReference('user_II', $userII);
@@ -72,13 +67,11 @@ class UserFixtures extends Fixture
             'Guik',
             'Ie1FDLGK',
             \Closure::fromCallable([$encoder, 'encodePassword']),
-            crypt(
-                str_rot13(
-                    str_shuffle(
-                        'guik@gmail.com'
-                    )
-                ),
-                'Ie1FDLGuik'
+            md5(
+                crypt(
+                    str_rot13('Guik'),
+                    "guik@gmail.com"
+                )
             )
         );
 
