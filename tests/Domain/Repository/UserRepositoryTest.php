@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class UserRepositoryTest
+ * Class UserRepositoryTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -115,7 +115,7 @@ class UserRepositoryTest extends KernelTestCase
         static::assertInstanceOf(
             UserInterface::class,
             $this->entityManager->getRepository(User::class)
-                                ->getUserByEmail('toto@gmail.com')
+                                ->getUserByEmail('hp@gmail.com')
         );
     }
 }

@@ -37,7 +37,7 @@ User:
                 type: "String"
                 description: "The user token in order to access the API"
             image:
-                type: "Image"
+                type: "Interfaces"
                 description: "The image of the user"
             stocks:
                 type: "[Stock]"

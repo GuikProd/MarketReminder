@@ -5,6 +5,8 @@ parameters:
     kernel.images_dir: "%kernel.project_dir%/public/images/profiles"
     cloud.storage_credentials: "%kernel.project_dir%/config/credentials/google/bucket"
     cloud.vision_credentials: "%kernel.project_dir%/config/credentials/google/vision"
+    cloud.storage.bucket_name: "%env(GOOGLE_BUCKET_NAME)%"
+    cloud.storage.public_url: "%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%/"
     email.sender_address: "%env(SENDER_EMAIL_ADDRESS)%"
 
 services:
@@ -17,14 +19,12 @@ services:
             $bucketCredentialsFolder: "%cloud.storage_credentials%"
             $visionCredentialsFolder: "%cloud.vision_credentials%"
             $filePath: "%kernel.images_dir%"
-            $bucketName: "%env(GOOGLE_BUCKET_NAME)%"
-            $googleStoragePublicUrl: "%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%/"
-            $emailSender: "%email.sender_address%"
-            $workflowRegistry: "@workflow.user_status"
+            $bucketName: "%cloud.storage.bucket_name%"
+            $googleStoragePublicUrl: "%cloud.storage.public_url%"
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Domain,Migrations,Repository}'
+        exclude: '../src/{Domain/Models,Domain/Event,Domain/Subscriber,Domain/UseCase,Migrations,Repository,Kernel.php}'
 
     App\UI\Action\:
         resource: '../src/UI/Action'

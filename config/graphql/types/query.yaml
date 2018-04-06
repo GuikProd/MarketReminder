@@ -12,12 +12,12 @@ Query:
                         description: "The id of the User, if omitted, return all the users."
                 resolve: "@=resolver('user_resolver', [args])"
             image:
-                type: "[Image]"
+                type: "[Interfaces]"
                 description: "An image linked to an user"
                 args:
                     id:
                         type: "Int"
-                        description: "The id of the Image, if omitted, all the images are returned."
+                        description: "The id of the Interfaces, if omitted, all the images are returned."
                 resolve: "@=resolver('image_resolver', [args])"
             stock:
                 type: "[Stock]"

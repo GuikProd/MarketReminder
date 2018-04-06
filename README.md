@@ -4,6 +4,7 @@ The source code of the web application/API used for MarketReminder mobile applic
 
 ## Build
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/06883408-e402-40da-842e-724eadbde07b/mini.png)](https://insight.sensiolabs.com/projects/06883408-e402-40da-842e-724eadbde07b)
 [![Build Status](https://travis-ci.org/Guikingone/MarketReminder.svg?branch=master)](https://travis-ci.org/Guikingone/MarketReminder)
 [![CircleCI](https://circleci.com/gh/Guikingone/MarketReminder.svg?style=svg)](https://circleci.com/gh/Guikingone/MarketReminder)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0975d1e66031b5235e08/maintainability)](https://codeclimate.com/github/Guikingone/MarketReminder/maintainability)
@@ -38,7 +39,7 @@ cp .env.dist .env
 Update the informations linked to Docker then use Docker-Compose :
 
 ```bash
-docker-composer up -d --build
+make start
 ```
 
 Then you must use Composer in order to launch the application :
@@ -77,14 +78,14 @@ http://localhost:port/
 If you need to perform some tasks:
 
 ```bash
-docker exec -it project_php-fpm sh
+make // See the PHP commands
 ```
 
 Once in the container:
 
 ```bash
 # Example for clearing the cache
-./bin/console c:c --env=prod || rm -rf var/cache/*
+make cache-clear
 ```
 
 **Please note that you MUST open a second terminal in order to keep git ou other commands line outside of Docker**
@@ -107,19 +108,13 @@ http://localhost:8000
 
 ### Tests
 
-This project use PHPUnit, PHPSpec, Behat and Blackfire in order to test and validate his internal logic, 
+This project use PHPUnit, Behat and Blackfire in order to test and validate his internal logic, 
 here the listing of available commands for testing purpose:
 
 ```bash
-docker exec -it project_php-fpm sh
+make phpunit
 
-vendor/bin/phpspec run # PHPSpec
-
-vendor/bin/phpunit -v --exclude-group blackfire # PHPUnit without Blackfire
-vendor/bin/phpunit -v --group blackfire # PHPUnit with Blackfire
-
-vendor/bin/behat # Behat suites
-vendor/bin/behat --profile coverage # Behat suites with coverage
+make behat
 ```
 
 ## Contributing 

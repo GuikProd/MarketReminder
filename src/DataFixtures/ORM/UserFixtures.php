@@ -16,6 +16,7 @@ namespace App\DataFixtures\ORM;
 use App\Domain\Models\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
  * Class UserFixtures.
@@ -29,14 +30,13 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $passwordEncoder = $this->container->get('security.password_encoder');
+        $encoder = new BCryptPasswordEncoder(13);
 
         $userI = new User(
             'hp@gmail.com',
             'HP',
             'Ie1FDLHPP',
-            $passwordEncoder,
-            ['active'],
+            \Closure::fromCallable([$encoder, 'encodePassword']),
             crypt(
                 str_rot13(
                     str_shuffle(
@@ -50,11 +50,10 @@ class UserFixtures extends Fixture
         $this->setReference('user', $userI);
 
         $userII = new User(
-            'toto@gmail.fr',
+            'toto@gmail.com',
             'Toto',
             'Ie1FDLTOTO',
-            $passwordEncoder,
-            ['active'],
+            \Closure::fromCallable([$encoder, 'encodePassword']),
             crypt(
                 str_rot13(
                     str_shuffle(
@@ -71,9 +70,8 @@ class UserFixtures extends Fixture
         $userIII = new User(
             'guik@gmail.com',
             'Guik',
-            'Ie1FDLGuik',
-            $passwordEncoder,
-            ['toValidate'],
+            'Ie1FDLGK',
+            \Closure::fromCallable([$encoder, 'encodePassword']),
             crypt(
                 str_rot13(
                     str_shuffle(

@@ -1,1 +1,44 @@
-
+App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO:
+     properties:
+         username:
+             - NotBlank:
+                 message: "validation.filled"
+                 groups: ['registration']
+             - Length:
+                 min: 3
+                 minMessage: "validation.length_short"
+                 max: 25
+                 maxMessage: "validation.length_long"
+                 groups: ['registration']
+         email:
+             - NotBlank:
+                 message: "validation.filled"
+                 groups: ['registration']
+             - Length:
+                 min: 10
+                 minMessage: "validation.length_short"
+                 max: 50
+                 maxMessage: "validation.length_long"
+                 groups: ['registration']
+             - Email:
+                message: "The value `{{ value }}` must be a valid email !"
+         password:
+             - NotBlank:
+                 message: "validation.filled"
+                 groups: ['registration']
+             - Length:
+                 min: 5
+                 minMessage: "validation.length_short"
+                 max: 25
+                 maxMessage: "validation.length_long"
+                 groups: ['registration']
+         profileImage:
+             - Image:
+                 mimeTypes:
+                     - 'image/jpeg'
+                     - 'image/png'
+                     - 'image/jpg'
+                 mimeTypesMessage: 'image.invalid_format'
+                 groups: ['registration']
+             - App\Application\Validator\ImageContent:
+                 groups: ['registration']

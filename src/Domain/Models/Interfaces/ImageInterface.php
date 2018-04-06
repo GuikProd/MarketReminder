@@ -21,47 +21,41 @@ namespace App\Domain\Models\Interfaces;
 interface ImageInterface
 {
     /**
-     * @return int|null
+     * ImageInterface constructor.
+     *
+     * @param string $alt
+     * @param string $filename
+     * @param string $publicUrl
      */
-    public function getId():? int;
+    public function __construct(string $alt, string $filename, string $publicUrl);
+
+    /**
+     * @return int
+     */
+    public function getId(): int;
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreationDate(): \DateTime;
+
+    /**
+     * @return null|\DateTime
+     */
+    public function getModificationDate():? \DateTime;
 
     /**
      * @return string
      */
-    public function getCreationDate(): string;
+    public function getAlt(): string;
 
     /**
-     * @param \DateTime $creationDate
+     * @return string
      */
-    public function setCreationDate(\DateTime $creationDate): void;
+    public function getPublicUrl(): string;
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getModificationDate():? string;
-
-    /**
-     * @param \DateTime $modificationDate
-     */
-    public function setModificationDate(\DateTime $modificationDate): void;
-
-    /**
-     * @return null|string
-     */
-    public function getAlt():? string;
-
-    /**
-     * @param string $alt
-     */
-    public function setAlt(string $alt): void;
-
-    /**
-     * @return null|string
-     */
-    public function getUrl():? string;
-
-    /**
-     * @param string $url
-     */
-    public function setUrl(string $url): void;
+    public function getFilename(): string;
 }

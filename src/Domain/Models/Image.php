@@ -17,7 +17,7 @@ use App\Domain\Models\Interfaces\ImageInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class Image.
+ * Class Interfaces.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -27,6 +27,21 @@ class Image implements ImageInterface
      * @var int
      */
     private $id;
+
+    /**
+     * @var string
+     */
+    private $alt;
+
+    /**
+     * @var string
+     */
+    private $publicUrl;
+
+    /**
+     * @var string
+     */
+    private $filename;
 
     /**
      * @var int
@@ -39,35 +54,24 @@ class Image implements ImageInterface
     private $modificationDate;
 
     /**
-     * @var string
-     */
-    private $alt;
-
-    /**
-     * @var string
-     */
-    private $url;
-
-    /**
-     * Image constructor.
-     *
-     * @param string $alt  The replacement text defined for the image display.
-     * @param string $url  The public URL of the image.
+     * {@inheritdoc}
      */
     public function __construct(
         string $alt,
-        string $url
+        string $filename,
+        string $publicUrl
     ) {
         $this->id = Uuid::uuid4();
         $this->creationDate = time();
         $this->alt = $alt;
-        $this->url = $url;
+        $this->filename = $filename;
+        $this->publicUrl = $publicUrl;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId(): ? int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -75,39 +79,23 @@ class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function getCreationDate(): string
+    public function getCreationDate(): \DateTime
     {
-        return $this->creationDate->format('D d-m-Y h:i:s');
+        return \DateTime::createFromFormat('U', $this->creationDate);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setCreationDate(\DateTime $creationDate): void
+    public function getModificationDate():? \DateTime
     {
-        $this->creationDate = $creationDate;
+        return \DateTime::createFromFormat('U', $this->modificationDate);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getModificationDate(): ? string
-    {
-        return $this->modificationDate->format('D d-m-Y h:i:s');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setModificationDate(\DateTime $modificationDate): void
-    {
-        $this->modificationDate = $modificationDate;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlt():? string
+    public function getAlt(): string
     {
         return $this->alt;
     }
@@ -115,24 +103,16 @@ class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function setAlt(string $alt): void
+    public function getPublicUrl(): string
     {
-        $this->alt = $alt;
+        return $this->publicUrl;
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getUrl():? string
+    public function getFilename(): string
     {
-        return $this->url;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setUrl(string $url): void
-    {
-        $this->url = $url;
+        return $this->filename;
     }
 }

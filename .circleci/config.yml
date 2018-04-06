@@ -1,26 +1,26 @@
 version: 2
 jobs:
-    phpspec:
+    encore:
         docker:
-            - image: circleci/php:7.2.2-apache-node-browsers
+            - image: circleci/node:9.9.0-stretch-browsers
         steps:
             - checkout
-            - run: sudo composer self-update
+            - setup_remote_docker
+            - run: sudo yarn install
             - restore_cache:
                 keys:
-                    - composer-v1-{{ checksum "composer.json" }}
-                    - composer-v1-
-            - run: composer install -n --optimize-autoloader --classmap-authoritative
-            - run: composer dump-autoload --optimize --classmap-authoritative
+                    - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                    - yarn-packages-{{ .Branch }}
+                    - yarn-packages-master
+                    - yarn-packages-
             - save_cache:
-                key: composer-v1-{{ checksum "composer.json" }}
+                key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
                 paths:
-                    - vendor
-            - run: cp .env.dist .env
-            - run: vendor/bin/phpspec run
+                    - node_modules/
+            - run: ./node_modules/.bin/encore production
     phpunit:
         docker:
-            - image: circleci/php:7.2.2-apache-node-browsers
+            - image: circleci/php:7.2.3-apache-node-browsers
             - image: redis
         steps:
             - checkout
@@ -34,22 +34,27 @@ jobs:
             - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
             - run: cp phpunit.xml.dist phpunit.xml
-            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
-            - run: touch $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
-            - run: echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
+            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:
                 key: composer-v1-{{ checksum "composer.json" }}
                 paths:
                     - vendor
+            - run: rm -rf var/cache/*
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
+            - run: ./bin/console d:f:l -n --env=test
+            - run: ./bin/console doctrine:cache:clear-query
+            - run: ./bin/console doctrine:cache:clear-metadata
             - run: vendor/bin/phpunit -v
             - run: rm -rf var/data.db
     behat_core:
         docker:
-            - image: circleci/php:7.2.2-apache-node-browsers
+            - image: circleci/php:7.2.3-apache-node-browsers
             - image: redis
         steps:
             - checkout
@@ -59,21 +64,37 @@ jobs:
                 keys:
                     - composer-v1-{{ checksum "composer.json" }}
                     - composer-v1-
+            - run: cp .env.dist .env
+            - run: cp .env.behat.dist .env.behat
+            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
             - save_cache:
                 key: composer-v1-{{ checksum "composer.json" }}
                 paths:
                     - vendor
-            - run: cp .env.dist .env
-            - run: cp .env.behat.dist .env.behat
-            - run: mkdir -p $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket
-            - run: touch $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
-            - run: echo $GCP_SERVICE_CREDENTIALS > $CIRCLE_WORKING_DIRECTORY/config/credentials/google/bucket/credentials.json
+            - run: rm -rf var/cache/*
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
+            - run: ./bin/console d:f:l -n --env=test
+            - run: ./bin/console doctrine:cache:clear-query
+            - run: ./bin/console doctrine:cache:clear-metadata
             - run: vendor/bin/behat --profile default
             - run: rm -rf var/data.db
+    gcloud_docker_build:
+        docker:
+            - image: google/cloud-sdk
+        steps:
+            - checkout
+            - run: echo $GCP_SERVICE_CREDENTIALS > /tmp/gcp_key.json
+            - run: gcloud config set project $GCP_PROJECT_NAME
+            - run: gcloud auth activate-service-account --key-file /tmp/gcp_key.json
+            - run: gcloud auth configure-docker
+            - run: gcloud container builds submit --tag gcr.io/$GCP_PROJECT_NAME/$GCP_MAIN_IMAGE_NAME .
+            - run: docker push gcr.io/$GCP_PROJECT_NAME/$GCP_MAIN_IMAGE_NAME:latest
     gcloud_kubernetes_check:
         docker:
             - image: google/cloud-sdk
@@ -87,15 +108,22 @@ jobs:
 
 workflows:
     version: 2
+    frontend:
+        jobs:
+            - encore
     unit_and_spec:
         jobs:
-            - phpspec
             - phpunit
     functional:
         jobs:
             - behat_core
     staging:
         jobs:
+            - gcloud_docker_build:
+                requires:
+                    - encore
+                    - phpunit
+                    - behat_core
             - gcloud_kubernetes_check:
                 requires:
-                    - behat_core
+                    - gcloud_docker_build

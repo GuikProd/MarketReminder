@@ -25,17 +25,22 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     /**
      * @var string
      */
-    public $username;
-
-    /**
-     * @var string
-     */
     public $email;
 
     /**
      * @var string
      */
-    public $plainPassword;
+    public $username;
+
+    /**
+     * @var string
+     */
+    public $password;
+
+    /**
+     * @var \SplFileInfo
+     */
+    public $profileImage;
 
     /**
      * @var string
@@ -48,12 +53,14 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     public function __construct(
         string $username,
         string $email,
-        string $plainPassword,
-        string $validationToken
+        string $password,
+        string $validationToken,
+        \SplFileInfo $uploadedImage = null
     ) {
         $this->username = $username;
         $this->email = $email;
-        $this->plainPassword = $plainPassword;
+        $this->password = $password;
         $this->validationToken = $validationToken;
+        $this->profileImage = $uploadedImage;
     }
 }

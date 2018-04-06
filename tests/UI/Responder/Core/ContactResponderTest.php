@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * Class ContactResponderTest
+ * Class ContactResponderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

@@ -18,7 +18,7 @@ use App\Domain\UseCase\UserResetPassword\DTO\UserResetPasswordDTO;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class UserResetPasswordDTOTest
+ * Class UserResetPasswordDTOTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -27,7 +27,7 @@ class UserResetPasswordDTOTest extends TestCase
     public function testPasswordResetToken()
     {
         $userPasswordResetDTO = new UserResetPasswordDTO(
-                                                 "toto@gmail.com",
+                                                 'toto@gmail.com',
                                                  'Toto'
                                              );
 

@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace App\Domain\Repository;
 
 use App\Domain\Models\Interfaces\UserInterface;
+use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
 /**
@@ -23,8 +25,18 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserRepository extends EntityRepository implements UserLoaderInterface, UserRepositoryInterface
+class UserRepository extends ServiceEntityRepository implements UserLoaderInterface, UserRepositoryInterface
 {
+    /**
+     * UserRepository constructor.
+     *
+     * @param RegistryInterface $registry
+     */
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, User::class);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -90,5 +102,14 @@ class UserRepository extends EntityRepository implements UserLoaderInterface, Us
                     ->setCacheable(true)
                     ->getQuery()
                     ->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(UserInterface $user): void
+    {
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
     }
 }

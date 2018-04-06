@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
- * Class AskResetPasswordResponderTest
+ * Class AskResetPasswordResponderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

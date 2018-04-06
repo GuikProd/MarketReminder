@@ -11,6 +11,7 @@ RUN set -xe \
           		zlib-dev \
           		gnupg \
           		graphviz \
+          		make \
           	&& docker-php-ext-install \
           		intl \
           		pdo_pgsql \

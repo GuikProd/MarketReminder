@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Infra\Form\FormHandler;
 
+use App\Application\Helper\Security\TokenGeneratorHelper;
 use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Domain\Event\User\UserResetPasswordEvent;
 use App\Domain\Models\User;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\Infra\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
-use App\Infra\Helper\Security\TokenGeneratorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
