@@ -34,5 +34,5 @@ interface ImageBuilderInterface
     /**
      * @return ImageInterface
      */
-    public function getImage(): ImageInterface;
+    public function getImage():? ImageInterface;
 }

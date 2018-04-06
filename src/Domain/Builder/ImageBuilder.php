@@ -42,7 +42,7 @@ class ImageBuilder implements ImageBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function getImage(): ImageInterface
+    public function getImage():? ImageInterface
     {
         return $this->image;
     }
