@@ -112,4 +112,12 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 }

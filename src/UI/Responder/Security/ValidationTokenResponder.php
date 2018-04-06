@@ -11,8 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Responder\Security;
+namespace App\UI\Responder\Security;
 
+use App\UI\Responder\Security\Interfaces\ValidationTokenResponderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -21,7 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ValidationTokenResponder
+class ValidationTokenResponder implements ValidationTokenResponderInterface
 {
     /**
      * @var UrlGeneratorInterface
@@ -29,9 +30,7 @@ class ValidationTokenResponder
     private $urlGenerator;
 
     /**
-     * ValidationTokenResponder constructor.
-     *
-     * @param UrlGeneratorInterface $urlGenerator
+     * {@inheritdoc}
      */
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
@@ -39,9 +38,9 @@ class ValidationTokenResponder
     }
 
     /**
-     * @return RedirectResponse
+     * {@inheritdoc}
      */
-    public function __invoke()
+    public function __invoke(): RedirectResponse
     {
         $response = new RedirectResponse(
             $this->urlGenerator->generate('index'),

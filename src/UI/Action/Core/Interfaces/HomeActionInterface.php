@@ -11,39 +11,24 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\UI\Action\Core;
+namespace App\UI\Action\Core\Interfaces;
 
-use App\UI\Action\Core\Interfaces\HomeActionInterface;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class HomeAction.
+ * Interface HomeActionInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
- *
- * @Route(
- *     name="index",
- *     path="/{_locale}/",
- *     methods={"GET"},
- *     requirements={
- *         "_locale": "%accepted_locales%"
- *     }
- * )
  */
-class HomeAction implements HomeActionInterface
+interface HomeActionInterface
 {
     /**
+     * @param Request $request
      * @param HomeResponderInterface $responder
      *
-     * {@inheritdoc}
+     * @return Response
      */
-    public function __invoke(
-        Request $request,
-        HomeResponderInterface $responder
-    ): Response {
-        return $responder($request);
-    }
+    public function __invoke(Request $request, HomeResponderInterface $responder): Response;
 }
