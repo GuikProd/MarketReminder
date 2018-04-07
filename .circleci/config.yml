@@ -52,7 +52,7 @@ jobs:
             - run: ./bin/console doctrine:cache:clear-metadata
             - run: vendor/bin/phpunit -v
             - run: rm -rf var/data.db
-    behat_core:
+    behat_core_fr:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
             - image: redis
@@ -83,6 +83,32 @@ jobs:
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
             - run: vendor/bin/behat --profile en
+            - run: rm -rf var/cache/*
+            - run: rm -rf var/data.db
+    behat_core_en:
+        docker:
+            - image: circleci/php:7.2.3-apache-node-browsers
+            - image: redis
+        steps:
+            - checkout
+            - setup_remote_docker
+            - run: sudo composer self-update
+            - restore_cache:
+                keys:
+                    - composer-v1-{{ checksum "composer.json" }}
+                    - composer-v1-
+            - run: cp .env.dist .env
+            - run: cp .env.behat.dist .env.behat
+            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
+            - run: composer install -n --optimize-autoloader --classmap-authoritative
+            - run: composer dump-autoload --optimize --classmap-authoritative
+            - save_cache:
+                key: composer-v1-{{ checksum "composer.json" }}
+                paths:
+                    - vendor
             - run: rm -rf var/cache/*
             - run: rm -rf var/data.db
             - run: ./bin/console d:d:c --env=test
@@ -124,14 +150,16 @@ workflows:
             - phpunit
     functional:
         jobs:
-            - behat_core
+            - behat_core_fr
+            - behat_core_en
     staging:
         jobs:
             - gcloud_docker_build:
                 requires:
                     - encore
                     - phpunit
-                    - behat_core
+                    - behat_core_fr
+                    - behat_core_en
             - gcloud_kubernetes_check:
                 requires:
                     - gcloud_docker_build
