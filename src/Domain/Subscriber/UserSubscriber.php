@@ -97,7 +97,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
             ->setTo($event->getUser()->getEmail())
             ->setBody(
                 $this->twig
-                    ->render('emails/security/registration_mail.html.twig', [
+                    ->render('emails/security/validation_mail.html.twig', [
                         'user' => $event->getUser(),
                     ]),
                 'text/html'
