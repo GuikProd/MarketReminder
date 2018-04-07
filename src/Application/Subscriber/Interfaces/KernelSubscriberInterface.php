@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace App\Application\Subscriber\Interfaces;
 
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Interface KernelSubscriberInterface.
@@ -22,6 +25,19 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
  */
 interface KernelSubscriberInterface
 {
+    /**
+     * KernelSubscriberInterface constructor.
+     *
+     * @param EventDispatcherInterface  $eventDispatcher
+     * @param UrlGeneratorInterface     $urlGenerator
+     * @param UserRepositoryInterface   $userRepository
+     */
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        UrlGeneratorInterface $urlGenerator,
+        UserRepositoryInterface $userRepository
+    );
+
     /**
      * @param GetResponseEvent $event
      */
