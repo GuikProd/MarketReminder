@@ -72,10 +72,6 @@ jobs:
             - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
-            - run: rm -rf var/cache/*
-            - run: rm -rf var/data.db
-            - run: ./bin/console doctrine:cache:clear-query
-            - run: ./bin/console doctrine:cache:clear-metadata
             - save_cache:
                 key: composer-v1-{{ checksum "composer.json" }}
                 paths:
