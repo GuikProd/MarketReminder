@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
 use Behat\Behat\Context\Context;
 use Symfony\Component\Config\FileLocator;
-use App\Bridge\Interfaces\CloudStorageBridgeInterface;
 
 /**
  * Class CloudContext.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class CloudContext implements Context
@@ -40,8 +40,8 @@ class CloudContext implements Context
     /**
      * CloudContext constructor.
      *
-     * @param string $bucketName
-     * @param string $publicFilesFolder
+     * @param string                      $bucketName
+     * @param string                      $publicFilesFolder
      * @param CloudStorageBridgeInterface $cloudStorageBridgeInterface
      */
     public function __construct(
@@ -72,7 +72,7 @@ class CloudContext implements Context
     /**
      * Allow to clean the bucket.
      *
-     * @param string $fileName    The name of the file to delete.
+     * @param string $fileName the name of the file to delete
      */
     public function cleanBucket(string $fileName)
     {
