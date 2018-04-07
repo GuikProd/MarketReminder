@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
-use App\Responder\Security\LoginResponder;
+use App\UI\Responder\Security\LoginResponder;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
