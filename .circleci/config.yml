@@ -84,6 +84,7 @@ jobs:
             - run: ./bin/console doctrine:cache:clear-metadata
             - run: vendor/bin/behat --profile en
             - run: rm -rf var/cache/*
+            - run: rm -rf var/data.db
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
