@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\UI\Action\Security;
 
 use App\UI\Action\Security\LoginAction;
-use App\Responder\Security\LoginResponder;
+use App\UI\Responder\Security\LoginResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
