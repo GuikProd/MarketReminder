@@ -47,9 +47,6 @@ class ValidationTokenResponder implements ValidationTokenResponderInterface
             RedirectResponse::HTTP_PERMANENTLY_REDIRECT
         );
 
-        return $response->setCache([
-            's_maxage' => 32800,
-            'public' => true
-        ]);
+        return $response;
     }
 }
