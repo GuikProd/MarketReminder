@@ -47,11 +47,7 @@ class KernelSubscriber implements EventSubscriberInterface, KernelSubscriberInte
     private $userRepository;
 
     /**
-     * KernelSubscriber constructor.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param UserRepositoryInterface $userRepository
+     * {@inheritdoc}
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
