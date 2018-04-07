@@ -99,7 +99,6 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
         return $this->createQueryBuilder('user')
                     ->where('user.validationToken = :token AND user.validated = false')
                     ->setParameter('token', $token)
-                    ->setCacheable(true)
                     ->getQuery()
                     ->getOneOrNullResult();
     }

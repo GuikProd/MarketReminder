@@ -68,13 +68,41 @@ class ValidationTokenAction implements ValidationTokenActionInterface
         ValidationTokenResponderInterface $responder
     ): RedirectResponse {
 
-        $request->getSession()->get('user')->validate();
+        if (!$request->attributes->get('token')) {
+
+            $this->eventDispatcher->dispatch(
+                SessionMessageEvent::NAME,
+                new SessionMessageEvent(
+                    'failure',
+                    'security.validation_failure.notFound_token'
+                )
+            );
+
+            return $responder();
+        }
+
+        $user = $this->userRepository->getUserByToken($request->attributes->get('token'));
+
+        if (!$user) {
+
+            $this->eventDispatcher->dispatch(
+                SessionMessageEvent::NAME,
+                new SessionMessageEvent(
+                    'failure',
+                    'security.validation_failure.notFound_token'
+                )
+            );
+
+            return $responder();
+        };
+
+        $user->validate();
 
         $this->userRepository->flush();
 
         $this->eventDispatcher->dispatch(
             UserValidatedEvent::NAME,
-            new UserValidatedEvent($request->getSession()->get('user'))
+            new UserValidatedEvent($user)
         );
 
         $this->eventDispatcher->dispatch(
