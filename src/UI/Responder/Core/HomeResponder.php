@@ -48,9 +48,7 @@ class HomeResponder implements HomeResponderInterface
         );
 
         $response->setCache([
-            'etag' => md5(crypt(str_rot13($response->getContent()), $this->twig->getCharset())),
-            'public' => false,
-            's_maxage' => 6000
+            'etag' => md5(crypt(str_rot13($response->getContent()), $this->twig->getCharset()))
         ]);
 
         if ($response->isNotModified($request)) {
