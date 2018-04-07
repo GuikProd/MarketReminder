@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Core\Interfaces;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
@@ -28,4 +30,15 @@ interface HomeResponderInterface
      * @param Environment  $twig
      */
     public function __construct(Environment $twig);
+
+    /**
+     * @param Request $request
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     *
+     * @return Response
+     */
+    public function __invoke(Request $request);
 }

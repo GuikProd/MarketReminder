@@ -39,13 +39,9 @@ class HomeResponder implements HomeResponderInterface
     }
 
     /**
-     * @return Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         $response = new Response(
             $this->twig->render('core/index.html.twig')

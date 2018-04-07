@@ -13,17 +13,15 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security;
 
-use App\UI\Responder\Security\Interfaces\RegisterResponderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RegisterResponderTest.
+ * Class LoginResponder
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisterResponder implements RegisterResponderInterface
+class LoginResponder
 {
     /**
      * @var Environment
@@ -31,7 +29,9 @@ class RegisterResponder implements RegisterResponderInterface
     private $twig;
 
     /**
-     * {@inheritdoc}
+     * LoginResponder constructor.
+     *
+     * @param Environment $twig
      */
     public function __construct(Environment $twig)
     {
@@ -39,18 +39,28 @@ class RegisterResponder implements RegisterResponderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Exception $exception
+     * @param string $username
+     *
+     * @return Response
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-    public function __invoke(FormInterface $registerForm): Response
-    {
+    public function __invoke(
+        \Exception $exception = null,
+        string $username = null
+    ) {
         $response = new Response(
-            $this->twig->render('security/register.html.twig', [
-                'registerForm' => $registerForm->createView(),
+            $this->twig->render('security/login.html.twig', [
+                'username' => $username,
+                'errors' => $exception
             ])
         );
 
         return $response->setCache([
-            'etag' => md5(str_rot13($response->getContent()))
+            'public' => true
         ]);
     }
 }

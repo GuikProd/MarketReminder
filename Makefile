@@ -92,6 +92,9 @@ behat: features
 php-cs: ## Allow to use php-cs-fixer
 	    $(ENV_PHP) php-cs-fixer fix $(FOLDER) --rules=@$(RULES)
 
+deptrac: ## Allow to use the deptrac analyzer
+	    $(ENV_PHP) deptrac
+
 ## Varnish commands
 logs: ## Allow to see the varnish logs
 	    $(ENV_VARNISH) varnishlog -b

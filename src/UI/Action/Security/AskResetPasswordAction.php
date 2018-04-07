@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
-use App\Infra\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
+use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use App\UI\Form\Type\AskResetPasswordType;
 use App\UI\Responder\Security\AskResetPasswordResponder;
 use Doctrine\ORM\EntityManagerInterface;

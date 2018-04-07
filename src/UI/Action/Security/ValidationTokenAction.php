@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
-use App\Application\Symfony\Events\SessionMessageEvent;
-use App\Domain\Event\User\UserValidatedEvent;
+use App\Application\Event\SessionMessageEvent;
+use App\Application\Event\User\UserValidatedEvent;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ValidationTokenActionInterface;
 use App\UI\Responder\Security\Interfaces\ValidationTokenResponderInterface;
