@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Domain\Event\Image;
 
 use App\Application\Event\Image\ImageUpdatedEvent;
-use App\Application\Event\Interfaces\ImageEventInterface;
+use App\Application\Event\Image\Interfaces\ImageUpdatedEventInterface;
 use App\Domain\Models\Interfaces\ImageInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +32,7 @@ class ImageUpdatedEventTest extends TestCase
         $imageUpdatedEvent = new ImageUpdatedEvent($imageMock);
 
         static::assertInstanceOf(
-            ImageEventInterface::class,
+            ImageUpdatedEventInterface::class,
             $imageUpdatedEvent
         );
     }

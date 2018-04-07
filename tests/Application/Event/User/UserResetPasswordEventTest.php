@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\Event\User;
 
-use App\Application\Event\Interfaces\UserEventInterface;
+use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
 use App\Application\Event\User\UserResetPasswordEvent;
 use App\Domain\Models\Interfaces\UserInterface;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +38,7 @@ class UserResetPasswordEventTest extends TestCase
         );
 
         static::assertInstanceOf(
-            UserEventInterface::class,
+            UserResetPasswordEventInterface::class,
             $userResetPasswordEvent
         );
 
