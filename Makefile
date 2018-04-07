@@ -41,7 +41,6 @@ autoload: ## Allow to dump the autoload
 	    $(COMPOSER) dump-autoload -a -o
 
 ## Symfony commands
-
 cache: ## Allow to clear the Symfony cache
 	    rm -rf ./var/cache/*
 
@@ -89,6 +88,7 @@ behat: features
 	    make redis
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
+## Tools commands
 php-cs: ## Allow to use php-cs-fixer
 	    $(ENV_PHP) php-cs-fixer fix $(FOLDER) --rules=@$(RULES)
 

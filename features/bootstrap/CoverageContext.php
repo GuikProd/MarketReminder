@@ -18,7 +18,7 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Report\Html\Facade;
 
 /**
- * Class CoverageContext
+ * Class CoverageContext.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

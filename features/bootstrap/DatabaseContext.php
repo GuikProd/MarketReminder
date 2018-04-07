@@ -45,8 +45,8 @@ class DatabaseContext implements Context
     /**
      * DatabaseContext constructor.
      *
-     * @param RegistryInterface  $doctrine
-     * @param KernelInterface    $kernel
+     * @param RegistryInterface $doctrine
+     * @param KernelInterface   $kernel
      */
     public function __construct(
         RegistryInterface $doctrine,
@@ -69,7 +69,7 @@ class DatabaseContext implements Context
     }
 
     /**
-     * Launch Doctrine fixtures command
+     * Launch Doctrine fixtures command.
      *
      * @param TableNode $users
      *
@@ -82,7 +82,6 @@ class DatabaseContext implements Context
         $encoder = new BCryptPasswordEncoder(13);
 
         foreach ($users->getHash() as $hash) {
-
             $userDTO = new UserRegistrationDTO(
                 $hash['username'],
                 $hash['email'],
