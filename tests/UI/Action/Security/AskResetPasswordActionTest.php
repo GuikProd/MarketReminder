@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Security;
 
-use App\Infra\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use App\UI\Action\Security\AskResetPasswordAction;
+use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use App\UI\Responder\Security\AskResetPasswordResponder;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
