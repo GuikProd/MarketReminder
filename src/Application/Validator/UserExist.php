@@ -34,4 +34,12 @@ class UserExist extends Constraint
     {
         return UserExistValidator::class;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargets()
+    {
+        return self::CLASS_CONSTRAINT;
+    }
 }
