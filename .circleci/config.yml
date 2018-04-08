@@ -20,7 +20,7 @@ jobs:
             - run: ./node_modules/.bin/encore production
     deptrac:
         docker:
-            - image: circle/php:7.2.4-apache-stretch-node-browsers
+            - image: circleci/php:7.2.4-apache-node-browsers
         steps:
             - checkout
             - setup_remote_docker
