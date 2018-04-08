@@ -56,4 +56,11 @@ class UserExistTest extends TestCase
             $userExist->validatedBy()
         );
     }
+
+    public function testValidationScope()
+    {
+        $userExist = new UserExist();
+
+        static::assertSame('class', $userExist->getTargets());
+    }
 }
