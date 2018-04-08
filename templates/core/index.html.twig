@@ -3,11 +3,4 @@
 {% block title %}Inventory Management{% endblock %}
 
 {% block body %}
-    {% if app.request.hasPreviousSession %}
-        {% for message in app.flashes('success') %}
-            <div>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
 {% endblock %}

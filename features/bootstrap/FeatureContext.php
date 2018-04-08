@@ -16,7 +16,7 @@ use Behat\MinkExtension\Context\MinkContext;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Class FeatureContext
+ * Class FeatureContext.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

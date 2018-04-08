@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\UI\Form\FormHandler;
 
 use App\Domain\UseCase\UserResetPassword\DTO\UserResetPasswordDTO;
-use App\Infra\Form\FormHandler\AskResetPasswordTypeHandler;
-use App\Infra\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
+use App\UI\Form\FormHandler\AskResetPasswordTypeHandler;
+use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

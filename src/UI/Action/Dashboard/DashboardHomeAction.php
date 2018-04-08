@@ -22,15 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  *
  * @Route(
- *     path="/{_locale}/dashboard",
+ *     path="/dashboard",
  *     name="dashboard_home",
- *     methods={"GET"},
- *     defaults={
- *         "_locale": "%locale%"
- *     },
- *     requirements={
- *         "_locale": "%accepted_locales%"
- *     }
+ *     methods={"GET"}
  * )
  */
 class DashboardHomeAction

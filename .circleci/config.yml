@@ -18,6 +18,16 @@ jobs:
                 paths:
                     - node_modules/
             - run: ./node_modules/.bin/encore production
+    deptrac:
+        docker:
+            - image: circleci/php:7.2.4-apache-node-browsers
+        steps:
+            - checkout
+            - setup_remote_docker
+            - run: curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
+            - run: chmod +x deptrac.phar
+            - run: mv deptrac.phar /usr/local/bin/deptrac
+            - run: deptrac
     phpunit:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
@@ -52,7 +62,7 @@ jobs:
             - run: ./bin/console doctrine:cache:clear-metadata
             - run: vendor/bin/phpunit -v
             - run: rm -rf var/data.db
-    behat_core:
+    behat_core_fr:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
             - image: redis
@@ -82,7 +92,39 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
-            - run: vendor/bin/behat --profile default
+            - run: vendor/bin/behat --profile fr
+            - run: rm -rf var/data.db
+    behat_core_en:
+        docker:
+            - image: circleci/php:7.2.3-apache-node-browsers
+            - image: redis
+        steps:
+            - checkout
+            - setup_remote_docker
+            - run: sudo composer self-update
+            - restore_cache:
+                keys:
+                    - composer-v1-{{ checksum "composer.json" }}
+                    - composer-v1-
+            - run: cp .env.dist .env
+            - run: cp .env.behat.dist .env.behat
+            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
+            - run: composer install -n --optimize-autoloader --classmap-authoritative
+            - run: composer dump-autoload --optimize --classmap-authoritative
+            - save_cache:
+                key: composer-v1-{{ checksum "composer.json" }}
+                paths:
+                    - vendor
+            - run: rm -rf var/cache/*
+            - run: ./bin/console d:d:c --env=test
+            - run: ./bin/console d:s:c --env=test
+            - run: ./bin/console d:f:l -n --env=test
+            - run: ./bin/console doctrine:cache:clear-query
+            - run: ./bin/console doctrine:cache:clear-metadata
+            - run: vendor/bin/behat --profile en
             - run: rm -rf var/data.db
     gcloud_docker_build:
         docker:
@@ -113,17 +155,21 @@ workflows:
             - encore
     unit_and_spec:
         jobs:
+            - deptrac
             - phpunit
     functional:
         jobs:
-            - behat_core
+            - behat_core_fr
+            - behat_core_en
     staging:
         jobs:
             - gcloud_docker_build:
                 requires:
                     - encore
+                    - deptrac
                     - phpunit
-                    - behat_core
+                    - behat_core_fr
+                    - behat_core_en
             - gcloud_kubernetes_check:
                 requires:
                     - gcloud_docker_build

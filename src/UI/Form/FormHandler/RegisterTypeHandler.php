@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\UI\Form\FormHandler;
 
+use App\Application\Event\User\UserCreatedEvent;
+use App\Application\Event\SessionMessageEvent;
 use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
-use App\Application\Symfony\Events\SessionMessageEvent;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
-use App\Domain\Event\User\UserCreatedEvent;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
-use App\Infra\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
+use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use App\UI\Form\Type\AskResetPasswordType;
 use App\UI\Responder\Security\AskResetPasswordResponder;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,13 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route(
  *     name="web_ask_reset_password",
- *     path="/{_locale}/reset-password/ask",
- *     defaults={
- *         "_locale": "%locale%"
- *     },
- *     requirements={
- *         "_locale": "%accepted_locales%"
- *     }
+ *     path="/reset-password/ask"
  * )
  */
 class AskResetPasswordAction

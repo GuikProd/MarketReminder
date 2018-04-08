@@ -19,6 +19,10 @@ layers:
     collectors:
       - type: className
         regex: .*Infra\\Form\\FormSubscriber.*
+  - name: GCP
+    collectors:
+      - type: className
+        regex: .*Infra\\GCP.*
   - name: Models
     collectors:
       - type: className

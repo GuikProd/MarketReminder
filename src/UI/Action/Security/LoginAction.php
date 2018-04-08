@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
-use App\Responder\Security\LoginResponder;
+use App\UI\Responder\Security\LoginResponder;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -24,14 +24,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  *
  * @Route(
  *     name="web_login",
- *     path="/{_locale}/login",
- *     methods={"GET", "POST"},
- *     defaults={
- *         "_locale": "%locale%"
- *     },
- *     requirements={
- *         "_locale": "%accepted_locales%"
- *     }
+ *     path="/login",
+ *     methods={"GET", "POST"}
  * )
  */
 class LoginAction
