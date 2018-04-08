@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\UI\Action\Security;
 
 use App\UI\Responder\Security\AskResetPasswordResponder;
+use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,14 +29,28 @@ use Twig\Environment;
  */
 class AskResetPasswordResponderTest extends TestCase
 {
+    public function testItImplements()
+    {
+        $twigMock = $this->createMock(Environment::class);
+        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
+
+        $urlGeneratorMock->method('generate')->willReturn('/fr/');
+
+        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
+
+        static::assertInstanceOf(
+            AskResetPasswordResponderInterface::class,
+            $askResetPasswordResponder
+        );
+    }
+
     public function testResponseIsReturned()
     {
         $formViewMock = $this->createMock(FormView::class);
         $twigMock = $this->createMock(Environment::class);
         $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
-        $urlGeneratorMock->method('generate')
-                         ->willReturn('/fr/');
+        $urlGeneratorMock->method('generate')->willReturn('/fr/');
 
         $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
 
@@ -47,12 +62,10 @@ class AskResetPasswordResponderTest extends TestCase
 
     public function testRedirectResponseIsReturned()
     {
-        $formViewMock = $this->createMock(FormView::class);
         $twigMock = $this->createMock(Environment::class);
         $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
-        $urlGeneratorMock->method('generate')
-            ->willReturn('/fr/');
+        $urlGeneratorMock->method('generate')->willReturn('/fr/');
 
         $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
 
