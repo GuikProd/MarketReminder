@@ -11,19 +11,27 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Form\FormSubscriber\Interfaces;
+namespace App\Application\Validator;
 
-use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Validator\Constraint;
 
 /**
- * Interface AskResetPasswordTypeSubscriberInterface.
+ * Class UserExist.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface AskResetPasswordTypeSubscriberInterface
+class UserExist extends Constraint
 {
     /**
-     * @param FormEvent $event
+     * @var string
      */
-    public function onSubmit(FormEvent $event): void;
+    public $message = 'user.exist';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validatedBy()
+    {
+        return UserExistValidator::class;
+    }
 }
