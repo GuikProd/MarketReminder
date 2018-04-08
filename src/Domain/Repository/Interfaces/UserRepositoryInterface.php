@@ -60,4 +60,10 @@ interface UserRepositoryInterface
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save(UserInterface $user): void;
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function flush(): void;
 }

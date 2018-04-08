@@ -21,10 +21,11 @@ services:
             $filePath: "%kernel.images_dir%"
             $bucketName: "%cloud.storage.bucket_name%"
             $googleStoragePublicUrl: "%cloud.storage.public_url%"
+            $emailSender: "%email.sender_address%"
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Domain/Models,Domain/Event,Domain/Subscriber,Domain/UseCase,Migrations,Repository,Kernel.php}'
+        exclude: '../src/{Domain/Models,Domain/UseCase,Migrations,Repository,Kernel.php}'
 
     App\UI\Action\:
         resource: '../src/UI/Action'

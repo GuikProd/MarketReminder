@@ -50,8 +50,7 @@ class RegisterResponder implements RegisterResponderInterface
         );
 
         return $response->setCache([
-            's_maxage' => 600,
-            'private' => true,
+            'etag' => md5(str_rot13($response->getContent()))
         ]);
     }
 }

@@ -97,9 +97,8 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     public function getUserByToken(string $token):? UserInterface
     {
         return $this->createQueryBuilder('user')
-                    ->where('user.validationToken = :token')
+                    ->where('user.validationToken = :token AND user.validated = false')
                     ->setParameter('token', $token)
-                    ->setCacheable(true)
                     ->getQuery()
                     ->getOneOrNullResult();
     }
@@ -110,6 +109,14 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     public function save(UserInterface $user): void
     {
         $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
         $this->getEntityManager()->flush();
     }
 }

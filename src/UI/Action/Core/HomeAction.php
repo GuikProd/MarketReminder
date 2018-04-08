@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Core;
 
-use App\Responder\Core\HomeResponder;
+use App\UI\Action\Core\Interfaces\HomeActionInterface;
+use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,26 +26,24 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route(
  *     name="index",
- *     path="/{_locale}/",
+ *     path="/",
  *     methods={"GET"},
  *     requirements={
  *         "_locale": "%accepted_locales%"
  *     }
  * )
  */
-class HomeAction
+class HomeAction implements HomeActionInterface
 {
     /**
-     * @param HomeResponder $responder
+     * @param HomeResponderInterface $responder
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, HomeResponder $responder)
-    {
+    public function __invoke(
+        Request $request,
+        HomeResponderInterface $responder
+    ): Response {
         return $responder($request);
     }
 }

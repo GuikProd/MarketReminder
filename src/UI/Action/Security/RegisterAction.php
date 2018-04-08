@@ -30,14 +30,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @Route(
  *     name="web_registration",
- *     path="/{_locale}/register",
- *     methods={"GET", "POST"},
- *     defaults={
- *         "_locale": "%locale%"
- *     },
- *     requirements={
- *         "_locale": "%accepted_locales%"
- *     }
+ *     path="/register",
+ *     methods={"GET", "POST"}
  * )
  */
 class RegisterAction implements RegisterActionInterface

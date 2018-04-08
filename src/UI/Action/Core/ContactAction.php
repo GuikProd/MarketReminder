@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Core;
 
-use App\UI\Responder\Core\ContactResponder;
+use App\UI\Action\Core\Interfaces\ContactActionInterface;
+use App\UI\Responder\Core\Interfaces\ContactResponderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -23,20 +26,16 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route(
  *     name="contact",
- *     path="/{_locale}/contact",
- *     methods={"GET", "POST"},
- *     defaults={
- *         "_locale": "%locale%"
- *     },
- *     requirements={
- *         "_locale": "%accepted_locales%"
- *     }
+ *     path="/contact",
+ *     methods={"GET", "POST"}
  * )
  */
-class ContactAction
+class ContactAction implements ContactActionInterface
 {
-    public function __invoke(ContactResponder $responder)
-    {
+    public function __invoke(
+        Request $request,
+        ContactResponderInterface $responder
+    ) : Response {
         return $responder();
     }
 }

@@ -49,12 +49,14 @@
         <env name="JWT_PASSPHRASE" value="f7ece5879922f89abaf6e0a3ade8f3de" />
         <!-- ###- lexik/jwt-authentication-bundle ### -->
 
-        <!-- ###+ symfony/swiftmailer-bundle ### -->
-        <!-- For Gmail as a transport, use: "gmail://username:password@localhost" -->
-        <!-- For a generic SMTP server, use: "smtp://localhost:25?encryption=&auth_mode=" -->
-        <!-- Delivery is disabled by default via "null://localhost" -->
-        <env name="MAILER_URL" value="null://localhost"/>
-        <!-- ###- symfony/swiftmailer-bundle ### -->
+        <!-- Mailer configuration -->
+        <env name="SENDER_EMAIL_ADDRESS" value="security@marketReminder.com" />
+        <env name="SENGRID_PORT" value="25" />
+        <env name="SENGRID_USERNAME" value="test" />
+        <env name="SENDGRID_SERVER" value="smtp.test.net" />
+        <env name="SENDGRID_TRANSPORT" value="smtp" />
+        <env name="SENDGRID_ENCRYPTION" value="tls" />
+        <env name="SENGRID_API_KEY" value="test" />
     </php>
 
     <testsuites>

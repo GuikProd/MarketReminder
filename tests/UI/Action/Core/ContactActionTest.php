@@ -16,6 +16,7 @@ namespace App\Tests\UI\Action\Core;
 use App\UI\Action\Core\ContactAction;
 use App\UI\Responder\Core\ContactResponder;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -29,6 +30,7 @@ class ContactActionTest extends TestCase
     public function testInvokeReturn()
     {
         $twigMock = $this->createMock(Environment::class);
+        $requestMock = $this->createMock(Request::class);
 
         $contactAction = new ContactAction();
 
@@ -36,7 +38,7 @@ class ContactActionTest extends TestCase
 
         static::assertInstanceOf(
             Response::class,
-            $contactAction($contactResponder)
+            $contactAction($requestMock, $contactResponder)
         );
     }
 }
