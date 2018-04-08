@@ -114,7 +114,7 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
-            - run: vendor/bin/behat --profile fr
+            - run: vendor/bin/behat --profile en
             - run: rm -rf var/data.db
     gcloud_docker_build:
         docker:
