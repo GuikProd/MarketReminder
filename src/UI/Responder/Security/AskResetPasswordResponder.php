@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security;
 
+use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class AskResetPasswordResponder
+class AskResetPasswordResponder implements AskResetPasswordResponderInterface
 {
     /**
      * @var Environment
@@ -37,10 +38,7 @@ class AskResetPasswordResponder
     private $urlGenerator;
 
     /**
-     * AskResetPasswordResponder constructor.
-     *
-     * @param Environment $twig
-     * @param UrlGeneratorInterface $urlGenerator
+     * {@inheritdoc}
      */
     public function __construct(
         Environment $twig,
@@ -51,23 +49,14 @@ class AskResetPasswordResponder
     }
 
     /**
-     * @param FormView $askResetPasswordTokenFormView
-     * @param bool $isRedirect
-     * @param string $urlToRedirect
-     * @param string $templateName
-     *
-     * @return Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function __invoke(
         FormView $askResetPasswordTokenFormView = null,
         $isRedirect = false,
         $urlToRedirect = 'index',
         string $templateName = 'security/askResetPasswordToken.html.twig'
-    ) {
+    ): Response {
 
         $isRedirect
             ? $response = new RedirectResponse($this->urlGenerator->generate($urlToRedirect))
