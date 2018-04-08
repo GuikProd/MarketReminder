@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\UI\Form\Type;
 
 use App\Domain\UseCase\UserResetPassword\DTO\Interfaces\UserResetPasswordDTOInterface;
-use App\Infra\Form\FormSubscriber\AskResetPasswordTypeSubscriber;
-use App\Infra\Form\FormSubscriber\Interfaces\AskResetPasswordTypeSubscriberInterface;
 use App\UI\Form\Type\AskResetPasswordType;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class AskResetPasswordTypeTest.
@@ -29,30 +31,27 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class AskResetPasswordTypeTest extends TypeTestCase
 {
     /**
-     * @var AskResetPasswordTypeSubscriberInterface
+     * @var ValidatorInterface
      */
-    private $askResetPasswordTypeSubscriber;
+    private $validator;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function getExtensions()
     {
-        $this->askResetPasswordTypeSubscriber = $this->createMock(AskResetPasswordTypeSubscriber::class);
+        $this->validator = $this->createMock(ValidatorInterface::class);
 
-        parent::setUp();
-    }
+        $this->validator
+            ->method('validate')
+            ->will($this->returnValue(new ConstraintViolationList()));
+        $this->validator
+            ->method('getMetadataFor')
+            ->will($this->returnValue(new ClassMetadata(Form::class)));
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtensions()
-    {
-        $type = new AskResetPasswordType($this->askResetPasswordTypeSubscriber);
-
-        return [
-            new PreloadedExtension([$type], []),
-        ];
+        return array(
+            new ValidatorExtension($this->validator)
+        );
     }
 
     public function testSubmittedDataIsSentToDTO()

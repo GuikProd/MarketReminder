@@ -13,21 +13,21 @@ Feature: As a registered user, I should be able to reset my password if I lost i
     Then I fill in "ask_reset_password_email" with "toto@gmail.com"
     And I press "Envoyer"
     Then I should be on "/fr/reset-password/ask"
-    And I should see "Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie."
+    And I should see "Les idenfiants soumis ne permettent pas de trouver un utilisateur, veuillez réessayer !"
 
   Scenario: I want to reset my password using a wrong username.
     Then I fill in "ask_reset_password_username" with "Titu"
     Then I fill in "ask_reset_password_email" with "titi@gmail.com"
     And I press "Envoyer"
     Then I should be on "/fr/reset-password/ask"
-    And I should see "Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie."
+    And I should see "Les idenfiants soumis ne permettent pas de trouver un utilisateur, veuillez réessayer !"
 
   Scenario: I want to reset my password using a wrong email.
     Then I fill in "ask_reset_password_username" with "Titi"
     Then I fill in "ask_reset_password_email" with "titu@gmail.com"
     And I press "Envoyer"
     Then I should be on "/fr/reset-password/ask"
-    And I should see "Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie."
+    And I should see "Les idenfiants soumis ne permettent pas de trouver un utilisateur, veuillez réessayer !"
 
   Scenario: I want to reset my password using good credentials.
     Then I fill in "ask_reset_password_username" with "Titi"

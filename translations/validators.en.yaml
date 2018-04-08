@@ -9,3 +9,4 @@ form.format_error: This format is invalid ! Please retry using a valid one !
 form.credentials_error: The submitted credentials already exist, please retry !
 image.forbidden_content: The submitted image contains explicit or forbidden content, please retry !
 image.invalid_format: The submitted format isn't allowed, please retry !
+user.exist: The credentials doesn't allow to find an existing user, please retry !
