@@ -95,6 +95,9 @@ php-cs: ## Allow to use php-cs-fixer
 deptrac: ## Allow to use the deptrac analyzer
 	    $(ENV_PHP) deptrac
 
+phpmetrics: ## Allow to launch a phpmetrics analyze
+	    $(ENV_PHP) vendor/bin/phpmetrics src
+
 ## Varnish commands
 logs: ## Allow to see the varnish logs
 	    $(ENV_VARNISH) varnishlog -b
