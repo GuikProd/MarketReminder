@@ -82,7 +82,7 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
-            - run: vendor/bin/behat --profile en
+            - run: vendor/bin/behat --profile fr
             - run: rm -rf var/data.db
     behat_core_en:
         docker:
