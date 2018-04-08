@@ -66,10 +66,6 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
                 ])
             );
 
-        return $response->setCache([
-            'public' => true,
-            's_maxage' => 3600,
-            'max_age' => 600
-        ]);
+        return $response;
     }
 }

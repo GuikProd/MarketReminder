@@ -45,7 +45,7 @@ cache: ## Allow to clear the Symfony cache
 	    rm -rf ./var/cache/*
 
 container: ## Allow to debug the container
-	    $(ENV_PHP) ./bin/console debug:container $(SERVICE)
+	    $(ENV_PHP) ./bin/console debug:container $(SERVICE) --show-private
 
 route: ## Allow to debug the route
 	    $(ENV_PHP) ./bin/console d:r
