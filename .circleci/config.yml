@@ -18,6 +18,16 @@ jobs:
                 paths:
                     - node_modules/
             - run: ./node_modules/.bin/encore production
+    deptrac:
+        docker:
+            - image: circle/php:7.2.4-apache-stretch-node-browsers
+        steps:
+            - checkout
+            - setup_remote_docker
+            - run: curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
+            - run: chmod +x deptrac.phar
+            - run: mv deptrac.phar /usr/local/bin/deptrac
+            - run: deptrac
     phpunit:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
@@ -145,6 +155,7 @@ workflows:
             - encore
     unit_and_spec:
         jobs:
+            - deptrac
             - phpunit
     functional:
         jobs:
@@ -155,6 +166,7 @@ workflows:
             - gcloud_docker_build:
                 requires:
                     - encore
+                    - deptrac
                     - phpunit
                     - behat_core_fr
                     - behat_core_en
