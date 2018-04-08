@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
+use App\UI\Action\Security\Interfaces\AskResetPasswordActionInterface;
 use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
 use App\UI\Form\Type\AskResetPasswordType;
-use App\UI\Responder\Security\AskResetPasswordResponder;
-use Doctrine\ORM\EntityManagerInterface;
+use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -31,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     path="/reset-password/ask"
  * )
  */
-class AskResetPasswordAction
+class AskResetPasswordAction implements AskResetPasswordActionInterface
 {
     /**
      * @var FormFactoryInterface
@@ -39,44 +40,29 @@ class AskResetPasswordAction
     private $formFactory;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * @var AskResetPasswordTypeHandlerInterface
      */
     private $askResetPasswordTypeHandler;
 
     /**
-     * AskResetPasswordAction constructor.
-     *
-     * @param FormFactoryInterface $formFactory
-     * @param EntityManagerInterface $entityManager
-     * @param AskResetPasswordTypeHandlerInterface $askResetPasswordTypeHandler
+     * {@inheritdoc}
      */
     public function __construct(
         FormFactoryInterface $formFactory,
-        EntityManagerInterface $entityManager,
         AskResetPasswordTypeHandlerInterface $askResetPasswordTypeHandler
     ) {
         $this->formFactory = $formFactory;
-        $this->entityManager = $entityManager;
         $this->askResetPasswordTypeHandler = $askResetPasswordTypeHandler;
     }
 
     /**
-     * @param Request $request
-     * @param AskResetPasswordResponder $responder
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, AskResetPasswordResponder $responder)
-    {
+    public function __invoke(
+        Request $request,
+        AskResetPasswordResponderInterface $responder
+    ): Response {
+
         $askResetPasswordForm = $this->formFactory
                                      ->create(AskResetPasswordType::class)
                                      ->handleRequest($request);

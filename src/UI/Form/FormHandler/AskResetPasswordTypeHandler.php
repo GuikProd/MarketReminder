@@ -16,10 +16,9 @@ namespace App\UI\Form\FormHandler;
 use App\Application\Event\SessionMessageEvent;
 use App\Application\Event\User\UserResetPasswordEvent;
 use App\Application\Helper\Security\TokenGeneratorHelper;
-use App\Domain\Models\User;
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -32,31 +31,31 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterface
 {
     /**
-     * @var SessionInterface
-     */
-    private $session;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
     /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
+        EventDispatcherInterface $eventDispatcher,
         SessionInterface $session,
-        EntityManagerInterface $entityManager,
-        EventDispatcherInterface $eventDispatcher
+        UserRepositoryInterface $userRepository
     ) {
-        $this->session = $session;
-        $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
+        $this->session = $session;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -66,11 +65,10 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
     {
         if ($askResetPasswordType->isSubmitted() && $askResetPasswordType->isValid()) {
 
-            $user = $this->entityManager->getRepository(User::class)
-                                        ->getUserByUsernameAndEmail(
-                                            $askResetPasswordType->getData()->username,
-                                            $askResetPasswordType->getData()->email
-                                        );
+            $user = $this->userRepository->getUserByUsernameAndEmail(
+                $askResetPasswordType->getData()->username,
+                $askResetPasswordType->getData()->email
+            );
 
             if (!$user) {
                 $this->eventDispatcher->dispatch(
@@ -90,7 +88,7 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
 
             $user->askForPasswordReset($userResetPasswordToken);
 
-            $this->entityManager->flush();
+            $this->userRepository->flush();
 
             $this->eventDispatcher->dispatch(
                 UserResetPasswordEvent::NAME,
