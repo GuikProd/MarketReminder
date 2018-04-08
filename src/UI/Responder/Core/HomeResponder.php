@@ -43,18 +43,8 @@ class HomeResponder implements HomeResponderInterface
      */
     public function __invoke(Request $request): Response
     {
-        $response = new Response(
+        return new Response(
             $this->twig->render('core/index.html.twig')
         );
-
-        $response->setCache([
-            'etag' => md5(crypt(str_rot13($response->getContent()), $this->twig->getCharset()))
-        ]);
-
-        if ($response->isNotModified($request)) {
-            return $response;
-        }
-
-        return $response;
     }
 }
