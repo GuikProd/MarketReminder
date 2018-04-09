@@ -107,7 +107,7 @@ class AskResetPasswordTypeHandlerTest extends KernelTestCase
     public function testRightHandlingProcessWithRightUser()
     {
         $userPasswordResetDTOMock = new UserResetPasswordDTO('hp@gmail.com', 'HP');
-        
+
         $userMock = $this->createMock(UserInterface::class);
         $userMock->method('getUsername')->willReturn('HP');
         $userMock->method('getEmail')->willReturn('hp@gmail.com');
