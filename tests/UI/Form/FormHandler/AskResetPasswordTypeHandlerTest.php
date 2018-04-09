@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\FormHandler;
 
+use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserResetPassword\DTO\UserResetPasswordDTO;
 use App\UI\Form\FormHandler\AskResetPasswordTypeHandler;
@@ -106,11 +107,15 @@ class AskResetPasswordTypeHandlerTest extends KernelTestCase
     public function testRightHandlingProcessWithRightUser()
     {
         $userPasswordResetDTOMock = new UserResetPasswordDTO('hp@gmail.com', 'HP');
+        $userMock = $this->createMock(UserInterface::class);
+        $userMock->method('getUsername')->willReturn('HP');
+        $userMock->method('getEmail')->willReturn('hp@gmail.com');
 
         $formInterfaceMock = $this->createMock(FormInterface::class);
         $formInterfaceMock->method('isValid')->willReturn(true);
         $formInterfaceMock->method('isSubmitted')->willReturn(true);
         $formInterfaceMock->method('getData')->willReturn($userPasswordResetDTOMock);
+        $this->userRepository->method('getUserByUsernameAndEmail')->willReturn($userMock);
 
         $askResetPasswordTypeHandler = new AskResetPasswordTypeHandler(
             $this->eventDispatcher,
