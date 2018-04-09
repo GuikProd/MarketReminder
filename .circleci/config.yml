@@ -26,7 +26,7 @@ jobs:
             - setup_remote_docker
             - run: curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
             - run: chmod +x deptrac.phar
-            - run: mv deptrac.phar /usr/local/bin/deptrac
+            - run: mv deptrac.phar ${HOME}/project/deptrac
             - run: deptrac
     phpunit:
         docker:

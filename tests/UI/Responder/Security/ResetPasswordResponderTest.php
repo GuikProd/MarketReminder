@@ -37,6 +37,7 @@ class ResetPasswordResponderTest extends TestCase
     public function setUp()
     {
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $this->urlGenerator->method('generate')->willReturn('/fr/');
     }
 
     public function testItImplements()
