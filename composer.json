@@ -98,6 +98,8 @@
             "App\\Infra\\GCP\\Bridge\\Interfaces\\": "src/Infra/GCP/Bridge/Interfaces/",
             "App\\Infra\\GCP\\CloudStorage\\": "src/Infra/GCP/CloudStorage/",
             "App\\Infra\\GCP\\CloudStorage\\Interfaces\\": "src/Infra/GCP/CloudStorage/Interfaces/",
+            "App\\Infra\\GCP\\CloudTranslation\\": "src/Infra/GCP/CloudTranslation/",
+            "App\\Infra\\GCP\\CloudTranslation\\Interfaces\\": "src/Infra/GCP/CloudTranslation/Interfaces/",
             "App\\Infra\\GCP\\CloudVision\\": "src/Infra/GCP/CloudVision/",
             "App\\Infra\\GCP\\CloudVision\\Interfaces\\": "src/Infra/GCP/CloudVision/Interfaces/",
             "App\\UI\\Action\\Core\\": "src/UI/Action/Core/",
