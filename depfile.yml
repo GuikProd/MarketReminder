@@ -7,6 +7,10 @@ layers:
     collectors:
       - type: className
         regex: .*UI\\Action.*
+  - name: CacheWarmer
+    collectors:
+      - type: className
+        regex: .*\\Application\\CacheWarmer.*
   - name: Form
     collectors:
       - type: className
@@ -46,6 +50,8 @@ ruleset:
       - Helper
       - Repository
       - Responder
+  CacheWarmer:
+      - Helper
   Form:
       - Validator
   FormHandler:
