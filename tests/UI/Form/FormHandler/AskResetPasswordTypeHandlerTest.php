@@ -84,7 +84,7 @@ class AskResetPasswordTypeHandlerTest extends KernelTestCase
         $userPasswordResetDTOMock = new UserResetPasswordDTO('tutu@gmail.com', 'Tutu');
 
         $formInterfaceMock = $this->createMock(FormInterface::class);
-        $formInterfaceMock->method('isValid')->willReturn(true);
+        $formInterfaceMock->method('isValid')->willReturn(false);
         $formInterfaceMock->method('isSubmitted')->willReturn(true);
         $formInterfaceMock->method('getData')->willReturn($userPasswordResetDTOMock);
 
