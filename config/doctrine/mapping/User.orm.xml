@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping"
 >
-    <entity name="App\Domain\Models\User" table="marketReminder_user" repository-class="App\Domain\Repository\UserRepository">
+    <entity name="App\Domain\Models\User" table="marketReminder_user" repository-class="App\Infra\Doctrine\Repository\UserRepository">
 
         <id name="id" type="string" />
         <field name="username" type="string" length="25" unique="true" nullable="false" />

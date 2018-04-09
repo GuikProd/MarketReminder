@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Domain\Repository;
+namespace App\Tests\Infra\Doctrine\Repository;
 
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Models\User;
@@ -38,8 +38,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->entityManager = static::$kernel->getContainer()
-                                              ->get('doctrine.orm.entity_manager');
+        $this->entityManager = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
     }
 
     public function testInterfaceImplementation()
