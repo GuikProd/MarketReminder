@@ -27,7 +27,7 @@ jobs:
             - run: curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
             - run: chmod +x deptrac.phar
             - run: mv deptrac.phar ${HOME}/project/deptrac
-            - run: deptrac
+            - run: ${HOME}/project/deptrac
     phpunit:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
