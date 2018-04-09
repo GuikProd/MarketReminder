@@ -22,6 +22,7 @@ services:
             $bucketName: "%cloud.storage.bucket_name%"
             $googleStoragePublicUrl: "%cloud.storage.public_url%"
             $emailSender: "%email.sender_address%"
+            $translationFolder: "%translator.default_path%"
 
     App\:
         resource: '../src/*'

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "38410b620274c753b4a91a5b12e9ad1a",
+    "content-hash": "5b39c04171592d7a4221bce0e49fbb86",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1294,6 +1294,50 @@
                 "Apache-2.0"
             ],
             "description": "Cloud Storage Client for PHP",
+            "time": "2018-03-28T16:57:27+00:00"
+        },
+        {
+            "name": "google/cloud-translate",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-translate.git",
+                "reference": "02b152d66078f582a45200e5dbc9b812bbbf30c9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-translate/zipball/02b152d66078f582a45200e5dbc9b812bbbf30c9",
+                "reference": "02b152d66078f582a45200e5dbc9b812bbbf30c9",
+                "shasum": ""
+            },
+            "require": {
+                "google/cloud-core": "^1.14"
+            },
+            "require-dev": {
+                "erusev/parsedown": "^1.6",
+                "phpdocumentor/reflection": "^3.0",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "extra": {
+                "component": {
+                    "id": "cloud-translate",
+                    "target": "GoogleCloudPlatform/google-cloud-php-translate.git",
+                    "path": "Translate",
+                    "entry": "src/TranslateClient.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Google\\Cloud\\Translate\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Cloud Transation Client for PHP",
             "time": "2018-03-28T16:57:27+00:00"
         },
         {
