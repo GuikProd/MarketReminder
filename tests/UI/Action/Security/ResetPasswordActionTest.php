@@ -66,6 +66,8 @@ class ResetPasswordActionTest extends TestCase
         $this->request = $this->createMock(Request::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
+
+        $this->urlGenerator->method('generate')->willReturn('/fr/');
     }
 
     public function testItImplements()
