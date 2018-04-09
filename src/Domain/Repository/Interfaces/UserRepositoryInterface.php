@@ -48,22 +48,16 @@ interface UserRepositoryInterface
      * @param string $token
      *
      * @return UserInterface|null
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getUserByToken(string $token):? UserInterface;
 
     /**
      * @param UserInterface $user
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save(UserInterface $user): void;
 
     /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * Allow to flush the last operations.
      */
     public function flush(): void;
 }
