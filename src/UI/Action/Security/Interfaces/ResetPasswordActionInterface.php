@@ -13,6 +13,13 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security\Interfaces;
 
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
+use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Interface ResetPasswordActionInterface.
  *
@@ -20,5 +27,24 @@ namespace App\UI\Action\Security\Interfaces;
  */
 interface ResetPasswordActionInterface
 {
+    /**
+     * ResetPasswordActionInterface constructor.
+     *
+     * @param EventDispatcherInterface  $eventDispatcher
+     * @param FormFactoryInterface      $formFactory
+     * @param UserRepositoryInterface   $userRepository
+     */
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        FormFactoryInterface $formFactory,
+        UserRepositoryInterface $userRepository
+    );
 
+    /**
+     * @param Request                          $request
+     * @param ResetPasswordResponderInterface  $responder
+     *
+     * @return RedirectResponse
+     */
+    public function __invoke(Request $request, ResetPasswordResponderInterface $responder): RedirectResponse;
 }

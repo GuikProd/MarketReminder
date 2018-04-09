@@ -15,7 +15,11 @@ namespace App\UI\Action\Security;
 
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
+use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ResetPasswordAction.
@@ -25,6 +29,11 @@ use Symfony\Component\Form\FormFactoryInterface;
 class ResetPasswordAction implements ResetPasswordActionInterface
 {
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @var FormFactoryInterface
      */
     private $formFactory;
@@ -33,4 +42,28 @@ class ResetPasswordAction implements ResetPasswordActionInterface
      * @var UserRepositoryInterface
      */
     private $userRepository;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        FormFactoryInterface $formFactory,
+        UserRepositoryInterface $userRepository
+    ) {
+        $this->eventDispatcher = $eventDispatcher;
+        $this->formFactory = $formFactory;
+        $this->userRepository = $userRepository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __invoke(
+        Request $request,
+        ResetPasswordResponderInterface $responder
+    ): RedirectResponse {
+
+        return $responder();
+    }
 }
