@@ -70,15 +70,6 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
                 $askResetPasswordType->getData()->email
             );
 
-            if (!$user) {
-                $this->eventDispatcher->dispatch(
-                    SessionMessageEvent::NAME,
-                    new SessionMessageEvent('failure', 'user.not_found')
-                );
-
-                return false;
-            }
-
             $userResetPasswordToken = new UserResetPasswordToken(
                 TokenGeneratorHelper::generateResetPasswordToken(
                     $askResetPasswordType->getData()->username,
