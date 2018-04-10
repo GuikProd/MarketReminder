@@ -52,6 +52,7 @@ ruleset:
       - Responder
   CacheWarmer:
       - Helper
+      - GCP
   Form:
       - Validator
   FormHandler:
