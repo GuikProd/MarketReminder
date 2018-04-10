@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation;
 
+use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 
 /**
@@ -22,5 +23,28 @@ use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
  */
 class CloudTranslationWarmer implements CloudTranslationWarmerInterface
 {
+    /**
+     * @var CloudTranslationBridgeInterface
+     */
+    private $cloudTranslationBridge;
 
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(CloudTranslationBridgeInterface $cloudTranslationBridge)
+    {
+        $this->cloudTranslationBridge = $cloudTranslationBridge;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function warmTranslation(string $textToTranslate, string $targetLocale):? array
+    {
+        return $this->cloudTranslationBridge
+                    ->loadCredentialsFile()
+                    ->getServiceBuilder()
+                    ->translate()
+                    ->translate($textToTranslate, ['target' => $targetLocale]);
+    }
 }

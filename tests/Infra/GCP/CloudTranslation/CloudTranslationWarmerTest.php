@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace tests\Infra\GCP\CloudTranslation;
 
+use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use PHPUnit\Framework\TestCase;
@@ -24,9 +25,22 @@ use PHPUnit\Framework\TestCase;
  */
 class CloudTranslationWarmerTest extends TestCase
 {
+    /**
+     * @var CloudTranslationBridgeInterface
+     */
+    private $cloudTranslationBridge;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        $this->cloudTranslationBridge = $this->createMock(CloudTranslationBridgeInterface::class);
+    }
+
     public function testItImplements()
     {
-        $cloudTranslationWarmer = new CloudTranslationWarmer();
+        $cloudTranslationWarmer = new CloudTranslationWarmer($this->cloudTranslationBridge);
 
         static::assertInstanceOf(
             CloudTranslationWarmerInterface::class,

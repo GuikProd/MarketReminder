@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Interfaces;
 
+use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
+
 /**
  * Interface CloudTranslationWarmerInterface.
  * 
@@ -20,5 +22,18 @@ namespace App\Infra\GCP\CloudTranslation\Interfaces;
  */
 interface CloudTranslationWarmerInterface
 {
+    /**
+     * CloudTranslationWarmerInterface constructor.
+     *
+     * @param CloudTranslationBridgeInterface  $cloudTranslationBridge
+     */
+    public function __construct(CloudTranslationBridgeInterface $cloudTranslationBridge);
 
+    /**
+     * @param string  $textToTranslate
+     * @param string  $targetLocale
+     *
+     * @return array|null
+     */
+    public function warmTranslation(string $textToTranslate, string $targetLocale):? array;
 }

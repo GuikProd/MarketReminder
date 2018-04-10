@@ -1,0 +1,36 @@
+home.text: Home
+account.welcome: 'Welcome to MarketReminder'
+account.greeting: 'Glad to see you on board!'
+resetPassword.title: 'Request to reset the password'
+registration.title: register
+password.raw: Password
+image.text: 'Profile Interfaces'
+account.creation: 'Create an account'
+account.already_exist: 'Account already created?'
+security.acount_creation: 'Your profile has been created! Please check your mailbox to validate it.'
+security.validation_success: 'Verified account, it&#39;s time to start your adventure!'
+security.validation_failure.notFound_token: 'This token does not exist or has already been validated, please resubmit!'
+security.login: 'To log in'
+security.login_failure: 'Submitted credentials appear invalid, please check your entry.'
+security.registration_username: Username
+security.registration_email: Email
+security.registration_password: Password
+security.resetPasswordToken_header: 'Request a new password.'
+security.resetPasswordToken: 'To send'
+user.account_created: 'The account has been created, an email to validate this creation has been sent to you.'
+user.invalid_credentials: 'The credentials entered seem invalid, please try again.'
+user.not_found: 'The filled in identifiers do not correspond to an existing user, please repeat your entry.'
+user.reset_password.success: 'The request has been registered, an email has been sent to you.'
+validation.length_short: 'This value is too short!'
+validation.length_long: 'This value is too long!'
+validation.filled: 'This field is required, please enter a value.'
+credentials.already_exist: 'These identifiers already exist!'
+form.format_error: 'The format is invalid! Please try again with a new valid format!'
+form.credentials_error: 'Submitted credentials already exist, please try again!'
+image.forbidden_content: 'Submitted image contains inappropriate content, please try again!'
+image.invalid_format: 'This image format is prohibited, please repeat your entry.'
+user.exist: 'Submitted idenfiants can not find a user, please try again!'
+Home: Home
+'Plain password': Password
+'Profile image': 'Profile Interfaces'
+'Your account was created ! Please check your mail to validate it.': 'Your profile has been created! Please check your mailbox to validate it.'

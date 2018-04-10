@@ -1,17 +1,18 @@
 # Pages title
-Home: Accueil
+home.text: Accueil
 account.welcome: Bienvenue sur MarketReminder
 account.greeting: Content de vous voir à bord !
 resetPassword.title: Demande de réinitialisation du mot de passe
 registration.title: S'enregistrer
-Plain password: Mot de passe
+password.raw: Mot de passe
 
 # Pages button
-Profile image: Interfaces de profil
+image.text: Interfaces de profil
 account.creation: Créer un compte
 account.already_exist: Compte déjà créé ?
 
 # Security | Account validation
+security.acount_creation: Votre profil a été créé ! Veuillez vérifier votre boîte mail afin de valider ce dernier.
 security.validation_success: Compte validé, il est temps de commencer votre aventure !
 security.validation_failure.notFound_token: Ce token n'existe pas ou a déjà été validé, veuillez réssayer !
 security.login: Se connecter

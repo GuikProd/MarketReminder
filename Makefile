@@ -41,13 +41,16 @@ autoload: ## Allow to dump the autoload
 	    $(COMPOSER) dump-autoload -a -o
 
 ## Symfony commands
-cache: ## Allow to clear the Symfony cache
+cache-clear: ## Allow to clear the cache
 	    rm -rf ./var/cache/*
+
+cache-warm: ## Allow to warm the cache
+	    $(ENV_PHP) ./bin/console cache:warmup
 
 container: ## Allow to debug the container
 	    $(ENV_PHP) ./bin/console debug:container $(SERVICE) --show-private
 
-route: ## Allow to debug the route
+route: ## Allow to debug the router
 	    $(ENV_PHP) ./bin/console d:r
 
 create-schema: ## Allow to create the BDD schema

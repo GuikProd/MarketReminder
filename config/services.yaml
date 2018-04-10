@@ -16,6 +16,7 @@ services:
         autoconfigure: true
         public: false
         bind:
+            $acceptedLocales: "%accepted_locales%"
             $defaultLocale: "%locale%"
             $bucketCredentialsFolder: "%cloud.storage_credentials%"
             $translationCredentialsFolder: "%cloud.translation_credentials%"

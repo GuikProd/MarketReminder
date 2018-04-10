@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Application\CacheWarmer\Interfaces;
 
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+
 /**
  * Interface TranslationCacheWarmerInterface.
  *
@@ -23,7 +25,13 @@ interface TranslationCacheWarmerInterface
     /**
      * TranslationCacheWarmerInterface constructor.
      *
-     * @param string  $translationsFolder
+     * @param string                           $acceptedLocales
+     * @param CloudTranslationWarmerInterface  $cloudTranslationWarmer
+     * @param string                           $translationsFolder
      */
-    public function __construct(string $translationsFolder);
+    public function __construct(
+        string $acceptedLocales,
+        CloudTranslationWarmerInterface $cloudTranslationWarmer,
+        string $translationsFolder
+    );
 }

@@ -2,7 +2,6 @@ validation.length_short: Cette valeur est trop courte !
 validation.length_long: Cette valeur est trop longue !
 validation.filled: Ce champs est requis, veuillez saisir une valeur.
 credentials.already_exist: Ces identifiants existent déjà !
-Your account was created ! Please check your mail to validate it.: Votre profil a été créé ! Veuillez vérifier votre boîte mail afin de valider ce dernier.
 
 # Form validations
 form.format_error: Le format est invalide ! Veuillez réessayer avec un nouveau format valide !
