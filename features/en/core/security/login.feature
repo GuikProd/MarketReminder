@@ -5,7 +5,7 @@ Feature: As a registered user, I want to log myself and being able to see a rest
       | username     | plainPassword | email           | validationToken  | validated  | active | currentState |
       | HelloWorld   | Ie1FDLGHW     | hello@gmail.com | EdFEDNRanuLs5    | 1          | 1      | toValidate   |
       | Titi         | Ie1FDLTITI    | titi@gmail.com  | ToFEGARRdjLs2    | 0          | 0      | active       |
-    When I am on "/en/login"s
+    When I am on "/en/login"
     Then I should see "Login"
 
   Scenario: I want to log myself using a wrong username.

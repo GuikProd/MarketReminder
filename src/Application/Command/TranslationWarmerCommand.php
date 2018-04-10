@@ -11,22 +11,23 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\CacheWarmer;
+namespace App\Application\Command;
 
-use App\Application\CacheWarmer\Interfaces\TranslationCacheWarmerInterface;
+use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmer;
-use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class TranslationCacheWarmer.
- *
+ * Class TranslationWarmerCommand.
+ * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class TranslationCacheWarmer extends CacheWarmer implements TranslationCacheWarmerInterface, CacheWarmerInterface
+class TranslationWarmerCommand extends Command implements TranslationWarmerCommandInterface
 {
     /**
      * @var string
@@ -54,18 +55,24 @@ class TranslationCacheWarmer extends CacheWarmer implements TranslationCacheWarm
         $this->acceptedLocales = $acceptedLocales;
         $this->cloudTranslationWarmer = $cloudTranslationWarmer;
         $this->translationsFolder = $translationsFolder;
+
+        parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function warmUp($cacheDir)
+    protected function configure()
     {
+        $this->setName('app:translation-warm')
+             ->setDescription('Allow to warm the translation')
+             ->setHelp('This command call the GCP Translation API and translate every text');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln('The translations are loaded and sent to GCP.');
+
         $finder = new Finder();
         $fileSystem = new Filesystem();
-        $yaml = new Yaml();
 
-        $fileSystem->mkdir($cacheDir.'/googleCloud');
         $fileSystem->mkdir($this->translationsFolder.'/google_cloud');
 
         $files = $finder->files()->in($this->translationsFolder);
@@ -78,7 +85,7 @@ class TranslationCacheWarmer extends CacheWarmer implements TranslationCacheWarm
         }
 
         foreach ($files as $file) {
-            $content = $yaml::parse($file->getContents());
+            $content = Yaml::parse($file->getContents());
 
             foreach ($content as $key => $translation) {
 
@@ -100,14 +107,6 @@ class TranslationCacheWarmer extends CacheWarmer implements TranslationCacheWarm
             }
         }
 
-        $this->writeCacheFile($cacheDir.'/googleCloud/translations.php', serialize($translatedElements));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isOptional()
-    {
-        return false;
+        $output->writeln('The translations has been translated and dumped into the translations folder.');
     }
 }

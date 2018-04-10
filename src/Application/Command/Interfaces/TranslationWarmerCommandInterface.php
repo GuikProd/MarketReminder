@@ -11,23 +11,24 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\CacheWarmer\Interfaces;
-
+namespace App\Application\Command\Interfaces;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 
 /**
- * Interface TranslationCacheWarmerInterface.
+ * Interface TranslationWarmerCommandInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface TranslationCacheWarmerInterface
+interface TranslationWarmerCommandInterface
 {
     /**
-     * TranslationCacheWarmerInterface constructor.
+     * TranslationWarmerCommandInterface constructor.
      *
      * @param string                           $acceptedLocales
      * @param CloudTranslationWarmerInterface  $cloudTranslationWarmer
      * @param string                           $translationsFolder
+     *
+     * @internal This command SHOULD call the Command constructor.
      */
     public function __construct(
         string $acceptedLocales,

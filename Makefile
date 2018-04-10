@@ -47,6 +47,9 @@ cache-clear: ## Allow to clear the cache
 cache-warm: ## Allow to warm the cache
 	    $(ENV_PHP) ./bin/console cache:warmup
 
+translation: ## Allow to warm the translation
+	    $(ENV_PHP) ./bin/console app:translation-warm
+
 container: ## Allow to debug the container
 	    $(ENV_PHP) ./bin/console debug:container $(SERVICE) --show-private
 
