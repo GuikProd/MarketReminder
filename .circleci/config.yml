@@ -57,7 +57,7 @@ jobs:
                 paths:
                     - vendor
             - run: rm -rf var/cache/*
-            - run: ./bin/console cache:warm-up
+            - run: ./bin/console cache:warmup
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
@@ -91,7 +91,7 @@ jobs:
                 paths:
                     - vendor
             - run: rm -rf var/cache/*
-            - run: ./bin/console cache:warm-up
+            - run: ./bin/console cache:warmup
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
@@ -125,7 +125,7 @@ jobs:
                 paths:
                     - vendor
             - run: rm -rf var/cache/*
-            - run: ./bin/console cache:warm-up
+            - run: ./bin/console cache:warmup
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
