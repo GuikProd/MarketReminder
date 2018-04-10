@@ -10,7 +10,7 @@ Feature: As a fresh registered used, I should validate my account in order to ac
   Scenario: I want to validate myself using a wrong token.
     Given I am on "/en/validation/9b6e77872d98ec5cbcafa96501c03"
     Then I should be on "/en/"
-    And I should see "Oops, looks like the validation token isn't valid or has already been validated, please retry !"
+    And I should see "This token does not exist or has already been validated, please resubmit!"
 
   Scenario: I want to validate myself using a right token.
     Given I am on "/en/"
@@ -21,4 +21,4 @@ Feature: As a fresh registered used, I should validate my account in order to ac
   Scenario: I want to validate myself twice with the same token.
     Given I am on "/en/validation/9b6e77872d98ec5cbcafa96501c03e56"
     Then I should be on "/en/"
-    And I should see "Oops, looks like the validation token isn't valid or has already been validated, please retry !"
+    And I should see "This token does not exist or has already been validated, please resubmit!"

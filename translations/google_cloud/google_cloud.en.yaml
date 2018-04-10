@@ -8,7 +8,7 @@ image.text: 'Profile Interfaces'
 account.creation: 'Create an account'
 account.already_exist: 'Account already created?'
 security.acount_creation: 'Your profile has been created! Please check your mailbox to validate it.'
-security.validation_success: 'Verified account, it&#39;s time to start your adventure!'
+security.validation_success: 'Validated account, you can start your management!'
 security.validation_failure.notFound_token: 'This token does not exist or has already been validated, please resubmit!'
 security.login: 'To log in'
 security.login_failure: 'Submitted credentials appear invalid, please check your entry.'
@@ -29,8 +29,4 @@ form.format_error: 'The format is invalid! Please try again with a new valid for
 form.credentials_error: 'Submitted credentials already exist, please try again!'
 image.forbidden_content: 'Submitted image contains inappropriate content, please try again!'
 image.invalid_format: 'This image format is prohibited, please repeat your entry.'
-user.exist: 'Submitted idenfiants can not find a user, please try again!'
-Home: Home
-'Plain password': Password
-'Profile image': 'Profile Interfaces'
-'Your account was created ! Please check your mail to validate it.': 'Your profile has been created! Please check your mailbox to validate it.'
+user.exist: 'Submitted IDs can not find a user, please try again!'

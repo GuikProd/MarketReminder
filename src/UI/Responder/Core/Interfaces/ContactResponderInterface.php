@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Core\Interfaces;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Interface ContactResponderInterface.
  *
@@ -20,5 +22,8 @@ namespace App\UI\Responder\Core\Interfaces;
  */
 interface ContactResponderInterface
 {
-
+    /**
+     * @return Response
+     */
+    public function __invoke(): Response;
 }

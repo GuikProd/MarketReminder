@@ -13,25 +13,25 @@ Feature: As a registered user, I should be able to reset my password if I lost i
     Then I fill in "ask_reset_password_email" with "toto@gmail.com"
     And I press "Send"
     Then I should be on "/en/reset-password/ask"
-    And I should see "The credentials doesn't allow to find an existing user, please retry !"
+    And I should see "Submitted IDs can not find a user, please try again!"
 
   Scenario: I want to reset my password using a wrong username.
     Then I fill in "ask_reset_password_username" with "Titu"
     Then I fill in "ask_reset_password_email" with "titi@gmail.com"
     And I press "Send"
     Then I should be on "/en/reset-password/ask"
-    And I should see "The credentials doesn't allow to find an existing user, please retry !"
+    And I should see "Submitted IDs can not find a user, please try again!"
 
   Scenario: I want to reset my password using a wrong email.
     Then I fill in "ask_reset_password_username" with "Titi"
     Then I fill in "ask_reset_password_email" with "titu@gmail.com"
     And I press "Send"
     Then I should be on "/en/reset-password/ask"
-    And I should see "The credentials doesn't allow to find an existing user, please retry !"
+    And I should see "Submitted IDs can not find a user, please try again!"
 
   Scenario: I want to reset my password using good credentials.
     Then I fill in "ask_reset_password_username" with "Titi"
     Then I fill in "ask_reset_password_email" with "titi@gmail.com"
     And I press "Send"
     Then I should be on "/en/"
-    And I should see "The demand has been saved, please check your emails."
+    And I should see "Validated account, you can start your management!"

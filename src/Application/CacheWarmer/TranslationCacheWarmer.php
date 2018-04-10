@@ -66,34 +66,41 @@ class TranslationCacheWarmer extends CacheWarmer implements TranslationCacheWarm
         $yaml = new Yaml();
 
         $fileSystem->mkdir($cacheDir.'/googleCloud');
+        $fileSystem->mkdir($this->translationsFolder.'/google_cloud');
 
         $files = $finder->files()->in($this->translationsFolder);
 
         $translatedElements = [];
+        $acceptedLocales = explode('|', $this->acceptedLocales);
+
+        if ('fr' === $acceptedLocales[0]) {
+            unset($acceptedLocales[0]);
+        }
 
         foreach ($files as $file) {
             $content = $yaml::parse($file->getContents());
 
             foreach ($content as $key => $translation) {
 
-                foreach (explode('|', $this->acceptedLocales) as $locale) {
+                foreach ($acceptedLocales as $locale) {
 
                     $translatedContent = $this->cloudTranslationWarmer->warmTranslation($translation, $locale);
                     $translatedElements[$locale][$key] = $translatedContent['text'];
+
                 }
             }
         }
 
-        $this->writeCacheFile($cacheDir.'/googleCloud/translations.php', serialize($translatedElements));
+        foreach ($translatedElements as $element) {
+            foreach ($acceptedLocales as $locale) {
+                file_put_contents(
+                    $this->translationsFolder.\sprintf("/google_cloud/google_cloud.%s.yaml", $locale),
+                    Yaml::dump($element)
+                );
+            }
+        }
 
-        file_put_contents(
-            $this->translationsFolder.'/google_cloud.%s.yaml',
-            Yaml::dump(
-                unserialize(
-                    file_get_contents($cacheDir.'/googleCloud/translations.php')
-                )
-            )
-        );
+        $this->writeCacheFile($cacheDir.'/googleCloud/translations.php', serialize($translatedElements));
     }
 
     /**

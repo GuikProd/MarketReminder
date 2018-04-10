@@ -15,7 +15,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I fill in "register_password" with "Ie1FDLDLP"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "This value is too short !"
+    And I should see "This value is too short!"
     And the response status code should be 200
 
   Scenario: I want to register myself using a too large username.
@@ -24,7 +24,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I fill in "register_password" with "Ie1FDLDLP"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "This value is too long !"
+    And I should see "This value is too long!"
     And the response status code should be 200
 
   Scenario: I want to register myself using a too large email.
@@ -33,7 +33,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I fill in "register_password" with "Ie1FDLDLP"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "This value is too long !"
+    And I should see "This value is too long!"
     And the response status code should be 200
 
   Scenario: I want to register myself using a wrong email.
@@ -50,7 +50,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I fill in "register_password" with "Toto"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "This value is too short !"
+    And I should see "This value is too short!"
     And the response status code should be 200
 
   Scenario: I want to register myself using a too large password.
@@ -59,7 +59,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I fill in "register_password" with "Ie1FDLDLPIe1FDLDLPIe1FDLDLP"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "This value is too long !"
+    And I should see "This value is too long!"
     And the response status code should be 200
 
   Scenario: I want to register myself using a right profile image.
@@ -78,7 +78,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I attach the file "test_III.gif" to "register_profileImage"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "The submitted format isn't allowed, please retry !"
+    And I should see "This image format is prohibited, please repeat your entry."
     And the response status code should be 200
 
   Scenario: I want to register myself using a wrong image which contains wrong labels.
@@ -88,7 +88,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I attach the file "test_money.jpg" to "register_profileImage"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "The submitted image contains explicit or forbidden content, please retry !"
+    And I should see "Submitted image contains inappropriate content, please try again!"
     And the response status code should be 200
 
   Scenario: I want to register myself with an account that already exist.
@@ -97,5 +97,5 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I fill in "register_password" with "Ie1FDLGHW"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "The submitted credentials seems invalid, please retry."
+    And I should see "Submitted credentials already exist, please try again!"
     And the response status code should be 200

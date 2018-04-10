@@ -46,7 +46,7 @@ class ContactResponder implements ContactResponderInterface
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function __invoke()
+    public function __invoke(): Response
     {
         $response = new Response(
             $this->twig->render('core/contact.html.twig')
