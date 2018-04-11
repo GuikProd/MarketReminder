@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 
 namespace App\Application\Command\Interfaces;
+
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 
 /**

@@ -59,6 +59,9 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         parent::__construct();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setName('app:translation-warm')
@@ -66,6 +69,9 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
              ->setHelp('This command call the GCP Translation API and translate every text');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('The translations are loaded and sent to GCP.');
@@ -77,6 +83,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
 
         $files = $finder->files()->in($this->translationsFolder);
 
+        $defaultFilename = [];
         $translatedElements = [];
         $acceptedLocales = explode('|', $this->acceptedLocales);
 
@@ -85,25 +92,33 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         }
 
         foreach ($files as $file) {
+
+            $defaultFilename[] = $file->getFilename();
             $content = Yaml::parse($file->getContents());
 
             foreach ($content as $key => $translation) {
 
                 foreach ($acceptedLocales as $locale) {
 
-                    $translatedContent = $this->cloudTranslationWarmer->warmTranslation($translation, $locale);
-                    $translatedElements[$locale][$key] = $translatedContent['text'];
+                    $translatedElements[$locale][$file->getFilename()][$key] = $this->cloudTranslationWarmer->warmTranslation($translation, $locale)['text'];
 
                 }
             }
         }
 
+        dump($translatedElements);
+        die();
+
         foreach ($translatedElements as $element) {
             foreach ($acceptedLocales as $locale) {
-                file_put_contents(
-                    $this->translationsFolder.\sprintf("/google_cloud/google_cloud.%s.yaml", $locale),
-                    Yaml::dump($element)
-                );
+                foreach ($defaultFilename as $filename) {
+                    if (!strstr($locale, $filename)) {
+                        file_put_contents(
+                            $this->translationsFolder.\sprintf("/%s1.%s2.yaml", $filename, $locale),
+                            Yaml::dump($element)
+                        );
+                    }
+                }
             }
         }
 
