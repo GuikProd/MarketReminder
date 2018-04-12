@@ -13,17 +13,28 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\Bridge\Interfaces;
 
+use Google\Cloud\Translate\TranslateClient;
+
 /**
  * Interface CloudTranslationBridgeInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface CloudTranslationBridgeInterface extends CloudBridgeInterface
+interface CloudTranslationBridgeInterface
 {
     /**
      * CloudTranslationBridgeInterface constructor.
      *
+     * @param string  $translationCredentialsFileName
      * @param string  $translationCredentialsFolder
      */
-    public function __construct(string $translationCredentialsFolder);
+    public function __construct(
+        string $translationCredentialsFileName,
+        string $translationCredentialsFolder
+    );
+
+    /**
+     * @return TranslateClient|null
+     */
+    public function getTranslateClient(): TranslateClient;
 }

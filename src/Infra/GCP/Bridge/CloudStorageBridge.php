@@ -15,43 +15,63 @@ namespace App\Infra\GCP\Bridge;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
-use Symfony\Component\Config\FileLocator;
+use Google\Cloud\Storage\StorageClient;
 
 /**
  * Class CloudStorageBridge.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudStorageBridge extends AbstractBridge implements CloudStorageBridgeInterface
+class CloudStorageBridge implements CloudBridgeInterface, CloudStorageBridgeInterface
 {
     /**
      * @var string
      */
-    private $bucketCredentialsFolder;
+    private $storageCredentialsFileName;
 
     /**
-     * CloudStorageBridge constructor.
-     *
-     * @param string $bucketCredentialsFolder
+     * @var string
      */
-    public function __construct(string $bucketCredentialsFolder)
-    {
-        $this->bucketCredentialsFolder = $bucketCredentialsFolder;
+    private $storageCredentialsFolder;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(
+        string $storageCredentialsFileName,
+        string $storageCredentialsFolder
+    ) {
+        $this->storageCredentialsFileName = $storageCredentialsFileName;
+        $this->storageCredentialsFolder = $storageCredentialsFolder;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function loadCredentialsFile(): CloudBridgeInterface
+    public function getStorageClient(): StorageClient
     {
-        $fileLocator = new FileLocator($this->bucketCredentialsFolder);
+        return new StorageClient([
+            'keyFile' => json_decode(file_get_contents($this->storageCredentialsFolder.'/'.$this->storageCredentialsFileName), true)
+        ]);
+    }
 
-        $this->credentials = json_decode(
-            file_get_contents(
-                $fileLocator->locate('credentials.json')
-            ), true
-        );
+    /**
+     * {@inheritdoc}
+     */
+    public function closeConnexion(): void
+    {
+        $this->storageCredentialsFileName = null;
+        $this->storageCredentialsFolder = null;
+    }
 
-        return $this;
+    /**
+     * {@inheritdoc}
+     */
+    public function getCredentials(): array
+    {
+        return [
+            'keyFileName' => $this->storageCredentialsFileName,
+            'keyFilePath' => $this->storageCredentialsFolder
+        ];
     }
 }

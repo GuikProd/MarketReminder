@@ -35,11 +35,12 @@ services:
     node:
         container_name: ${CONTAINER_NAME}_nodejs
         build: './docker/node'
-        links:
-            - php-fpm
         volumes:
-            - './:${WORKPATH}:rw'
-        # command: bash -c "yarn && yarn build" -> Uncomment for production.
+            - './:/var/www/mk:rw,cached'
+        depends_on:
+            - php-fpm
+        ports:
+            - '8088:3000'
         restart: always
 
     # Server optimization

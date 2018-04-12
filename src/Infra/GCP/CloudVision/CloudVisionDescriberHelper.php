@@ -49,9 +49,7 @@ class CloudVisionDescriberHelper implements CloudVisionDescriberHelperInterface
     public function describe(Image $analysedImage): Annotation
     {
         return $this->cloudVisionBridgeInterface
-                    ->loadCredentialsFile()
-                    ->getServiceBuilder()
-                    ->vision()
+                    ->getVisionClient()
                     ->annotate($analysedImage);
     }
 

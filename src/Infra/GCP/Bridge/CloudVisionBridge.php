@@ -15,43 +15,66 @@ namespace App\Infra\GCP\Bridge;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
-use Symfony\Component\Config\FileLocator;
+use Google\Cloud\Core\Exception\GoogleException;
+use Google\Cloud\Vision\VisionClient;
 
 /**
  * Class CloudVisionBridge.
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudVisionBridge extends AbstractBridge implements CloudVisionBridgeInterface
+class CloudVisionBridge implements CloudBridgeInterface, CloudVisionBridgeInterface
 {
+    /**
+     * @var string
+     */
+    private $visionCredentialsFileName;
+
     /**
      * @var string
      */
     private $visionCredentialsFolder;
 
     /**
-     * CloudVisionBridge constructor.
-     *
-     * @param string $visionCredentialsFolder
+     * {@inheritdoc}
      */
-    public function __construct(string $visionCredentialsFolder)
-    {
+    public function __construct(
+        string $visionCredentialsFileName,
+        string $visionCredentialsFolder
+    ) {
+        $this->visionCredentialsFileName = $visionCredentialsFileName;
         $this->visionCredentialsFolder = $visionCredentialsFolder;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws GoogleException
      */
-    public function loadCredentialsFile(): CloudBridgeInterface
+    public function getVisionClient(): VisionClient
     {
-        $fileLocator = new FileLocator($this->visionCredentialsFolder);
+        return new VisionClient([
+            'keyFile' => json_decode(file_get_contents($this->visionCredentialsFolder.'/'.$this->visionCredentialsFileName), true)
+        ]);
+    }
 
-        $this->credentials = json_decode(
-            file_get_contents(
-                $fileLocator->locate('credentials.json')
-            ), true
-        );
+    /**
+     * {@inheritdoc}
+     */
+    public function closeConnexion(): void
+    {
+        $this->visionCredentialsFileName = null;
+        $this->visionCredentialsFolder = null;
+    }
 
-        return $this;
+    /**
+     * {@inheritdoc}
+     */
+    public function getCredentials(): array
+    {
+        return [
+            'keyFileName' => $this->visionCredentialsFileName,
+            'keyFilePath' => $this->visionCredentialsFolder
+        ];
     }
 }

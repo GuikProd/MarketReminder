@@ -42,9 +42,7 @@ class CloudStorageCleanerHelper implements CloudStorageCleanerHelperInterface
     public function delete(string $bucketName, string $fileName): void
     {
         $this->cloudStorageBridgeInterface
-             ->loadCredentialsFile()
-             ->getServiceBuilder()
-             ->storage()
+             ->getStorageClient()
              ->bucket($bucketName)
              ->object($fileName)
              ->delete();

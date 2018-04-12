@@ -92,11 +92,6 @@ interface UserInterface
     public function getCreationDate(): ? string;
 
     /**
-     * @param \DateTime $validationDate
-     */
-    public function setValidationDate(\DateTime $validationDate): void;
-
-    /**
      * @return null|string
      */
     public function getValidationDate(): ? string;

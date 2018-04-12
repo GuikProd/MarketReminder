@@ -15,41 +15,63 @@ namespace App\Infra\GCP\Bridge;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
-use Symfony\Component\Config\FileLocator;
+use Google\Cloud\Translate\TranslateClient;
 
 /**
  * Class CloudTranslationBridge.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudTranslationBridge extends AbstractBridge implements CloudTranslationBridgeInterface
+class CloudTranslationBridge implements CloudBridgeInterface, CloudTranslationBridgeInterface
 {
     /**
      * @var string
      */
-    private $translationCredentialsFolder;
+    private $credentialsFileName;
+
+    /**
+     * @var string
+     */
+    private $credentialsFolder;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $translationCredentialsFolder)
-    {
-        $this->translationCredentialsFolder = $translationCredentialsFolder;
+    public function __construct(
+        string $translationCredentialsFileName,
+        string $translationCredentialsFolder
+    ) {
+        $this->credentialsFileName = $translationCredentialsFileName;
+        $this->credentialsFolder = $translationCredentialsFolder;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function loadCredentialsFile(): CloudBridgeInterface
+    public function getTranslateClient(): TranslateClient
     {
-        $fileLocator = new FileLocator($this->translationCredentialsFolder);
+        return new TranslateClient([
+            'keyFile' => json_decode(file_get_contents($this->credentialsFolder.'/'.$this->credentialsFileName), true)
+        ]);
+    }
 
-        $this->credentials = json_decode(
-            file_get_contents(
-                $fileLocator->locate('credentials.json')
-            ), true
-        );
+    /**
+     * {@inheritdoc}
+     */
+    public function closeConnexion(): void
+    {
+        $this->credentialsFileName = null;
+        $this->credentialsFolder = null;
+    }
 
-        return $this;
+    /**
+     * {@inheritdoc}
+     */
+    public function getCredentials(): array
+    {
+        return [
+            'keyFile' => $this->credentialsFileName,
+            'keyFilePath' => $this->credentialsFolder
+        ];
     }
 }

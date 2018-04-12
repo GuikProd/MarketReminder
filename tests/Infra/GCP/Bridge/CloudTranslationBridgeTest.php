@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\Bridge;
 
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
-use Google\Cloud\Core\ServiceBuilder;
+use Google\Cloud\Translate\TranslateClient;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -28,7 +28,12 @@ class CloudTranslationBridgeTest extends KernelTestCase
     /**
      * @var string
      */
-    private $translationCredentials;
+    private $translationCredentialsFileName;
+
+    /**
+     * @var string
+     */
+    private $translationCredentialsFolder;
 
     /**
      * {@inheritdoc}
@@ -37,13 +42,19 @@ class CloudTranslationBridgeTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->translationCredentials = static::$kernel->getContainer()
-                                                       ->getParameter('cloud.translation_credentials');
+        $this->translationCredentialsFileName = static::$kernel->getContainer()
+                                                               ->getParameter('cloud.translation_credentials.filename');
+
+        $this->translationCredentialsFolder = static::$kernel->getContainer()
+                                                             ->getParameter('cloud.translation_credentials');
     }
 
     public function testItImplements()
     {
-        $cloudTranslationBridge = new CloudTranslationBridge($this->translationCredentials);
+        $cloudTranslationBridge = new CloudTranslationBridge(
+            $this->translationCredentialsFileName,
+            $this->translationCredentialsFolder
+        );
 
         static::assertInstanceOf(
             CloudTranslationBridgeInterface::class,
@@ -53,27 +64,36 @@ class CloudTranslationBridgeTest extends KernelTestCase
 
     public function testCredentialsAreLoaded()
     {
-        $cloudTranslationBridge = new CloudTranslationBridge($this->translationCredentials);
+        $cloudTranslationBridge = new CloudTranslationBridge(
+            $this->translationCredentialsFileName,
+            $this->translationCredentialsFolder
+        );
 
-        static::assertInstanceOf(
-            CloudTranslationBridgeInterface::class,
-            $cloudTranslationBridge->loadCredentialsFile()
+        static::assertSame(
+            $this->translationCredentialsFileName,
+            $cloudTranslationBridge->getCredentials()['keyFile']
         );
     }
 
-    public function testItReturnServiceBuilder()
+    public function testItReturnTranslateClient()
     {
-        $cloudTranslationBridge = new CloudTranslationBridge($this->translationCredentials);
+        $cloudTranslationBridge = new CloudTranslationBridge(
+            $this->translationCredentialsFileName,
+            $this->translationCredentialsFolder
+        );
 
         static::assertInstanceOf(
-            ServiceBuilder::class,
-            $cloudTranslationBridge->getServiceBuilder()
+            TranslateClient::class,
+            $cloudTranslationBridge->getTranslateClient()
         );
     }
 
     public function testItStopConnexion()
     {
-        $cloudTranslationBridge = new CloudTranslationBridge($this->translationCredentials);
+        $cloudTranslationBridge = new CloudTranslationBridge(
+            $this->translationCredentialsFileName,
+            $this->translationCredentialsFolder
+        );
 
         $cloudTranslationBridge->closeConnexion();
 

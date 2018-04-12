@@ -55,7 +55,7 @@ class CloudStorageBridgeTest extends KernelTestCase
 
         static::assertInstanceOf(
             CloudStorageBridgeInterface::class,
-            $cloudStorageBridge->loadCredentialsFile()
+            $cloudStorageBridge->getCredentials()['kyFilePath']
         );
     }
 

@@ -45,9 +45,7 @@ class CloudStoragePersisterHelper implements CloudStoragePersisterHelperInterfac
     public function persist(string $bucketName, string $fileName, $options = []): StorageObject
     {
         return $this->cloudStorageBridge
-                    ->loadCredentialsFile()
-                    ->getServiceBuilder()
-                    ->storage()
+                    ->getStorageClient()
                     ->bucket($bucketName)
                     ->upload(fopen($fileName, 'r'), $options);
     }

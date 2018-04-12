@@ -57,6 +57,10 @@
         <env name="SENDGRID_TRANSPORT" value="smtp" />
         <env name="SENDGRID_ENCRYPTION" value="tls" />
         <env name="SENGRID_API_KEY" value="test" />
+
+        <!-- ###+ nelmio/cors-bundle ### -->
+        <env name="CORS_ALLOW_ORIGIN" value="^https?://localhost:?[0-9]*$"/>
+        <!-- ###- nelmio/cors-bundle ### -->
     </php>
 
     <testsuites>

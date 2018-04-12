@@ -209,25 +209,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function setValidationDate(\DateTime $validationDate): void
-    {
-        $this->validationDate = $validationDate;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getValidated(): ? bool
     {
         return $this->validated;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setValidated(bool $validated): void
-    {
-        $this->validated = $validated;
     }
 
     /**

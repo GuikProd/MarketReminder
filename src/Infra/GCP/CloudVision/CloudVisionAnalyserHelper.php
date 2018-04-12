@@ -43,9 +43,7 @@ class CloudVisionAnalyserHelper implements CloudVisionAnalyserHelperInterface
     public function analyse(string $imagePath, string $analyseMode): Image
     {
         return $this->cloudVisionBridgeInterface
-                    ->loadCredentialsFile()
-                    ->getServiceBuilder()
-                    ->vision()
+                    ->getVisionClient()
                     ->image(
                         file_get_contents($imagePath),
                         [$analyseMode]

@@ -13,11 +13,28 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\Bridge\Interfaces;
 
+use Google\Cloud\Vision\VisionClient;
+
 /**
  * Interface CloudVisionBridgeInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface CloudVisionBridgeInterface extends CloudBridgeInterface
+interface CloudVisionBridgeInterface
 {
+    /**
+     * CloudVisionBridgeInterface constructor.
+     *
+     * @param string  $visionCredentialsFileName
+     * @param string  $visionCredentialsFolder
+     */
+    public function __construct(
+        string $visionCredentialsFileName,
+        string $visionCredentialsFolder
+    );
+
+    /**
+     * @return VisionClient
+     */
+    public function getVisionClient(): VisionClient;
 }

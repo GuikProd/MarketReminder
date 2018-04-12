@@ -3,11 +3,22 @@ parameters:
     accepted_locales: 'fr|en'
     kernel.docker_dir: "%kernel.project_dir%/docker/config"
     kernel.images_dir: "%kernel.project_dir%/public/images/profiles"
-    cloud.storage_credentials: "%kernel.project_dir%/config/credentials/google/bucket"
-    cloud.translation_credentials: "%kernel.project_dir%/config/credentials/google/translation"
-    cloud.vision_credentials: "%kernel.project_dir%/config/credentials/google/vision"
+
+    ## Cloud Storage
     cloud.storage.bucket_name: "%env(GOOGLE_BUCKET_NAME)%"
+    cloud.storage_credentials: "%kernel.project_dir%/config/credentials/google/bucket"
+    cloud.storage_credentials.filename: "credentials.json"
     cloud.storage.public_url: "%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%/"
+
+    ## Cloud Translation
+    cloud.translation_credentials: "%kernel.project_dir%/config/credentials/google/translation"
+    cloud.translation_credentials.filename: "credentials.json"
+
+    ## Cloud Vision
+    cloud.vision_credentials: "%kernel.project_dir%/config/credentials/google/vision"
+    cloud.vision_credentials.filename: "credentials.json"
+
+    ## SendGrid
     email.sender_address: "%env(SENDER_EMAIL_ADDRESS)%"
 
 services:
@@ -18,14 +29,23 @@ services:
         bind:
             $acceptedLocales: "%accepted_locales%"
             $defaultLocale: "%locale%"
-            $bucketCredentialsFolder: "%cloud.storage_credentials%"
-            $translationCredentialsFolder: "%cloud.translation_credentials%"
-            $visionCredentialsFolder: "%cloud.vision_credentials%"
             $filePath: "%kernel.images_dir%"
             $bucketName: "%cloud.storage.bucket_name%"
             $googleStoragePublicUrl: "%cloud.storage.public_url%"
             $emailSender: "%email.sender_address%"
+
+            ## Cloud Storage
+            $storageCredentialsFileName: "%cloud.storage_credentials.filename%"
+            $storageCredentialsFolder: "%cloud.storage_credentials%"
+
+            ## Cloud Translation
+            $translationCredentialsFileName: "%cloud.translation_credentials.filename%"
+            $translationCredentialsFolder: "%cloud.translation_credentials%"
             $translationsFolder: "%translator.default_path%"
+
+            ## Cloud Vision
+            $visionCredentialsFileName: "%cloud.vision_credentials.filename%"
+            $visionCredentialsFolder: "%cloud.vision_credentials%"
 
     App\:
         resource: '../src/*'

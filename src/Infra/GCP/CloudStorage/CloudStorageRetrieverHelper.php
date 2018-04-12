@@ -43,8 +43,7 @@ class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterfac
     public function checkFileExistence(string $bucketName, string $fileName): bool
     {
         return $this->cloudStorageBridge
-                    ->getServiceBuilder()
-                    ->storage()
+                    ->getStorageClient()
                     ->bucket($bucketName)
                     ->object($fileName)
                     ->exists();
@@ -56,8 +55,7 @@ class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterfac
     public function retrieveAsFile(string $bucketName, string $fileName, string $filePath): StreamInterface
     {
         return $this->cloudStorageBridge
-                    ->getServiceBuilder()
-                    ->storage()
+                    ->getStorageClient()
                     ->bucket($bucketName)
                     ->object($fileName)
                     ->downloadToFile($filePath);
@@ -69,8 +67,7 @@ class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterfac
     public function retrieveAsString(string $bucketName, string $fileName): string
     {
         return $this->cloudStorageBridge
-                    ->getServiceBuilder()
-                    ->storage()
+                    ->getStorageClient()
                     ->bucket($bucketName)
                     ->object($fileName)
                     ->downloadAsString();

@@ -42,9 +42,7 @@ class CloudTranslationWarmer implements CloudTranslationWarmerInterface
     public function warmTranslation(string $textToTranslate, string $targetLocale):? array
     {
         return $this->cloudTranslationBridge
-                    ->loadCredentialsFile()
-                    ->getServiceBuilder()
-                    ->translate()
+                    ->getTranslateClient()
                     ->translate($textToTranslate, ['target' => $targetLocale]);
     }
 }

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\Bridge\Interfaces;
 
-use Google\Cloud\Core\ServiceBuilder;
-
 /**
  * Interface CloudBridgeInterface.
  *
@@ -23,25 +21,9 @@ use Google\Cloud\Core\ServiceBuilder;
 interface CloudBridgeInterface
 {
     /**
-     * Allow to return a ServiceBuilder configured with the credentials.
-     *
-     * @return ServiceBuilder
+     * @return array
      */
-    public function getServiceBuilder(): ServiceBuilder;
-
-    /**
-     * Allow to load the credentials linked to this bridge.
-     *
-     * @return CloudBridgeInterface
-     */
-    public function loadCredentialsFile(): self;
-
-    /**
-     * Allow to get the credentials.
-     *
-     * @return null|array
-     */
-    public function getCredentials():? array;
+    public function getCredentials(): array;
 
     /**
      * Allow to close the connexion via ths service account.

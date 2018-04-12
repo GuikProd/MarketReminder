@@ -106,18 +106,16 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
             }
         }
 
-        dump($translatedElements);
-        die();
-
-        foreach ($translatedElements as $element) {
+        foreach ($translatedElements as $element => $value) {
             foreach ($acceptedLocales as $locale) {
                 foreach ($defaultFilename as $filename) {
-                    if (!strstr($locale, $filename)) {
-                        file_put_contents(
-                            $this->translationsFolder.\sprintf("/%s1.%s2.yaml", $filename, $locale),
-                            Yaml::dump($element)
-                        );
-                    }
+
+                    $newLocale = strtr($filename, ['fr' => $locale]);
+
+                    file_put_contents(
+                        $this->translationsFolder.\sprintf("/%s", $newLocale),
+                        Yaml::dump($value)
+                    );
                 }
             }
         }

@@ -13,11 +13,28 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\Bridge\Interfaces;
 
+use Google\Cloud\Storage\StorageClient;
+
 /**
  * Interface CloudStorageBridgeInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface CloudStorageBridgeInterface extends CloudBridgeInterface
+interface CloudStorageBridgeInterface
 {
+    /**
+     * CloudStorageBridgeInterface constructor.
+     *
+     * @param string  $storageCredentialsFileName
+     * @param string  $storageCredentialsFolder
+     */
+    public function __construct(
+        string $storageCredentialsFileName,
+        string $storageCredentialsFolder
+    );
+
+    /**
+     * @return StorageClient
+     */
+    public function getStorageClient(): StorageClient;
 }
