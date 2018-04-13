@@ -1,0 +1,23 @@
+home.text: Home
+account.welcome: 'Welcome to MarketReminder'
+account.greeting: 'Glad to see you on board!'
+resetPassword.title: 'Reset password'
+registration.title: 'Create an account'
+password.raw: Password
+image.text: 'Profile Image'
+account.creation: 'Create an account'
+account.already_exist: 'Account already created?'
+security.acount_creation: 'Your profile has been created! Please check your mailbox to validate it.'
+security.validation_success: 'Validated account, you can start your management!'
+security.validation_failure.notFound_token: 'This token does not exist or has already been validated, please resubmit!'
+security.login: 'To log in'
+security.login_failure: 'Submitted credentials appear invalid, please check your entry.'
+security.registration_username: Username
+security.registration_email: Email
+security.registration_password: Password
+security.resetPasswordToken_header: 'Request a new password.'
+security.resetPasswordToken: 'To send'
+user.account_created: 'The account has been created, an email to validate this creation has been sent to you.'
+user.invalid_credentials: 'The credentials entered seem invalid, please try again.'
+user.not_found: 'The credentials entered do not correspond to an existing user, please repeat your entry.'
+user.reset_password.success: 'The request has been registered, an email has been sent to you.'

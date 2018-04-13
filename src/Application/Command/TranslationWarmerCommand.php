@@ -69,7 +69,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
             ->setHelp('This command call the GCP Translation API and translate the whole file passed.')
             ->addArgument('filename', InputArgument::REQUIRED, 'The complete name of the file to translate.')
             ->addArgument('locale', InputArgument::REQUIRED, 'The locale used by the file to translate.')
-            ->addArgument('destinationLocale', InputArgument::REQUIRED, 'The estination locale used to translate.');
+            ->addArgument('destinationLocale', InputArgument::REQUIRED, 'The destination locale used to translate.');
     }
 
     /**
@@ -80,7 +80,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         $output->writeln('The translations are loaded and sent to GCP.');
 
         $finder = new Finder();
-        
+
         $files = $finder->files()
                         ->in($this->translationsFolder)
                         ->name($input->getArgument('filename').'.'.$input->getArgument('locale').'.yaml');
@@ -112,10 +112,11 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
             }
         }
 
-        $finalArray = array_combine($toTranslateKeys, $translatedElements);
-
-        Yaml::dump(
-            file_put_contents($this->translationsFolder.'/'.$input->getArgument('filename').'.en.'.'yaml', $finalArray)
+        file_put_contents(
+            $this->translationsFolder.'/'.$input->getArgument('filename').'.en.'.'yaml',
+            Yaml::dump(
+                array_combine($toTranslateKeys, $translatedElements)
+            )
         );
 
 
