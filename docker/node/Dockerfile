@@ -4,6 +4,4 @@ RUN mkdir -p /var/www/mk
 
 WORKDIR /var/www/mk
 
-COPY . ./
-
-CMD yarn start
+CMD yarn watch

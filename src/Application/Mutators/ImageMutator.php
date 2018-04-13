@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the MarketReminder project.
  *
@@ -11,15 +9,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Repository;
+namespace App\Application\Mutators;
 
-use Doctrine\ORM\EntityRepository;
+use Overblog\GraphQLBundle\Definition\Argument;
+use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 
 /**
- * Class StockRepository.
+ * Class ImageMutator.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class StockRepository extends EntityRepository
+class ImageMutator implements MutationInterface
 {
+    public function createImage(Argument $argument)
+    {
+    }
 }

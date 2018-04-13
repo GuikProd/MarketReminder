@@ -9,19 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Resolvers;
+namespace App\Application\Resolvers;
 
-use App\Models\Stock;
+use App\Models\Products;
 use Doctrine\ORM\EntityManagerInterface;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class StockResolver.
+ * Class ProductsResolver.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class StockResolver implements ResolverInterface
+class ProductsResolver implements ResolverInterface
 {
     /**
      * @var EntityManagerInterface
@@ -29,7 +29,7 @@ class StockResolver implements ResolverInterface
     private $entityManagerInterface;
 
     /**
-     * StockResolver constructor.
+     * ProductsResolver constructor.
      *
      * @param EntityManagerInterface $entityManagerInterface
      */
@@ -41,19 +41,19 @@ class StockResolver implements ResolverInterface
     /**
      * @param Argument $argument
      *
-     * @return Stock|Stock[]|array|null|object
+     * @return Products[]|array
      */
-    public function getStock(Argument $argument)
+    public function getProduct(Argument $argument)
     {
         if ($argument->offsetExists('id')) {
             return [
-                $this->entityManagerInterface->getRepository(Stock::class)
+                $this->entityManagerInterface->getRepository(Products::class)
                                              ->findOneBy([
                                                  'id' => $argument->offsetGet('id'),
                                              ]),
             ];
         }
 
-        return $this->entityManagerInterface->getRepository(Stock::class)->findAll();
+        return $this->entityManagerInterface->getRepository(Products::class)->findAll();
     }
 }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Mutators;
+namespace App\Application\Mutators;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Overblog\GraphQLBundle\Definition\Argument;

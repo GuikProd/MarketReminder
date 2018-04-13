@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Mutators;
+namespace App\Application\Mutators;
 
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;

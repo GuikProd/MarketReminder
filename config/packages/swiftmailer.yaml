@@ -7,3 +7,4 @@ swiftmailer:
     encryption: '%env(SENDGRID_ENCRYPTION)%'
     spool:
         type: "memory"
+    logging: true

@@ -9,51 +9,51 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Resolvers;
+namespace App\Application\Resolvers;
 
-use App\Models\Image;
+use App\Domain\Models\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class ImageResolver.
+ * Class UserResolver.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ImageResolver implements ResolverInterface
+class UserResolver implements ResolverInterface
 {
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private $entityManagerInterface;
 
     /**
-     * ImageResolver constructor.
+     * UserResolver constructor.
      *
      * @param EntityManagerInterface $entityManagerInterface
      */
     public function __construct(EntityManagerInterface $entityManagerInterface)
     {
-        $this->entityManager = $entityManagerInterface;
+        $this->entityManagerInterface = $entityManagerInterface;
     }
 
     /**
      * @param Argument $argument
      *
-     * @return Image[]|array
+     * @return User|User[]|array|null|object
      */
-    public function getImage(Argument $argument)
+    public function getUser(Argument $argument)
     {
         if ($argument->offsetExists('id')) {
             return [
-                $this->entityManager->getRepository(Image::class)
-                                    ->findOneBy([
-                                      'id' => $argument->offsetGet('id'),
-                                    ]),
+                $this->entityManagerInterface->getRepository(User::class)
+                                             ->findOneBy([
+                                                 'id' => $argument->offsetGet('id'),
+                                             ]),
             ];
         }
 
-        return $this->entityManager->getRepository(Image::class)->findAll();
+        return $this->entityManagerInterface->getRepository(User::class)->findAll();
     }
 }

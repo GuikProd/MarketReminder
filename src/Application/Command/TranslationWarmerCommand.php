@@ -16,15 +16,15 @@ namespace App\Application\Command;
 use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class TranslationWarmerCommand.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class TranslationWarmerCommand extends Command implements TranslationWarmerCommandInterface
@@ -65,8 +65,11 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
     protected function configure()
     {
         $this->setName('app:translation-warm')
-             ->setDescription('Allow to warm the translation')
-             ->setHelp('This command call the GCP Translation API and translate every text');
+            ->setDescription('Allow to warm the translation')
+            ->setHelp('This command call the GCP Translation API and translate the whole file passed.')
+            ->addArgument('filename', InputArgument::REQUIRED, 'The complete name of the file to translate.')
+            ->addArgument('locale', InputArgument::REQUIRED, 'The locale used by the file to translate.')
+            ->addArgument('destinationLocale', InputArgument::REQUIRED, 'The estination locale used to translate.');
     }
 
     /**
@@ -77,15 +80,15 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         $output->writeln('The translations are loaded and sent to GCP.');
 
         $finder = new Finder();
-        $fileSystem = new Filesystem();
+        
+        $files = $finder->files()
+                        ->in($this->translationsFolder)
+                        ->name($input->getArgument('filename').'.'.$input->getArgument('locale').'.yaml');
 
-        $fileSystem->mkdir($this->translationsFolder.'/google_cloud');
-
-        $files = $finder->files()->in($this->translationsFolder);
-
-        $defaultFilename = [];
-        $translatedElements = [];
         $acceptedLocales = explode('|', $this->acceptedLocales);
+        $translatedElements = [];
+        $toTranslateElements = [];
+        $toTranslateKeys = [];
 
         if ('fr' === $acceptedLocales[0]) {
             unset($acceptedLocales[0]);
@@ -93,32 +96,28 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
 
         foreach ($files as $file) {
 
-            $defaultFilename[] = $file->getFilename();
             $content = Yaml::parse($file->getContents());
 
-            foreach ($content as $key => $translation) {
-
-                foreach ($acceptedLocales as $locale) {
-
-                    $translatedElements[$locale][$file->getFilename()][$key] = $this->cloudTranslationWarmer->warmTranslation($translation, $locale)['text'];
-
-                }
+            foreach ($content as $value => $entry) {
+                $toTranslateElements[] = $entry;
+                $toTranslateKeys[] = $value;
             }
         }
 
-        foreach ($translatedElements as $element => $value) {
-            foreach ($acceptedLocales as $locale) {
-                foreach ($defaultFilename as $filename) {
+        foreach ($acceptedLocales as $locale) {
+            $values = $this->cloudTranslationWarmer->warmArrayTranslation($toTranslateElements, $locale);
 
-                    $newLocale = strtr($filename, ['fr' => $locale]);
-
-                    file_put_contents(
-                        $this->translationsFolder.\sprintf("/%s", $newLocale),
-                        Yaml::dump($value)
-                    );
-                }
+            foreach ($values as $value) {
+                $translatedElements[] = $value['text'];
             }
         }
+
+        $finalArray = array_combine($toTranslateKeys, $translatedElements);
+
+        Yaml::dump(
+            file_put_contents($this->translationsFolder.'/'.$input->getArgument('filename').'.en.'.'yaml', $finalArray)
+        );
+
 
         $output->writeln('The translations has been translated and dumped into the translations folder.');
     }

@@ -14,6 +14,11 @@ start: ## Allow to create the project
 	    make install
 	    make cache-clear
 
+restart: ## Allow to recreate the project
+	    $(DOCKER_COMPOSE) up -d --build --remove-orphans
+	    make install
+	    make cache-clear
+
 stop: ## Allow to stop the containers
 	    $(DOCKER_COMPOSE) stop
 
@@ -48,7 +53,7 @@ cache-warm: ## Allow to warm the cache
 	    $(ENV_PHP) ./bin/console cache:warmup
 
 translation: ## Allow to warm the translation
-	    $(ENV_PHP) ./bin/console app:translation-warm
+	    $(ENV_PHP) ./bin/console app:translation-warm $(FILENAME) $(LOCALE)
 
 container: ## Allow to debug the container
 	    $(ENV_PHP) ./bin/console debug:container $(SERVICE) --show-private

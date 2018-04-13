@@ -36,4 +36,12 @@ interface CloudTranslationWarmerInterface
      * @return array|null
      */
     public function warmTranslation(string $textToTranslate, string $targetLocale):? array;
+
+    /**
+     * @param array  $textToTranslate
+     * @param string $targetLocale
+     *
+     * @return array|null
+     */
+    public function warmArrayTranslation(array $textToTranslate, string $targetLocale):? array;
 }

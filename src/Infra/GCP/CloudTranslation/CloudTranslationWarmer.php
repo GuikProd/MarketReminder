@@ -45,4 +45,14 @@ class CloudTranslationWarmer implements CloudTranslationWarmerInterface
                     ->getTranslateClient()
                     ->translate($textToTranslate, ['target' => $targetLocale]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function warmArrayTranslation(array $textToTranslate, string $targetLocale): ? array
+    {
+        return $this->cloudTranslationBridge
+                    ->getTranslateClient()
+                    ->translateBatch($textToTranslate, ['target' => $targetLocale]);
+    }
 }

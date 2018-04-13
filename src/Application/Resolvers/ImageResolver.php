@@ -9,51 +9,51 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Resolvers;
+namespace App\Application\Resolvers;
 
-use App\Models\Products;
+use App\Models\Image;
 use Doctrine\ORM\EntityManagerInterface;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class ProductsResolver.
+ * Class ImageResolver.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ProductsResolver implements ResolverInterface
+class ImageResolver implements ResolverInterface
 {
     /**
      * @var EntityManagerInterface
      */
-    private $entityManagerInterface;
+    private $entityManager;
 
     /**
-     * ProductsResolver constructor.
+     * ImageResolver constructor.
      *
      * @param EntityManagerInterface $entityManagerInterface
      */
     public function __construct(EntityManagerInterface $entityManagerInterface)
     {
-        $this->entityManagerInterface = $entityManagerInterface;
+        $this->entityManager = $entityManagerInterface;
     }
 
     /**
      * @param Argument $argument
      *
-     * @return Products[]|array
+     * @return Image[]|array
      */
-    public function getProduct(Argument $argument)
+    public function getImage(Argument $argument)
     {
         if ($argument->offsetExists('id')) {
             return [
-                $this->entityManagerInterface->getRepository(Products::class)
-                                             ->findOneBy([
-                                                 'id' => $argument->offsetGet('id'),
-                                             ]),
+                $this->entityManager->getRepository(Image::class)
+                                    ->findOneBy([
+                                      'id' => $argument->offsetGet('id'),
+                                    ]),
             ];
         }
 
-        return $this->entityManagerInterface->getRepository(Products::class)->findAll();
+        return $this->entityManager->getRepository(Image::class)->findAll();
     }
 }
