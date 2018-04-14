@@ -16,7 +16,9 @@ namespace tests\Application\Command;
 use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class TranslationWarmerCommandTest.
@@ -64,5 +66,30 @@ class TranslationWarmerCommandTest extends KernelTestCase
             Command::class,
             $translationWarmerCommand
         );
+    }
+
+    public function testItThrowAnExceptionWithWrongChannel()
+    {
+        $kernel = static::bootKernel();
+
+        $application = new Application($kernel);
+
+        $application->add(new TranslationWarmerCommand(
+            $this->acceptedLocales,
+            $this->cloudTranslationWarmer,
+            $this->translationFolder
+        ));
+
+        $command = $application->find('app:translation-warm');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'channel' => 'toto',
+            'destinationLocale' => 'ru'
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        static::assertContains('This channel does not exist, please retry !', $display);
     }
 }

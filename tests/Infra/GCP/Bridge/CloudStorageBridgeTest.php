@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\Bridge;
 
 use App\Infra\GCP\Bridge\CloudStorageBridge;
 use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
-use Google\Cloud\Core\ServiceBuilder;
+use Google\Cloud\Storage\StorageClient;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -28,45 +28,77 @@ class CloudStorageBridgeTest extends KernelTestCase
     /**
      * @var string
      */
-    private $bucketCredentials;
+    private $bucketCredentialsFolder;
+
+    /**
+     * @var string
+     */
+    private $bucketCredentialsFileName;
 
     /**
      * {@inheritdoc}
      */
     public function setUp()
     {
-        $this->bucketCredentials = static::bootKernel()->getContainer()
-                                                       ->getParameter('cloud.storage_credentials');
+        static::bootKernel();
+
+        $this->bucketCredentialsFolder = static::$kernel->getContainer()
+                                                        ->getParameter('cloud.storage_credentials');
+
+        $this->bucketCredentialsFileName = static::$kernel->getContainer()
+                                                          ->getParameter('cloud.storage_credentials.filename');
+    }
+
+    public function testItImplements()
+    {
+        $cloudStorage = new CloudStorageBridge(
+            $this->bucketCredentialsFileName,
+            $this->bucketCredentialsFolder
+        );
+
+        static::assertInstanceOf(
+            CloudStorageBridgeInterface::class,
+            $cloudStorage
+        );
     }
 
     public function testReturnServiceBuilder()
     {
-        $cloudStorage = new CloudStorageBridge($this->bucketCredentials);
+        $cloudStorage = new CloudStorageBridge(
+            $this->bucketCredentialsFileName,
+            $this->bucketCredentialsFolder
+        );
 
         static::assertInstanceOf(
-            ServiceBuilder::class,
-            $cloudStorage->getServiceBuilder()
+            StorageClient::class,
+            $cloudStorage->getStorageClient()
         );
     }
 
     public function testCredentialsAreLoaded()
     {
-        $cloudStorageBridge = new CloudStorageBridge($this->bucketCredentials);
+        $cloudStorage = new CloudStorageBridge(
+            $this->bucketCredentialsFileName,
+            $this->bucketCredentialsFolder
+        );
 
-        static::assertInstanceOf(
-            CloudStorageBridgeInterface::class,
-            $cloudStorageBridge->getCredentials()['kyFilePath']
+        static::assertSame(
+            $this->bucketCredentialsFolder,
+            $cloudStorage->getCredentials()['keyFilePath']
         );
     }
 
     public function testConnexionIsDown()
     {
-        $cloudStorageBridge = new CloudStorageBridge($this->bucketCredentials);
+        $cloudStorage = new CloudStorageBridge(
+            $this->bucketCredentialsFileName,
+            $this->bucketCredentialsFolder
+        );
 
-        $cloudStorageBridge->closeConnexion();
+        $cloudStorage->closeConnexion();
 
         static::assertNull(
-            $cloudStorageBridge->getCredentials()
+            $cloudStorage->getCredentials()['keyFilePath']
         );
     }
 }

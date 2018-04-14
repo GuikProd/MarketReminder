@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\Bridge;
 
 use App\Infra\GCP\Bridge\CloudVisionBridge;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
-use Google\Cloud\Core\ServiceBuilder;
+use Google\Cloud\Vision\VisionClient;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -28,45 +28,80 @@ class CloudVisionBridgeTest extends KernelTestCase
     /**
      * @var string
      */
-    private $visionCredentials;
+    private $cloudVisionCredentialsFileName;
+
+    /**
+     * @var string
+     */
+    private $cloudVisionCredentialsFolder;
 
     /**
      * {@inheritdoc}
      */
     public function setUp()
     {
-        $this->visionCredentials = static::bootKernel()->getContainer()
-                                                       ->getParameter('cloud.vision_credentials');
+        static::bootKernel();
+
+        $this->cloudVisionCredentialsFolder = static::$kernel->getContainer()
+                                                        ->getParameter('cloud.vision_credentials');
+
+        $this->cloudVisionCredentialsFileName = static::$kernel->getContainer()
+                                                               ->getParameter('cloud.vision_credentials.filename');
     }
 
-    public function testReturnServiceBuilder()
+    public function testItImplements()
     {
-        $cloudVisionBridge = new CloudVisionBridge($this->visionCredentials);
+        $cloudVisionBridge = new CloudVisionBridge(
+            $this->cloudVisionCredentialsFileName,
+            $this->cloudVisionCredentialsFolder
+        );
 
         static::assertInstanceOf(
-            ServiceBuilder::class,
-            $cloudVisionBridge->getServiceBuilder()
+            CloudVisionBridgeInterface::class,
+            $cloudVisionBridge
+        );
+    }
+
+    /**
+     * @throws \Google\Cloud\Core\Exception\GoogleException
+     */
+    public function testReturnServiceBuilder()
+    {
+        $cloudVisionBridge = new CloudVisionBridge(
+            $this->cloudVisionCredentialsFileName,
+            $this->cloudVisionCredentialsFolder
+        );
+
+        static::assertInstanceOf(
+            VisionClient::class,
+            $cloudVisionBridge->getVisionClient()
         );
     }
 
     public function testCredentialsAreLoaded()
     {
-        $cloudVisionBridge = new CloudVisionBridge($this->visionCredentials);
+        $cloudVisionBridge = new CloudVisionBridge(
+            $this->cloudVisionCredentialsFileName,
+            $this->cloudVisionCredentialsFolder
+        );
 
-        static::assertInstanceOf(
-            CloudVisionBridgeInterface::class,
-            $cloudVisionBridge->loadCredentialsFile()
+        static::assertArrayHasKey(
+            'keyFilePath',
+            $cloudVisionBridge->getCredentials()
         );
     }
 
     public function testConnexionIsDown()
     {
-        $cloudVisionBridge = new CloudVisionBridge($this->visionCredentials);
+        $cloudVisionBridge = new CloudVisionBridge(
+            $this->cloudVisionCredentialsFileName,
+            $this->cloudVisionCredentialsFolder
+        );
 
         $cloudVisionBridge->closeConnexion();
 
         static::assertNull(
-            $cloudVisionBridge->getCredentials()
+            $cloudVisionBridge->getCredentials()['keyFilePath']
         );
     }
 }

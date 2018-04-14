@@ -67,7 +67,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         $this->setName('app:translation-warm')
             ->setDescription('Allow to warm the translation')
             ->setHelp('This command call the GCP Translation API and translate the whole file passed.')
-            ->addArgument('filename', InputArgument::REQUIRED, 'The channel of the file to translate.')
+            ->addArgument('channel', InputArgument::REQUIRED, 'The channel of the file to translate.')
             ->addArgument('destinationLocale', InputArgument::REQUIRED, 'The destination locale used to translate.');
     }
 
@@ -76,19 +76,25 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('The translations are loaded and sent to GCP.');
+        $output->writeln('<info>The translations file are loaded and parsed.</info>');
 
         $finder = new Finder();
 
         $files = $finder->files()
                         ->in($this->translationsFolder)
                         ->name(
-                            $input->getArgument('filename').'.fr.yaml'
+                            $input->getArgument('channel').'.fr.yaml'
                         );
+
+        if (!$files->count() > 0) {
+            throw new \InvalidArgumentException(
+                'This channel does not exist, please retry !'
+            );
+        }
 
         if (!\in_array($input->getArgument('destinationLocale'), explode('|', $this->acceptedLocales))) {
             $output->writeln(
-                "<info>The locale isn't defined in the accepted locales, the generated files could not be available.</info>"
+                "<comment>The locale isn't defined in the accepted locales, the generated files could not be available.</comment>"
             );
         }
 
@@ -106,6 +112,8 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
             }
         }
 
+        $output->writeln('<info>The translations keys are about to be translated.</info>');
+
         $values = $this->cloudTranslationWarmer->warmArrayTranslation($toTranslateElements, $input->getArgument('destinationLocale'));
 
         foreach ($values as $value) {
@@ -113,13 +121,12 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         }
 
         file_put_contents(
-            $this->translationsFolder.'/'.$input->getArgument('filename').'.'.$input->getArgument('destinationLocale').'.yaml',
+            $this->translationsFolder.'/'.$input->getArgument('channel').'.'.$input->getArgument('destinationLocale').'.yaml',
             Yaml::dump(
                 array_combine($toTranslateKeys, $translatedElements)
             )
         );
 
-
-        $output->writeln('The translations has been translated and dumped into the translations folder.');
+        $output->writeln('<info>The translations has been translated and dumped into the translations folder.</info>');
     }
 }

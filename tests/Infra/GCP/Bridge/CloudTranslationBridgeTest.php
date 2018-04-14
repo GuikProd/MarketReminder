@@ -98,7 +98,7 @@ class CloudTranslationBridgeTest extends KernelTestCase
         $cloudTranslationBridge->closeConnexion();
 
         static::assertNull(
-            $cloudTranslationBridge->getCredentials()
+            $cloudTranslationBridge->getCredentials()['keyFile']
         );
     }
 }
