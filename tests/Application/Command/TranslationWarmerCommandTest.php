@@ -68,7 +68,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         );
     }
 
-    public function testItThrowAnExceptionWithWrongChannel()
+    public function testItPreventWrongLocale()
     {
         $kernel = static::bootKernel();
 
@@ -84,12 +84,37 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'channel' => 'toto',
+            'channel' => 'messages',
             'destinationLocale' => 'ru'
         ]);
 
         $display = $commandTester->getDisplay();
 
-        static::assertContains('This channel does not exist, please retry !', $display);
+        static::assertContains('The locale isn\'t defined in the accepted locales, the generated files could not be available.', $display);
+    }
+
+    public function testItTranslateWithRightChannel()
+    {
+        $kernel = static::bootKernel();
+
+        $application = new Application($kernel);
+
+        $application->add(new TranslationWarmerCommand(
+            $this->acceptedLocales,
+            $this->cloudTranslationWarmer,
+            $this->translationFolder
+        ));
+
+        $command = $application->find('app:translation-warm');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'channel' => 'messages',
+            'destinationLocale' => 'en'
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        static::assertContains('The translations has been translated and dumped into the translations folder.', $display);
     }
 }
