@@ -53,7 +53,7 @@ cache-warm: ## Allow to warm the cache
 	    $(ENV_PHP) ./bin/console cache:warmup
 
 translation: ## Allow to warm the translation
-	    $(ENV_PHP) ./bin/console app:translation-warm $(FILENAME) $(LOCALE) $(DESTINATION_LOCALE)
+	    $(ENV_PHP) ./bin/console app:translation-warm $(FILENAME) $(LOCALE)
 
 container: ## Allow to debug the container
 	    $(ENV_PHP) ./bin/console debug:container $(SERVICE) --show-private

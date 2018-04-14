@@ -67,8 +67,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         $this->setName('app:translation-warm')
             ->setDescription('Allow to warm the translation')
             ->setHelp('This command call the GCP Translation API and translate the whole file passed.')
-            ->addArgument('filename', InputArgument::REQUIRED, 'The complete name of the file to translate.')
-            ->addArgument('locale', InputArgument::REQUIRED, 'The locale used by the file to translate.')
+            ->addArgument('filename', InputArgument::REQUIRED, 'The channel of the file to translate.')
             ->addArgument('destinationLocale', InputArgument::REQUIRED, 'The destination locale used to translate.');
     }
 
@@ -83,16 +82,19 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
 
         $files = $finder->files()
                         ->in($this->translationsFolder)
-                        ->name($input->getArgument('filename').'.'.$input->getArgument('locale').'.yaml');
+                        ->name(
+                            $input->getArgument('filename').'.fr.yaml'
+                        );
 
-        $acceptedLocales = explode('|', $this->acceptedLocales);
+        if (!\in_array($input->getArgument('destinationLocale'), explode('|', $this->acceptedLocales))) {
+            $output->writeln(
+                "<info>The locale isn't defined in the accepted locales, the generated files could not be available.</info>"
+            );
+        }
+
         $translatedElements = [];
         $toTranslateElements = [];
         $toTranslateKeys = [];
-
-        if ('fr' === $acceptedLocales[0]) {
-            unset($acceptedLocales[0]);
-        }
 
         foreach ($files as $file) {
 
@@ -104,16 +106,14 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
             }
         }
 
-        foreach ($acceptedLocales as $locale) {
-            $values = $this->cloudTranslationWarmer->warmArrayTranslation($toTranslateElements, $locale);
+        $values = $this->cloudTranslationWarmer->warmArrayTranslation($toTranslateElements, $input->getArgument('destinationLocale'));
 
-            foreach ($values as $value) {
-                $translatedElements[] = $value['text'];
-            }
+        foreach ($values as $value) {
+            $translatedElements[] = $value['text'];
         }
 
         file_put_contents(
-            $this->translationsFolder.'/'.$input->getArgument('filename').'.en.'.'yaml',
+            $this->translationsFolder.'/'.$input->getArgument('filename').'.'.$input->getArgument('destinationLocale').'.yaml',
             Yaml::dump(
                 array_combine($toTranslateKeys, $translatedElements)
             )
