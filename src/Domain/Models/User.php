@@ -193,17 +193,17 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getCreationDate(): ? string
+    public function getCreationDate(): ? \DateTime
     {
-        return $this->creationDate->format('D d-m-Y h:i:s');
+        return \DateTime::createFromFormat('U', (string) $this->creationDate);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getValidationDate(): ? string
+    public function getValidationDate(): ? \DateTime
     {
-        return $this->validationDate->format('D d-m-Y h:i:s');
+        return \DateTime::createFromFormat('U', (string) $this->validationDate);
     }
 
     /**
@@ -212,14 +212,6 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function getValidated(): ? bool
     {
         return $this->validated;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setValidationToken(string $validationToken): void
-    {
-        $this->validationToken = $validationToken;
     }
 
     /**

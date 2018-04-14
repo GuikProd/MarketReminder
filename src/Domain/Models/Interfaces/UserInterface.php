@@ -89,12 +89,12 @@ interface UserInterface
     /**
      * @return string
      */
-    public function getCreationDate(): ? string;
+    public function getCreationDate(): ? \DateTime;
 
     /**
      * @return null|string
      */
-    public function getValidationDate(): ? string;
+    public function getValidationDate(): ? \DateTime;
 
     /**
      * @return array
@@ -105,11 +105,6 @@ interface UserInterface
      * @return bool
      */
     public function getValidated(): ? bool;
-
-    /**
-     * @param string $validationToken
-     */
-    public function setValidationToken(string $validationToken): void;
 
     /**
      * @return null|string

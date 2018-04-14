@@ -5,4 +5,5 @@
            xsi:schemaLocation="https://api-platform.com/schema/metadata
            https://api-platform.com/schema/metadata/metadata-2.0.xsd">
     <resource class="App\Domain\Models\User" />
+    <resource class="App\Domain\Models\Image" />
 </resources>
