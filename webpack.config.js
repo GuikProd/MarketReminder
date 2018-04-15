@@ -34,6 +34,15 @@ Encore
             ]
         }
     )
+    .addLoader(
+        {
+            test: /\.js$/,
+            loader: 'babel-loader',
+            query: {
+                presets: ['es2015']
+            }
+        }
+    )
 
     // Style
     .addStyleEntry('core', './assets/scss/public/core.scss')
