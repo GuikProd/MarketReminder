@@ -65,10 +65,10 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
     protected function configure()
     {
         $this->setName('app:translation-warm')
-            ->setDescription('Allow to warm the translation')
-            ->setHelp('This command call the GCP Translation API and translate the whole file passed.')
+            ->setDescription('Allow to warm the translation for a given channel and locale.')
+            ->setHelp('This command call the GCP Translation API and translate (using the locale passed) the whole channel passed.')
             ->addArgument('channel', InputArgument::REQUIRED, 'The channel of the file to translate.')
-            ->addArgument('destinationLocale', InputArgument::REQUIRED, 'The destination locale used to translate.');
+            ->addArgument('locale', InputArgument::REQUIRED, 'The locale used to translate.');
     }
 
     /**
@@ -92,7 +92,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
             );
         }
 
-        if (!\in_array($input->getArgument('destinationLocale'), explode('|', $this->acceptedLocales))) {
+        if (!\in_array($input->getArgument('locale'), explode('|', $this->acceptedLocales))) {
             $output->writeln(
                 "<comment>The locale isn't defined in the accepted locales, the generated files could not be available.</comment>"
             );
@@ -114,14 +114,14 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
 
         $output->writeln('<info>The translations keys are about to be translated.</info>');
 
-        $values = $this->cloudTranslationWarmer->warmArrayTranslation($toTranslateElements, $input->getArgument('destinationLocale'));
+        $values = $this->cloudTranslationWarmer->warmArrayTranslation($toTranslateElements, $input->getArgument('locale'));
 
         foreach ($values as $value) {
             $translatedElements[] = $value['text'];
         }
 
         file_put_contents(
-            $this->translationsFolder.'/'.$input->getArgument('channel').'.'.$input->getArgument('destinationLocale').'.yaml',
+            $this->translationsFolder.'/'.$input->getArgument('channel').'.'.$input->getArgument('locale').'.yaml',
             Yaml::dump(
                 array_combine($toTranslateKeys, $translatedElements)
             )

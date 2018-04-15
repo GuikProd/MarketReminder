@@ -85,12 +85,15 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'channel' => 'messages',
-            'destinationLocale' => 'ru'
+            'locale' => 'ru'
         ]);
 
         $display = $commandTester->getDisplay();
 
-        static::assertContains('The locale isn\'t defined in the accepted locales, the generated files could not be available.', $display);
+        static::assertContains(
+            'The locale isn\'t defined in the accepted locales, the generated files could not be available.',
+            $display
+        );
     }
 
     public function testItTranslateWithRightChannel()
@@ -110,11 +113,14 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'channel' => 'messages',
-            'destinationLocale' => 'en'
+            'locale' => 'en'
         ]);
 
         $display = $commandTester->getDisplay();
 
-        static::assertContains('The translations has been translated and dumped into the translations folder.', $display);
+        static::assertContains(
+            'The translations has been translated and dumped into the translations folder.',
+            $display
+        );
     }
 }
