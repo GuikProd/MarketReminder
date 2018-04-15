@@ -97,5 +97,5 @@ Feature: As a normal user, I want to be able to register myself and create a new
     And I fill in "register_password" with "Ie1FDLGHW"
     And I press "Create an account"
     Then I should be on "/en/register"
-    And I should see "Submitted credentials already exist, please try again!"
+    And I should see "The credentials entered seem invalid, please try again."
     And the response status code should be 200
