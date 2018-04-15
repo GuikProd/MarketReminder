@@ -35,7 +35,7 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
-            - run: sudo apt-get install -y zip
+            - run: sudo docker-php-ext-install zip
             - run: sudo composer self-update
             - restore_cache:
                 keys:
@@ -73,7 +73,7 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
-            - run: sudo apt-get install -y zip
+            - run: sudo docker-php-ext-install zip
             - run: sudo composer self-update
             - restore_cache:
                 keys:
@@ -108,7 +108,7 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
-            - run: sudo apt-get install -y zip
+            - run: sudo docker-php-ext-install zip
             - run: sudo composer self-update
             - restore_cache:
                 keys:
