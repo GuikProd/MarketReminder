@@ -16,7 +16,7 @@ Feature: As a fresh registered used, I should validate my account in order to ac
     Given I am on "/en/"
     And I go to "/en/validation/2d5f2478687a40bd755120bdcb713f01"
     Then I should be on "/en/"
-    And I should see "Account validated ! Time to start your stock management !"
+    And I should see "Validated account, you can start your management!"
 
   Scenario: I want to validate myself twice with the same token.
     Given I am on "/en/validation/9b6e77872d98ec5cbcafa96501c03e56"
