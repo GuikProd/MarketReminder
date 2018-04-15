@@ -6,17 +6,12 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
-            - restore_cache:
-                keys:
-                    - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                    - yarn-packages-{{ .Branch }}
-                    - yarn-packages-master
-                    - yarn-packages-
+            - run: yarn install
             - save_cache:
                 key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
                 paths:
                     - node_modules/
-            - run: ./node_modules/.bin/encore production
+            - run: yarn build
     deptrac:
         docker:
             - image: circleci/php:7.2.4-apache-node-browsers
