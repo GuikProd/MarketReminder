@@ -7,10 +7,6 @@ jobs:
             - checkout
             - setup_remote_docker
             - run: yarn install
-            - save_cache:
-                key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                paths:
-                    - node_modules/
             - run: yarn build
     deptrac:
         docker:
