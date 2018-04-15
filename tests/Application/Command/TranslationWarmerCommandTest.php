@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace tests\Application\Command;
 
 use App\Application\Command\TranslationWarmerCommand;
+use App\Infra\GCP\Bridge\CloudTranslationBridge;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Application;
@@ -50,8 +52,14 @@ class TranslationWarmerCommandTest extends KernelTestCase
         static::bootKernel();
 
         $this->acceptedLocales = static::$kernel->getContainer()->getParameter('accepted_locales');
-        $this->cloudTranslationWarmer = $this->createMock(CloudTranslationWarmerInterface::class);
         $this->translationFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
+
+        $this->cloudTranslationWarmer = new CloudTranslationWarmer(
+            new CloudTranslationBridge(
+                static::$kernel->getContainer()->getParameter('cloud.translation_credentials.filename'),
+                static::$kernel->getContainer()->getParameter('cloud.translation_credentials')
+            )
+        );
     }
 
     public function testItExtends()

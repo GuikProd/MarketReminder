@@ -16,7 +16,7 @@ Feature: As a fresh registered used, I should validate my account in order to ac
     Given I am on "/fr/"
     And I go to "/fr/validation/2d5f2478687a40bd75512dadzdzddsqd"
     Then I should be on "/fr/"
-    And I should see "Compte validé, il est temps de commencer votre aventure !"
+    And I should see "Compte validé, vous pouvez vous commencer votre gestion !"
 
   Scenario: I want to validate myself twice with the same token.
     Given I am on "/fr/validation/9b6e77872d98ec5cbcafa96501c03e76"

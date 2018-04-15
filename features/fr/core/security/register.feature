@@ -7,7 +7,7 @@ Feature: As a normal user, I want to be able to register myself and create a new
       | HelloWorld   | Ie1FDLGHW     | hello@gmail.com | EdFEDNRanuLs5    | 1          | 1      | toValidate   |
       | Titi         | Ie1FDLTITI    | titi@gmail.com  | ToFEGARRdjLs2    | 0          | 0      | active       |
     When I am on "/fr/register"
-    Then I should see "S'enregistrer"
+    Then I should see "Créer un compte"
 
   Scenario: I want to register myself using a too small username.
     Then I fill in "register_username" with "to"

@@ -70,7 +70,7 @@ class SessionMessageSubscriber implements EventSubscriberInterface, SessionMessa
                       ->add(
                           $event->getFlashBag(),
                           $this->translator
-                               ->trans($event->getMessage(), [], 'google_cloud')
+                               ->trans($event->getMessage(), [], 'messages')
                       );
     }
 }
