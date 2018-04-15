@@ -166,13 +166,5 @@ workflows:
             - behat_core_en
     staging:
         jobs:
-            - gcloud_docker_build:
-                requires:
-                    - encore
-                    - deptrac
-                    - phpunit
-                    - behat_core_fr
-                    - behat_core_en
-            - gcloud_kubernetes_check:
-                requires:
-                    - gcloud_docker_build
+            - gcloud_docker_build
+            - gcloud_kubernetes_check
