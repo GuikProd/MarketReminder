@@ -6,7 +6,6 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
-            - run: sudo yarn install
             - restore_cache:
                 keys:
                     - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}

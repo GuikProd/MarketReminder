@@ -1,4 +1,4 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
 
 Encore
     .setOutputPath('public/build/')
@@ -9,6 +9,31 @@ Encore
     // .enableVersioning(Encore.isProduction())
     .enableTypeScriptLoader()
     .enableVueLoader()
+    .enableSassLoader()
+    .addLoader(
+        {
+            test: /\.scss$/,
+            use: [
+                {
+                    loader: 'sass-loader',
+                    options: {
+                        importer: function(url, prev) {
+                            if(url.indexOf('@material') === 0) {
+                                const filePath = url.split('@material')[1];
+                                const nodeModulePath = `./node_modules/@material/${filePath}`;
+                                return {
+                                    file: require('path').resolve(nodeModulePath)
+                                };
+                            }
+                            return {
+                                file: url
+                            };
+                        }
+                    }
+                }
+            ]
+        }
+    )
 
     // Style
     .addStyleEntry('core', './assets/scss/public/core.scss')
