@@ -87,7 +87,7 @@ redis: ## Allow to clean the Redis cache
 
 phpunit: ## Launch all PHPUnit tests
 phpunit: tests
-	    $(ENV_PHP) vendor/bin/phpunit
+	    $(ENV_PHP) ./bin/phpunit
 
 phpunit-blackfire: ## Allow to launch Blackfire tests
 	    $(ENV_PHP) vendor/bin/phpunit --group Blackfire
