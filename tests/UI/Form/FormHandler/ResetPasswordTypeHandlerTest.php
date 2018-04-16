@@ -11,19 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Domain\UseCase\UserResetPassword\DTO\Interfaces;
+namespace App\Tests\UI\Form\FormHandler;
+
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Interface UserNewPasswordDTOInterface.
+ * Class ResetPasswordTypeHandlerTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface UserNewPasswordDTOInterface
+class ResetPasswordTypeHandlerTest extends KernelTestCase
 {
-    /**
-     * UserNewPasswordDTOInterface constructor.
-     *
-     * @param string  $password
-     */
-    public function __construct(string $password);
+
 }
