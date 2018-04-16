@@ -19,6 +19,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
@@ -104,6 +105,10 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
 
         foreach ($files as $file) {
 
+            $this->backUpTranslation($file);
+
+            $output->writeln('<info>The default content of the file has been saved in the backup.</info>');
+
             $content = Yaml::parse($file->getContents());
 
             foreach ($content as $value => $entry) {
@@ -128,5 +133,21 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         );
 
         $output->writeln('<info>The translations has been translated and dumped into the translations folder.</info>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function backUpTranslation(\SplFileInfo $toBackUpFile): void
+    {
+        $fileSystem = new Filesystem();
+        $fileSystem->mkdir($this->translationsFolder.'/backup');
+
+        file_put_contents(
+            $this->translationsFolder.'/backup/'.time().$toBackUpFile->getBasename(),
+            Yaml::dump(
+                Yaml::parse($toBackUpFile->getContents())
+            )
+        );
     }
 }

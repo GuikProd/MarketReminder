@@ -30,3 +30,6 @@ user.account_created: Le compte a bien été créé, un email permettant de vali
 user.invalid_credentials: Les identifiants renseignés semblent invalides, veuillez réessayer.
 user.not_found: Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie.
 user.reset_password.success: La demande a bien été enregistrée, un email vous a été envoyé.
+
+# Emails
+user.ask_reset_password: Comme demandé, voici un lien vous permettant de réinitialiser votre mot de passe, ce lien est actif durant 24H.

@@ -36,4 +36,12 @@ interface TranslationWarmerCommandInterface
         CloudTranslationWarmerInterface $cloudTranslationWarmer,
         string $translationsFolder
     );
+
+    /**
+     * Allow to backup every files before it translation, this way,
+     * we can check the validity of the file each time.
+     *
+     * @param \SplFileInfo $toBackUpFile
+     */
+    public function backUpTranslation(\SplFileInfo $toBackUpFile): void;
 }
