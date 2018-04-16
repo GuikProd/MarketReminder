@@ -32,4 +32,6 @@ user.not_found: Les identifiants renseignés ne correspondent pas à un utilisat
 user.reset_password.success: La demande a bien été enregistrée, un email vous a été envoyé.
 
 # Emails
+user.ask_reset_password.header: Demande de réinitialisation du mot de passe.
 user.ask_reset_password: Comme demandé, voici un lien vous permettant de réinitialiser votre mot de passe, ce lien est actif durant 24H.
+user.ask_reset_password.text: Réinitialiser le mot de passe

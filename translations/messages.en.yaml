@@ -21,4 +21,6 @@ user.account_created: 'The account has been created, an email to validate this c
 user.invalid_credentials: 'The credentials entered seem invalid, please try again.'
 user.not_found: 'The credentials entered do not correspond to an existing user, please repeat your entry.'
 user.reset_password.success: 'The request has been registered, an email has been sent to you.'
+user.ask_reset_password.header: 'Request to reset the password.'
 user.ask_reset_password: 'As requested, here is a link to reset your password, this link is active for 24 hours.'
+user.ask_reset_password.text: 'Reset password'

@@ -20,11 +20,20 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ResetPasswordAction.
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ *
+ * @Route(
+ *     name="web_reset_password",
+ *     path="/reset-password/{token}",
+ *     requirements={
+ *         "token": "\S+"
+ *     }
+ * )
  */
 class ResetPasswordAction implements ResetPasswordActionInterface
 {

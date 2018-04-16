@@ -1,0 +1,26 @@
+home.text: Accueil
+account.welcome: 'Bienvenue sur MarketReminder'
+account.greeting: 'Content de vous voir à bord !'
+resetPassword.title: 'Réinitialiser son mot de passe'
+registration.title: 'Créer un compte'
+password.raw: 'Mot de passe'
+image.text: 'Image de profil'
+account.creation: 'Créer un compte'
+account.already_exist: 'Compte déjà créé ?'
+security.acount_creation: 'Votre profil a été créé ! Veuillez vérifier votre boîte mail afin de valider ce dernier.'
+security.validation_success: 'Compte validé, vous pouvez vous commencer votre gestion !'
+security.validation_failure.notFound_token: 'Ce token n''existe pas ou a déjà été validé, veuillez réssayer !'
+security.login: 'Se connecter'
+security.login_failure: 'Les identifiants soumis semblent invalides, veuillez vérifier votre saisie.'
+security.registration_username: Username
+security.registration_email: Email
+security.registration_password: Password
+security.resetPasswordToken_header: 'Demander un nouveau mot de passe.'
+security.resetPasswordToken: Envoyer
+user.account_created: 'Le compte a bien été créé, un email permettant de valider cette création vous a été envoyé.'
+user.invalid_credentials: 'Les identifiants renseignés semblent invalides, veuillez réessayer.'
+user.not_found: 'Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie.'
+user.reset_password.success: 'La demande a bien été enregistrée, un email vous a été envoyé.'
+user.ask_reset_password.header: 'Demande de réinitialisation du mot de passe.'
+user.ask_reset_password: 'Comme demandé, voici un lien vous permettant de réinitialiser votre mot de passe, ce lien est actif durant 24H.'
+user.ask_reset_password.text: 'Réinitialiser le mot de passe'

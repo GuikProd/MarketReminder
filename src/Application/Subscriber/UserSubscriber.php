@@ -114,7 +114,9 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
                     ->setFrom($this->emailSender)
                     ->setTo($event->getUser()->getEmail())
                     ->setBody(
-                        $this->twig->render('emails/security/user_reset_password.html.twig')
+                        $this->twig->render('emails/security/user_reset_password.html.twig', [
+                            'user' => $event->getUser()
+                        ])
                     );
 
         $this->swiftMailer->send($message);

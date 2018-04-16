@@ -31,19 +31,8 @@ class UserResetPasswordDTOTest extends TestCase
                                                  'Toto'
                                              );
 
-        static::assertInstanceOf(
-            UserResetPasswordDTOInterface::class,
-            $userPasswordResetDTO
-        );
-
-        static::assertSame(
-            'Toto',
-            $userPasswordResetDTO->username
-        );
-
-        static::assertSame(
-            'toto@gmail.com',
-            $userPasswordResetDTO->email
-        );
+        static::assertInstanceOf(UserResetPasswordDTOInterface::class, $userPasswordResetDTO);
+        static::assertSame('Toto', $userPasswordResetDTO->username);
+        static::assertSame('toto@gmail.com', $userPasswordResetDTO->email);
     }
 }
