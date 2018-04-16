@@ -131,4 +131,32 @@ class TranslationWarmerCommandTest extends KernelTestCase
             $display
         );
     }
+
+    public function testItBackupTheDefaultFile()
+    {
+        $kernel = static::bootKernel();
+
+        $application = new Application($kernel);
+
+        $application->add(new TranslationWarmerCommand(
+            $this->acceptedLocales,
+            $this->cloudTranslationWarmer,
+            $this->translationFolder
+        ));
+
+        $command = $application->find('app:translation-warm');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'channel' => 'messages',
+            'locale' => 'en'
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        static::assertContains(
+            'The default content of the file has been saved in the backup.',
+            $display
+        );
+    }
 }
