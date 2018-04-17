@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures\ORM;
 
-use App\Domain\Models\User;
+use App\Domain\Builder\UserBuilder;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
@@ -30,9 +30,14 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $encoder = new BCryptPasswordEncoder(13);
+        $userBuilder = new UserBuilder();
+        $userBuilderII = new UserBuilder();
+        $userBuilderIII = new UserBuilder();
 
-        $userI = new User(
+        $encoder = new BCryptPasswordEncoder(13);
+        \Closure::fromCallable([$encoder, 'encodePassword']);
+
+        $userBuilder->createFromRegistration(
             'hp@gmail.com',
             'HP',
             'Ie1FDLHPP',
@@ -45,9 +50,9 @@ class UserFixtures extends Fixture
             )
         );
 
-        $this->setReference('user', $userI);
+        $this->setReference('user', $userBuilder->getUser());
 
-        $userII = new User(
+        $userBuilderII->createFromRegistration(
             'toto@gmail.com',
             'Toto',
             'Ie1FDLTOTO',
@@ -60,9 +65,9 @@ class UserFixtures extends Fixture
             )
         );
 
-        $this->setReference('user_II', $userII);
+        $this->setReference('user_II', $userBuilderII->getUser());
 
-        $userIII = new User(
+        $userBuilderIII->createFromRegistration(
             'guik@gmail.com',
             'Guik',
             'Ie1FDLGK',
@@ -75,11 +80,12 @@ class UserFixtures extends Fixture
             )
         );
 
-        $this->setReference('user_III', $userIII);
 
-        $manager->persist($userI);
-        $manager->persist($userII);
-        $manager->persist($userIII);
+        $this->setReference('user_III', $userBuilderIII->getUser());
+
+        $manager->persist($userBuilder->getUser());
+        $manager->persist($userBuilderII->getUser());
+        $manager->persist($userBuilderIII->getUser());
 
         $manager->flush();
     }

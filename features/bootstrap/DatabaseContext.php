@@ -80,6 +80,7 @@ class DatabaseContext implements Context
     public function iLoadFollowingUsers(TableNode $users)
     {
         $encoder = new BCryptPasswordEncoder(13);
+        $callable = Closure::fromCallable([$encoder, 'encodePassword']);
 
         foreach ($users->getHash() as $hash) {
             $userDTO = new UserRegistrationDTO(
@@ -92,8 +93,7 @@ class DatabaseContext implements Context
             $user = new User(
                 $userDTO->email,
                 $userDTO->username,
-                $hash['plainPassword'],
-                Closure::fromCallable([$encoder, 'encodePassword']),
+                $callable($hash['plainPassword'], null),
                 $userDTO->validationToken
             );
 

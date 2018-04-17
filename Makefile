@@ -99,7 +99,7 @@ behat: ## Launch all Behat tests
 behat: features
 	    make check-schema
 	    make fixtures_test
-	    make redis
+	    make doctrine-cache
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands

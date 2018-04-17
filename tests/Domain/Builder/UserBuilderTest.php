@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Domain\Builder;
+namespace App\Tests\Domain\Builder;
 
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Builder\UserBuilder;
