@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 class User implements SecurityUserInterface, UserInterface, \Serializable
 {
     /**
-     * @var int
+     * @var string
      */
     private $id;
 
@@ -87,6 +87,11 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $resetPasswordToken;
 
     /**
+     * @var int
+     */
+    private $resetPasswordDate;
+
+    /**
      * @var ImageInterface
      */
     private $profileImage;
@@ -98,21 +103,20 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
         string $email,
         string $username,
         string $password,
-        callable $passwordEncoder,
         string $validationToken,
         ImageInterface $profileImage = null
     ) {
+        $this->active = false;
+        $this->currentState = ['toValidate'];
         $this->id = Uuid::uuid4();
         $this->creationDate = time();
-        $this->active = false;
-        $this->validated = false;
-        $this->roles[] = 'ROLE_USER';
         $this->email = $email;
-        $this->username = $username;
-        $this->password = $passwordEncoder($password, null);
-        $this->currentState = ['toValidate'];
-        $this->validationToken = $validationToken;
+        $this->password = $password;
         $this->profileImage = $profileImage;
+        $this->roles[] = 'ROLE_USER';
+        $this->username = $username;
+        $this->validated = false;
+        $this->validationToken = $validationToken;
     }
 
     /**
@@ -137,7 +141,16 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getId(): ? string
+    public function updatePassword(string $newPassword): void
+    {
+        $this->password = $newPassword;
+        $this->resetPasswordDate = time();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId(): string
     {
         return $this->id;
     }
@@ -201,14 +214,6 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getValidationDate(): ? \DateTime
-    {
-        return \DateTime::createFromFormat('U', (string) $this->validationDate);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getValidated(): ? bool
     {
         return $this->validated;
@@ -228,6 +233,14 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function getResetPasswordToken(): ? string
     {
         return $this->resetPasswordToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResetPasswordDate():? int
+    {
+        return $this->resetPasswordDate;
     }
 
     /**

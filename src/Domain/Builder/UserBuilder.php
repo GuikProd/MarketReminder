@@ -42,7 +42,9 @@ class UserBuilder implements UserBuilderInterface
         ImageInterface $profileImage = null
     ): UserBuilderInterface {
 
-        $this->user = new User($email, $username, $password, $passwordEncoder, $validationToken, $profileImage);
+        $encryptedPassword = $passwordEncoder($password, null);
+
+        $this->user = new User($email, $username, $encryptedPassword, $validationToken, $profileImage);
 
         return $this;
     }

@@ -24,7 +24,7 @@ use Ramsey\Uuid\Uuid;
 class Image implements ImageInterface
 {
     /**
-     * @var int
+     * @var string
      */
     private $id;
 
@@ -71,7 +71,7 @@ class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

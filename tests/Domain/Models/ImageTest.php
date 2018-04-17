@@ -24,9 +24,13 @@ use PHPUnit\Framework\TestCase;
  */
 class ImageTest extends TestCase
 {
-    public function testDataAreAvailable()
+    public function testItImplementsAndReturnData()
     {
-        $image = new Image('toto', 'toto.png', 'http://tests.com/profileImage/toto.png');
+        $image = new Image(
+            'toto',
+            'toto.png',
+            'http://tests.com/profileImage/toto.png'
+        );
 
         static::assertInstanceOf(ImageInterface::class, $image);
         static::assertSame('toto', $image->getAlt());

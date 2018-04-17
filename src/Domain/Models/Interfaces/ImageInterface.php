@@ -23,16 +23,24 @@ interface ImageInterface
     /**
      * ImageInterface constructor.
      *
-     * @param string $alt
-     * @param string $filename
-     * @param string $publicUrl
+     * @param string  $alt        The alt of the image (by default, the filename).
+     * @param string  $filename   The name of the Image once stored.
+     * @param string  $publicUrl  The public URL (using GCP) of the file.
+     *
+     * @internal The constructor should define an UUID along with a creationDate using time().
      */
-    public function __construct(string $alt, string $filename, string $publicUrl);
+    public function __construct(
+        string $alt,
+        string $filename,
+        string $publicUrl
+    );
 
     /**
-     * @return int
+     * The UUID generated during object construction.
+     *
+     * @return string
      */
-    public function getId(): int;
+    public function getId(): string;
 
     /**
      * @return \DateTime

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "04fdc8a1a66d7323b2084f8da85ddf01",
+    "content-hash": "035bf710eedbc2eaaff59ca0282e0ffe",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -161,16 +161,16 @@
         },
         {
             "name": "beberlei/assert",
-            "version": "v2.9.4",
+            "version": "v2.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beberlei/assert.git",
-                "reference": "7c24bedba95c600bba7b6021185a7d7fa2deb961"
+                "reference": "c07fe163d6a3b3e4b1275981ec004397954afa89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/assert/zipball/7c24bedba95c600bba7b6021185a7d7fa2deb961",
-                "reference": "7c24bedba95c600bba7b6021185a7d7fa2deb961",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/c07fe163d6a3b3e4b1275981ec004397954afa89",
+                "reference": "c07fe163d6a3b3e4b1275981ec004397954afa89",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +212,7 @@
                 "assertion",
                 "validation"
             ],
-            "time": "2018-04-09T14:40:28+00:00"
+            "time": "2018-04-16T11:18:27+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -1342,16 +1342,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.19.1",
+            "version": "v1.19.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-core.git",
-                "reference": "6559504fc097d782fd79eac3f7b062578a2e224e"
+                "reference": "c0d71125f31400b09d1a1097e6c336f3e2908532"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/6559504fc097d782fd79eac3f7b062578a2e224e",
-                "reference": "6559504fc097d782fd79eac3f7b062578a2e224e",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/c0d71125f31400b09d1a1097e6c336f3e2908532",
+                "reference": "c0d71125f31400b09d1a1097e6c336f3e2908532",
                 "shasum": ""
             },
             "require": {
@@ -1397,7 +1397,7 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
-            "time": "2018-04-03T21:27:33+00:00"
+            "time": "2018-04-16T18:09:56+00:00"
         },
         {
             "name": "google/cloud-storage",

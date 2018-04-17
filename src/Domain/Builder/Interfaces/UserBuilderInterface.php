@@ -32,6 +32,9 @@ interface UserBuilderInterface
      * @param ImageInterface|null  $profileImage
      *
      * @return UserBuilderInterface
+     *
+     * @internal In order to ease the creation process, the encoded password is generated
+     *           before the hydration.
      */
     public function createFromRegistration(
         string $email,

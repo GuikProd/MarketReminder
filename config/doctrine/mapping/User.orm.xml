@@ -18,7 +18,7 @@
         <field name="active" type="boolean" nullable="false" />
         <field name="currentState" type="array" nullable="false" unique="false" />
 
-        <one-to-one field="profileImage" target-entity="App\Domain\Models\Image">
+        <one-to-one field="profileImage" target-entity="App\Domain\Models\Image" fetch="EAGER">
             <join-column name="image_id" referenced-column-name="id" nullable="true" />
             <cascade>
                 <cascade-persist/>

@@ -81,9 +81,12 @@ fixtures_dev: ## Allow to load the fixtures in the dev env
 fixtures_dev: src/DataFixtures
 	    $(ENV_PHP) ./bin/console d:f:l -n --env=dev
 
-redis: ## Allow to clean the Redis cache
+doctrine-cache: ## Allow to clean the Doctrine cache
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-query
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-metadata
+
+redis-cache:
+	    $(ENV_PHP) ./bin/console redis:flushall
 
 phpunit: ## Launch all PHPUnit tests
 phpunit: tests

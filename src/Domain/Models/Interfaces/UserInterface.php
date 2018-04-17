@@ -28,7 +28,6 @@ interface UserInterface
      * @param string              $email            The email linked to this user.
      * @param string              $username         The username used by the User.
      * @param string              $password         The encrypted version of the password.
-     * @param callable            $passwordEncoder  The encoder used to crypt the password, the salt isn't passed.
      * @param string              $validationToken  The validation token used for validate the user.
      * @param ImageInterface|null $profileImage     If the user define it, the profile image.
      *
@@ -39,7 +38,6 @@ interface UserInterface
         string $email,
         string $username,
         string $password,
-        callable $passwordEncoder,
         string $validationToken,
         ImageInterface $profileImage = null
     );
@@ -52,14 +50,21 @@ interface UserInterface
     public function askForPasswordReset(UserResetPasswordToken $userPasswordReset): void;
 
     /**
+     * Allow to update the password, for simplicity, a "resetDate" is define in order to help the user.
+     *
+     * @param string $newPassword
+     */
+    public function updatePassword(string $newPassword): void;
+
+    /**
      * Allow to validate the user once he has validate his account.
      */
     public function validate(): void;
 
     /**
-     * @return int|null
+     * @return string
      */
-    public function getId(): ? string;
+    public function getId(): string;
 
     /**
      * @return null|string
@@ -92,11 +97,6 @@ interface UserInterface
     public function getCreationDate(): ? \DateTime;
 
     /**
-     * @return null|string
-     */
-    public function getValidationDate(): ? \DateTime;
-
-    /**
      * @return array
      */
     public function getCurrentState(): ? array;
@@ -115,6 +115,11 @@ interface UserInterface
      * @return null|string
      */
     public function getResetPasswordToken():? string;
+
+    /**
+     * @return int|null
+     */
+    public function getResetPasswordDate():? int;
 
     /**
      * @param ImageInterface $profileImage
