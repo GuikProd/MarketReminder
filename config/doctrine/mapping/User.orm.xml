@@ -5,7 +5,7 @@
 >
     <entity name="App\Domain\Models\User" table="marketReminder_user" repository-class="App\Infra\Doctrine\Repository\UserRepository">
 
-        <id name="id" type="string" />
+        <id name="id" type="uuid" column="id" />
         <field name="username" type="string" length="25" unique="true" nullable="false" />
         <field name="email" type="string" length="50" unique="true" nullable="false" />
         <field name="password" type="string" length="60" unique="false" nullable="false" />

@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping"
 >
     <entity name="App\Domain\Models\Image" table="marketReminder_image" repository-class="App\Infra\Doctrine\Repository\ImageRepository">
-        <id name="id" type="string" column="id"/>
+        <id name="id" type="uuid" column="id" />
         <field name="creationDate" type="integer" nullable="false" unique="true" />
         <field name="modificationDate" type="integer" nullable="true" unique="true" />
         <field name="alt" type="string" length="50" unique="true" nullable="false" />

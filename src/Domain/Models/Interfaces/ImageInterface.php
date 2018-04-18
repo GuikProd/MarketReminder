@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Models\Interfaces;
 
+use Ramsey\Uuid\UuidInterface;
+
 /**
  * Interface ImageInterface.
  *
@@ -38,9 +40,9 @@ interface ImageInterface
     /**
      * The UUID generated during object construction.
      *
-     * @return string
+     * @return UuidInterface
      */
-    public function getId(): string;
+    public function getId(): UuidInterface;
 
     /**
      * @return \DateTime

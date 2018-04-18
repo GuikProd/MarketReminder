@@ -15,6 +15,7 @@ namespace App\Domain\Models;
 
 use App\Domain\Models\Interfaces\ImageInterface;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class Interfaces.
@@ -71,7 +72,7 @@ class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

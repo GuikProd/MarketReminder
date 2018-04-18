@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Domain\Models\Interfaces;
 
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Interface UserInterface.
@@ -62,9 +63,9 @@ interface UserInterface
     public function validate(): void;
 
     /**
-     * @return string
+     * @return UuidInterface
      */
-    public function getId(): string;
+    public function getId(): UuidInterface;
 
     /**
      * @return null|string

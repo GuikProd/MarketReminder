@@ -17,6 +17,7 @@ use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 
 /**
@@ -150,7 +151,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
