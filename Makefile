@@ -117,5 +117,8 @@ logs: ## Allow to see the varnish logs
 	    $(ENV_VARNISH) varnishlog -b
 
 ## Blackfire commands
-profile: ## Allow to profile a page using Blackfire
-	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)
+profile_php: ## Allow to profile a page using Blackfire and PHP environment
+	    $(ENV_BLACKFIRE) blackfire curl http://172.19.0.1:8080$(URL) --samples $(SAMPLES)
+
+profile_varnish: ## Allow to profile a page using Blackfire and Varnish environment
+	    $(ENV_BLACKFIRE) blackfire curl http://172.19.0.1$(URL) --samples $(SAMPLES)

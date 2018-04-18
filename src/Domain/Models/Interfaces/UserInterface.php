@@ -58,7 +58,7 @@ interface UserInterface
     public function updatePassword(string $newPassword): void;
 
     /**
-     * Allow to validate the user once he has validate his account.
+     * Allow to mark the user as validated once he has validate his account via a token.
      */
     public function validate(): void;
 
@@ -93,7 +93,7 @@ interface UserInterface
     public function getActive(): ? bool;
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getCreationDate(): ? \DateTime;
 
