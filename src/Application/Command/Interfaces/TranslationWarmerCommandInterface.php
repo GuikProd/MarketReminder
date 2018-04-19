@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Command\Interfaces;
 
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Interface TranslationWarmerCommandInterface.
@@ -41,7 +42,11 @@ interface TranslationWarmerCommandInterface
      * Allow to backup every files before it translation, this way,
      * we can check the validity of the file each time.
      *
-     * @param \SplFileInfo $toBackUpFile
+     * If a file in the backup already contains the content to translate,
+     * the backup is considered as fresh.
+     *
+     * @param OutputInterface  $output
+     * @param \SplFileInfo     $toBackUpFile
      */
-    public function backUpTranslation(\SplFileInfo $toBackUpFile): void;
+    public function backUpTranslation(OutputInterface $output, \SplFileInfo $toBackUpFile): void;
 }

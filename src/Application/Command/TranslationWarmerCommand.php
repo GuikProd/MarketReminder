@@ -66,10 +66,10 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
     protected function configure()
     {
         $this->setName('app:translation-warm')
-            ->setDescription('Allow to warm the translation for a given channel and locale.')
-            ->setHelp('This command call the GCP Translation API and translate (using the locale passed) the whole channel passed.')
-            ->addArgument('channel', InputArgument::REQUIRED, 'The channel of the file to translate.')
-            ->addArgument('locale', InputArgument::REQUIRED, 'The locale used to translate.');
+             ->setDescription('Allow to warm the translation for a given channel and locale.')
+             ->setHelp('This command call the GCP Translation API and translate (using the locale passed) the whole channel passed.')
+             ->addArgument('channel', InputArgument::REQUIRED, 'The channel of the file to translate.')
+             ->addArgument('locale', InputArgument::REQUIRED, 'The locale used to translate.');
     }
 
     /**
@@ -105,9 +105,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
 
         foreach ($files as $file) {
 
-            $this->backUpTranslation($file);
-
-            $output->writeln('<info>The default content of the file has been saved in the backup.</info>');
+            $this->backUpTranslation($output, $file);
 
             $content = Yaml::parse($file->getContents());
 
@@ -138,10 +136,19 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
     /**
      * {@inheritdoc}
      */
-    public function backUpTranslation(\SplFileInfo $toBackUpFile): void
+    public function backUpTranslation(OutputInterface $output, \SplFileInfo $toBackUpFile): void
     {
         $fileSystem = new Filesystem();
+        $finder = new Finder();
         $fileSystem->mkdir($this->translationsFolder.'/backup');
+
+        $files = $finder->files()->in($this->translationsFolder.'/backup');
+
+        foreach ($files as $file) {
+            if (Yaml::parse($toBackUpFile->getContents()) === Yaml::parse($file->getContents())) {
+                return;
+            }
+        }
 
         file_put_contents(
             $this->translationsFolder.'/backup/'.time().$toBackUpFile->getBasename(),
@@ -149,5 +156,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
                 Yaml::parse($toBackUpFile->getContents())
             )
         );
+
+        $output->writeln('<info>The default content of the file has been saved in the backup.</info>');
     }
 }

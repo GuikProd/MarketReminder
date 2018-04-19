@@ -55,7 +55,7 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
-            - run: ./bin/phpunit -v
+            - run: ./bin/phpunit -v --exclude-group Blackfire
             - run: rm -rf var/data.db
     behat_core_fr:
         docker:

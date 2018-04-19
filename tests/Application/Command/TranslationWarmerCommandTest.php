@@ -17,6 +17,7 @@ use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -29,6 +30,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class TranslationWarmerCommandTest extends KernelTestCase
 {
+    use TestCaseTrait;
+
     /**
      * @var string
      */
@@ -74,6 +77,37 @@ class TranslationWarmerCommandTest extends KernelTestCase
             Command::class,
             $translationWarmerCommand
         );
+    }
+
+    /**
+     * @group Blackfire
+     */
+    public function testBlackfireProfiling()
+    {
+        $this->createBlackfire();
+
+        $kernel = static::bootKernel();
+
+        $application = new Application($kernel);
+
+        $application->add(new TranslationWarmerCommand(
+            $this->acceptedLocales,
+            $this->cloudTranslationWarmer,
+            $this->translationFolder
+        ));
+
+        $command = $application->find('app:translation-warm');
+        $commandTester = new CommandTester($command);
+
+        $probe = static::$blackfire->createProbe();
+
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'channel' => 'messages',
+            'locale' => 'ru'
+        ]);
+
+        static::$blackfire->endProbe($probe);
     }
 
     public function testItPreventWrongLocale()
