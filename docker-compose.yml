@@ -81,6 +81,7 @@ services:
         container_name: ${CONTAINER_NAME}_blackfire
         image: blackfire/blackfire
         environment:
+            BLACKFIRE_LOG_LEVEL: 4
             BLACKFIRE_SERVER_ID: '${BLACKFIRE_SERVER_ID}'
             BLACKFIRE_SERVER_TOKEN: '${BLACKFIRE_SERVER_TOKEN}'
             BLACKFIRE_CLIENT_ID: '${BLACKFIRE_CLIENT_ID}'
