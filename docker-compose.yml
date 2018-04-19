@@ -88,7 +88,7 @@ services:
         links:
             - php-fpm
         volumes:
-            - './:${WORKPATH}:rw'
+            - './:${WORKPATH}:rw,cached'
         restart: always
 
 volumes:
