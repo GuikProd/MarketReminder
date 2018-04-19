@@ -166,7 +166,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         );
     }
 
-    public function testItBackupTheDefaultFile()
+    public function testItDoesNotBackupTheFile()
     {
         $kernel = static::bootKernel();
 
@@ -188,7 +188,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
 
         $display = $commandTester->getDisplay();
 
-        static::assertContains(
+        static::assertNotContains(
             'The default content of the file has been saved in the backup.',
             $display
         );
