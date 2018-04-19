@@ -5,6 +5,7 @@ COMPOSER = $(ENV_PHP) composer
 
 ## Environments
 ENV_PHP = $(DOCKER) exec marketReminder_php-fpm
+ENV_NODE = $(DOCKER) exec marketReminder_nodejs
 ENV_VARNISH = $(DOCKER) exec marketReminder_varnish
 ENV_BLACKFIRE = $(DOCKER) exec marketReminder_blackfire
 
@@ -111,6 +112,13 @@ deptrac: ## Allow to use the deptrac analyzer
 
 phpmetrics: ## Allow to launch a phpmetrics analyze
 	    $(ENV_PHP) vendor/bin/phpmetrics src
+
+## NodeJS commands
+watch: ## Allow to use Encore to watch the asssets
+	    $(ENV_NODE) yarn watch
+
+add: ## Allow to use Encore to watch the asssets
+	    $(ENV_NODE) yarn add --dev $(PACKAGE)
 
 ## Varnish commands
 logs: ## Allow to see the varnish logs
