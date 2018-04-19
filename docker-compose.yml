@@ -35,20 +35,18 @@ services:
     node:
         container_name: ${CONTAINER_NAME}_nodejs
         build: './docker/node'
-        volumes:
-            - './:/var/www/mk:rw,cached'
-        depends_on:
-            - php-fpm
         ports:
-            - '8088:3000'
-        restart: always
+            - 3000:3000
+        volumes:
+            - './:/usr/src/app:rw,cached'
+        entrypoint: "yarn watch"
 
     # Server optimization
     varnish:
         container_name: ${CONTAINER_NAME}_varnish
         build: './docker/varnish'
         volumes:
-            - './docker/varnish/conf:/etc/varnish:rw'
+            - './docker/varnish/conf:/etc/varnish:rw,cached'
         ports:
             - '${VARNISH_PORT}:80'
         depends_on:

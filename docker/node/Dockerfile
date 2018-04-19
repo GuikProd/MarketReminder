@@ -1,7 +1,3 @@
-FROM node:9.4-alpine
-
-RUN mkdir -p /var/www/mk
-
-WORKDIR /var/www/mk
-
-CMD yarn watch
+FROM node:8
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
