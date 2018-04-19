@@ -58,6 +58,7 @@
             </main>
         </div>
         {% block javascripts %}
+            <script src="{{ asset('build/serviceWorker.js') }}"></script>
             <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
             <script defer src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
             <script src="{{ asset('build/vue.js') }}"></script>

@@ -52,6 +52,10 @@ Encore
     .addEntry('form', './assets/javascript/components/form.js')
     .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')
 
+    // PWA
+    .addEntry('serviceWorker', './assets/javascript/pwa/app.js')
+    .addEntry('sw', './assets/javascript/pwa/sw.js')
+
     // Vue
     .addEntry('vue', './assets/vue/public/index.js')
 ;
