@@ -146,7 +146,8 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         $finder = new Finder();
         $fileSystem->mkdir($this->translationsFolder.'/backup');
 
-        $files = $finder->files()->in($this->translationsFolder.'/backup');
+        $files = $finder->files()
+                        ->in($this->translationsFolder.'/backup');
 
         foreach ($files as $file) {
             if (Yaml::parse($toBackUpFile->getContents()) === Yaml::parse($file->getContents())) {
