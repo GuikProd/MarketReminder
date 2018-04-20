@@ -11,8 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Application\Command;
+namespace App\Tests\Application\Command;
 
+use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
@@ -65,7 +66,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         );
     }
 
-    public function testItExtends()
+    public function testItExtendsAndImplements()
     {
         $translationWarmerCommand = new TranslationWarmerCommand(
             $this->acceptedLocales,
@@ -77,12 +78,60 @@ class TranslationWarmerCommandTest extends KernelTestCase
             Command::class,
             $translationWarmerCommand
         );
+
+        static::assertInstanceOf(
+            TranslationWarmerCommandInterface::class,
+            $translationWarmerCommand
+        );
     }
 
     /**
+     * Test if the Translations process is skipped due to the default file content.
+     *
      * @group Blackfire
      */
-    public function testBlackfireProfiling()
+    public function testBlackfireProfilingWithoutTranslation()
+    {
+        $this->createBlackfire();
+
+        $kernel = static::bootKernel();
+
+        $application = new Application($kernel);
+
+        $application->add(new TranslationWarmerCommand(
+            $this->acceptedLocales,
+            $this->cloudTranslationWarmer,
+            $this->translationFolder
+        ));
+
+        $command = $application->find('app:translation-warm');
+        $commandTester = new CommandTester($command);
+
+        $probe = static::$blackfire->createProbe();
+
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'channel' => 'messages',
+            'locale' => 'en'
+        ]);
+
+        static::$blackfire->endProbe($probe);
+
+        $display = $commandTester->getDisplay();
+
+        static::assertContains(
+            'The default files already contains the translated content, the translation process is skipped.',
+            $display
+        );
+    }
+
+    /**
+     * Test if the backup process is skipped due to the fact that the backup
+     * already contain the translated content.
+     *
+     * @group Blackfire
+     */
+    public function testBlackfireProfilingWithoutBackup()
     {
         $this->createBlackfire();
 
@@ -108,6 +157,18 @@ class TranslationWarmerCommandTest extends KernelTestCase
         ]);
 
         static::$blackfire->endProbe($probe);
+
+        $display = $commandTester->getDisplay();
+
+        static::assertContains(
+            'No default file has been found with the translated content, the translation process is in progress.',
+            $display
+        );
+
+        static::assertNotContains(
+            'The default content of the file has been saved in the backup.',
+            $display
+        );
     }
 
     public function testItPreventWrongLocale()

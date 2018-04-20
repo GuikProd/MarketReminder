@@ -48,5 +48,27 @@ interface TranslationWarmerCommandInterface
      * @param OutputInterface  $output
      * @param \SplFileInfo     $toBackUpFile
      */
-    public function backUpTranslation(OutputInterface $output, \SplFileInfo $toBackUpFile): void;
+    public function backUpTranslation(
+        OutputInterface $output,
+        \SplFileInfo $toBackUpFile
+    ): void;
+
+    /**
+     * Allow to check the content of every file which is already saved in the translations folder.
+     *
+     * If the content is already in sync with the desired translation, the process is skipped.
+     *
+     * @param OutputInterface  $output
+     * @param string           $channel
+     * @param string           $locale
+     * @param \SplFileInfo     $toCompareFile
+     *
+     * @return bool  If the translation process is skipped or not.
+     */
+    public function checkFileContent(
+        OutputInterface $output ,
+        string $channel,
+        string $locale,
+        \SplFileInfo $toCompareFile
+    ): bool ;
 }

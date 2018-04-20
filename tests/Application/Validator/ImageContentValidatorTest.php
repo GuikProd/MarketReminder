@@ -13,11 +13,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Validator;
 
+use App\Application\Validator\ImageContent;
 use App\Application\Validator\ImageContentValidator;
 use App\Application\Validator\Interfaces\ImageContentValidatorInterface;
+use App\Infra\GCP\Bridge\CloudVisionBridge;
+use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
+use App\Infra\GCP\CloudVision\CloudVisionAnalyserHelper;
+use App\Infra\GCP\CloudVision\CloudVisionDescriberHelper;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
-use PHPUnit\Framework\TestCase;
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -26,8 +33,48 @@ use Symfony\Component\Validator\ConstraintValidator;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ImageContentValidatorTest extends TestCase
+class ImageContentValidatorTest extends KernelTestCase
 {
+    use TestCaseTrait;
+
+    /**
+     * @var CloudVisionAnalyserHelperInterface
+     */
+    private $cloudVisionAnalyser;
+
+    /**
+     * @var CloudVisionBridgeInterface
+     */
+    private $cloudVisionBridge;
+
+    /**
+     * @var CloudVisionDescriberHelperInterface
+     */
+    private $cloudVisionDescriber;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        static::bootKernel();
+
+        $this->cloudVisionBridge = new CloudVisionBridge(
+            static::$kernel->getContainer()->getParameter('cloud.vision_credentials.filename'),
+            static::$kernel->getContainer()->getParameter('cloud.vision_credentials')
+        );
+
+        $this->cloudVisionAnalyser = new CloudVisionAnalyserHelper($this->cloudVisionBridge);
+        $this->cloudVisionDescriber = new CloudVisionDescriberHelper($this->cloudVisionBridge);
+
+        $this->translator = static::$kernel->getContainer()->get('translator');
+    }
+
     public function testItExtendsAndImplements()
     {
         $imageContentValidator = new ImageContentValidator(
@@ -56,5 +103,30 @@ class ImageContentValidatorTest extends TestCase
             'cloudVisionDescriber',
             ImageContentValidator::class
         );
+    }
+
+    /**
+     * @group Blackfire
+     */
+    public function testBlackfireProfilingWhileWrongContentIsBlocked()
+    {
+        $imageContentValidator = new ImageContentValidator(
+            $this->cloudVisionAnalyser,
+            $this->cloudVisionDescriber,
+            $this->translator
+        );
+
+        $toAnalyseFile = new File(
+            static::$kernel->getContainer()->getParameter('kernel.project_dir').'/tests/_assets/money-world-orig.jpg'
+        );
+
+        $probe = static::$blackfire->createProbe();
+
+        $imageContentValidator->validate(
+            $toAnalyseFile,
+            new ImageContent()
+        );
+
+        static::$blackfire->endProbe($probe);
     }
 }
