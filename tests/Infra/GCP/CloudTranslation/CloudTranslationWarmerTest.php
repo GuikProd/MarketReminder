@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class CloudTranslationWarmerTest.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class CloudTranslationWarmerTest extends TestCase

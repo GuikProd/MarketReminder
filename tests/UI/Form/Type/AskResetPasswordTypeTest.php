@@ -50,7 +50,7 @@ class AskResetPasswordTypeTest extends TypeTestCase
             ->will($this->returnValue(new ClassMetadata(Form::class)));
 
         return array(
-            new ValidatorExtension($this->validator)
+            new ValidatorExtension($this->validator),
         );
     }
 

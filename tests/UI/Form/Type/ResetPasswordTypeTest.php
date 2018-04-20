@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class ResetPasswordTypeTest.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class ResetPasswordTypeTest extends TypeTestCase
@@ -50,7 +50,7 @@ class ResetPasswordTypeTest extends TypeTestCase
             ->will($this->returnValue(new ClassMetadata(Form::class)));
 
         return array(
-            new ValidatorExtension($this->validator)
+            new ValidatorExtension($this->validator),
         );
     }
 
@@ -70,8 +70,8 @@ class ResetPasswordTypeTest extends TypeTestCase
         $resetPasswordType->submit([
             'password' => [
                 'first' => 'Ie1FDLTOTo',
-                'second' => 'Ie1FDLTOTo'
-            ]
+                'second' => 'Ie1FDLTOTo',
+            ],
         ]);
 
         static::assertTrue($resetPasswordType->isValid());

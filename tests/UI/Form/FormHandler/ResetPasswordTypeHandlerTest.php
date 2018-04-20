@@ -22,5 +22,4 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class ResetPasswordTypeHandlerTest extends KernelTestCase
 {
-
 }

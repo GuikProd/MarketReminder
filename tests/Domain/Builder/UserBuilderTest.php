@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
- * Class UserBuilderTest
+ * Class UserBuilderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

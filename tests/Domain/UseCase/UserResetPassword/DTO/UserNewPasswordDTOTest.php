@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class UserNewPasswordDTOTest.
- * 
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
 class UserNewPasswordDTOTest extends TestCase

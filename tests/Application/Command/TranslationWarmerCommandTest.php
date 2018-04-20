@@ -112,7 +112,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'channel' => 'messages',
-            'locale' => 'en'
+            'locale' => 'en',
         ]);
 
         static::$blackfire->endProbe($probe);
@@ -153,7 +153,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'channel' => 'messages',
-            'locale' => 'ru'
+            'locale' => 'ru',
         ]);
 
         static::$blackfire->endProbe($probe);
@@ -188,7 +188,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'channel' => 'messages',
-            'locale' => 'ru'
+            'locale' => 'ru',
         ]);
 
         $display = $commandTester->getDisplay();
@@ -216,7 +216,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'channel' => 'messages',
-            'locale' => 'en'
+            'locale' => 'en',
         ]);
 
         $display = $commandTester->getDisplay();
@@ -244,7 +244,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'channel' => 'messages',
-            'locale' => 'en'
+            'locale' => 'en',
         ]);
 
         $display = $commandTester->getDisplay();

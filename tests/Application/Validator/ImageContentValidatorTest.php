@@ -81,7 +81,6 @@ class ImageContentValidatorTest extends KernelTestCase
             $this->createMock(CloudVisionAnalyserHelperInterface::class),
             $this->createMock(CloudVisionDescriberHelperInterface::class),
             $this->createMock(TranslatorInterface::class)
-
         );
 
         static::assertInstanceOf(
