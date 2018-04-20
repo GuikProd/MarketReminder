@@ -199,7 +199,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         );
     }
 
-    public function testItTranslateWithRightChannel()
+    public function testItCheckDefaultFiles()
     {
         $kernel = static::bootKernel();
 
@@ -222,7 +222,7 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $display = $commandTester->getDisplay();
 
         static::assertContains(
-            'The translations has been translated and dumped into the translations folder.',
+            'The default files already contains the translated content, the translation process is skipped.',
             $display
         );
     }
