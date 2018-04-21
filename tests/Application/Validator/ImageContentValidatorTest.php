@@ -27,6 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class ImageContentValidatorTest.
@@ -58,6 +59,11 @@ class ImageContentValidatorTest extends KernelTestCase
     private $translator;
 
     /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    /**
      * {@inheritdoc}
      */
     public function setUp()
@@ -73,6 +79,8 @@ class ImageContentValidatorTest extends KernelTestCase
         $this->cloudVisionDescriber = new CloudVisionDescriberHelper($this->cloudVisionBridge);
 
         $this->translator = static::$kernel->getContainer()->get('translator');
+
+        $this->validator = static::$kernel->getContainer()->get('validator');
     }
 
     public function testItExtendsAndImplements()
@@ -109,23 +117,33 @@ class ImageContentValidatorTest extends KernelTestCase
      */
     public function testBlackfireProfilingWhileWrongContentIsBlocked()
     {
-        $imageContentValidator = new ImageContentValidator(
-            $this->cloudVisionAnalyser,
-            $this->cloudVisionDescriber,
-            $this->translator
-        );
-
         $toAnalyseFile = new File(
             static::$kernel->getContainer()->getParameter('kernel.project_dir').'/tests/_assets/money-world-orig.jpg'
         );
 
         $probe = static::$blackfire->createProbe();
 
-        $imageContentValidator->validate(
-            $toAnalyseFile,
-            new ImageContent()
-        );
+        $violations = $this->validator->validate($toAnalyseFile, new ImageContent());
 
         static::$blackfire->endProbe($probe);
+
+        static::assertGreaterThan(
+            0,
+            count($violations)
+        );
+    }
+
+    public function testValidationAgainstWrongContent()
+    {
+        $toAnalyseFile = new File(
+            static::$kernel->getContainer()->getParameter('kernel.project_dir').'/tests/_assets/money-world-orig.jpg'
+        );
+
+        $violations = $this->validator->validate($toAnalyseFile, new ImageContent());
+
+        static::assertGreaterThan(
+            0,
+            count($violations)
+        );
     }
 }

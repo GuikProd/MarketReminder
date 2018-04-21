@@ -28,9 +28,7 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 class UserRepository extends ServiceEntityRepository implements UserLoaderInterface, UserRepositoryInterface
 {
     /**
-     * UserRepository constructor.
-     *
-     * @param RegistryInterface $registry
+     * {@inheritdoc}
      */
     public function __construct(RegistryInterface $registry)
     {
@@ -106,10 +104,22 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     /**
      * {@inheritdoc}
      */
+    public function getUserByResetPasswordToken(string $token): ? UserInterface
+    {
+        return $this->createQueryBuilder('user')
+                    ->where('user.resetPasswordToken = :token')
+                    ->setParameter('token', $token)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function save(UserInterface $user): void
     {
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->_em->persist($user);
+        $this->_em->flush();
     }
 
     /**
@@ -117,6 +127,6 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
      */
     public function flush(): void
     {
-        $this->getEntityManager()->flush();
+        $this->_em->flush();
     }
 }

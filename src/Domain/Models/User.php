@@ -90,6 +90,11 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * @var int
      */
+    private $askResetPasswordDate;
+
+    /**
+     * @var int
+     */
     private $resetPasswordDate;
 
     /**
@@ -137,6 +142,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function askForPasswordReset(UserResetPasswordToken $resetPasswordToken): void
     {
         $this->resetPasswordToken = $resetPasswordToken->getResetPasswordToken();
+        $this->askResetPasswordDate = time();
     }
 
     /**
@@ -234,6 +240,14 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function getResetPasswordToken(): ? string
     {
         return $this->resetPasswordToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAskResetPasswordDate(): ? int
+    {
+        return $this->askResetPasswordDate;
     }
 
     /**

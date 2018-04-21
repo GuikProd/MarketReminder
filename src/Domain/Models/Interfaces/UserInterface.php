@@ -118,6 +118,11 @@ interface UserInterface
     public function getResetPasswordToken():? string;
 
     /**
+     * @return null|int
+     */
+    public function getAskResetPasswordDate():? int;
+
+    /**
      * @return int|null
      */
     public function getResetPasswordDate():? int;

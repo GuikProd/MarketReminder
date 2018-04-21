@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security\Interfaces;
 
+use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Responder\Security\Interfaces\RegisterResponderInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +27,17 @@ use Symfony\Component\HttpFoundation\Response;
  */
 interface RegisterActionInterface
 {
+    /**
+     * RegisterActionInterface constructor.
+     *
+     * @param FormFactoryInterface         $formFactory
+     * @param RegisterTypeHandlerInterface $registerTypeHandler
+     */
+    public function __construct(
+        FormFactoryInterface $formFactory,
+        RegisterTypeHandlerInterface $registerTypeHandler
+    );
+
     /**
      * @param Request $request
      * @param RegisterResponderInterface $responder

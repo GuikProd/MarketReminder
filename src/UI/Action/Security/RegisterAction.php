@@ -18,10 +18,8 @@ use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Form\Type\RegisterType;
 use App\UI\Responder\Security\Interfaces\RegisterResponderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class RegisterAction.
@@ -42,11 +40,6 @@ class RegisterAction implements RegisterActionInterface
     private $formFactory;
 
     /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
      * @var RegisterTypeHandlerInterface
      */
     private $registerTypeHandler;
@@ -55,16 +48,13 @@ class RegisterAction implements RegisterActionInterface
      * RegisterAction constructor.
      *
      * @param FormFactoryInterface         $formFactory
-     * @param UrlGeneratorInterface        $urlGenerator
      * @param RegisterTypeHandlerInterface $registerTypeHandler
      */
     public function __construct(
         FormFactoryInterface $formFactory,
-        UrlGeneratorInterface $urlGenerator,
         RegisterTypeHandlerInterface $registerTypeHandler
     ) {
         $this->formFactory = $formFactory;
-        $this->urlGenerator = $urlGenerator;
         $this->registerTypeHandler = $registerTypeHandler;
     }
 
@@ -80,11 +70,9 @@ class RegisterAction implements RegisterActionInterface
                              ->handleRequest($request);
 
         if ($this->registerTypeHandler->handle($registerType)) {
-            return new RedirectResponse(
-                $this->urlGenerator->generate('index')
-            );
+            return $responder(true);
         }
 
-        return $responder($registerType);
+        return $responder(false, $registerType);
     }
 }

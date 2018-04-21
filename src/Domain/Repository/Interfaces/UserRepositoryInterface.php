@@ -52,6 +52,13 @@ interface UserRepositoryInterface
     public function getUserByToken(string $token):? UserInterface;
 
     /**
+     * @param string $token
+     *
+     * @return UserInterface|null
+     */
+    public function getUserByResetPasswordToken(string $token):? UserInterface;
+
+    /**
      * @param UserInterface $user
      */
     public function save(UserInterface $user): void;
