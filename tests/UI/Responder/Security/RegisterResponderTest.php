@@ -49,6 +49,8 @@ class RegisterResponderTest extends TestCase
     {
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+
+        $this->urlGenerator->method('generate')->willReturn('/fr/');
     }
 
     public function testItImplements()
@@ -69,8 +71,6 @@ class RegisterResponderTest extends TestCase
      */
     public function testBlackfireProfilingWithRedirectResponse()
     {
-        $this->urlGenerator->method('generate')->willReturn('/fr/');
-
         $registerResponder = new RegisterResponder(
             $this->twig,
             $this->urlGenerator
@@ -93,7 +93,6 @@ class RegisterResponderTest extends TestCase
      */
     public function testBlackfireProfilingWithResponse()
     {
-        $this->urlGenerator->method('generate')->willReturn('/fr/');
         $formInterfaceMock = $this->createMock(FormInterface::class);
 
         $registerResponder = new RegisterResponder(
@@ -106,6 +105,38 @@ class RegisterResponderTest extends TestCase
         $registerResponder(false, $formInterfaceMock);
 
         static::$blackfire->endProbe($probe);
+
+        static::assertInstanceOf(
+            Response::class,
+            $registerResponder(false, $formInterfaceMock)
+        );
+    }
+
+    public function testRedirectResponseIsReturned()
+    {
+        $registerResponder = new RegisterResponder(
+            $this->twig,
+            $this->urlGenerator
+        );
+
+        $registerResponder(true);
+
+        static::assertInstanceOf(
+            RedirectResponse::class,
+            $registerResponder(true)
+        );
+    }
+
+    public function testResponseIsReturned()
+    {
+        $formInterfaceMock = $this->createMock(FormInterface::class);
+
+        $registerResponder = new RegisterResponder(
+            $this->twig,
+            $this->urlGenerator
+        );
+
+        $registerResponder(false, $formInterfaceMock);
 
         static::assertInstanceOf(
             Response::class,

@@ -45,10 +45,7 @@ class RegisterAction implements RegisterActionInterface
     private $registerTypeHandler;
 
     /**
-     * RegisterAction constructor.
-     *
-     * @param FormFactoryInterface         $formFactory
-     * @param RegisterTypeHandlerInterface $registerTypeHandler
+     * {@inheritdoc}
      */
     public function __construct(
         FormFactoryInterface $formFactory,

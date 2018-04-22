@@ -24,7 +24,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Class AskResetPasswordTypeHandler
+ * Class AskResetPasswordTypeHandler.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */

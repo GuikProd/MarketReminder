@@ -79,7 +79,6 @@ class ImageContentValidatorTest extends KernelTestCase
         $this->cloudVisionDescriber = new CloudVisionDescriberHelper($this->cloudVisionBridge);
 
         $this->translator = static::$kernel->getContainer()->get('translator');
-
         $this->validator = static::$kernel->getContainer()->get('validator');
     }
 
@@ -91,25 +90,10 @@ class ImageContentValidatorTest extends KernelTestCase
             $this->createMock(TranslatorInterface::class)
         );
 
-        static::assertInstanceOf(
-            ConstraintValidator::class,
-            $imageContentValidator
-        );
-
-        static::assertInstanceOf(
-            ImageContentValidatorInterface::class,
-            $imageContentValidator
-        );
-
-        static::assertClassHasAttribute(
-            'cloudVisionAnalyser',
-            ImageContentValidator::class
-        );
-
-        static::assertClassHasAttribute(
-            'cloudVisionDescriber',
-            ImageContentValidator::class
-        );
+        static::assertInstanceOf(ConstraintValidator::class, $imageContentValidator);
+        static::assertInstanceOf(ImageContentValidatorInterface::class, $imageContentValidator);
+        static::assertClassHasAttribute('cloudVisionAnalyser', ImageContentValidator::class);
+        static::assertClassHasAttribute('cloudVisionDescriber', ImageContentValidator::class);
     }
 
     /**
@@ -127,10 +111,7 @@ class ImageContentValidatorTest extends KernelTestCase
 
         static::$blackfire->endProbe($probe);
 
-        static::assertGreaterThan(
-            0,
-            count($violations)
-        );
+        static::assertGreaterThan(0, count($violations));
     }
 
     public function testValidationAgainstWrongContent()
@@ -141,9 +122,6 @@ class ImageContentValidatorTest extends KernelTestCase
 
         $violations = $this->validator->validate($toAnalyseFile, new ImageContent());
 
-        static::assertGreaterThan(
-            0,
-            count($violations)
-        );
+        static::assertGreaterThan(0, count($violations));
     }
 }

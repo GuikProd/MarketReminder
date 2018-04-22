@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\FormHandler;
 
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class ResetPasswordTypeHandlerTest.
@@ -22,4 +24,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class ResetPasswordTypeHandlerTest extends KernelTestCase
 {
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
 }

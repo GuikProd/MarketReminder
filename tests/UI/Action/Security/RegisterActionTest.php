@@ -73,10 +73,7 @@ class RegisterActionTest extends TestCase
             $registerTypeHandlerMock
         );
 
-        static::assertInstanceOf(
-            RegisterActionInterface::class,
-            $registerAction
-        );
+        static::assertInstanceOf(RegisterActionInterface::class, $registerAction);
     }
 
     /**
@@ -189,8 +186,6 @@ class RegisterActionTest extends TestCase
         $formInterfaceMock = $this->createMock(FormInterface::class);
         $registerTypeHandlerMock = $this->createMock(RegisterTypeHandlerInterface::class);
         $requestMock = $this->createMock(Request::class);
-        $registerResponderMock = $this->createMock(RegisterResponder::class);
-        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
         $formFactoryMock->method('create')->willReturn($formInterfaceMock);
         $formInterfaceMock->method('handleRequest')->willReturn($formInterfaceMock);
@@ -198,11 +193,13 @@ class RegisterActionTest extends TestCase
 
         $registerTypeHandlerMock->method('handle')->willReturn(false);
 
-        $urlGeneratorMock->method('generate')->willReturn('/fr/');
+        $registerResponder = new RegisterResponder(
+            $this->twig,
+            $this->urlGenerator
+        );
 
         $registerAction = new RegisterAction(
             $formFactoryMock,
-            $urlGeneratorMock,
             $registerTypeHandlerMock
         );
 
@@ -210,7 +207,7 @@ class RegisterActionTest extends TestCase
             Response::class,
             $registerAction(
                 $requestMock,
-                $registerResponderMock
+                $registerResponder
             )
         );
     }

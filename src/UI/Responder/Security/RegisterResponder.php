@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
- * Class RegisterResponderTest.
+ * Class RegisterResponder.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
