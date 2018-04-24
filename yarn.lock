@@ -22,6 +22,10 @@
   version "0.34.0"
   resolved "https://registry.yarnpkg.com/@material/base/-/base-0.34.0.tgz#73f915227f9f0548e24587f502d74c351250224a"
 
+"@material/base@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/base/-/base-0.35.0.tgz#8640c2da385e8cc393ff56153c5a319f5a7704cb"
+
 "@material/button@^0.33.0":
   version "0.33.0"
   resolved "https://registry.yarnpkg.com/@material/button/-/button-0.33.0.tgz#4d89a65ab49ce47635c0f886a1799bfe6005615d"
@@ -85,11 +89,29 @@
     "@material/theme" "^0.33.0"
     "@material/typography" "^0.28.0"
 
+"@material/drawer@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/drawer/-/drawer-0.35.0.tgz#da3964f14667618978c3ca397bab3a5d0465a45b"
+  dependencies:
+    "@material/animation" "^0.34.0"
+    "@material/base" "^0.35.0"
+    "@material/elevation" "^0.35.0"
+    "@material/rtl" "^0.35.0"
+    "@material/theme" "^0.35.0"
+    "@material/typography" "^0.35.0"
+
 "@material/elevation@^0.28.0":
   version "0.28.0"
   resolved "https://registry.yarnpkg.com/@material/elevation/-/elevation-0.28.0.tgz#78d3a551b78100d588c457600733ee1c6fd04501"
   dependencies:
     "@material/animation" "^0.25.0"
+    "@material/theme" "^0.4.0"
+
+"@material/elevation@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/elevation/-/elevation-0.35.0.tgz#a0b8bbe346ebb29a4decd35b961aaf2635ff89bd"
+  dependencies:
+    "@material/animation" "^0.34.0"
     "@material/theme" "^0.4.0"
 
 "@material/fab@^0.33.0":
@@ -208,6 +230,13 @@
     "@material/base" "^0.29.0"
     "@material/theme" "^0.33.0"
 
+"@material/ripple@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/ripple/-/ripple-0.35.0.tgz#3670e04e02dd6efc1ff0546e5129b4e96ec55f70"
+  dependencies:
+    "@material/base" "^0.35.0"
+    "@material/theme" "^0.35.0"
+
 "@material/rtl@^0.33.0":
   version "0.33.0"
   resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-0.33.0.tgz#4ae034aa9de3056c73843ac6c50b4b93ee7669aa"
@@ -215,6 +244,10 @@
 "@material/rtl@^0.34.0":
   version "0.34.0"
   resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-0.34.0.tgz#6116d9c99f0c0ff40a8ae97ea5bc1a5fd29bcff5"
+
+"@material/rtl@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-0.35.0.tgz#caae659e35a9bf1b9d91c734c8a3315a81bcde21"
 
 "@material/select@^0.33.0":
   version "0.33.0"
@@ -305,6 +338,10 @@
   version "0.34.0"
   resolved "https://registry.yarnpkg.com/@material/theme/-/theme-0.34.0.tgz#0118b935c2ecbcf3b4a1c84cd949e6344fa8bcb5"
 
+"@material/theme@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/theme/-/theme-0.35.0.tgz#a2c76f60b82a53d399b769ef91ec52e83ad3c3bd"
+
 "@material/theme@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@material/theme/-/theme-0.4.0.tgz#0aef1a0279b65c15990584fb8b8eca095c734641"
@@ -320,6 +357,17 @@
     "@material/theme" "^0.33.0"
     "@material/typography" "^0.28.0"
 
+"@material/toolbar@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/toolbar/-/toolbar-0.35.0.tgz#f50a7ba7e6acda4fc03ca5044b1e88d5be974a23"
+  dependencies:
+    "@material/base" "^0.35.0"
+    "@material/elevation" "^0.35.0"
+    "@material/ripple" "^0.35.0"
+    "@material/rtl" "^0.35.0"
+    "@material/theme" "^0.35.0"
+    "@material/typography" "^0.35.0"
+
 "@material/top-app-bar@^0.33.0":
   version "0.33.0"
   resolved "https://registry.yarnpkg.com/@material/top-app-bar/-/top-app-bar-0.33.0.tgz#12aee8dce404f39c1058a91bc9a2bd95e1d19097"
@@ -332,6 +380,18 @@
     "@material/theme" "^0.33.0"
     "@material/typography" "^0.28.0"
 
+"@material/top-app-bar@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/top-app-bar/-/top-app-bar-0.35.0.tgz#6b1f2d37210337a6da13672562b5a86bb79d20c9"
+  dependencies:
+    "@material/animation" "^0.34.0"
+    "@material/base" "^0.35.0"
+    "@material/elevation" "^0.35.0"
+    "@material/ripple" "^0.35.0"
+    "@material/rtl" "^0.35.0"
+    "@material/theme" "^0.35.0"
+    "@material/typography" "^0.35.0"
+
 "@material/typography@^0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@material/typography/-/typography-0.1.1.tgz#fb2e3437bd3284d39e9fb91485767ade6b2bd0c1"
@@ -343,6 +403,10 @@
 "@material/typography@^0.34.0":
   version "0.34.0"
   resolved "https://registry.yarnpkg.com/@material/typography/-/typography-0.34.0.tgz#cb365ecd2eb0d785410c743ec3426a107a687e3d"
+
+"@material/typography@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/typography/-/typography-0.35.0.tgz#23ad7eb7c9789e69c7c3fa54df8fc311cd7fc4b1"
 
 "@symfony/webpack-encore@^0.20.0":
   version "0.20.0"

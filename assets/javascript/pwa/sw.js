@@ -6,19 +6,9 @@ self.addEventListener('install', function (event) {
                 cache.add('/build/registration.css');
                 cache.add('/build/serviceWorker.js');
                 cache.add('/build/form.js');
+                cache.add('https://unpkg.com/material-components-web@latest/dist/material-components-web.css');
+                cache.add('https://unpkg.com/material-components-web@latest/dist/material-components-web.js');
+                cache.add('https://fonts.googleapis.com/icon?family=Material+Icons');
             })
-    );
-});
-
-self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        caches.match(event.request)
-              .then(function (response) {
-                  if (response) {
-                      return response;
-                  }
-
-                  return fetch(event.request);
-              })
     );
 });

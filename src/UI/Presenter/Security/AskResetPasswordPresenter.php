@@ -19,11 +19,11 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class AskResetPresenter.
+ * Class AskResetPasswordPresenter.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class AskResetPresenter implements AskResetPasswordPresenterInterface, PresenterInterface
+class AskResetPasswordPresenter implements AskResetPasswordPresenterInterface, PresenterInterface
 {
     /**
      * @var array
