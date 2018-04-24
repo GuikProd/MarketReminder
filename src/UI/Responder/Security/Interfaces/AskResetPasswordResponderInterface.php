@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security\Interfaces;
 
-use Symfony\Component\Form\FormView;
+use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -28,19 +29,19 @@ interface AskResetPasswordResponderInterface
     /**
      * AskResetPasswordResponderInterface constructor.
      *
-     * @param Environment            $twig
-     * @param UrlGeneratorInterface  $urlGenerator
+     * @param AskResetPasswordPresenterInterface $presenter
+     * @param Environment                        $twig
+     * @param UrlGeneratorInterface              $urlGenerator
      */
     public function __construct(
+        AskResetPasswordPresenterInterface $presenter,
         Environment $twig,
         UrlGeneratorInterface $urlGenerator
     );
 
     /**
-     * @param FormView|null $askResetPasswordTokenFormView
-     * @param bool $isRedirect
-     * @param string $urlToRedirect
-     * @param string $templateName
+     * @param bool               $redirect
+     * @param FormInterface|null $askResetPasswordTokenFormView
      *
      * @return Response
      *
@@ -49,9 +50,7 @@ interface AskResetPasswordResponderInterface
      * @throws \Twig_Error_Syntax
      */
     public function __invoke(
-        FormView $askResetPasswordTokenFormView = null,
-        $isRedirect = false,
-        $urlToRedirect = 'index',
-        string $templateName = 'security/askResetPasswordToken.html.twig'
+        $redirect = false,
+        FormInterface $askResetPasswordTokenFormView = null
     ): Response;
 }

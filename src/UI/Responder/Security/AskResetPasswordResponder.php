@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security;
 
+use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
 use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
-use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -27,6 +28,11 @@ use Twig\Environment;
  */
 class AskResetPasswordResponder implements AskResetPasswordResponderInterface
 {
+    /**
+     * @var AskResetPasswordPresenterInterface
+     */
+    private $askResetPresenter;
+
     /**
      * @var Environment
      */
@@ -41,9 +47,11 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
      * {@inheritdoc}
      */
     public function __construct(
+        AskResetPasswordPresenterInterface $presenter,
         Environment $twig,
         UrlGeneratorInterface $urlGenerator
     ) {
+        $this->askResetPresenter = $presenter;
         $this->twig = $twig;
         $this->urlGenerator = $urlGenerator;
     }
@@ -52,17 +60,22 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
      * {@inheritdoc}
      */
     public function __invoke(
-        FormView $askResetPasswordTokenFormView = null,
         $isRedirect = false,
-        $urlToRedirect = 'index',
-        string $templateName = 'security/askResetPasswordToken.html.twig'
+        FormInterface $askResetPasswordForm = null
     ): Response {
 
+        $this->askResetPresenter->prepareOptions([
+            'form' => $askResetPasswordForm->createView(),
+            'card_header' => 'security.resetPasswordToken_header',
+            'card_button' => 'security.resetPasswordToken',
+            'page_title' => 'resetPassword.title'
+        ]);
+
         $isRedirect
-            ? $response = new RedirectResponse($this->urlGenerator->generate($urlToRedirect))
+            ? $response = new RedirectResponse($this->urlGenerator->generate('index'))
             : $response = new Response(
-                $this->twig->render($templateName, [
-                    'askResetPasswordTokenForm' => $askResetPasswordTokenFormView
+                $this->twig->render('security/askResetPasswordToken.html.twig', [
+                    'presenter' => $this->askResetPresenter
                 ])
             );
 

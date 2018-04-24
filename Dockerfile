@@ -46,7 +46,10 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && mkdir -p /tmp/blackfire \
     && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
     && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
-    && rm -Rf /tmp/blackfire
+    && rm -Rf /tmp/blackfire \
+    && curl -OLsS http://get.blackfire.io/blackfire-player.phar \
+    && chmod +x blackfire-player.phar \
+    && mv blackfire-player.phar /usr/local/bin/blackfire-player
 
 # PHP-CS-FIXER & Deptrac
 RUN wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer \

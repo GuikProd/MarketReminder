@@ -17,6 +17,8 @@ use App\Application\Command\SessionCleanerCommand;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -41,6 +43,9 @@ class SessionCleanerCommandTest extends KernelTestCase
 
     public function testSessionsIsCleaned()
     {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
         $application = new Application($this->commandKernel);
         $application->add(new SessionCleanerCommand());
 
