@@ -117,10 +117,13 @@ phpmetrics: ## Allow to launch a phpmetrics analyze
 watch: ## Allow to use Encore to watch the asssets
 	    $(ENV_NODE) yarn watch
 
-add_prod: ## Allow to add a new package in the "prod" env
+production: ## Allow to build the assets for a production usage.
+	    $(ENV_NODE) yarn build
+
+yarn_add_prod: ## Allow to add a new package in the "prod" env
 	    $(ENV_NODE) yarn add $(PACKAGE)
 
-add_dev: ## Allow to add a new package in the "dev" env
+yarn_add_dev: ## Allow to add a new package in the "dev" env
 	    $(ENV_NODE) yarn add --dev $(PACKAGE)
 
 ## Varnish commands
