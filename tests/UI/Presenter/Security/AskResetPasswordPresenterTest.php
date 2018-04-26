@@ -18,6 +18,7 @@ use App\UI\Presenter\Security\AskResetPasswordPresenter;
 use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
 /**
@@ -28,6 +29,22 @@ use Symfony\Component\Form\FormView;
 class AskResetPasswordPresenterTest extends TestCase
 {
     use TestCaseTrait;
+
+    /**
+     * @var FormInterface
+     */
+    private $formInterface;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp()
+    {
+        $this->formInterface = $this->createMock(FormInterface::class);
+
+        $this->formInterface->method('createView')
+                            ->willReturn($this->createMock(FormView::class));
+    }
 
     public function testItImplements()
     {
@@ -47,10 +64,14 @@ class AskResetPasswordPresenterTest extends TestCase
         $probe = static::$blackfire->createProbe();
 
         $askResetPasswordPresenter->prepareOptions([
-            'form' => $this->createMock(FormView::class),
-            'card_header' => 'Reset password',
-            'card_button' => 'Reset',
-            'page_title' => 'Reset Password'
+            'card' => [
+                'header' => 'Reset password',
+                'button' => 'Reset',
+            ],
+            'form' => $this->formInterface,
+            'page' => [
+                'title' => 'Reset Password'
+            ]
         ]);
 
         static::$blackfire->endProbe($probe);

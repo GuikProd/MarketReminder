@@ -40,6 +40,7 @@ services:
         volumes:
             - './:/usr/src/app:rw,cached'
         entrypoint: "yarn watch"
+        restart: always
 
     # Server optimization
     varnish:

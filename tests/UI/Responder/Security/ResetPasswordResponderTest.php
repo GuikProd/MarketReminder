@@ -15,6 +15,7 @@ namespace App\Tests\UI\Responder\Security;
 
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -26,6 +27,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class ResetPasswordResponderTest extends TestCase
 {
+    use TestCaseTrait;
+
     /**
      * @var UrlGeneratorInterface
      */
@@ -47,6 +50,25 @@ class ResetPasswordResponderTest extends TestCase
         static::assertInstanceOf(
             ResetPasswordResponderInterface::class,
             $resetPasswordResponder
+        );
+    }
+
+    /**
+     * @group Blackfire
+     */
+    public function testBlackfireProfilingAndRedirectResponseReturn()
+    {
+        $resetPasswordResponder = new ResetPasswordResponder($this->urlGenerator);
+
+        $probe = static::$blackfire->createProbe();
+
+        $resetPasswordResponder();
+
+        static::$blackfire->endProbe($probe);
+
+        static::assertInstanceOf(
+            RedirectResponse::class,
+            $resetPasswordResponder()
         );
     }
 

@@ -30,8 +30,7 @@ class ResetPasswordResponder implements ResetPasswordResponderInterface
     private $urlGenerator;
 
     /**
-     * ResetPasswordResponder constructor.
-     * @param UrlGeneratorInterface $urlGenerator
+     * {@inheritdoc}
      */
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {

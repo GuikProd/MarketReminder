@@ -15,6 +15,7 @@ namespace App\UI\Presenter\Security;
 
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -47,23 +48,41 @@ class AskResetPasswordPresenter implements AskResetPasswordPresenterInterface, P
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'form' => FormView::class,
-            'card_header' => '',
-            'card_button'=> '',
-            'page_title' => ''
+            'form' => FormInterface::class ?? null,
+            'card' => [
+                'card_header' => '',
+                'card_button'=> '',
+            ],
+            'page' => [
+                'title' => ''
+            ],
         ]);
 
-        $resolver->setAllowedTypes('form', FormView::class);
-        $resolver->setAllowedTypes('card_header', 'string');
-        $resolver->setAllowedTypes('card_button', 'string');
-        $resolver->setAllowedTypes('page_title', 'string');
+        $resolver->setAllowedTypes('card', 'array');
+        $resolver->setAllowedTypes('page', 'array');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getViewOptions(): array
+    public function getCard(): array
     {
-        return $this->viewOptions;
+        return $this->viewOptions['card'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForm(): ?FormView
+    {
+        return $this->viewOptions['form']->createView() ?? null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPage(): array
+    {
+        return $this->viewOptions['page'];
     }
 }

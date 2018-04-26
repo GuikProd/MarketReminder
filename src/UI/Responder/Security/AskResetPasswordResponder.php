@@ -65,16 +65,20 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
     ): Response {
 
         $this->askResetPresenter->prepareOptions([
-            'form' => $askResetPasswordForm->createView(),
-            'card_header' => 'security.resetPasswordToken_header',
-            'card_button' => 'security.resetPasswordToken',
-            'page_title' => 'resetPassword.title'
+            'card' => [
+                'header' => 'security.resetPasswordToken_header',
+                'button' => 'security.resetPasswordToken',
+            ],
+            'form' => $askResetPasswordForm,
+            'page' => [
+                'title' => 'resetPassword.title'
+            ]
         ]);
 
         $isRedirect
             ? $response = new RedirectResponse($this->urlGenerator->generate('index'))
             : $response = new Response(
-                $this->twig->render('security/askResetPasswordToken.html.twig', [
+                $this->twig->render('security/ask_reset_password_token.html.twig', [
                     'presenter' => $this->askResetPresenter
                 ])
             );

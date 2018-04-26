@@ -35,5 +35,10 @@ interface PresenterInterface
     /**
      * @return array
      */
+    public function getPage(): array;
+
+    /**
+     * @return array
+     */
     public function getViewOptions(): array;
 }
