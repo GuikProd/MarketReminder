@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
+use App\Application\Event\SessionMessageEvent;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
+use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -48,6 +50,11 @@ class ResetPasswordAction implements ResetPasswordActionInterface
     private $formFactory;
 
     /**
+     * @var ResetPasswordPresenterInterface
+     */
+    private $resetPasswordPresenter;
+
+    /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
@@ -58,10 +65,12 @@ class ResetPasswordAction implements ResetPasswordActionInterface
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         FormFactoryInterface $formFactory,
+        ResetPasswordPresenterInterface $resetPasswordPresenter,
         UserRepositoryInterface $userRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->formFactory = $formFactory;
+        $this->resetPasswordPresenter = $resetPasswordPresenter;
         $this->userRepository = $userRepository;
     }
 
@@ -72,6 +81,28 @@ class ResetPasswordAction implements ResetPasswordActionInterface
         Request $request,
         ResetPasswordResponderInterface $responder
     ): RedirectResponse {
+
+        if (!$user = $this->userRepository->getUserByResetPasswordToken($request->attributes->get('token'))) {
+
+            $this->resetPasswordPresenter->prepareOptions([
+                'notification' => [
+                    'content' => 'user.notification.wrong_reset_password_token',
+                    'type' => 'failure'
+                ]
+            ]);
+
+            $this->eventDispatcher->dispatch(
+                SessionMessageEvent::NAME,
+                new SessionMessageEvent(
+                    $this->resetPasswordPresenter->getNotificationMessage()['title'],
+                    $this->resetPasswordPresenter->getNotificationMessage()['content']
+                )
+            );
+
+            return $responder();
+        }
+
+
 
         return $responder();
     }

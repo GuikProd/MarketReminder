@@ -17,6 +17,7 @@ use App\UI\Presenter\Security\AskResetPasswordPresenter;
 use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
 use App\UI\Responder\Security\AskResetPasswordResponder;
 use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,6 +32,8 @@ use Twig\Environment;
  */
 class AskResetPasswordResponderTest extends TestCase
 {
+    use TestCaseTrait;
+
     /**
      * @var AskResetPasswordPresenterInterface
      */
@@ -52,7 +55,7 @@ class AskResetPasswordResponderTest extends TestCase
     protected function setUp()
     {
         $this->askResetPasswordPresenter = new AskResetPasswordPresenter();
-        
+
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
@@ -75,23 +78,24 @@ class AskResetPasswordResponderTest extends TestCase
 
     /**
      * @group Blackfire
+     *
+     * @doesNotPerformAssertions
      */
     public function testBlackfireProfilingResponseIsReturned()
     {
-        $askResetPasswordPresenter = new AskResetPasswordPresenter();
-
         $formInterface = $this->createMock(FormInterface::class);
 
+        $probe = static::$blackfire->createProbe();
+
         $askResetPasswordResponder = new AskResetPasswordResponder(
-            $askResetPasswordPresenter,
+            $this->askResetPasswordPresenter,
             $this->twig,
             $this->urlGenerator
         );
 
-        static::assertInstanceOf(
-            Response::class,
-            $askResetPasswordResponder(false, $formInterface)
-        );
+        $askResetPasswordResponder(false, $formInterface);
+
+        static::$blackfire->endProbe($probe);
     }
 
     public function testResponseIsReturned()

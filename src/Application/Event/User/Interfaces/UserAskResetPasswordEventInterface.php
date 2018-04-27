@@ -11,15 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\Event\User;
-
-use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
+namespace App\Application\Event\User\Interfaces;
 
 /**
- * Class UserCreatedEvent.
+ * Interface UserAskResetPasswordEventInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserCreatedEvent extends AbstractUserEvent implements UserCreatedEventInterface
+interface UserAskResetPasswordEventInterface
 {
+    const NAME = 'user.ask.reset_password';
 }

@@ -11,14 +11,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\Command\Interfaces;
+namespace App\Application\Event\User;
+
+use App\Application\Event\User\Interfaces\UserAskResetPasswordEventInterface;
 
 /**
- * Interface SessionCleanerCommandInterface.
- *
+ * Class UserAskResetPasswordEvent.
+ * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface SessionCleanerCommandInterface
+class UserAskResetPasswordEvent extends AbstractUserEvent implements UserAskResetPasswordEventInterface
 {
-
 }

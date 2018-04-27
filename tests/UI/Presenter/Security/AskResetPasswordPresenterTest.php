@@ -70,7 +70,7 @@ class AskResetPasswordPresenterTest extends TestCase
             ],
             'form' => $this->formInterface,
             'page' => [
-                'title' => 'Reset Password'
+                'title' => 'reset_password.title'
             ]
         ]);
 

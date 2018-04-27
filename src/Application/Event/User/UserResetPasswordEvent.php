@@ -14,34 +14,12 @@ declare(strict_types=1);
 namespace App\Application\Event\User;
 
 use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
-use App\Domain\Models\Interfaces\UserInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class UserResetPasswordEvent.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserResetPasswordEvent extends Event implements UserResetPasswordEventInterface
+class UserResetPasswordEvent extends AbstractUserEvent implements UserResetPasswordEventInterface
 {
-    /**
-     * @var UserInterface
-     */
-    private $user;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(UserInterface $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUser(): UserInterface
-    {
-        return $this->user;
-    }
 }

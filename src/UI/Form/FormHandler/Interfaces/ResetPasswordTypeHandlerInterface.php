@@ -11,46 +11,45 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\UI\Action\Security\Interfaces;
+namespace App\UI\Form\FormHandler\Interfaces;
 
+use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
-use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
- * Interface ResetPasswordActionInterface.
+ * Interface ResetPasswordTypeHandlerInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface ResetPasswordActionInterface
+interface ResetPasswordTypeHandlerInterface
 {
     /**
-     * ResetPasswordActionInterface constructor.
+     * ResetPasswordTypeHandlerInterface constructor.
      *
+     * @param EncoderFactoryInterface         $encoderFactory
      * @param EventDispatcherInterface        $eventDispatcher
-     * @param FormFactoryInterface            $formFactory
      * @param ResetPasswordPresenterInterface $resetPasswordPresenter
      * @param UserRepositoryInterface         $userRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        FormFactoryInterface $formFactory,
+        EncoderFactoryInterface $encoderFactory,
         ResetPasswordPresenterInterface $resetPasswordPresenter,
         UserRepositoryInterface $userRepository
     );
 
     /**
-     * @param Request                          $request
-     * @param ResetPasswordResponderInterface  $responder
+     * @param FormInterface $form
+     * @param UserInterface $user
      *
-     * @return RedirectResponse
+     * @return bool
      */
-    public function __invoke(
-        Request $request,
-        ResetPasswordResponderInterface $responder
-    ): RedirectResponse;
+    public function handle(
+        FormInterface $form,
+        UserInterface $user
+    ): bool;
 }

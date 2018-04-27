@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Application\Subscriber;
 
+use App\Application\Event\User\Interfaces\UserAskResetPasswordEventInterface;
 use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
 use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
 use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
@@ -21,7 +22,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Twig\Environment;
 
 /**
- * Class UserSubscriber
+ * Class UserSubscriber.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
@@ -61,10 +62,29 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     public static function getSubscribedEvents()
     {
         return [
+            UserAskResetPasswordEventInterface::NAME => 'onUserAskResetPasswordEvent',
             UserCreatedEventInterface::NAME => 'onUserCreated',
             UserValidatedEventInterface::NAME => 'onUserValidated',
             UserResetPasswordEventInterface::NAME => 'onUserResetPassword'
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onUserAskResetPasswordEvent(UserAskResetPasswordEventInterface $event): void
+    {
+        $askResetPasswordMail =  (new \Swift_Message)
+            ->setFrom($this->emailSender)
+            ->setTo($event->getUser()->getEmail())
+            ->setBody(
+                $this->twig->render('emails/security/user_ask_reset_password.html.twig', [
+                    'user' => $event->getUser(),
+                    'presenter' => $event->getEmailPresenter()
+                ]), 'text/html'
+            );
+
+        $this->swiftMailer->send($askResetPasswordMail);
     }
 
     /**
@@ -76,14 +96,32 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
             ->setFrom($this->emailSender)
             ->setTo($event->getUser()->getEmail())
             ->setBody(
-                $this->twig
-                    ->render('emails/security/registration_mail.html.twig', [
-                        'user' => $event->getUser(),
-                    ]),
-                'text/html'
+                $this->twig->render('emails/security/registration_mail.html.twig', [
+                    'user' => $event->getUser(),
+                    'presenter' => $event->getEmailPresenter()
+                ]), 'text/html'
             );
 
         $this->swiftMailer->send($registrationMail);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onUserResetPassword(UserResetPasswordEventInterface $event): void
+    {
+        $message = (new \Swift_Message)
+            ->setSubject($event->getEmailPresenter()->getEmail()['subject'])
+            ->setFrom($this->emailSender)
+            ->setTo($event->getEmailPresenter()->getEmail()['to'])
+            ->setBody(
+                $this->twig->render('emails/security/user_reset_password.html.twig', [
+                    'user' => $event->getUser(),
+                    'presenter' => $event->getEmailPresenter()
+                ])
+            );
+
+        $this->swiftMailer->send($message);
     }
 
     /**
@@ -95,30 +133,12 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
             ->setFrom($this->emailSender)
             ->setTo($event->getUser()->getEmail())
             ->setBody(
-                $this->twig
-                    ->render('emails/security/validation_mail.html.twig', [
-                        'user' => $event->getUser(),
-                    ]),
-                'text/html'
+                $this->twig->render('emails/security/validation_mail.html.twig', [
+                    'user' => $event->getUser(),
+                    'presenter' => $event->getEmailPresenter()
+                ]), 'text/html'
             );
 
         $this->swiftMailer->send($validationMail);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function onUserResetPassword(UserResetPasswordEventInterface $event): void
-    {
-        $message = (new \Swift_Message)
-                    ->setFrom($this->emailSender)
-                    ->setTo($event->getUser()->getEmail())
-                    ->setBody(
-                        $this->twig->render('emails/security/user_reset_password.html.twig', [
-                            'user' => $event->getUser()
-                        ])
-                    );
-
-        $this->swiftMailer->send($message);
     }
 }

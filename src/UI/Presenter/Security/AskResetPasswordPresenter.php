@@ -34,11 +34,11 @@ class AskResetPasswordPresenter extends AbstractPresenter implements AskResetPas
         $resolver->setDefaults([
             'form' => FormInterface::class ?? null,
             'card' => [
-                'card_header' => '',
-                'card_button'=> '',
+                'card_header' => null,
+                'card_button'=> null,
             ],
             'page' => [
-                'title' => ''
+                'title' => null
             ],
         ]);
 

@@ -11,15 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\Event\User;
-
-use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
+namespace App\UI\Presenter\User\Interfaces;
 
 /**
- * Class UserCreatedEvent.
- *
+ * Interface UserEmailPresenterInterface.
+ * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserCreatedEvent extends AbstractUserEvent implements UserCreatedEventInterface
+interface UserEmailPresenterInterface
 {
+    /**
+     * @return array
+     */
+    public function getEmail(): array;
 }

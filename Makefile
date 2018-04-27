@@ -69,14 +69,15 @@ create-schema: ## Allow to create the BDD schema
 
 check-schema: ## Check the mapping
 check-schema: config/doctrine
-	    $(ENV_PHP) ./bin/console d:s:v
+	    $(ENV_PHP) ./bin/console doctrine:schema:validate
 
 update-schema: ## Allow to update the schema
+	    $(ENV_PHP) ./bin/console d:s:u --dump-sql
 	    $(ENV_PHP) ./bin/console d:s:u --force
 
 fixtures_test: ## Allow to load the fixtures in the test env
 fixtures_test: src/DataFixtures
-	    $(ENV_PHP) ./bin/console d:f:l -n --env=test
+	    $(ENV_PHP) ./bin/console doctrine:fixtures:load -n --env=test
 
 fixtures_dev: ## Allow to load the fixtures in the dev env
 fixtures_dev: src/DataFixtures

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Application\Event\User\Interfaces;
 
-use App\Domain\Models\Interfaces\UserInterface;
-
 /**
  * Interface UserCreatedEventInterface.
  *
@@ -23,16 +21,4 @@ use App\Domain\Models\Interfaces\UserInterface;
 interface UserCreatedEventInterface
 {
     const NAME = 'user.registered';
-
-    /**
-     * UserCreatedEventInterface constructor.
-     *
-     * @param UserInterface  $user
-     */
-    public function __construct(UserInterface $user);
-
-    /**
-     * @return UserInterface
-     */
-    public function getUser(): UserInterface;
 }

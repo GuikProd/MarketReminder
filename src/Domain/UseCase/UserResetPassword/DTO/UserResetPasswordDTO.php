@@ -35,8 +35,8 @@ class UserResetPasswordDTO implements UserResetPasswordDTOInterface
     /**
      * UserResetPasswordDTO constructor.
      *
-     * @param string $email     The email of the User who reset his password.
-     * @param string $username  The username of the User who reset his password.
+     * @param string $email    The email of the User who reset his password.
+     * @param string $username The username of the User who reset his password.
      */
     public function __construct(
         string $email,

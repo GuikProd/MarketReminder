@@ -71,7 +71,7 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
             ],
             'form' => $askResetPasswordForm,
             'page' => [
-                'title' => 'resetPassword.title'
+                'title' => 'reset_password.title'
             ]
         ]);
 

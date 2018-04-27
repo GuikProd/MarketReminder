@@ -23,5 +23,10 @@ interface ResetPasswordPresenterInterface
     /**
      * @return array
      */
+    public function getEmail(): array;
+
+    /**
+     * @return array
+     */
     public function getNotificationMessage(): array;
 }

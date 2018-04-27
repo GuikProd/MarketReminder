@@ -11,18 +11,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\UI\Presenter\Security;
+namespace App\UI\Presenter\User;
 
 use App\UI\Presenter\AbstractPresenter;
-use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ResetPasswordPresenter.
+ * Class UserEmailPresenter.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ResetPasswordPresenter extends AbstractPresenter implements ResetPasswordPresenterInterface
+class UserEmailPresenter extends AbstractPresenter implements UserEmailPresenterInterface
 {
     /**
      * {@inheritdoc}
@@ -30,18 +30,14 @@ class ResetPasswordPresenter extends AbstractPresenter implements ResetPasswordP
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'notification' => [
+            'email' => [
                 'content' => null,
-                'title' => null
-            ],
-            'page' => [
-                'title' => null
+                'subject' => null,
+                'to' => null
             ]
         ]);
 
         $resolver->setAllowedTypes('email', 'array');
-        $resolver->setAllowedTypes('notification', 'array');
-        $resolver->setAllowedTypes('page', 'array');
     }
 
     /**
@@ -50,13 +46,5 @@ class ResetPasswordPresenter extends AbstractPresenter implements ResetPasswordP
     public function getEmail(): array
     {
         return $this->getViewOptions()['email'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNotificationMessage(): array
-    {
-        return $this->getViewOptions()['notification'];
     }
 }

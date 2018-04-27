@@ -38,6 +38,8 @@ class ResetPasswordPresenterTest extends TestCase
 
     /**
      * @group Blackfire
+     *
+     * @doesNotPerformAssertions
      */
     public function testBlackfireProfilingAlongWithAllDefinitions()
     {
@@ -47,13 +49,30 @@ class ResetPasswordPresenterTest extends TestCase
 
         $resetPasswordPresenter->prepareOptions([
             'notification' => [
-                'content' => ''
+                'content' => 'user.notification.reset_password_success'
             ],
             'page' => [
-                'title' => ''
+                'title' => 'reset_password.title'
             ]
         ]);
 
         static::$blackfire->endProbe($probe);
+    }
+
+    public function testAllDefinitionsAreFound()
+    {
+        $resetPasswordPresenter = new ResetPasswordPresenter();
+
+        $resetPasswordPresenter->prepareOptions([
+            'notification' => [
+                'content' => 'user.notification.reset_password_success'
+            ],
+            'page' => [
+                'title' => 'reset_password.title'
+            ]
+        ]);
+
+        static::assertArrayHasKey('content', $resetPasswordPresenter->getNotificationMessage());
+        static::assertArrayHasKey('title', $resetPasswordPresenter->getPage());
     }
 }

@@ -27,16 +27,8 @@ class SessionMessageEventTest extends TestCase
     {
         $sessionMessageEvent = new SessionMessageEvent('failure', 'form.username_error');
 
-        static::assertSame(
-            'session.message_added',
-            $sessionMessageEvent::NAME
-        );
-
-        static::assertSame(
-            'failure',
-            $sessionMessageEvent->getFlashBag()
-        );
-
+        static::assertSame('session.message_added', $sessionMessageEvent::NAME);
+        static::assertSame('failure', $sessionMessageEvent->getFlashBag());
         static::assertSame(
             'form.username_error',
             $sessionMessageEvent->getMessage()
@@ -47,16 +39,8 @@ class SessionMessageEventTest extends TestCase
     {
         $sessionMessageEvent = new SessionMessageEvent('success', 'user.account_created');
 
-        static::assertSame(
-            'session.message_added',
-            $sessionMessageEvent::NAME
-        );
-
-        static::assertSame(
-            'success',
-            $sessionMessageEvent->getFlashBag()
-        );
-
+        static::assertSame('session.message_added', $sessionMessageEvent::NAME);
+        static::assertSame('success', $sessionMessageEvent->getFlashBag());
         static::assertSame(
             'user.account_created',
             $sessionMessageEvent->getMessage()
