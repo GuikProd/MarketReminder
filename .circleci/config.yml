@@ -13,7 +13,6 @@ jobs:
             - image: circleci/php:7.2.4-apache-node-browsers
         steps:
             - checkout
-            - setup_remote_docker
             - run: curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
             - run: chmod +x deptrac.phar
             - run: mv deptrac.phar ${HOME}/project/deptrac
@@ -24,7 +23,6 @@ jobs:
             - image: redis
         steps:
             - checkout
-            - setup_remote_docker
             - run: sudo apt install -y libsqlite3-dev zlib1g-dev
             - run: sudo docker-php-ext-install zip
             - run: sudo composer self-update

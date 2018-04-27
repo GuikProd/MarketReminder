@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter\Security;
 
-use App\UI\Presenter\Interfaces\PresenterInterface;
+use App\UI\Presenter\AbstractPresenter;
 use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -24,24 +24,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class AskResetPasswordPresenter implements AskResetPasswordPresenterInterface, PresenterInterface
+class AskResetPasswordPresenter extends AbstractPresenter implements AskResetPasswordPresenterInterface
 {
-    /**
-     * @var array
-     */
-    private $viewOptions;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function prepareOptions(array $viewOptions = array()): void
-    {
-        $resolver = new OptionsResolver();
-        $this->configureOptions($resolver);
-
-        $this->viewOptions = $resolver->resolve($viewOptions);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -67,7 +51,7 @@ class AskResetPasswordPresenter implements AskResetPasswordPresenterInterface, P
      */
     public function getCard(): array
     {
-        return $this->viewOptions['card'];
+        return $this->getViewOptions()['card'];
     }
 
     /**
@@ -75,14 +59,6 @@ class AskResetPasswordPresenter implements AskResetPasswordPresenterInterface, P
      */
     public function getForm(): ?FormView
     {
-        return $this->viewOptions['form']->createView() ?? null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPage(): array
-    {
-        return $this->viewOptions['page'];
+        return $this->getViewOptions()['form']->createView() ?? null;
     }
 }
