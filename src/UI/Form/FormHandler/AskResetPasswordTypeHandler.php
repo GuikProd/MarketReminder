@@ -92,9 +92,12 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
 
             $this->userEmailPresenter->prepareOptions([
                 'email' => [
-                    'content' => 'user.ask_reset_password',
-                    'subject' => 'user.reset_password.header',
+                    'content' => 'user.ask_reset_password.content',
+                    'link' => [
+                        'text' => 'user.ask_reset_password.link.text'
+                    ],
                     'header' => 'user.ask_reset_password.header',
+                    'subject' => 'user.reset_password.header',
                     'title' => 'user.ask_reset_password.header',
                     'to' => $user->getEmail()
                 ],

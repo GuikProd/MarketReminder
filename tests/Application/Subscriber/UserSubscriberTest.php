@@ -11,14 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Domain\Subscriber;
+namespace App\Tests\Application\Subscriber;
 
 use App\Application\Event\User\UserCreatedEvent;
 use App\Application\Event\User\UserResetPasswordEvent;
 use App\Application\Event\User\UserValidatedEvent;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\Application\Subscriber\UserSubscriber;
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -28,51 +30,88 @@ use Twig\Environment;
  */
 class UserSubscriberTest extends TestCase
 {
+    use TestCaseTrait;
+
+    /**
+     * @var string
+     */
+    private $emailSender;
+
+    /**
+     * @var \Swift_Mailer
+     */
+    private $swiftMailer;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->emailSender = 'test@marketReminder.com';
+        $this->swiftMailer = $this->createMock(\Swift_Mailer::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->twig = $this->createMock(Environment::class);
+    }
+
     public function testItImplements()
     {
-        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
-        $emailSenderMock = 'test@marketReminder.com';
-        $twigMock = $this->createMock(Environment::class);
-
-        $userSubscriber = new UserSubscriber($emailSenderMock, $swiftMailerMock, $twigMock);
-
-        static::assertClassHasAttribute(
-            'swiftMailer',
-            UserSubscriber::class
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->translator,
+            $this->twig
         );
 
-        static::assertInstanceOf(
-            UserSubscriberInterface::class,
-            $userSubscriber
-        );
+        static::assertClassHasAttribute('swiftMailer', UserSubscriber::class);
+        static::assertInstanceOf(UserSubscriberInterface::class, $userSubscriber);
+        static::assertInstanceOf(UserSubscriberInterface::class, $userSubscriber);
+    }
 
-        static::assertInstanceOf(
-            UserSubscriberInterface::class,
-            $userSubscriber
+    /**
+     * @group Blackfire
+     *
+     * @doestNotPerformAssertions
+     */
+    public function testBlackfireProfilingAndUserCreatedEventIsListened()
+    {
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->translator,
+            $this->twig
         );
     }
 
     public function testUserCreatedEventIsListened()
     {
-        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
-        $emailSenderMock = 'test@marketReminder.com';
-        $twigMock = $this->createMock(Environment::class);
-
-        $userSubscriber = new UserSubscriber($emailSenderMock, $swiftMailerMock, $twigMock);
-
-        static::assertArrayHasKey(
-            UserCreatedEvent::NAME,
-            $userSubscriber::getSubscribedEvents()
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->translator,
+            $this->twig
         );
+
+        static::assertArrayHasKey(UserCreatedEvent::NAME, $userSubscriber::getSubscribedEvents());
     }
 
     public function testUserValidatedEventIsListened()
     {
-        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
-        $emailSenderMock = 'test@marketReminder.com';
-        $twigMock = $this->createMock(Environment::class);
-
-        $userSubscriber = new UserSubscriber($emailSenderMock, $swiftMailerMock, $twigMock);
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->translator,
+            $this->twig
+        );
 
         static::assertArrayHasKey(
             UserValidatedEvent::NAME,
@@ -82,11 +121,12 @@ class UserSubscriberTest extends TestCase
 
     public function testUserResetPasswordEventIsListened()
     {
-        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
-        $emailSenderMock = 'test@marketReminder.com';
-        $twigMock = $this->createMock(Environment::class);
-
-        $userSubscriber = new UserSubscriber($emailSenderMock, $swiftMailerMock, $twigMock);
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->translator,
+            $this->twig
+        );
 
         static::assertArrayHasKey(
             UserResetPasswordEvent::NAME,
@@ -97,11 +137,13 @@ class UserSubscriberTest extends TestCase
     public function testUserResetPasswordEventLogicIsTriggered()
     {
         $userResetPasswordEventMock = $this->createMock(UserResetPasswordEvent::class);
-        $swiftMailerMock = $this->createMock(\Swift_Mailer::class);
-        $emailSenderMock = 'test@marketReminder.com';
-        $twigMock = $this->createMock(Environment::class);
 
-        $userSubscriber = new UserSubscriber($emailSenderMock, $swiftMailerMock, $twigMock);
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->translator,
+            $this->twig
+        );
 
         static::assertNull(
             $userSubscriber->onUserResetPassword($userResetPasswordEventMock)

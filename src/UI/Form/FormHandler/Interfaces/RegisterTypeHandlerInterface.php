@@ -19,6 +19,7 @@ use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -41,6 +42,7 @@ interface RegisterTypeHandlerInterface
      * @param ImageUploaderHelperInterface          $imageUploaderHelper
      * @param ImageRetrieverHelperInterface         $imageRetrieverHelper
      * @param UserBuilderInterface                  $userBuilder
+     * @param UserEmailPresenterInterface           $presenter
      * @param UserRepositoryInterface               $userRepository
      * @param ValidatorInterface                    $validator
      */
@@ -52,6 +54,7 @@ interface RegisterTypeHandlerInterface
         ImageUploaderHelperInterface $imageUploaderHelper,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
         UserBuilderInterface $userBuilder,
+        UserEmailPresenterInterface $presenter,
         UserRepositoryInterface $userRepository,
         ValidatorInterface $validator
     );

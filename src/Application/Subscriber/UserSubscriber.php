@@ -19,6 +19,7 @@ use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
 use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -39,6 +40,11 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     private $swiftMailer;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @var Environment
      */
     private $twig;
@@ -49,10 +55,12 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     public function __construct(
         string $emailSender,
         \Swift_Mailer $swiftMailer,
+        TranslatorInterface $translator,
         Environment $twig
     ) {
         $this->emailSender = $emailSender;
         $this->swiftMailer = $swiftMailer;
+        $this->translator = $translator;
         $this->twig = $twig;
     }
 
@@ -75,8 +83,12 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     public function onUserAskResetPasswordEvent(UserAskResetPasswordEventInterface $event): void
     {
         $askResetPasswordMail =  (new \Swift_Message)
+            ->setSubject(
+                $this->translator
+                     ->trans($event->getEmailPresenter()->getEmail()['subject'])
+            )
             ->setFrom($this->emailSender)
-            ->setTo($event->getUser()->getEmail())
+            ->setTo($event->getEmailPresenter()->getEmail()['to'])
             ->setBody(
                 $this->twig->render('emails/security/user_ask_reset_password.html.twig', [
                     'user' => $event->getUser(),
@@ -93,6 +105,10 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     public function onUserCreated(UserCreatedEventInterface $event): void
     {
         $registrationMail =  (new \Swift_Message)
+            ->setSubject(
+                $this->translator
+                     ->trans($event->getEmailPresenter()->getEmail()['subject'])
+            )
             ->setFrom($this->emailSender)
             ->setTo($event->getUser()->getEmail())
             ->setBody(
@@ -111,7 +127,10 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     public function onUserResetPassword(UserResetPasswordEventInterface $event): void
     {
         $message = (new \Swift_Message)
-            ->setSubject($event->getEmailPresenter()->getEmail()['subject'])
+            ->setSubject(
+                $this->translator
+                     ->trans($event->getEmailPresenter()->getEmail()['subject'])
+            )
             ->setFrom($this->emailSender)
             ->setTo($event->getEmailPresenter()->getEmail()['to'])
             ->setBody(
@@ -130,6 +149,10 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     public function onUserValidated(UserValidatedEventInterface $event): void
     {
         $validationMail =  (new \Swift_Message)
+            ->setSubject(
+                $this->translator
+                     ->trans($event->getEmailPresenter()->getEmail()['subject'])
+            )
             ->setFrom($this->emailSender)
             ->setTo($event->getUser()->getEmail())
             ->setBody(

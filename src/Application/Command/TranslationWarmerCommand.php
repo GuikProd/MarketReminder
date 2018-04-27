@@ -199,7 +199,9 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
                 $toCompareKeys[] = $key;
             }
 
-            if (count($defaultKeys) == count($toCompareKeys)) {
+            if (\array_diff($defaultKeys, $toCompareKeys)) {
+                return false;
+            } else if (!\array_diff($defaultKeys, $toCompareKeys)) {
                 $output->writeln(
                     '<info>The default files already contains the translated content, the translation process is skipped.</info>'
                 );

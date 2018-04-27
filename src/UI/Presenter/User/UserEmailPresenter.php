@@ -32,6 +32,9 @@ class UserEmailPresenter extends AbstractPresenter implements UserEmailPresenter
         $resolver->setDefaults([
             'email' => [
                 'content' => null,
+                'link' => [
+                    'text' => null
+                ],
                 'subject' => null,
                 'to' => null
             ]
