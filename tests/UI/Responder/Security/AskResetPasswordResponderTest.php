@@ -51,7 +51,8 @@ class AskResetPasswordResponderTest extends TestCase
      */
     protected function setUp()
     {
-        $this->askResetPasswordPresenter = $this->createMock(AskResetPasswordPresenterInterface::class);
+        $this->askResetPasswordPresenter = new AskResetPasswordPresenter();
+        
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 

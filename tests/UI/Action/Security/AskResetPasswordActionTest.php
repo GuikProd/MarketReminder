@@ -16,6 +16,7 @@ namespace App\Tests\UI\Action\Security;
 use App\UI\Action\Security\AskResetPasswordAction;
 use App\UI\Action\Security\Interfaces\AskResetPasswordActionInterface;
 use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
+use App\UI\Presenter\Security\AskResetPasswordPresenter;
 use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
 use App\UI\Responder\Security\AskResetPasswordResponder;
 use PHPUnit\Framework\TestCase;
@@ -60,7 +61,8 @@ class AskResetPasswordActionTest extends TestCase
      */
     public function setUp()
     {
-        $this->askResetPasswordPresenter = $this->createMock(AskResetPasswordPresenterInterface::class);
+        $this->askResetPasswordPresenter = new AskResetPasswordPresenter();
+
         $this->askResetPasswordTypeHandler = $this->createMock(AskResetPasswordTypeHandlerInterface::class);
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->formView = $this->createMock(FormView::class);
