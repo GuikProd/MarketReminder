@@ -78,4 +78,24 @@ class AskResetPasswordPresenterTest extends TestCase
 
         static::assertArrayHasKey('form', $askResetPasswordPresenter->getViewOptions());
     }
+
+    public function testOptionsResolving()
+    {
+        $askResetPasswordPresenter = new AskResetPasswordPresenter();
+
+        $askResetPasswordPresenter->prepareOptions([
+            'card' => [
+                'header' => 'Reset password',
+                'button' => 'Reset',
+            ],
+            'form' => $this->formInterface,
+            'page' => [
+                'title' => 'Reset Password'
+            ]
+        ]);
+
+        static::assertArrayHasKey('form', $askResetPasswordPresenter->getViewOptions());
+        static::assertArrayHasKey('header', $askResetPasswordPresenter->getCard());
+        static::assertArrayHasKey('title', $askResetPasswordPresenter->getPage());
+    }
 }

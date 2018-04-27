@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Security;
 
+use App\UI\Presenter\Security\AskResetPasswordPresenter;
+use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
 use App\UI\Responder\Security\AskResetPasswordResponder;
 use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -29,14 +31,40 @@ use Twig\Environment;
  */
 class AskResetPasswordResponderTest extends TestCase
 {
+    /**
+     * @var AskResetPasswordPresenterInterface
+     */
+    private $askResetPasswordPresenter;
+
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->askResetPasswordPresenter = $this->createMock(AskResetPasswordPresenterInterface::class);
+        $this->twig = $this->createMock(Environment::class);
+        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+
+        $this->urlGenerator->method('generate')->willReturn('/fr/');
+    }
+
     public function testItImplements()
     {
-        $twigMock = $this->createMock(Environment::class);
-        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
-
-        $urlGeneratorMock->method('generate')->willReturn('/fr/');
-
-        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
+        $askResetPasswordResponder = new AskResetPasswordResponder(
+            $this->askResetPasswordPresenter,
+            $this->twig,
+            $this->urlGenerator
+        );
 
         static::assertInstanceOf(
             AskResetPasswordResponderInterface::class,
@@ -44,38 +72,54 @@ class AskResetPasswordResponderTest extends TestCase
         );
     }
 
-    public function testResponseIsReturned()
+    /**
+     * @group Blackfire
+     */
+    public function testBlackfireProfilingResponseIsReturned()
     {
-        $formViewMock = $this->createMock(FormView::class);
-        $twigMock = $this->createMock(Environment::class);
-        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
+        $askResetPasswordPresenter = new AskResetPasswordPresenter();
 
-        $urlGeneratorMock->method('generate')->willReturn('/fr/');
+        $formInterface = $this->createMock(FormInterface::class);
 
-        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
+        $askResetPasswordResponder = new AskResetPasswordResponder(
+            $askResetPasswordPresenter,
+            $this->twig,
+            $this->urlGenerator
+        );
 
         static::assertInstanceOf(
             Response::class,
-            $askResetPasswordResponder($formViewMock)
+            $askResetPasswordResponder(false, $formInterface)
+        );
+    }
+
+    public function testResponseIsReturned()
+    {
+        $formInterface = $this->createMock(FormInterface::class);
+
+        $askResetPasswordResponder = new AskResetPasswordResponder(
+            $this->askResetPasswordPresenter,
+            $this->twig,
+            $this->urlGenerator
+        );
+
+        static::assertInstanceOf(
+            Response::class,
+            $askResetPasswordResponder(false, $formInterface)
         );
     }
 
     public function testRedirectResponseIsReturned()
     {
-        $twigMock = $this->createMock(Environment::class);
-        $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
-
-        $urlGeneratorMock->method('generate')->willReturn('/fr/');
-
-        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
+        $askResetPasswordResponder = new AskResetPasswordResponder(
+            $this->askResetPasswordPresenter,
+            $this->twig,
+            $this->urlGenerator
+        );
 
         static::assertInstanceOf(
             RedirectResponse::class,
-            $askResetPasswordResponder(
-                null,
-                true,
-                'index',
-                '')
+            $askResetPasswordResponder(true)
         );
     }
 }
