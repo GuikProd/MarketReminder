@@ -23,7 +23,6 @@ use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -72,11 +71,6 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
     private $userBuilder;
 
     /**
-     * @var UserEmailPresenterInterface
-     */
-    private $userEmailPresenter;
-
-    /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
@@ -97,7 +91,6 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
         ImageUploaderHelperInterface $imageUploaderHelper,
         ImageRetrieverHelperInterface $imageRetrieverHelper,
         UserBuilderInterface $userBuilder,
-        UserEmailPresenterInterface $presenter,
         UserRepositoryInterface $userRepository,
         ValidatorInterface $validator
     ) {
@@ -108,7 +101,6 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
         $this->imageUploaderHelper = $imageUploaderHelper;
         $this->imageRetrieverHelper = $imageRetrieverHelper;
         $this->userBuilder = $userBuilder;
-        $this->userEmailPresenter = $presenter;
         $this->userRepository = $userRepository;
         $this->validator = $validator;
     }
@@ -129,7 +121,8 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $this->imageBuilder->build(
                     $this->imageUploaderHelper->getFileName(),
                     $this->imageUploaderHelper->getFileName(),
-                    $this->imageRetrieverHelper->getGoogleStoragePublicUrl().$this->imageUploaderHelper->getFileName()
+                    $this->imageRetrieverHelper
+                                 ->getGoogleStoragePublicUrl().$this->imageUploaderHelper->getFileName()
                 );
             }
 
@@ -142,15 +135,16 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $this->imageBuilder->getImage() ?: null
             );
 
-            $errors = $this->validator->validate($this->userBuilder->getUser(), null, ['User', 'registration']);
+            $errors = $this->validator->validate(
+                $this->userBuilder->getUser(),
+                null,
+                ['User', 'registration']
+            );
 
             if (count($errors) > 0) {
                 $this->eventDispatcher->dispatch(
                     SessionMessageEvent::NAME,
-                    new SessionMessageEvent(
-                        'failure',
-                        'user.invalid_credentials'
-                    )
+                    new SessionMessageEvent('failure', 'user.invalid_credentials')
                 );
 
                 return false;
@@ -158,35 +152,14 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
 
             $this->userRepository->save($this->userBuilder->getUser());
 
-            $this->userEmailPresenter->prepareOptions([
-                'email' => [
-                    'content' => [
-                        'first_part' => 'user.registration.welcome.content_first_part',
-                        'second_part' => 'user.registration.welcome.content_second_part',
-                        'link' => [
-                            'text' => 'user.registration.welcome.content.link.text'
-                        ]
-                    ],
-                    'header' => 'user.registration.welcome.header',
-                    'subject' => 'user.registration.welcome.header',
-                    'to' => $this->userBuilder->getUser()
-                ]
-            ]);
-
             $this->eventDispatcher->dispatch(
                 UserCreatedEvent::NAME,
-                new UserCreatedEvent(
-                    $this->userBuilder->getUser(),
-                    $this->userEmailPresenter
-                )
+                new UserCreatedEvent($this->userBuilder->getUser())
             );
 
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
-                new SessionMessageEvent(
-                    'success',
-                    'user.account_created'
-                )
+                new SessionMessageEvent('success', 'user.account_created')
             );
 
             return true;

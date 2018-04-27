@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\Event\User;
 
+use App\Application\Event\User\AbstractUserEvent;
+use App\Application\Event\User\Interfaces\UserEventInterface;
 use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
 use App\Application\Event\User\UserResetPasswordEvent;
 use App\Domain\Models\Interfaces\UserInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class UserResetPasswordEventTest.
@@ -26,37 +27,33 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class UserResetPasswordEventTest extends TestCase
 {
-    public function testEventNameIsDefined()
+    /**
+     * @var UserInterface
+     */
+    private $user;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
     {
-        $userMock = $this->createMock(UserInterface::class);
+        $this->user = $this->createMock(UserInterface::class);
+    }
 
-        $userResetPasswordEvent = new UserResetPasswordEvent($userMock);
+    public function testEventConstruction()
+    {
+        $userResetPasswordEvent = new UserResetPasswordEvent($this->user);
 
-        static::assertInstanceOf(
-            Event::class,
-            $userResetPasswordEvent
-        );
-
-        static::assertInstanceOf(
-            UserResetPasswordEventInterface::class,
-            $userResetPasswordEvent
-        );
-
-        static::assertSame(
-            'user.password_reset',
-            $userResetPasswordEvent::NAME
-        );
+        static::assertInstanceOf(AbstractUserEvent::class, $userResetPasswordEvent);
+        static::assertInstanceOf(UserEventInterface::class, $userResetPasswordEvent);
+        static::assertInstanceOf(UserResetPasswordEventInterface::class, $userResetPasswordEvent);
+        static::assertSame('user.password_reset', $userResetPasswordEvent::NAME);
     }
 
     public function testUserIsInjected()
     {
-        $userMock = $this->createMock(UserInterface::class);
+        $userResetPasswordEvent = new UserResetPasswordEvent($this->user);
 
-        $userResetPasswordEvent = new UserResetPasswordEvent($userMock);
-
-        static::assertInstanceOf(
-            UserInterface::class,
-            $userResetPasswordEvent->getUser()
-        );
+        static::assertInstanceOf(UserInterface::class, $userResetPasswordEvent->getUser());
     }
 }

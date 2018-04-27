@@ -18,6 +18,7 @@ use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
 use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
 use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
+use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -50,18 +51,25 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     private $twig;
 
     /**
+     * @var UserEmailPresenterInterface
+     */
+    private $userEmailPresenter;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
         string $emailSender,
         \Swift_Mailer $swiftMailer,
         TranslatorInterface $translator,
-        Environment $twig
+        Environment $twig,
+        UserEmailPresenterInterface $presenter
     ) {
         $this->emailSender = $emailSender;
         $this->swiftMailer = $swiftMailer;
         $this->translator = $translator;
         $this->twig = $twig;
+        $this->userEmailPresenter = $presenter;
     }
 
     /**
@@ -79,10 +87,18 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function onUserAskResetPasswordEvent(UserAskResetPasswordEventInterface $event): void
     {
-        $askResetPasswordMail =  (new \Swift_Message)
+        $this->userEmailPresenter->prepareOption([
+
+        ]);
+
+        $askResetPasswordMail = (new \Swift_Message)
             ->setSubject(
                 $this->translator
                      ->trans($event->getEmailPresenter()->getEmail()['subject'])
@@ -101,20 +117,38 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function onUserCreated(UserCreatedEventInterface $event): void
     {
-        $registrationMail =  (new \Swift_Message)
+        $this->userEmailPresenter->prepareOptions([
+            'email' => [
+                'content' => [
+                    'first_part' => 'user.registration.welcome.content_first_part',
+                    'second_part' => 'user.registration.welcome.content_second_part',
+                    'link' => [
+                        'text' => 'user.registration.welcome.content.link.text'
+                    ]
+                ],
+                'header' => 'user.registration.welcome.header',
+                'subject' => 'user.registration.welcome.header'
+            ],
+            'user' => $event->getUser()
+        ]);
+
+        $registrationMail = (new \Swift_Message)
             ->setSubject(
                 $this->translator
-                     ->trans($event->getEmailPresenter()->getEmail()['subject'])
+                     ->trans($this->userEmailPresenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($event->getUser()->getEmail())
+            ->setTo($this->userEmailPresenter->getUser())
             ->setBody(
                 $this->twig->render('emails/security/registration_mail.html.twig', [
-                    'user' => $event->getUser(),
-                    'presenter' => $event->getEmailPresenter()
+                    'presenter' => $this->userEmailPresenter
                 ]), 'text/html'
             );
 
@@ -123,10 +157,14 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function onUserResetPassword(UserResetPasswordEventInterface $event): void
     {
-        $message = (new \Swift_Message)
+        $resetPasswordMessage = (new \Swift_Message)
             ->setSubject(
                 $this->translator
                      ->trans($event->getEmailPresenter()->getEmail()['subject'])
@@ -140,15 +178,19 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
                 ])
             );
 
-        $this->swiftMailer->send($message);
+        $this->swiftMailer->send($resetPasswordMessage);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function onUserValidated(UserValidatedEventInterface $event): void
     {
-        $validationMail =  (new \Swift_Message)
+        $validationMail = (new \Swift_Message)
             ->setSubject(
                 $this->translator
                      ->trans($event->getEmailPresenter()->getEmail()['subject'])

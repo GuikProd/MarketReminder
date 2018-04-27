@@ -24,4 +24,9 @@ interface UserEmailPresenterInterface
      * @return array
      */
     public function getEmail(): array;
+
+    /**
+     * @return array
+     */
+    public function getUser(): array;
 }

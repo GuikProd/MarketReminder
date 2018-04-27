@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter\User;
 
+use App\Domain\Models\Interfaces\UserInterface;
 use App\UI\Presenter\AbstractPresenter;
 use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,10 +38,12 @@ class UserEmailPresenter extends AbstractPresenter implements UserEmailPresenter
                 ],
                 'subject' => null,
                 'to' => null
-            ]
+            ],
+            'user' => null
         ]);
 
         $resolver->setAllowedTypes('email', 'array');
+        $resolver->setAllowedTypes('user', UserInterface::class);
     }
 
     /**
@@ -49,5 +52,13 @@ class UserEmailPresenter extends AbstractPresenter implements UserEmailPresenter
     public function getEmail(): array
     {
         return $this->getViewOptions()['email'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUser(): array
+    {
+        return $this->getViewOptions()['user'];
     }
 }

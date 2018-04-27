@@ -15,7 +15,6 @@ namespace App\Application\Event\User;
 
 use App\Application\Event\User\Interfaces\UserEventInterface;
 use App\Domain\Models\Interfaces\UserInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -31,19 +30,11 @@ abstract class AbstractUserEvent extends Event implements UserEventInterface
     private $user;
 
     /**
-     * @var UserEmailPresenterInterface
-     */
-    private $userEmailPresenter;
-
-    /**
      * {@inheritdoc}
      */
-    public function __construct(
-        UserInterface $user,
-        UserEmailPresenterInterface $presenter
-    ) {
+    public function __construct(UserInterface $user)
+    {
         $this->user = $user;
-        $this->userEmailPresenter = $presenter;
     }
 
     /**
@@ -52,13 +43,5 @@ abstract class AbstractUserEvent extends Event implements UserEventInterface
     public function getUser(): UserInterface
     {
         return $this->user;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailPresenter(): UserEmailPresenterInterface
-    {
-        return $this->userEmailPresenter;
     }
 }

@@ -24,15 +24,23 @@ use PHPUnit\Framework\TestCase;
  */
 class UserCreatedEventTest extends TestCase
 {
+    /**
+     * @var UserInterface
+     */
+    private $user;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->user = $this->createMock(UserInterface::class);
+    }
+
     public function testGetterReturn()
     {
-        $userMock = $this->createMock(UserInterface::class);
+        $event = new UserCreatedEvent($this->user);
 
-        $event = new UserCreatedEvent($userMock);
-
-        static::assertInstanceOf(
-            UserInterface::class,
-            $event->getUser()
-        );
+        static::assertInstanceOf(UserInterface::class, $event->getUser());
     }
 }

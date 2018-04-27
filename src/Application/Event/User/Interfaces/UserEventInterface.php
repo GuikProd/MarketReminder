@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Application\Event\User\Interfaces;
 
 use App\Domain\Models\Interfaces\UserInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 
 /**
  * Interface UserEventInterface.
@@ -26,21 +25,12 @@ interface UserEventInterface
     /**
      * UserCreatedEventInterface constructor.
      *
-     * @param UserInterface               $user
-     * @param UserEmailPresenterInterface $presenter
+     * @param UserInterface $user
      */
-    public function __construct(
-        UserInterface $user,
-        UserEmailPresenterInterface $presenter
-    );
+    public function __construct(UserInterface $user);
 
     /**
      * @return UserInterface
      */
     public function getUser(): UserInterface;
-
-    /**
-     * @return UserEmailPresenterInterface
-     */
-    public function getEmailPresenter(): UserEmailPresenterInterface;
 }
