@@ -94,21 +94,30 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      */
     public function onUserAskResetPasswordEvent(UserAskResetPasswordEventInterface $event): void
     {
-        $this->userEmailPresenter->prepareOption([
-
+        $this->userEmailPresenter->prepareOptions([
+            'email' => [
+                'content' => [
+                    'text' => 'user.ask_reset_password.content',
+                    'link' => [
+                        'text' => 'user.ask_reset_password.link.text'
+                    ]
+                ],
+                'header' => 'user.ask_reset_password.header',
+                'subject' => 'user.ask_reset_password.header'
+            ],
+            'user' => $event->getUser()
         ]);
 
         $askResetPasswordMail = (new \Swift_Message)
             ->setSubject(
                 $this->translator
-                     ->trans($event->getEmailPresenter()->getEmail()['subject'])
+                     ->trans($this->userEmailPresenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($event->getEmailPresenter()->getEmail()['to'])
+            ->setTo($this->userEmailPresenter->getUser()->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/user_ask_reset_password.html.twig', [
-                    'user' => $event->getUser(),
-                    'presenter' => $event->getEmailPresenter()
+                    'presenter' => $this->userEmailPresenter
                 ]), 'text/html'
             );
 
@@ -145,7 +154,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
                      ->trans($this->userEmailPresenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($this->userEmailPresenter->getUser())
+            ->setTo($this->userEmailPresenter->getUser()->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/registration_mail.html.twig', [
                     'presenter' => $this->userEmailPresenter
@@ -164,18 +173,31 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      */
     public function onUserResetPassword(UserResetPasswordEventInterface $event): void
     {
+        $this->userEmailPresenter->prepareOptions([
+            'email' => [
+                'content' => [
+                    'text' => 'user.reset_password.content',
+                    'link' => [
+                        'text' => 'security.login'
+                    ]
+                ],
+                'header' => 'user.reset_password.header',
+                'subject' => 'user.reset_password.header'
+            ],
+            'user' => $event->getUser()
+        ]);
+
         $resetPasswordMessage = (new \Swift_Message)
             ->setSubject(
                 $this->translator
-                     ->trans($event->getEmailPresenter()->getEmail()['subject'])
+                     ->trans($this->userEmailPresenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($event->getEmailPresenter()->getEmail()['to'])
+            ->setTo($this->userEmailPresenter->getUser()->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/user_reset_password.html.twig', [
-                    'user' => $event->getUser(),
-                    'presenter' => $event->getEmailPresenter()
-                ])
+                    'presenter' => $this->userEmailPresenter
+                ]), 'text/html'
             );
 
         $this->swiftMailer->send($resetPasswordMessage);

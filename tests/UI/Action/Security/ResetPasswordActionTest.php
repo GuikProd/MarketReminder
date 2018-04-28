@@ -16,6 +16,7 @@ namespace App\Tests\UI\Action\Security;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
 use App\UI\Action\Security\ResetPasswordAction;
+use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -47,6 +48,11 @@ class ResetPasswordActionTest extends TestCase
     private $request;
 
     /**
+     * @var ResetPasswordPresenterInterface
+     */
+    private $resetPasswordPresenter;
+
+    /**
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
@@ -64,6 +70,7 @@ class ResetPasswordActionTest extends TestCase
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->request = $this->createMock(Request::class);
+        $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
 
@@ -75,6 +82,7 @@ class ResetPasswordActionTest extends TestCase
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,
             $this->formFactory,
+            $this->resetPasswordPresenter,
             $this->userRepository
         );
 
@@ -91,6 +99,7 @@ class ResetPasswordActionTest extends TestCase
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,
             $this->formFactory,
+            $this->resetPasswordPresenter,
             $this->userRepository
         );
 
@@ -107,6 +116,7 @@ class ResetPasswordActionTest extends TestCase
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,
             $this->formFactory,
+            $this->resetPasswordPresenter,
             $this->userRepository
         );
 

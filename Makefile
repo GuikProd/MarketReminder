@@ -92,10 +92,10 @@ redis-cache:
 
 phpunit: ## Launch all PHPUnit tests
 phpunit: tests
-	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire
+	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
 
 phpunit-blackfire: ## Allow to launch Blackfire tests
-	    $(ENV_PHP) vendor/bin/phpunit --group Blackfire
+	    $(ENV_PHP) vendor/bin/phpunit --group Blackfire tests/$(FOLDER)
 
 behat: ## Launch all Behat tests
 behat: features
