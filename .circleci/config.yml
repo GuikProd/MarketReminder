@@ -135,6 +135,8 @@ jobs:
             - run: echo $GCP_SERVICE_CREDENTIALS > /tmp/gcp_key.json
             - run: gcloud config set project $GCP_PROJECT_NAME
             - run: gcloud auth activate-service-account --key-file /tmp/gcp_key.json
+            - run: rm -rf ./Dockerfile
+            - run: mv ./Dockerfile.production Dockerfile
             - run: gcloud container builds submit --tag gcr.io/$GCP_PROJECT_NAME/$GCP_MAIN_IMAGE_NAME ./Dockerfile.production
             - run: docker push gcr.io/$GCP_PROJECT_NAME/$GCP_MAIN_IMAGE_NAME:latest
     gcloud_kubernetes_check:
