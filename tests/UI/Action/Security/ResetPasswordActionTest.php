@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Security;
 
+use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
 use App\UI\Action\Security\ResetPasswordAction;
@@ -103,6 +104,8 @@ class ResetPasswordActionTest extends TestCase
             $this->userRepository
         );
 
+        $this->userRepository->method('getUserByResetPasswordToken')->willReturn(null);
+
         static::assertInstanceOf(
             RedirectResponse::class,
             $resetPasswordAction($this->request, $resetPasswordResponder)
@@ -118,6 +121,10 @@ class ResetPasswordActionTest extends TestCase
             $this->formFactory,
             $this->resetPasswordPresenter,
             $this->userRepository
+        );
+
+        $this->userRepository->method('getUserByResetPasswordToken')->willReturn(
+            $this->createMock(UserInterface::class)
         );
 
         static::assertInstanceOf(

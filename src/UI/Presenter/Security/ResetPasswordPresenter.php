@@ -39,7 +39,6 @@ class ResetPasswordPresenter extends AbstractPresenter implements ResetPasswordP
             ]
         ]);
 
-        $resolver->setAllowedTypes('email', 'array');
         $resolver->setAllowedTypes('notification', 'array');
         $resolver->setAllowedTypes('page', 'array');
     }

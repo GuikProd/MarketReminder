@@ -20,7 +20,6 @@ use App\Application\Helper\Security\TokenGeneratorHelper;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -43,11 +42,6 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
     private $session;
 
     /**
-     * @var UserEmailPresenterInterface
-     */
-    private $userEmailPresenter;
-
-    /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
@@ -58,12 +52,10 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         SessionInterface $session,
-        UserEmailPresenterInterface $presenter,
         UserRepositoryInterface $userRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->session = $session;
-        $this->userEmailPresenter = $presenter;
         $this->userRepository = $userRepository;
     }
 
@@ -90,25 +82,9 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
 
             $this->userRepository->flush();
 
-            $this->userEmailPresenter->prepareOptions([
-                'email' => [
-                    'content' => 'user.ask_reset_password.content',
-                    'link' => [
-                        'text' => 'user.ask_reset_password.link.text'
-                    ],
-                    'header' => 'user.ask_reset_password.header',
-                    'subject' => 'user.reset_password.header',
-                    'title' => 'user.ask_reset_password.header',
-                    'to' => $user->getEmail()
-                ],
-            ]);
-
             $this->eventDispatcher->dispatch(
                 UserAskResetPasswordEventInterface::NAME,
-                new UserAskResetPasswordEvent(
-                    $user,
-                    $this->userEmailPresenter
-                )
+                new UserAskResetPasswordEvent($user)
             );
 
             $this->eventDispatcher->dispatch(

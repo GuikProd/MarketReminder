@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\UI\Form\FormHandler\Interfaces;
 
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -31,13 +30,11 @@ interface AskResetPasswordTypeHandlerInterface
      *
      * @param EventDispatcherInterface    $eventDispatcher
      * @param SessionInterface            $session
-     * @param UserEmailPresenterInterface $presenter
      * @param UserRepositoryInterface     $userRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         SessionInterface $session,
-        UserEmailPresenterInterface $presenter,
         UserRepositoryInterface $userRepository
     );
 
