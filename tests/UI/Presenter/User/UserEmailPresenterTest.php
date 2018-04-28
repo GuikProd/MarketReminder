@@ -11,24 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\UI\Presenter\User\Interfaces;
+namespace tests\UI\Presenter\User;
 
-use App\Domain\Models\Interfaces\UserInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Interface UserEmailPresenterInterface.
- * 
+ * Class UserEmailPresenterTest.
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface UserEmailPresenterInterface
+class UserEmailPresenterTest extends TestCase
 {
-    /**
-     * @return array
-     */
-    public function getEmail(): array;
 
-    /**
-     * @return array
-     */
-    public function getUser(): ?UserInterface;
 }

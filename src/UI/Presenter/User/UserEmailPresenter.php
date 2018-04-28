@@ -57,7 +57,7 @@ class UserEmailPresenter extends AbstractPresenter implements UserEmailPresenter
     /**
      * {@inheritdoc}
      */
-    public function getUser(): array
+    public function getUser(): ?UserInterface
     {
         return $this->getViewOptions()['user'];
     }
