@@ -7,6 +7,6 @@ Feature: As a registered user, I should be able to reset my password with a rese
       | Titi         | Ie1FDLTITI    | titi@gmail.com  | ToFEGARRdjLs2   | RPFDNANRnudr4      | 0          | 0      | active       |
 
   Scenario: I want to reset my password using a wrong token
-    Given I am on "/fr/reset-password/RPFDNANRnudr2"
-    Then I should be on "/fr/"
-    And I should see "MarketReminder - Accueil"
+    Given I am on "/en/reset-password/RPFDNANRnudr2"
+    Then I should be on "/en/"
+    And I should see "MarketReminder - Reset password"

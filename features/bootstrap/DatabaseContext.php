@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use App\Domain\Models\User;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
+use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -99,6 +100,14 @@ class DatabaseContext implements Context
 
             if ($hash['validated']) {
                 $user->validate();
+            }
+
+            if ($hash['resetPasswordToken']) {
+                $userResetPasswordToken = new UserResetPasswordToken(
+                    $hash['resetPasswordToken']
+                );
+
+                $user->askForPasswordReset($userResetPasswordToken);
             }
 
             $this->doctrine->getManager()->persist($user);
