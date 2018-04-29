@@ -24,6 +24,7 @@ use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -85,12 +86,14 @@ class ResetPasswordActionTest extends TestCase
     {
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
-        $this->request = $this->createMock(Request::class);
         $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
         $this->resetPasswordTypeHandler = $this->createMock(ResetPasswordTypeHandlerInterface::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
+
+        $this->request = $this->getMockBuilder(Request::class)
+                              ->enableOriginalConstructor();
 
         $this->request->method('get')->willReturn('');
         $this->urlGenerator->method('generate')->willReturn('/fr/');
