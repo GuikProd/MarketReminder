@@ -66,7 +66,7 @@ class ResetPasswordResponder implements ResetPasswordResponderInterface
     public function __invoke(
         $redirect = false,
         FormInterface $form = null
-    ): RedirectResponse {
+    ): Response {
 
         $this->resetPasswordPresenter->prepareOptions([
             'form' => $form,
