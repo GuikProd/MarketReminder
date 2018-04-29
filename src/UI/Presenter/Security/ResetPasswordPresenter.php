@@ -15,6 +15,8 @@ namespace App\UI\Presenter\Security;
 
 use App\UI\Presenter\AbstractPresenter;
 use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -30,17 +32,30 @@ class ResetPasswordPresenter extends AbstractPresenter implements ResetPasswordP
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'form' => null,
             'notification' => [
                 'content' => null,
                 'title' => null
             ],
             'page' => [
-                'title' => null
+                'title' => null,
+                'button' => [
+                    'content' => null
+                ]
             ]
         ]);
 
+        $resolver->setAllowedTypes('form', FormInterface::class);
         $resolver->setAllowedTypes('notification', 'array');
         $resolver->setAllowedTypes('page', 'array');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForm(): ?FormView
+    {
+        return $this->getViewOptions()['form']->createView();
     }
 
     /**

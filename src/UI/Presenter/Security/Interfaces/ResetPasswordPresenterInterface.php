@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter\Security\Interfaces;
 
+use Symfony\Component\Form\FormView;
+
 /**
  * Interface ResetPasswordPresenterInterface.
  *
@@ -20,6 +22,11 @@ namespace App\UI\Presenter\Security\Interfaces;
  */
 interface ResetPasswordPresenterInterface
 {
+    /**
+     * @return null|FormView
+     */
+    public function getForm(): ?FormView;
+
     /**
      * @return array
      */

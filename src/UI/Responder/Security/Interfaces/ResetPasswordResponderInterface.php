@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security\Interfaces;
 
+use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 /**
  * Interface ResetPasswordResponderInterface.
@@ -26,12 +29,24 @@ interface ResetPasswordResponderInterface
     /**
      * ResetPasswordResponderInterface constructor.
      *
-     * @param UrlGeneratorInterface  $urlGenerator
+     * @param Environment                     $twig
+     * @param ResetPasswordPresenterInterface $presenter
+     * @param UrlGeneratorInterface           $urlGenerator
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator);
+    public function __construct(
+        Environment $twig,
+        ResetPasswordPresenterInterface $presenter,
+        UrlGeneratorInterface $urlGenerator
+    );
 
     /**
+     * @param bool          $redirect
+     * @param FormInterface $form
+     *
      * @return RedirectResponse
      */
-    public function __invoke(): RedirectResponse;
+    public function __invoke(
+        $redirect = false,
+        FormInterface $form = null
+    ): RedirectResponse;
 }

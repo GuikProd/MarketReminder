@@ -16,6 +16,8 @@ namespace App\UI\Action\Security;
 use App\Application\Event\SessionMessageEvent;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
+use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
+use App\UI\Form\Type\ResetPasswordType;
 use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -55,6 +57,11 @@ class ResetPasswordAction implements ResetPasswordActionInterface
     private $resetPasswordPresenter;
 
     /**
+     * @var ResetPasswordTypeHandlerInterface
+     */
+    private $resetPasswordTypeHandler;
+
+    /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
@@ -66,11 +73,13 @@ class ResetPasswordAction implements ResetPasswordActionInterface
         EventDispatcherInterface $eventDispatcher,
         FormFactoryInterface $formFactory,
         ResetPasswordPresenterInterface $resetPasswordPresenter,
+        ResetPasswordTypeHandlerInterface $resetPasswordTypeHandler,
         UserRepositoryInterface $userRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->formFactory = $formFactory;
         $this->resetPasswordPresenter = $resetPasswordPresenter;
+        $this->resetPasswordTypeHandler = $resetPasswordTypeHandler;
         $this->userRepository = $userRepository;
     }
 
@@ -94,16 +103,21 @@ class ResetPasswordAction implements ResetPasswordActionInterface
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
                 new SessionMessageEvent(
-                    $this->resetPasswordPresenter->getNotificationMessage()['title'],
+                    $this->resetPasswordPresenter->getNotificationMessage()['type'],
                     $this->resetPasswordPresenter->getNotificationMessage()['content']
                 )
             );
 
-            return $responder();
+            return $responder(true);
         }
 
+        $form = $this->formFactory->create(ResetPasswordType::class)
+                                  ->handleRequest($request);
 
+        if ($this->resetPasswordTypeHandler->handle($form, $user)) {
+            return $responder(true);
+        }
 
-        return $responder();
+        return $responder(false, $form);
     }
 }

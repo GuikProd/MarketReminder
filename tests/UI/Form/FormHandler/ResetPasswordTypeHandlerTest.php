@@ -124,6 +124,8 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
             $this->userRepository
         );
 
-        $resetPasswordTypeHandler->handle($this->formInterface, $this->user);
+        static::assertFalse(
+            $resetPasswordTypeHandler->handle($this->formInterface, $this->user)
+        );
     }
 }

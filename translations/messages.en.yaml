@@ -7,6 +7,7 @@ password.raw: Password
 image.text: 'Profile Image'
 account.creation: 'Create an account'
 account.already_exist: 'Account already created?'
+reset_password.button.text: reset
 security.acount_creation: 'Your profile has been created! Please check your mailbox to validate it.'
 security.validation_success: 'Validated account, you can start your management!'
 security.validation_failure.notFound_token: 'This token does not exist or has already been validated, please resubmit!'

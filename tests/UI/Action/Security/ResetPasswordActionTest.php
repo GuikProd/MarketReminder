@@ -17,6 +17,7 @@ use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
 use App\UI\Action\Security\ResetPasswordAction;
+use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -57,6 +58,11 @@ class ResetPasswordActionTest extends TestCase
     private $resetPasswordPresenter;
 
     /**
+     * @var ResetPasswordTypeHandlerInterface
+     */
+    private $resetPasswordTypeHandler;
+
+    /**
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
@@ -75,6 +81,7 @@ class ResetPasswordActionTest extends TestCase
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->request = $this->createMock(Request::class);
         $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
+        $this->resetPasswordTypeHandler = $this->createMock(ResetPasswordTypeHandlerInterface::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
 
@@ -88,6 +95,7 @@ class ResetPasswordActionTest extends TestCase
             $this->eventDispatcher,
             $this->formFactory,
             $this->resetPasswordPresenter,
+            $this->resetPasswordTypeHandler,
             $this->userRepository
         );
 
@@ -112,6 +120,7 @@ class ResetPasswordActionTest extends TestCase
             $this->eventDispatcher,
             $this->formFactory,
             $this->resetPasswordPresenter,
+            $this->resetPasswordTypeHandler,
             $this->userRepository
         );
 
@@ -130,6 +139,7 @@ class ResetPasswordActionTest extends TestCase
             $this->eventDispatcher,
             $this->formFactory,
             $this->resetPasswordPresenter,
+            $this->resetPasswordTypeHandler,
             $this->userRepository
         );
 
@@ -149,6 +159,7 @@ class ResetPasswordActionTest extends TestCase
             $this->eventDispatcher,
             $this->formFactory,
             $this->resetPasswordPresenter,
+            $this->resetPasswordTypeHandler,
             $this->userRepository
         );
 

@@ -10,6 +10,7 @@ password.raw: Mot de passe
 image.text: Image de profil
 account.creation: Créer un compte
 account.already_exist: Compte déjà créé ?
+reset_password.button.text: Réinitialiser
 
 # Security | Account validation
 security.acount_creation: Votre profil a été créé ! Veuillez vérifier votre boîte mail afin de valider ce dernier.

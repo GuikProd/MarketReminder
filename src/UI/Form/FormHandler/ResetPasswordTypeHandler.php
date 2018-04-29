@@ -21,7 +21,6 @@ use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -33,11 +32,6 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
  */
 class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
 {
-    /**
-     * @var UserEmailPresenterInterface
-     */
-    private $userEmailPresenter;
-
     /**
      * @var EventDispatcherInterface
      */
@@ -99,20 +93,9 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
                 )
             );
 
-            $this->userEmailPresenter->prepareOptions([
-                'email' => [
-                    'content' => 'user.reset_password.content',
-                    'subject' => 'user.reset_password.header',
-                    'to' => $user->getEmail()
-                ],
-            ]);
-
             $this->eventDispatcher->dispatch(
                 UserResetPasswordEventInterface::NAME,
-                new UserResetPasswordEvent(
-                    $user,
-                    $this->userEmailPresenter
-                )
+                new UserResetPasswordEvent($user)
             );
 
             return true;

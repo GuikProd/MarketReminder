@@ -13,12 +13,16 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Security;
 
+use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 /**
  * Class ResetPasswordResponderTest.
@@ -30,6 +34,21 @@ class ResetPasswordResponderTest extends TestCase
     use TestCaseTrait;
 
     /**
+     * @var FormInterface
+     */
+    private $form;
+
+    /**
+     * @var ResetPasswordPresenterInterface
+     */
+    private $resetPasswordPresenter;
+
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
@@ -37,15 +56,22 @@ class ResetPasswordResponderTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
+        $this->form = $this->createMock(FormInterface::class);
+        $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
+        $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->urlGenerator->method('generate')->willReturn('/fr/');
     }
 
     public function testItImplements()
     {
-        $resetPasswordResponder = new ResetPasswordResponder($this->urlGenerator);
+        $resetPasswordResponder = new ResetPasswordResponder(
+            $this->twig,
+            $this->resetPasswordPresenter,
+            $this->urlGenerator
+        );
 
         static::assertInstanceOf(
             ResetPasswordResponderInterface::class,
@@ -54,31 +80,88 @@ class ResetPasswordResponderTest extends TestCase
     }
 
     /**
+     * @doesNotPerformAssertions
+     *
      * @group Blackfire
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-    public function testBlackfireProfilingAndRedirectResponseReturn()
+    public function testBlackfireProfilingAndRedirectResponseIsReturned()
     {
-        $resetPasswordResponder = new ResetPasswordResponder($this->urlGenerator);
+        $resetPasswordResponder = new ResetPasswordResponder(
+            $this->twig,
+            $this->resetPasswordPresenter,
+            $this->urlGenerator
+        );
 
         $probe = static::$blackfire->createProbe();
 
-        $resetPasswordResponder();
+        $resetPasswordResponder(true);
 
         static::$blackfire->endProbe($probe);
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     *
+     * @group Blackfire
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function testBlackfireProfilingAndResponseIsReturned()
+    {
+        $resetPasswordResponder = new ResetPasswordResponder(
+            $this->twig,
+            $this->resetPasswordPresenter,
+            $this->urlGenerator
+        );
+
+        $probe = static::$blackfire->createProbe();
+
+        $resetPasswordResponder(false, $this->form);
+
+        static::$blackfire->endProbe($probe);
+    }
+
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function testItReturnARedirectResponse()
+    {
+        $resetPasswordResponder = new ResetPasswordResponder(
+            $this->twig,
+            $this->resetPasswordPresenter,
+            $this->urlGenerator
+        );
 
         static::assertInstanceOf(
             RedirectResponse::class,
-            $resetPasswordResponder()
+            $resetPasswordResponder(false)
         );
     }
 
-    public function testItReturnARedirectResponse()
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function testItReturnAResponse()
     {
-        $resetPasswordResponder = new ResetPasswordResponder($this->urlGenerator);
+        $resetPasswordResponder = new ResetPasswordResponder(
+            $this->twig,
+            $this->resetPasswordPresenter,
+            $this->urlGenerator
+        );
 
         static::assertInstanceOf(
-            RedirectResponse::class,
-            $resetPasswordResponder()
+            Response::class,
+            $resetPasswordResponder(true, $this->form)
         );
     }
 }

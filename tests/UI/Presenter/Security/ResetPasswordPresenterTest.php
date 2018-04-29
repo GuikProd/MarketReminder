@@ -18,6 +18,8 @@ use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
 use App\UI\Presenter\Security\ResetPasswordPresenter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 /**
  * Class ResetPasswordPresenterTest.
@@ -27,6 +29,19 @@ use PHPUnit\Framework\TestCase;
 class ResetPasswordPresenterTest extends TestCase
 {
     use TestCaseTrait;
+
+    /**
+     * @var FormInterface
+     */
+    private $formInterface;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->formInterface = $this->createMock(FormInterface::class);
+    }
 
     public function testItImplements()
     {
@@ -48,11 +63,15 @@ class ResetPasswordPresenterTest extends TestCase
         $probe = static::$blackfire->createProbe();
 
         $resetPasswordPresenter->prepareOptions([
+            'form' => $this->formInterface,
             'notification' => [
                 'content' => 'user.notification.reset_password_success'
             ],
             'page' => [
-                'title' => 'reset_password.title'
+                'title' => 'reset_password.title',
+                'button' => [
+                    'content' => ''
+                ]
             ]
         ]);
 
@@ -64,15 +83,21 @@ class ResetPasswordPresenterTest extends TestCase
         $resetPasswordPresenter = new ResetPasswordPresenter();
 
         $resetPasswordPresenter->prepareOptions([
+            'form' => $this->formInterface,
             'notification' => [
                 'content' => 'user.notification.reset_password_success'
             ],
             'page' => [
-                'title' => 'reset_password.title'
+                'title' => 'reset_password.title',
+                'button' => [
+                    'content' => ''
+                ]
             ]
         ]);
 
+        static::assertInstanceOf(FormView::class, $resetPasswordPresenter->getForm());
         static::assertArrayHasKey('content', $resetPasswordPresenter->getNotificationMessage());
         static::assertArrayHasKey('title', $resetPasswordPresenter->getPage());
+        static::assertArrayHasKey('button', $resetPasswordPresenter->getPage());
     }
 }
