@@ -15,6 +15,8 @@ namespace App\Tests\UI\Action\Core;
 
 use App\UI\Action\Core\HomeAction;
 use App\UI\Action\Core\Interfaces\HomeActionInterface;
+use App\UI\Presenter\Core\HomePresenter;
+use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
 use App\UI\Responder\Core\HomeResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +30,27 @@ use Twig\Environment;
  */
 class HomeActionTest extends TestCase
 {
+    /**
+     * @var HomePresenterInterface
+     */
+    private $homePresenter;
+
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->homePresenter = new HomePresenter();
+        $this->twig = $this->createMock(Environment::class);
+
+        $this->twig->method('getCharset')->willReturn('utf-8');
+    }
+
     public function testItImplements()
     {
         $homeAction = new HomeAction();
@@ -41,12 +64,11 @@ class HomeActionTest extends TestCase
     public function testReturn()
     {
         $requestMock = $this->createMock(Request::class);
-        $twigMock = $this->createMock(Environment::class);
 
-        $twigMock->method('getCharset')
-                 ->willReturn('UTF-8');
-
-        $homeResponder = new HomeResponder($twigMock);
+        $homeResponder = new HomeResponder(
+            $this->twig,
+            $this->homePresenter
+        );
 
         $homeAction = new HomeAction();
 

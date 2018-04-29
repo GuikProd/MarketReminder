@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Core;
 
+use App\UI\Presenter\Core\HomePresenter;
 use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
@@ -43,7 +44,7 @@ class HomeResponderTest extends TestCase
      */
     protected function setUp()
     {
-        $this->homePresenter = $this->createMock(HomePresenterInterface::class);
+        $this->homePresenter = new HomePresenter();
         $this->twig = $this->createMock(Environment::class);
 
         $this->twig->method('getCharset')->willReturn('utf-8');
