@@ -10,3 +10,7 @@ Feature: As a registered user, I should be able to reset my password with a rese
     Given I am on "/fr/reset-password/RPFDNANRnudr2"
     Then I should be on "/fr/"
     And I should see "MarketReminder - Accueil"
+
+  Scenario: I want to reset my password using a good token
+    Given I am on "/fr/reset-password/EdFEDNRanuLs5"
+    Then I should be on "/fr/reset-password"
