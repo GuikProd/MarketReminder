@@ -17,10 +17,12 @@ use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Form\FormHandler\ResetPasswordTypeHandler;
+use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
  * Class ResetPasswordTypeHandlerTest.
@@ -32,6 +34,11 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
     use TestCaseTrait;
 
     /**
+     * @var EncoderFactoryInterface
+     */
+    private $encoderFactory;
+
+    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -40,6 +47,11 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
      * @var FormInterface
      */
     private $formInterface;
+
+    /**
+     * @var ResetPasswordPresenterInterface
+     */
+    private $resetPasswordPresenter;
 
     /**
      * @var UserInterface
@@ -56,8 +68,10 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
      */
     protected function setUp()
     {
+        $this->encoderFactory = $this->createMock(EncoderFactoryInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->formInterface = $this->createMock(FormInterface::class);
+        $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
         $this->user = $this->createMock(UserInterface::class);
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
     }
@@ -66,6 +80,8 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
     {
         $resetPasswordTypeHandler = new ResetPasswordTypeHandler(
             $this->eventDispatcher,
+            $this->encoderFactory,
+            $this->resetPasswordPresenter,
             $this->userRepository
         );
 
@@ -84,6 +100,8 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
     {
         $resetPasswordTypeHandler = new ResetPasswordTypeHandler(
             $this->eventDispatcher,
+            $this->encoderFactory,
+            $this->resetPasswordPresenter,
             $this->userRepository
         );
 
@@ -101,11 +119,11 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
 
         $resetPasswordTypeHandler = new ResetPasswordTypeHandler(
             $this->eventDispatcher,
+            $this->encoderFactory,
+            $this->resetPasswordPresenter,
             $this->userRepository
         );
 
         $resetPasswordTypeHandler->handle($this->formInterface, $this->user);
-
-
     }
 }
