@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\UI\Responder\Security;
 
 use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use App\UI\Presenter\Security\ResetPasswordPresenter;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -59,9 +60,10 @@ class ResetPasswordResponderTest extends TestCase
     protected function setUp()
     {
         $this->form = $this->createMock(FormInterface::class);
-        $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
+        $this->resetPasswordPresenter = new ResetPasswordPresenter();
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+
         $this->urlGenerator->method('generate')->willReturn('/fr/');
     }
 

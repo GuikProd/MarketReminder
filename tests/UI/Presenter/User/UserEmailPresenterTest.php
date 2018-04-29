@@ -24,6 +24,19 @@ use PHPUnit\Framework\TestCase;
  */
 class UserEmailPresenterTest extends TestCase
 {
+    /**
+     * @var UserInterface
+     */
+    private $user;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->user = $this->createMock(UserInterface::class);
+    }
+
     public function testOptionsAreDefined()
     {
         $userEmailPresenter = new UserEmailPresenter();
@@ -33,10 +46,11 @@ class UserEmailPresenterTest extends TestCase
                 'link' => '',
                 'subject' => '',
                 'to' => ''
-            ]
+            ],
+            'user' => $this->user
         ]);
 
-        static::assertNull($userEmailPresenter->getUser());
+        static::assertInstanceOf(UserInterface::class, $userEmailPresenter->getUser());
         static::assertArrayHasKey('content', $userEmailPresenter->getEmail());
         static::assertArrayHasKey('subject', $userEmailPresenter->getEmail());
         static::assertArrayHasKey('to', $userEmailPresenter->getEmail());
@@ -47,7 +61,7 @@ class UserEmailPresenterTest extends TestCase
     {
         $userEmailPresenter = new UserEmailPresenter();
         $userEmailPresenter->prepareOptions([
-            'user' => $this->createMock(UserInterface::class)
+            'user' => $this->user
         ]);
 
         static::assertInstanceOf(
