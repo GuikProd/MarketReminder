@@ -1,0 +1,8 @@
+{% block form_row %}
+    <div class="mdc-text-field">
+        {{ form_label(form, '', {'label_attr': {'class': 'mdc-floating-label'}}) }}
+        {{ form_widget(form, {'attr': {'class': 'mdc-text-field__input'}}) }}
+        {{ form_errors(form, {'attr': {'class': 'mdl-textfield__error'}}) }}
+        <div class="mdc-line-ripple"></div>
+    </div>
+{% endblock %}

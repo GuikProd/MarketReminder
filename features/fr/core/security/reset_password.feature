@@ -14,4 +14,8 @@ Feature: As a registered user, I should be able to reset my password with a rese
   Scenario: I want to reset my password using a good token
     Given I am on "/fr/reset-password/EdFEDNRanuLs5"
     Then I should be on "/fr/reset-password/EdFEDNRanuLs5"
-
+    And I fill in "reset_password_password_first" with "Ie1FDLHW"
+    And I fill in "reset_password_password_second" with "Ie1FDLHW"
+    Then I press "Réinitialiser"
+    And I should be on "/fr/"
+    Then I should see ""
