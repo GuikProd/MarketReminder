@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Core;
 
+use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use PHPUnit\Framework\TestCase;
@@ -27,13 +28,33 @@ use Twig\Environment;
  */
 class HomeResponderTest extends TestCase
 {
+    /**
+     * @var HomePresenterInterface
+     */
+    private $homePresenter;
+
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->homePresenter = $this->createMock(HomePresenterInterface::class);
+        $this->twig = $this->createMock(Environment::class);
+
+        $this->twig->method('getCharset')->willReturn('utf-8');
+    }
+
     public function testItImplements()
     {
-        $twigMock = $this->createMock(Environment::class);
-        $twigMock->method('getCharset')
-            ->willReturn('UTF-8');
-
-        $homeResponder = new HomeResponder($twigMock);
+        $homeResponder = new HomeResponder(
+            $this->twig,
+            $this->homePresenter
+        );
 
         static::assertInstanceOf(
             HomeResponderInterface::class,
@@ -41,14 +62,19 @@ class HomeResponderTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function testResponseIsReturned()
     {
         $requestMock = $this->createMock(Request::class);
-        $twigMock = $this->createMock(Environment::class);
-        $twigMock->method('getCharset')
-                 ->willReturn('UTF-8');
 
-        $homeResponder = new HomeResponder($twigMock);
+        $homeResponder = new HomeResponder(
+            $this->twig,
+            $this->homePresenter
+        );
 
         static::assertInstanceOf(
             Response::class,
