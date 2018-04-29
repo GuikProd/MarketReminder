@@ -9,7 +9,7 @@ Feature: As a registered user, I should be able to reset my password with a rese
   Scenario: I want to reset my password using a wrong token
     Given I am on "/fr/reset-password/RPFDNANRnudr2"
     Then I should be on "/fr/"
-    And I should see "MarketReminder - Accueil"
+    And I should see "MarketReminder - Inventory Management"
 
   Scenario: I want to reset my password using a good token
     Given I am on "/fr/reset-password/EdFEDNRanuLs5"

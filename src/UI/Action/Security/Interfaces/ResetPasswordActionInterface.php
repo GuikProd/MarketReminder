@@ -21,6 +21,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Interface ResetPasswordActionInterface.
@@ -50,10 +51,10 @@ interface ResetPasswordActionInterface
      * @param Request                          $request
      * @param ResetPasswordResponderInterface  $responder
      *
-     * @return RedirectResponse
+     * @return Response
      */
     public function __invoke(
         Request $request,
         ResetPasswordResponderInterface $responder
-    ): RedirectResponse;
+    ): Response;
 }

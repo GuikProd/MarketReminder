@@ -24,6 +24,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -89,7 +90,7 @@ class ResetPasswordAction implements ResetPasswordActionInterface
     public function __invoke(
         Request $request,
         ResetPasswordResponderInterface $responder
-    ): RedirectResponse {
+    ): Response {
 
         if (!$user = $this->userRepository->getUserByResetPasswordToken($request->attributes->get('token'))) {
 

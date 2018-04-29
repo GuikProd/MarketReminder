@@ -1,4 +1,5 @@
 home.text: Home
+home.title: 'Inventory management'
 account.welcome: 'Welcome to MarketReminder'
 account.greeting: 'Glad to see you on board!'
 reset_password.title: 'Reset password'

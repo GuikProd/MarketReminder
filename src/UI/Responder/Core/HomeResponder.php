@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Core;
 
+use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +27,11 @@ use Twig\Environment;
 class HomeResponder implements HomeResponderInterface
 {
     /**
+     * @var HomePresenterInterface
+     */
+    private $homePresenter;
+
+    /**
      * @var Environment
      */
     private $twig;
@@ -33,9 +39,12 @@ class HomeResponder implements HomeResponderInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(Environment $twig)
-    {
+    public function __construct(
+        Environment $twig,
+        HomePresenterInterface $presenter
+    ) {
         $this->twig = $twig;
+        $this->homePresenter = $presenter;
     }
 
     /**
@@ -43,8 +52,16 @@ class HomeResponder implements HomeResponderInterface
      */
     public function __invoke(Request $request): Response
     {
+        $this->homePresenter->prepareOptions([
+            'page' => [
+                'title' => 'home.title'
+            ]
+        ]);
+
         return new Response(
-            $this->twig->render('core/index.html.twig')
+            $this->twig->render('core/index.html.twig', [
+                'presenter' => $this->homePresenter
+            ])
         );
     }
 }

@@ -9,4 +9,4 @@ Feature: As a registered user, I should be able to reset my password with a rese
   Scenario: I want to reset my password using a wrong token
     Given I am on "/en/reset-password/RPFDNANRnudr2"
     Then I should be on "/en/"
-    And I should see "MarketReminder - Reset password"
+    And I should see "MarketReminder - Inventory Management"

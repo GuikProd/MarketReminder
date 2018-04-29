@@ -25,10 +25,13 @@ use Symfony\Component\HttpFoundation\Response;
 interface HomeActionInterface
 {
     /**
-     * @param Request $request
+     * @param Request                $request
      * @param HomeResponderInterface $responder
      *
      * @return Response
      */
-    public function __invoke(Request $request, HomeResponderInterface $responder): Response;
+    public function __invoke(
+        Request $request,
+        HomeResponderInterface $responder
+    ): Response;
 }

@@ -36,8 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeAction implements HomeActionInterface
 {
     /**
-     * @param HomeResponderInterface $responder
-     *
      * {@inheritdoc}
      */
     public function __invoke(
