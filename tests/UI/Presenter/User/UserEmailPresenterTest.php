@@ -27,6 +27,14 @@ class UserEmailPresenterTest extends TestCase
     public function testOptionsAreDefined()
     {
         $userEmailPresenter = new UserEmailPresenter();
+        $userEmailPresenter->prepareOptions([
+            'email' => [
+                'content' => '',
+                'link' => '',
+                'subject' => '',
+                'to' => ''
+            ]
+        ]);
 
         static::assertNull($userEmailPresenter->getUser());
         static::assertArrayHasKey('content', $userEmailPresenter->getEmail());
