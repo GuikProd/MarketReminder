@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Presenter\User;
 
+use App\Domain\Models\Interfaces\UserInterface;
+use App\UI\Presenter\User\UserEmailPresenter;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,5 +24,27 @@ use PHPUnit\Framework\TestCase;
  */
 class UserEmailPresenterTest extends TestCase
 {
+    public function testOptionsAreDefined()
+    {
+        $userEmailPresenter = new UserEmailPresenter();
 
+        static::assertNull($userEmailPresenter->getUser());
+        static::assertArrayHasKey('content', $userEmailPresenter->getEmail());
+        static::assertArrayHasKey('subject', $userEmailPresenter->getEmail());
+        static::assertArrayHasKey('to', $userEmailPresenter->getEmail());
+        static::assertArrayHasKey('link', $userEmailPresenter->getEmail());
+    }
+
+    public function testUserIsReturned()
+    {
+        $userEmailPresenter = new UserEmailPresenter();
+        $userEmailPresenter->prepareOptions([
+            'user' => $this->createMock(UserInterface::class)
+        ]);
+
+        static::assertInstanceOf(
+            UserInterface::class,
+            $userEmailPresenter->getUser()
+        );
+    }
 }

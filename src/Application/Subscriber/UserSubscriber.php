@@ -212,17 +212,27 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      */
     public function onUserValidated(UserValidatedEventInterface $event): void
     {
+        $this->userEmailPresenter->prepareOptions([
+            'email' => [
+                'content' => [
+
+                ],
+                'header' => '',
+                'subject' => ''
+            ],
+            'user' => $event->getUser()
+        ]);
+
         $validationMail = (new \Swift_Message)
             ->setSubject(
                 $this->translator
-                     ->trans($event->getEmailPresenter()->getEmail()['subject'])
+                     ->trans($this->userEmailPresenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($event->getUser()->getEmail())
+            ->setTo($this->userEmailPresenter->getUser()->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/validation_mail.html.twig', [
-                    'user' => $event->getUser(),
-                    'presenter' => $event->getEmailPresenter()
+                    'presenter' => $this->userEmailPresenter
                 ]), 'text/html'
             );
 
