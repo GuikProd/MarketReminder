@@ -41,6 +41,9 @@ class ResetPasswordPresenterTest extends TestCase
     protected function setUp()
     {
         $this->formInterface = $this->createMock(FormInterface::class);
+
+        $this->formInterface->method('createView')
+                            ->willReturn($this->createMock(FormView::class));
     }
 
     public function testItImplements()

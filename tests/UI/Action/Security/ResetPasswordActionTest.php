@@ -27,6 +27,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 /**
  * Class ResetPasswordActionTest.
@@ -63,6 +64,11 @@ class ResetPasswordActionTest extends TestCase
     private $resetPasswordTypeHandler;
 
     /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
@@ -82,6 +88,7 @@ class ResetPasswordActionTest extends TestCase
         $this->request = $this->createMock(Request::class);
         $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
         $this->resetPasswordTypeHandler = $this->createMock(ResetPasswordTypeHandlerInterface::class);
+        $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
 
@@ -114,7 +121,11 @@ class ResetPasswordActionTest extends TestCase
     {
         $this->userRepository->method('getUserByResetPasswordToken')->willReturn(null);
 
-        $resetPasswordResponder = new ResetPasswordResponder($this->urlGenerator);
+        $resetPasswordResponder = new ResetPasswordResponder(
+            $this->twig,
+            $this->resetPasswordPresenter,
+            $this->urlGenerator
+        );
 
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,
@@ -133,7 +144,11 @@ class ResetPasswordActionTest extends TestCase
 
     public function testItReturnDuringWrongProcess()
     {
-        $resetPasswordResponder = new ResetPasswordResponder($this->urlGenerator);
+        $resetPasswordResponder = new ResetPasswordResponder(
+            $this->twig,
+            $this->resetPasswordPresenter,
+            $this->urlGenerator
+        );
 
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,
@@ -153,7 +168,11 @@ class ResetPasswordActionTest extends TestCase
 
     public function testItReturnDuringRightProcess()
     {
-        $resetPasswordResponder = new ResetPasswordResponder($this->urlGenerator);
+        $resetPasswordResponder = new ResetPasswordResponder(
+            $this->twig,
+            $this->resetPasswordPresenter,
+            $this->urlGenerator
+        );
 
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,

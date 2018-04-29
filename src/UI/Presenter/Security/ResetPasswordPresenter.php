@@ -55,7 +55,7 @@ class ResetPasswordPresenter extends AbstractPresenter implements ResetPasswordP
      */
     public function getForm(): ?FormView
     {
-        return $this->getViewOptions()['form']->createView();
+        return $this->getViewOptions()['form']->createView() ?? null;
     }
 
     /**
