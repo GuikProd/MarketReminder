@@ -25,7 +25,7 @@ use Ramsey\Uuid\UuidInterface;
 class Image implements ImageInterface
 {
     /**
-     * @var string
+     * @var UuidInterface
      */
     private $id;
 
@@ -82,7 +82,7 @@ class Image implements ImageInterface
      */
     public function getCreationDate(): \DateTime
     {
-        return \DateTime::createFromFormat('U', $this->creationDate);
+        return \DateTime::createFromFormat('U', (string) $this->creationDate);
     }
 
     /**
@@ -90,7 +90,7 @@ class Image implements ImageInterface
      */
     public function getModificationDate():? \DateTime
     {
-        return \DateTime::createFromFormat('U', $this->modificationDate);
+        return \DateTime::createFromFormat('U', (string) $this->modificationDate) ?: null;
     }
 
     /**

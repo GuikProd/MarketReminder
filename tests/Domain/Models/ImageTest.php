@@ -16,6 +16,7 @@ namespace tests\Domain\Models;
 use App\Domain\Models\Image;
 use App\Domain\Models\Interfaces\ImageInterface;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class ImageTest.
@@ -24,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ImageTest extends TestCase
 {
-    public function testItImplementsAndReturnData()
+    public function testItImplements()
     {
         $image = new Image(
             'toto',
@@ -33,6 +34,19 @@ class ImageTest extends TestCase
         );
 
         static::assertInstanceOf(ImageInterface::class, $image);
+    }
+
+    public function testItReturnData()
+    {
+        $image = new Image(
+            'toto',
+            'toto.png',
+            'http://tests.com/profileImage/toto.png'
+        );
+
+        static::assertInstanceOf(UuidInterface::class, $image->getId());
+        static::assertNotNull($image->getCreationDate());
+        static::assertNull($image->getModificationDate());
         static::assertSame('toto', $image->getAlt());
         static::assertSame('toto.png', $image->getFilename());
         static::assertSame('http://tests.com/profileImage/toto.png', $image->getPublicUrl());

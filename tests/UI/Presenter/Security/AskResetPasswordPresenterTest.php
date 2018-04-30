@@ -97,5 +97,6 @@ class AskResetPasswordPresenterTest extends TestCase
         static::assertArrayHasKey('form', $askResetPasswordPresenter->getViewOptions());
         static::assertArrayHasKey('header', $askResetPasswordPresenter->getCard());
         static::assertArrayHasKey('title', $askResetPasswordPresenter->getPage());
+        static::assertInstanceOf(FormView::class, $askResetPasswordPresenter->getForm());
     }
 }
