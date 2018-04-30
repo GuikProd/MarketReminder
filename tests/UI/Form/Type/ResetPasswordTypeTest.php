@@ -74,7 +74,9 @@ class ResetPasswordTypeTest extends TypeTestCase
             ]
         ]);
 
-        static::assertFalse($resetPasswordType->isValid());
+        static::assertTrue($resetPasswordType->isValid());
+        static::assertInstanceOf(UserNewPasswordDTOInterface::class, $resetPasswordType->getData());
+        static::assertNull($resetPasswordType->getData()->password);
     }
 
     public function testGoodDataAreSubmitted()

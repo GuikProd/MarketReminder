@@ -61,14 +61,6 @@ class ResetPasswordPresenter extends AbstractPresenter implements ResetPasswordP
     /**
      * {@inheritdoc}
      */
-    public function getEmail(): array
-    {
-        return $this->getViewOptions()['email'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getNotificationMessage(): array
     {
         return $this->getViewOptions()['notification'];
