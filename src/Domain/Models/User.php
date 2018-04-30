@@ -68,7 +68,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $creationDate;
 
     /**
-     * @var \DateTime
+     * @var int
      */
     private $validationDate;
 
@@ -132,7 +132,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     {
         $this->active = true;
         $this->validated = true;
-        $this->validationToken = '';
+        $this->validationToken = null;
         $this->validationDate = time();
     }
 
@@ -232,6 +232,14 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function getValidationToken(): ? string
     {
         return $this->validationToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidationDate(): ?int
+    {
+        return $this->validationDate;
     }
 
     /**

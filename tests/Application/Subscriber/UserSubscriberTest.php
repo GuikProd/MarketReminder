@@ -157,6 +157,11 @@ class UserSubscriberTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function testUserResetPasswordEventLogicIsTriggered()
     {
         $userResetPasswordEventMock = $this->createMock(UserResetPasswordEvent::class);
@@ -171,6 +176,28 @@ class UserSubscriberTest extends TestCase
 
         static::assertNull(
             $userSubscriber->onUserResetPassword($userResetPasswordEventMock)
+        );
+    }
+
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function testUserValidatedEventLogicIsTriggered()
+    {
+        $userValidatedEvent = $this->createMock(UserValidatedEvent::class);
+
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->translator,
+            $this->twig,
+            $this->userEmailPresenter
+        );
+
+        static::assertNull(
+            $userSubscriber->onUserValidated($userValidatedEvent)
         );
     }
 }

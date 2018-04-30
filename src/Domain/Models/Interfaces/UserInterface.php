@@ -113,6 +113,11 @@ interface UserInterface
     public function getValidationToken(): ? string;
 
     /**
+     * @return int|null
+     */
+    public function getValidationDate(): ?int;
+
+    /**
      * @return null|string
      */
     public function getResetPasswordToken():? string;

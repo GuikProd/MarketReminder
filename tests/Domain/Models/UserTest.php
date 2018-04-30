@@ -11,12 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Domain\Models;
+namespace App\Tests\Domain\Models;
 
 use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Models\User;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class UserTest.
@@ -35,6 +36,7 @@ class UserTest extends TestCase
         );
 
         static::assertInstanceOf(UserInterface::class, $user);
+        static::assertInstanceOf(UuidInterface::class, $user->getId());
         static::assertSame('toto@gmail.com', $user->getEmail());
         static::assertSame('Toto', $user->getUsername());
         static::assertSame('Ie1FDLTOTO', $user->getPassword());
@@ -55,5 +57,22 @@ class UserTest extends TestCase
         );
 
         static::assertInstanceOf(ImageInterface::class, $user->getProfileImage());
+    }
+
+    public function testUserValidation()
+    {
+        $user = new User(
+            'toto@gmail.com',
+            'Toto',
+            'Ie1FDLTOTO',
+            'aa194daz4dz24ad4zd9d9adza4d9d9a'
+        );
+
+        $user->validate();
+
+        static::assertTrue($user->getValidated());
+        static::assertTrue($user->getActive());
+        static::assertNotNull($user->getValidationDate());
+        static::assertNull($user->getValidationToken());
     }
 }
