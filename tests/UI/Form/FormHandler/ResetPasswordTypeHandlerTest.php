@@ -15,13 +15,17 @@ namespace App\Tests\UI\Form\FormHandler;
 
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
+use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Form\FormHandler\ResetPasswordTypeHandler;
+use App\UI\Presenter\AbstractPresenter;
 use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use App\UI\Presenter\Security\ResetPasswordPresenter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
@@ -71,9 +75,29 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
         $this->encoderFactory = $this->createMock(EncoderFactoryInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->formInterface = $this->createMock(FormInterface::class);
-        $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
         $this->user = $this->createMock(UserInterface::class);
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
+
+        $this->encoderFactory->method('getEncoder')
+                             ->willReturn(new BCryptPasswordEncoder(13));
+
+        $this->formInterface->method('getData')
+                            ->willReturn(new UserRegistrationDTO(
+                                'toto',
+                                'toto@gmail.com',
+                                'Ie1FDLTOTO',
+                                'dzazddzaazdda'
+                            ));
+
+        $this->resetPasswordPresenter = $this->getMockBuilder(ResetPasswordPresenter::class)
+                                             ->enableOriginalConstructor()
+                                             ->getMock();
+
+        $this->resetPasswordPresenter->method('getNotificationMessage')
+                                     ->willReturn([
+                                         'content' => '',
+                                         'title' => ''
+                                     ]);
     }
 
     public function testItImplements()
@@ -125,6 +149,23 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
         );
 
         static::assertFalse(
+            $resetPasswordTypeHandler->handle($this->formInterface, $this->user)
+        );
+    }
+
+    public function testGoodDataAreSubmitted()
+    {
+        $this->formInterface->method('isSubmitted')->willReturn(true);
+        $this->formInterface->method('isValid')->willReturn(true);
+
+        $resetPasswordTypeHandler = new ResetPasswordTypeHandler(
+            $this->eventDispatcher,
+            $this->encoderFactory,
+            $this->resetPasswordPresenter,
+            $this->userRepository
+        );
+
+        static::assertTrue(
             $resetPasswordTypeHandler->handle($this->formInterface, $this->user)
         );
     }
