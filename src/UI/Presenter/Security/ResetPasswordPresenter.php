@@ -35,7 +35,7 @@ class ResetPasswordPresenter extends AbstractPresenter implements ResetPasswordP
             'form' => null,
             'notification' => [
                 'content' => null,
-                'title' => null
+                'type' => null
             ],
             'page' => [
                 'title' => null,

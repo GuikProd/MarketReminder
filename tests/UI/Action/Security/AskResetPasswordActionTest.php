@@ -59,7 +59,7 @@ class AskResetPasswordActionTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->askResetPasswordPresenter = new AskResetPasswordPresenter();
 
@@ -88,13 +88,10 @@ class AskResetPasswordActionTest extends TestCase
     }
 
     /**
-     * @group Blackfire
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-    public function testBlackfireProfilingWithWrongData()
-    {
-
-    }
-
     public function testWrongDataProcess()
     {
         $formInterfaceMock = $this->createMock(FormInterface::class);
@@ -123,6 +120,11 @@ class AskResetPasswordActionTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function testRightProcess()
     {
         $formInterfaceMock = $this->createMock(FormInterface::class);
