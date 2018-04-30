@@ -78,6 +78,8 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
 
             $user->updatePassword($passwordEncoder($form->getData()->password, null));
 
+            $this->userRepository->flush();
+
             $this->resetPasswordPresenter->prepareOptions([
                 'notification' => [
                     'content' => 'user.notification.password_reset_success',

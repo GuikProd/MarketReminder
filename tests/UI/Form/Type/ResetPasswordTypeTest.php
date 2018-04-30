@@ -64,6 +64,19 @@ class ResetPasswordTypeTest extends TypeTestCase
         static::assertTrue($resetPasswordType->isEmpty());
     }
 
+    public function testWrongDataAreSubmitted()
+    {
+        $resetPasswordType = $this->factory->create(ResetPasswordType::class);
+        $resetPasswordType->submit([
+            'password' => [
+                'first' => 'Ie1FDLTOTo',
+                'second' => 'Ie1FDLTOT'
+            ]
+        ]);
+
+        static::assertFalse($resetPasswordType->isValid());
+    }
+
     public function testGoodDataAreSubmitted()
     {
         $resetPasswordType = $this->factory->create(ResetPasswordType::class);

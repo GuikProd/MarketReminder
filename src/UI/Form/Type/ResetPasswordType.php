@@ -35,7 +35,8 @@ class ResetPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('password', RepeatedType::class, [
-            'type' => PasswordType::class
+            'type' => PasswordType::class,
+            'invalid_message' => 'password.not_match'
         ]);
     }
 

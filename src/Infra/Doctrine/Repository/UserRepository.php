@@ -37,6 +37,8 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function loadUserByUsername($username)
     {

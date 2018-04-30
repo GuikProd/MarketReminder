@@ -23,7 +23,7 @@ interface UserNewPasswordDTOInterface
     /**
      * UserNewPasswordDTOInterface constructor.
      *
-     * @param string  $password
+     * @param string|null $password  The new password (null if the form is invalid).
      */
-    public function __construct(string $password);
+    public function __construct(string $password = null);
 }

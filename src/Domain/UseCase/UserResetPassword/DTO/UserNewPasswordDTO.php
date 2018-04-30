@@ -30,7 +30,7 @@ class UserNewPasswordDTO implements UserNewPasswordDTOInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $password)
+    public function __construct(string $password = null)
     {
         $this->password = $password;
     }
