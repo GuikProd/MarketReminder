@@ -57,7 +57,7 @@ jobs:
             - run: ./bin/phpunit -v --exclude-group Blackfire --coverage-html /tmp/phpunit-coverage
             - run: rm -rf var/data.db
             - store_artifacts:
-                - path: /tmp/phpunit-coverage
+                path: /tmp/phpunit-coverage
     behat_core_fr:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
