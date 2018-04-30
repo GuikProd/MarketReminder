@@ -23,6 +23,7 @@ jobs:
             - image: redis
         steps:
             - checkout
+            - run: mkdir -p /tmp/phpunit-coverage
             - run: sudo apt install -y libsqlite3-dev zlib1g-dev
             - run: sudo docker-php-ext-install zip
             - run: sudo composer self-update
@@ -53,8 +54,10 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
-            - run: ./bin/phpunit -v --exclude-group Blackfire
+            - run: ./bin/phpunit -v --exclude-group Blackfire --coverage-html /tmp/phpunit-coverage
             - run: rm -rf var/data.db
+            - store_artifacts:
+                - path: /tmp/phpunit-coverage
     behat_core_fr:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
