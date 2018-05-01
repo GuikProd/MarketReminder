@@ -18,6 +18,9 @@ parameters:
     cloud.vision_credentials: "%kernel.project_dir%/config/credentials/google/vision"
     cloud.vision_credentials.filename: "credentials.json"
 
+    ## Redis
+    redis.dsn: '%env(REDIS_URL)%'
+
     ## SendGrid
     email.sender_address: "%env(SENDER_EMAIL_ADDRESS)%"
 
@@ -33,6 +36,9 @@ services:
             $bucketName: "%cloud.storage.bucket_name%"
             $googleStoragePublicUrl: "%cloud.storage.public_url%"
             $emailSender: "%email.sender_address%"
+
+            ## Redis
+            $redisDSN: '%redis.dsn%'
 
             ## Cloud Storage
             $storageCredentialsFileName: "%cloud.storage_credentials.filename%"

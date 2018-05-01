@@ -12,6 +12,7 @@ RUN set -xe \
           		gnupg \
           		graphviz \
           		make \
+          		autoconf \
           	&& docker-php-ext-install \
           		intl \
           		pdo_pgsql \
