@@ -11,24 +11,28 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\Redis;
+namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationReaderInterface;
+use App\Infra\Redis\Translation\RedisTranslationReader;
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 /**
- * Class RedisConnectorTest.
+ * Class RedisTranslationReaderTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisConnectorTest extends KernelTestCase
+class RedisTranslationReaderTest extends KernelTestCase
 {
+    use TestCaseTrait;
+
     /**
-     * @var string
+     * @var RedisConnectorInterface
      */
-    private $redisDSN;
+    private $redisConnector;
 
     /**
      * {@inheritdoc}
@@ -37,23 +41,18 @@ class RedisConnectorTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->redisDSN = static::$kernel->getContainer()->getParameter('redis.dsn');
+        $this->redisConnector = new RedisConnector(
+            static::$kernel->getContainer()->getParameter('redis.dsn')
+        );
     }
 
     public function testItImplements()
     {
-        $redisConnector = new RedisConnector($this->redisDSN);
-
-        static::assertInstanceOf(RedisConnectorInterface::class, $redisConnector);
-    }
-
-    public function testItConfigureConnectionAndReturnAdapter()
-    {
-        $redisConnector = new RedisConnector($this->redisDSN);
+        $redisTranslationReader = new RedisTranslationReader($this->redisConnector);
 
         static::assertInstanceOf(
-            RedisAdapter::class,
-            $redisConnector->getAdapter()
+            RedisTranslationReaderInterface::class,
+            $redisTranslationReader
         );
     }
 }

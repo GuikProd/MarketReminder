@@ -15,7 +15,7 @@ namespace App\Infra\Redis;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use Predis\Client;
-use Symfony\Component\Cache\Simple\RedisCache;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 /**
  * Class RedisConnector.
@@ -25,7 +25,7 @@ use Symfony\Component\Cache\Simple\RedisCache;
 class RedisConnector implements RedisConnectorInterface
 {
     /**
-     * @var RedisCache
+     * @var RedisAdapter
      */
     private $adapter;
 
@@ -45,11 +45,11 @@ class RedisConnector implements RedisConnectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getAdapter(): RedisCache
+    public function getAdapter(): RedisAdapter
     {
         $connexion = new Client($this->redisDSN);
 
-        $this->adapter = new RedisCache(
+        $this->adapter = new RedisAdapter(
             $connexion,
             '',
             0
