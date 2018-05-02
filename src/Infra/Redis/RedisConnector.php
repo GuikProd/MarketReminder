@@ -27,7 +27,7 @@ class RedisConnector implements RedisConnectorInterface
     /**
      * @var RedisAdapter
      */
-    private $adapter;
+    private $cache;
 
     /**
      * @var string
@@ -45,22 +45,16 @@ class RedisConnector implements RedisConnectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getAdapter(): RedisConnectorInterface
+    public function getAdapter(): RedisAdapter
     {
-        $this->adapter = new RedisAdapter(
+        $this->cache = new RedisAdapter(
             new Client(),
             '',
             0
         );
 
-        return $this;
-    }
+        $this->cache::createConnection($this->redisDSN);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConnection(): Client
-    {
-        return $this->adapter::createConnection($this->redisDSN);
+        return $this->cache;
     }
 }

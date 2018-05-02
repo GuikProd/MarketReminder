@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\Redis\Interfaces;
 
-use Predis\Client;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 /**
  * Interface RedisConnectorInterface.
@@ -30,16 +30,9 @@ interface RedisConnectorInterface
     public function __construct(string $redisDSN);
 
     /**
-     * Instantiate the RedisAdapter along with the \Redis class.
+     * Instantiate the RedisAdapter along with the @see Predis class.
      *
-     * @return RedisConnectorInterface
+     * @return RedisAdapter
      */
-    public function getAdapter(): RedisConnectorInterface;
-
-    /**
-     * Return the Client connection.
-     *
-     * @return Client
-     */
-    public function getConnection(): Client;
+    public function getAdapter(): RedisAdapter;
 }
