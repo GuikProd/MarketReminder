@@ -16,7 +16,7 @@ namespace App\Tests\Infra\Redis;
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\Simple\RedisCache;
 
 /**
  * Class RedisConnectorTest.
@@ -52,7 +52,7 @@ class RedisConnectorTest extends KernelTestCase
         $redisConnector = new RedisConnector($this->redisDSN);
 
         static::assertInstanceOf(
-            RedisAdapter::class,
+            RedisCache::class,
             $redisConnector->getAdapter()
         );
     }
