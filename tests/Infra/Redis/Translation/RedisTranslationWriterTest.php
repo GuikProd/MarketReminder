@@ -90,6 +90,7 @@ class RedisTranslationWriterTest extends KernelTestCase
 
         $redisTranslationWriter->write(
             $this->cacheTag,
+            'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
@@ -98,6 +99,7 @@ class RedisTranslationWriterTest extends KernelTestCase
 
         $redisTranslationWriter->write(
             $cacheTag,
+            'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
@@ -120,6 +122,7 @@ class RedisTranslationWriterTest extends KernelTestCase
 
         $redisTranslationWriter->write(
             $this->cacheTag,
+            'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
@@ -138,12 +141,14 @@ class RedisTranslationWriterTest extends KernelTestCase
 
         $redisTranslationWriter->write(
             $this->cacheTag,
+            'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
 
         $processStatus = $redisTranslationWriter->write(
             $cacheTag,
+            'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
@@ -158,16 +163,16 @@ class RedisTranslationWriterTest extends KernelTestCase
     {
         $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
-        $cacheTag = md5($this->cacheTag);
-
         $redisTranslationWriter->write(
             $this->cacheTag,
+            'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
 
         $processStatus = $redisTranslationWriter->write(
-            $cacheTag,
+            $this->cacheTag,
+            'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
@@ -186,11 +191,11 @@ class RedisTranslationWriterTest extends KernelTestCase
 
         $processStatus = $redisTranslationWriter->write(
             $cacheTag,
+            'fr',
             'validators.fr.yaml',
             $this->goodTestingData
         );
 
         static::assertTrue($processStatus);
-        static::assertNotEmpty($redisTranslationWriter->getTags());
     }
 }

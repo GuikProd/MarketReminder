@@ -21,17 +21,12 @@ use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationWriter implements RedisTranslationWriterInterface
+final class RedisTranslationWriter implements RedisTranslationWriterInterface
 {
     /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
-
-    /**
-     * @var array
-     */
-    private $tags = [];
 
     /**
      * {@inheritdoc}
@@ -44,22 +39,30 @@ class RedisTranslationWriter implements RedisTranslationWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function write(string $tag, string $fileName, array $values): bool
+    public function write(string $tag, string $channel, string $fileName, array $values): bool
     {
-        $this->tags[] = $tag;
-
         if (!$this->storeTag($tag, $fileName)) {
             return false;
         }
 
         $cacheItem = $this->redisConnector->getAdapter()->getItem($fileName);
 
-        if ($cacheItem->isHit()) {
+        if ($tag === $cacheItem->get()['tag']) {
             return false;
         }
 
-        $cacheItem->set($values);
-        $cacheItem->tag($tag);
+        $cacheItem->set([
+            'tag' => [
+                'tag' => $tag,
+                'timestamp' => (string) time()
+            ],
+            'channel' => $channel,
+            'value' => $values
+        ]);
+        $cacheItem->tag([
+            $cacheItem->get()['tag']['timestamp'],
+            $tag
+        ]);
 
         $this->redisConnector->getAdapter()->save($cacheItem);
 
@@ -82,13 +85,5 @@ class RedisTranslationWriter implements RedisTranslationWriterInterface
         $this->redisConnector->getAdapter()->save($cacheItem);
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTags(): array
-    {
-        return $this->tags;
     }
 }
