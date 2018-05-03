@@ -52,7 +52,8 @@ class RedisTranslationWriterTest extends KernelTestCase
         static::bootKernel();
 
         $this->redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.dsn')
+            static::$kernel->getContainer()->getParameter('redis.dsn'),
+            static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
         // Used to clear the cache before any test (if not, the cache will return always the same values).

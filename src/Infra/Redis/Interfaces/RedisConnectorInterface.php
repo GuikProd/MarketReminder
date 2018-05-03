@@ -25,9 +25,10 @@ interface RedisConnectorInterface
     /**
      * RedisConnectorInterface constructor.
      *
-     * @param string $redisDSN  The DSN of the Redis server to use.
+     * @param string $redisDSN   The DSN of the Redis server to use.
+     * @param string $namespace  The namespace used by the Redis server.
      */
-    public function __construct(string $redisDSN);
+    public function __construct(string $redisDSN, string $namespace);
 
     /**
      * Instantiate the RedisAdapter along with the @see Predis class.

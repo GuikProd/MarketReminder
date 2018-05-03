@@ -32,14 +32,22 @@ class RedisConnector implements RedisConnectorInterface
     /**
      * @var string
      */
+    private $namespace;
+
+    /**
+     * @var string
+     */
     private $redisDSN;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $redisDSN)
-    {
+    public function __construct(
+        string $redisDSN,
+        string $namespace
+    ) {
         $this->redisDSN = $redisDSN;
+        $this->namespace = $namespace;
     }
 
     /**
@@ -51,7 +59,7 @@ class RedisConnector implements RedisConnectorInterface
 
         $this->adapter = new RedisAdapter(
             $connexion,
-            '',
+            $this->namespace,
             0
         );
 

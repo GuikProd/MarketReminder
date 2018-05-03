@@ -15,8 +15,6 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationReaderInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationReader;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
@@ -24,11 +22,11 @@ use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class RedisTranslationReaderTest.
+ * Class RedisTranslationReaderSystemTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationReaderTest extends KernelTestCase
+class RedisTranslationReaderSystemTest extends KernelTestCase
 {
     use TestCaseTrait;
 
@@ -50,7 +48,8 @@ class RedisTranslationReaderTest extends KernelTestCase
         static::bootKernel();
 
         $this->redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.dsn')
+            static::$kernel->getContainer()->getParameter('redis.dsn'),
+            static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
         $this->redisTranslationWriter = new RedisTranslationWriter(
@@ -58,16 +57,6 @@ class RedisTranslationReaderTest extends KernelTestCase
         );
 
         $this->redisConnector->getAdapter()->clear();
-    }
-
-    public function testItImplements()
-    {
-        $redisTranslationReader = new RedisTranslationReader($this->redisConnector);
-
-        static::assertInstanceOf(
-            RedisTranslationReaderInterface::class,
-            $redisTranslationReader
-        );
     }
 
     /**
@@ -101,9 +90,13 @@ class RedisTranslationReaderTest extends KernelTestCase
     }
 
     /**
+     * @group Blackfire
+     *
+     * @doesNotPerformAssertions
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItReturnNull()
+    public function testBlackfireProfilingAndItReturnAnEntry()
     {
         $tagName = md5(str_rot13((string) uniqid()));
 
@@ -116,38 +109,13 @@ class RedisTranslationReaderTest extends KernelTestCase
 
         $redisTranslationReader = new RedisTranslationReader($this->redisConnector);
 
-        $entry = $redisTranslationReader->getEntry(
-            'messages.fr.yaml',
-            ['home.text' => 'Hi !']
-        );
+        $probe = static::$blackfire->createProbe();
 
-        static::assertNull($entry);
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItReturnAnEntry()
-    {
-        $tagName = md5(str_rot13((string) uniqid()));
-
-        $this->redisTranslationWriter->write(
-            $tagName,
-            'fr',
+        $redisTranslationReader->getEntry(
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationReader($this->redisConnector);
-
-        $entry = $redisTranslationReader->getEntry(
-            'messages.fr.yaml',
-            ['home.text' => 'hello !']
-        );
-
-        static::assertInstanceOf(
-            RedisTranslationInterface::class,
-            $entry
-        );
+        static::$blackfire->endProbe($probe);
     }
 }

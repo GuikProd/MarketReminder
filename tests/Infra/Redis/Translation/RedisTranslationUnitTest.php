@@ -18,11 +18,11 @@ use App\Infra\Redis\Translation\RedisTranslation;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class RedisTranslationTest.
+ * Class RedisTranslationUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationTest extends TestCase
+class RedisTranslationUnitTest extends TestCase
 {
     public function testItImplements()
     {

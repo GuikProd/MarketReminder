@@ -13,22 +13,28 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 /**
- * Class RedisConnectorTest.
+ * Class RedisConnectorSystemTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisConnectorTest extends KernelTestCase
+class RedisConnectorSystemTest extends KernelTestCase
 {
+    use TestCaseTrait;
+
     /**
      * @var string
      */
     private $redisDSN;
+
+    /**
+     * @var string
+     */
+    private $redisNamespace;
 
     /**
      * {@inheritdoc}
@@ -38,22 +44,25 @@ class RedisConnectorTest extends KernelTestCase
         static::bootKernel();
 
         $this->redisDSN = static::$kernel->getContainer()->getParameter('redis.dsn');
+        $this->redisNamespace = static::$kernel->getContainer()->getParameter('redis.namespace_test');
     }
 
-    public function testItImplements()
+    /**
+     * @group Blackfire
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testBlackfireProfilingWithCacheCleaning()
     {
-        $redisConnector = new RedisConnector($this->redisDSN);
-
-        static::assertInstanceOf(RedisConnectorInterface::class, $redisConnector);
-    }
-
-    public function testItConfigureConnectionAndReturnAdapter()
-    {
-        $redisConnector = new RedisConnector($this->redisDSN);
-
-        static::assertInstanceOf(
-            RedisAdapter::class,
-            $redisConnector->getAdapter()
+        $redisConnector = new RedisConnector(
+            $this->redisDSN,
+            $this->redisNamespace
         );
+
+        $probe = static::$blackfire->createProbe();
+
+        $redisConnector->getAdapter()->clear();
+
+        static::$blackfire->endProbe($probe);
     }
 }

@@ -21,7 +21,7 @@ script:
     - ./bin/console d:d:c --env=test
     - ./bin/console d:s:c --env=test
     - ./bin/console d:f:l -n --env=test
-    - vendor/bin/phpunit -v
+    - vendor/bin/phpunit -v --exclude-group Blackfire
     - vendor/bin/behat --profile default
 notifications:
     email: false

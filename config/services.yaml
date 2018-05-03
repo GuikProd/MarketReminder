@@ -20,6 +20,9 @@ parameters:
 
     ## Redis
     redis.dsn: '%env(REDIS_URL)%'
+    redis.namespace_dev: "dev"
+    redis.namespace_prod: "prod"
+    redis.namespace_test: "test"
 
     ## SendGrid
     email.sender_address: "%env(SENDER_EMAIL_ADDRESS)%"
