@@ -62,6 +62,10 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         if ($cacheItem->isHit()) {
             $toStore = $this->checkContent($cacheItem, $values);
 
+            $this->redisConnector->getAdapter()->invalidateTags($cacheItem->getPreviousTags());
+
+            $this->redisConnector->getAdapter()->deleteItem($cacheItem->getKey());
+
             if (!$toStore) {
                 return false;
             }
@@ -81,7 +85,7 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         }
 
         $cacheItem->set($this->entries);
-        $cacheItem->tag([$tag, (string) time()]);
+        $cacheItem->tag($tag);
 
         $this->redisConnector->getAdapter()->save($cacheItem);
 
@@ -97,7 +101,11 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         static $toCheckContent = [];
 
         foreach ($cacheValues->get() as $item => $value) {
-            $redisTranslation = $this->serializer->deserialize($value, RedisTranslation::class, 'json');
+            $redisTranslation = $this->serializer->deserialize(
+                $value,
+                RedisTranslation::class,
+                'json'
+            );
 
             $translationContent[] = $redisTranslation->getKey();
         }

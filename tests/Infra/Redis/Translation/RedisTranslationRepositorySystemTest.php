@@ -80,7 +80,6 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
         $tagName = md5(str_rot13((string) uniqid()));
 
         $this->redisTranslationWriter->write(
-            $tagName,
             'fr',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
@@ -110,10 +109,7 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
      */
     public function testBlackfireProfilingAndItReturnAnEntry()
     {
-        $tagName = md5(str_rot13((string) uniqid()));
-
         $this->redisTranslationWriter->write(
-            $tagName,
             'fr',
             'messages.fr.yaml',
             ['home.text' => 'hello !']

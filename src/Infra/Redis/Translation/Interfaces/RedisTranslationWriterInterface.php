@@ -38,7 +38,7 @@ interface RedisTranslationWriterInterface
      * For security purpose, the tag is generated using a @see Uuid::uuid4(), a check is done for
      * coherence purpose inside the "tag table".
      *
-     * For reading purpose, the item is tagged with the Uuid tag and a timestamp.
+     * For reading purpose, the item is tagged with the Uuid tag.
      *
      * @param string $channel  The channel used by the item (used for retrieving process).
      * @param string $fileName The name of the file to cache (used as a key inside the cache along with the tag).

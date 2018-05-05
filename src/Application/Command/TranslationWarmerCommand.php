@@ -15,6 +15,8 @@ namespace App\Application\Command;
 
 use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +30,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class TranslationWarmerCommand extends Command implements TranslationWarmerCommandInterface
+final class TranslationWarmerCommand extends Command implements TranslationWarmerCommandInterface
 {
     /**
      * @var string
@@ -41,6 +43,16 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
     private $cloudTranslationWarmer;
 
     /**
+     * @var RedisTranslationRepositoryInterface
+     */
+    private $redisTranslationRepository;
+
+    /**
+     * @var RedisTranslationWriterInterface
+     */
+    private $redisTranslationWriter;
+
+    /**
      * @var string
      */
     private $translationsFolder;
@@ -51,10 +63,14 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
     public function __construct(
         string $acceptedLocales,
         CloudTranslationWarmerInterface $cloudTranslationWarmer,
+        RedisTranslationRepositoryInterface $redisTranslationRepository,
+        RedisTranslationWriterInterface $redisTranslationWriter,
         string $translationsFolder
     ) {
         $this->acceptedLocales = $acceptedLocales;
         $this->cloudTranslationWarmer = $cloudTranslationWarmer;
+        $this->redisTranslationRepository = $redisTranslationRepository;
+        $this->redisTranslationWriter = $redisTranslationWriter;
         $this->translationsFolder = $translationsFolder;
 
         parent::__construct();
@@ -89,9 +105,7 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
                         );
 
         if (!$files->count() > 0) {
-            throw new \InvalidArgumentException(
-                'This channel does not exist, please retry !'
-            );
+            throw new \InvalidArgumentException(\sprintf('This channel does not exist, please retry !'));
         }
 
         if (!\in_array($input->getArgument('locale'), explode('|', $this->acceptedLocales))) {
@@ -105,6 +119,13 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         $toTranslateKeys = [];
 
         foreach ($files as $file) {
+
+            try {
+                $this->warmRedisTranslationCache($input->getArgument('channel'), $output, $file);
+            } catch (\Psr\Cache\InvalidArgumentException $exception) {
+                $output->write('<error>'. $exception->getMessage() . '</error>');
+            }
+
             if ($this->checkFileContent($output, $input->getArgument('channel'), $input->getArgument('locale'), $file)) {
                 return;
             }
@@ -135,6 +156,24 @@ class TranslationWarmerCommand extends Command implements TranslationWarmerComma
         );
 
         $output->writeln('<info>The translations has been translated and dumped into the translations folder.</info>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function warmRedisTranslationCache(string $channel, OutputInterface $output, \SplFileInfo $toWarmFile): bool
+    {
+        $content = Yaml::parse($toWarmFile->getContents());
+
+        if ($this->redisTranslationWriter->write($channel, $toWarmFile->getFilename(), $content)) {
+            $output->write('<info>The translations has been cached.</info>');
+
+            return true;
+        }
+
+        $output->write('<info>The translations are already cached, process skipped.</info>');
+
+        return false;
     }
 
     /**

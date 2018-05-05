@@ -30,11 +30,6 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     use TestCaseTrait;
 
     /**
-     * @var string
-     */
-    private $cacheTag;
-
-    /**
      * @var array
      */
     private $goodTestingData = [];
@@ -66,8 +61,6 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
         // Used to clear the cache before any test (if not, the cache will return always the same values).
         $this->redisConnector->getAdapter()->clear();
 
-        $this->cacheTag = md5(str_rot13((string) uniqid()));
-
         $this->goodTestingData = [
             'home.text' => 'Inventory management',
             'reset_password.title.text' => 'Réinitialiser votre mot de passe.'
@@ -81,7 +74,7 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testBlackfireProfilingItDoesNotSaveSameTagTwice()
+    public function testBlackfireProfilingItDoesNotSaveSameContentTwice()
     {
         $redisTranslationWriter = new RedisTranslationWriter(
             $this->serializer,
@@ -89,7 +82,6 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
         );
 
         $redisTranslationWriter->write(
-            $this->cacheTag,
             'fr',
             'messages.fr.yaml',
             $this->goodTestingData
@@ -98,7 +90,6 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
         $probe = static::$blackfire->createProbe();
 
         $redisTranslationWriter->write(
-            $this->cacheTag,
             'fr',
             'messages.fr.yaml',
             $this->goodTestingData
@@ -121,14 +112,11 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
             $this->redisConnector
         );
 
-        $cacheTag = md5($this->cacheTag);
-
         $probe = static::$blackfire->createProbe();
 
         $redisTranslationWriter->write(
-            $cacheTag,
             'fr',
-            'messages.fr.yaml',
+            'validators.fr.yaml',
             $this->goodTestingData
         );
 

@@ -132,4 +132,23 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
 
         static::assertTrue($processStatus);
     }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItUpdateAndSaveItem()
+    {
+        $redisTranslationWriter = new RedisTranslationWriter(
+            $this->serializer,
+            $this->redisConnector
+        );
+
+        $processStatus = $redisTranslationWriter->write(
+            'fr',
+            'validators.fr.yaml',
+            ['user.creation_success' => 'Hello user !']
+        );
+
+        static::assertTrue($processStatus);
+    }
 }

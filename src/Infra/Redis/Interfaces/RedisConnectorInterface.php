@@ -31,7 +31,9 @@ interface RedisConnectorInterface
     public function __construct(string $redisDSN, string $namespace);
 
     /**
-     * Instantiate the RedisAdapter (wrapped with a TagAwareAdapter) along with the @see Predis class.
+     * Instantiate the RedisAdapter (wrapped with a TagAwareAdapter for cache invalidation).
+     *
+     * A @see Predis client is returned.
      *
      * @return TagAwareAdapterInterface
      */
