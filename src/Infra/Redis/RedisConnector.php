@@ -16,16 +16,18 @@ namespace App\Infra\Redis;
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use Predis\Client;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Class RedisConnector.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisConnector implements RedisConnectorInterface
+final class RedisConnector implements RedisConnectorInterface
 {
     /**
-     * @var RedisAdapter
+     * @var TagAwareAdapterInterface
      */
     private $adapter;
 
@@ -53,17 +55,21 @@ class RedisConnector implements RedisConnectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getAdapter(): RedisAdapter
+    public function getAdapter(): TagAwareAdapterInterface
     {
         $connexion = new Client($this->redisDSN);
 
-        $this->adapter = new RedisAdapter(
+        $redisAdapter = new RedisAdapter(
             $connexion,
             $this->namespace,
             0
         );
 
-        $this->adapter::createConnection($this->redisDSN);
+        $redisAdapter::createConnection($this->redisDSN);
+
+        $this->adapter = new TagAwareAdapter(
+            $redisAdapter
+        );
 
         return $this->adapter;
     }

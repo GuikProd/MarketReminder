@@ -14,31 +14,31 @@ declare(strict_types=1);
 namespace App\Infra\Redis\Translation\Interfaces;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Interface RedisTranslationReaderInterface.
+ * Interface RedisTranslationRepositoryInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface RedisTranslationReaderInterface
+interface RedisTranslationRepositoryInterface
 {
     /**
-     * RedisTranslationReaderInterface constructor.
+     * RedisTranslationRepositoryInterface constructor.
      *
+     * @param SerializerInterface     $serializer
      * @param RedisConnectorInterface $redisConnector
      */
-    public function __construct(RedisConnectorInterface $redisConnector);
+    public function __construct(SerializerInterface $serializer, RedisConnectorInterface $redisConnector);
 
     /**
      * Allow to retrieve a single cache item and transform it into a RedisTranslation.
      *
      * @param string $filename  The name of the item to retrieve.
-     * @param array  $values    The values used to compare the item content.
      *
      * @throws \Psr\Cache\InvalidArgumentException
      *
-     * @return RedisTranslationInterface  The cache item transformed if the cache is valid.
-     * @return null                       If the cache item isn't valid, a new entry must be generated.
+     * @return array  The array which contains all the translations stored using the $filename.
      */
-    public function getEntry(string $filename, array $values): ?RedisTranslationInterface;
+    public function getEntry(string $filename): ?array;
 }

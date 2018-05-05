@@ -14,17 +14,23 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationReaderInterface;
-use App\Infra\Redis\Translation\RedisTranslationReader;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\RedisTranslationRepository;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Class RedisTranslationReaderUnitTest.
+ * Class RedisTranslationRepositoryUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationReaderUnitTest extends TestCase
+class RedisTranslationRepositoryUnitTest extends TestCase
 {
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
     /**
      * @var RedisConnectorInterface
      */
@@ -35,6 +41,8 @@ class RedisTranslationReaderUnitTest extends TestCase
      */
     protected function setUp()
     {
+        $this->serializer = $this->createMock(SerializerInterface::class);
+
         $this->redisConnector = $this->getMockBuilder(RedisConnectorInterface::class)
                                          ->disableOriginalConstructor()
                                          ->getMock();
@@ -42,10 +50,13 @@ class RedisTranslationReaderUnitTest extends TestCase
 
     public function testItImplements()
     {
-        $redisTranslationReader = new RedisTranslationReader($this->redisConnector);
+        $redisTranslationReader = new RedisTranslationRepository(
+            $this->serializer,
+            $this->redisConnector
+        );
 
         static::assertInstanceOf(
-            RedisTranslationReaderInterface::class,
+            RedisTranslationRepositoryInterface::class,
             $redisTranslationReader
         );
     }

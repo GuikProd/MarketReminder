@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslation implements RedisTranslationInterface
+final class RedisTranslation implements RedisTranslationInterface
 {
     /**
      * @var array
@@ -88,5 +88,13 @@ class RedisTranslation implements RedisTranslationInterface
     public function getValue(): string
     {
         return $this->options['value'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 }

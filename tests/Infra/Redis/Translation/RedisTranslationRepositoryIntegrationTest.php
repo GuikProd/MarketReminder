@@ -17,19 +17,22 @@ use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslationReader;
+use App\Infra\Redis\Translation\RedisTranslationRepository;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Class RedisTranslationReaderIntegrationTest.
+ * Class RedisTranslationRepositoryIntegrationTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationReaderIntegrationTest extends KernelTestCase
+class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
 {
-    use TestCaseTrait;
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @var RedisConnectorInterface
@@ -48,12 +51,15 @@ class RedisTranslationReaderIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
+        $this->serializer = static::$kernel->getContainer()->get('serializer');
+
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
         $this->redisTranslationWriter = new RedisTranslationWriter(
+            $this->serializer,
             $this->redisConnector
         );
 
@@ -65,21 +71,18 @@ class RedisTranslationReaderIntegrationTest extends KernelTestCase
      */
     public function testItReturnNull()
     {
-        $tagName = md5(str_rot13((string) uniqid()));
-
         $this->redisTranslationWriter->write(
-            $tagName,
             'fr',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationReader($this->redisConnector);
-
-        $entry = $redisTranslationReader->getEntry(
-            'messages.fr.yaml',
-            ['home.text' => 'Hi !']
+        $redisTranslationReader = new RedisTranslationRepository(
+            $this->serializer,
+            $this->redisConnector
         );
+
+        $entry = $redisTranslationReader->getEntry('validators.fr.yaml');
 
         static::assertNull($entry);
     }
@@ -89,25 +92,20 @@ class RedisTranslationReaderIntegrationTest extends KernelTestCase
      */
     public function testItReturnAnEntry()
     {
-        $tagName = md5(str_rot13((string) uniqid()));
-
         $this->redisTranslationWriter->write(
-            $tagName,
             'fr',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationReader($this->redisConnector);
-
-        $entry = $redisTranslationReader->getEntry(
-            'messages.fr.yaml',
-            ['home.text' => 'hello !']
+        $redisTranslationReader = new RedisTranslationRepository(
+            $this->serializer,
+            $this->redisConnector
         );
 
-        static::assertInstanceOf(
-            RedisTranslationInterface::class,
-            $entry
-        );
+        $entry = $redisTranslationReader->getEntry('messages.fr.yaml');
+
+        static::assertCount(1, $entry);
+        static::assertInstanceOf(RedisTranslationInterface::class, $entry[0]);
     }
 }

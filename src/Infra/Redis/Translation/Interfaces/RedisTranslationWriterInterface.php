@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Infra\Redis\Translation\Interfaces;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
+use Psr\Cache\CacheItemInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Interface RedisTranslationWriterInterface.
@@ -25,17 +27,19 @@ interface RedisTranslationWriterInterface
     /**
      * RedisTranslationWriterInterface constructor.
      *
+     * @param SerializerInterface     $serializer
      * @param RedisConnectorInterface $redisConnector
      */
-    public function __construct(RedisConnectorInterface $redisConnector);
+    public function __construct(SerializerInterface $serializer, RedisConnectorInterface $redisConnector);
 
     /**
-     * Allow to store a new item in the Cache, for security purpose,
-     * the tag should not be already used by an item, if yes, the item isn't stored.
+     * Allow to store a new item in the Cache, a RedisTranslation is created, the item is stored as a JSON entry.
      *
-     * For reading purpose, the item is tagged with the original tag and a timestamp.
+     * For security purpose, the tag is generated using a @see Uuid::uuid4(), a check is done for
+     * coherence purpose inside the "tag table".
      *
-     * @param string $tag      The tag used to validate the cache entry.
+     * For reading purpose, the item is tagged with the Uuid tag and a timestamp.
+     *
      * @param string $channel  The channel used by the item (used for retrieving process).
      * @param string $fileName The name of the file to cache (used as a key inside the cache along with the tag).
      * @param array  $values   The array of values to cache.
@@ -44,19 +48,16 @@ interface RedisTranslationWriterInterface
      *
      * @return bool  If the write process has succeed.
      */
-    public function write(string $tag, string $channel, string $fileName, array $values): bool;
+    public function write(string $channel, string $fileName, array $values): bool;
 
     /**
-     * Allow to store every tag used by the items already persisted.
+     * Allow to decide if the new values should be stored in the cache, the check is done
+     * via the $cacheValues keys along with the $values keys.
      *
-     * For simplicity purpose, the timestamp tag is persisted.
+     * @param CacheItemInterface $cacheValues  The cache item already stored.
+     * @param array              $values       The values to check before caching it.
      *
-     * @param string $tag      The tag to store.
-     * @param string $fileName The filename used as a value (as a FK for relation).
-     *
-     * @throws \Psr\Cache\InvalidArgumentException @see RedisAdapter::getItem()
-     *
-     * @return bool  If the tag has been stored.
+     * @return bool  If the new values should be stored.
      */
-    public function storeTag(string $tag, string $fileName): bool;
+    public function checkContent(CacheItemInterface $cacheValues, array $values): bool;
 }

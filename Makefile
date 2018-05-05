@@ -59,6 +59,9 @@ translation: ## Allow to warm the translation
 container: ## Allow to debug the container
 	    $(ENV_PHP) ./bin/console debug:container $(SERVICE) --show-private
 
+event:
+	    $(ENV_PHP) ./bin/console debug:event-dispatcher
+
 route: ## Allow to debug the router
 	    $(ENV_PHP) ./bin/console d:r
 

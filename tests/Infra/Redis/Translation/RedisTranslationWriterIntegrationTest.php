@@ -15,24 +15,21 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Class RedisTranslationWriterTest.
+ * Class RedisTranslationWriterIntegrationTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationWriterTest extends KernelTestCase
+class RedisTranslationWriterIntegrationTest extends KernelTestCase
 {
-    use TestCaseTrait;
-
     /**
-     * @var string
+     * @var SerializerInterface
      */
-    private $cacheTag;
+    private $serializer;
 
     /**
      * @var RedisConnectorInterface
@@ -51,6 +48,8 @@ class RedisTranslationWriterTest extends KernelTestCase
     {
         static::bootKernel();
 
+        $this->serializer = static::$kernel->getContainer()->get('serializer');
+
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
@@ -59,96 +58,29 @@ class RedisTranslationWriterTest extends KernelTestCase
         // Used to clear the cache before any test (if not, the cache will return always the same values).
         $this->redisConnector->getAdapter()->clear();
 
-        $this->cacheTag = md5(str_rot13((string) uniqid()));
-
         $this->goodTestingData = [
-            'home.text' => 'Inventory management'
+            'home.text' => 'Inventory management',
+            'reset_password.title.text' => 'Réinitialiser votre mot de passe.'
         ];
     }
 
-    public function testItImplements()
-    {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
-
-        static::assertInstanceOf(
-            RedisTranslationWriterInterface::class,
-            $redisTranslationWriter
-        );
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @doesNotPerformAssertions
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testBlackfireProfilingWithoutCacheWriteAndWrongTag()
-    {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
-
-        $cacheTag = $this->cacheTag;
-
-        $redisTranslationWriter->write(
-            $this->cacheTag,
-            'fr',
-            'messages.fr.yaml',
-            $this->goodTestingData
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $redisTranslationWriter->write(
-            $cacheTag,
-            'fr',
-            'messages.fr.yaml',
-            $this->goodTestingData
-        );
-
-        static::$blackfire->endProbe($probe);
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @doesNotPerformAssertions
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testBlackfireProfilingWithCacheWrite()
-    {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
-
-        $probe = static::$blackfire->createProbe();
-
-        $redisTranslationWriter->write(
-            $this->cacheTag,
-            'fr',
-            'messages.fr.yaml',
-            $this->goodTestingData
-        );
-
-        static::$blackfire->endProbe($probe);
-    }
-
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToSaveWithSameTag()
+    public function testItRefuseToStoreWithSameContent()
     {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
-
-        $cacheTag = $this->cacheTag;
+        $redisTranslationWriter = new RedisTranslationWriter(
+            $this->serializer,
+            $this->redisConnector
+        );
 
         $redisTranslationWriter->write(
-            $this->cacheTag,
             'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
 
         $processStatus = $redisTranslationWriter->write(
-            $cacheTag,
             'fr',
             'messages.fr.yaml',
             $this->goodTestingData
@@ -162,17 +94,18 @@ class RedisTranslationWriterTest extends KernelTestCase
      */
     public function testItRefuseToSaveWithSameFileName()
     {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+        $redisTranslationWriter = new RedisTranslationWriter(
+            $this->serializer,
+            $this->redisConnector
+        );
 
         $redisTranslationWriter->write(
-            $this->cacheTag,
             'fr',
             'messages.fr.yaml',
             $this->goodTestingData
         );
 
         $processStatus = $redisTranslationWriter->write(
-            $this->cacheTag,
             'fr',
             'messages.fr.yaml',
             $this->goodTestingData
@@ -186,12 +119,12 @@ class RedisTranslationWriterTest extends KernelTestCase
      */
     public function testItSaveEntries()
     {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
-
-        $cacheTag = md5($this->cacheTag);
+        $redisTranslationWriter = new RedisTranslationWriter(
+            $this->serializer,
+            $this->redisConnector
+        );
 
         $processStatus = $redisTranslationWriter->write(
-            $cacheTag,
             'fr',
             'validators.fr.yaml',
             $this->goodTestingData

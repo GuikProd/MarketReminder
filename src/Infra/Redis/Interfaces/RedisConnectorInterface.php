@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\Redis\Interfaces;
 
-use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Interface RedisConnectorInterface.
@@ -31,9 +31,9 @@ interface RedisConnectorInterface
     public function __construct(string $redisDSN, string $namespace);
 
     /**
-     * Instantiate the RedisAdapter along with the @see Predis class.
+     * Instantiate the RedisAdapter (wrapped with a TagAwareAdapter) along with the @see Predis class.
      *
-     * @return RedisAdapter
+     * @return TagAwareAdapterInterface
      */
-    public function getAdapter(): RedisAdapter;
+    public function getAdapter(): TagAwareAdapterInterface;
 }

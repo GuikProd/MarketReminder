@@ -50,6 +50,11 @@ interface RedisTranslationInterface
     public function getKey(): string;
 
     /**
+     * @return array
+     */
+    public function getOptions(): array;
+
+    /**
      * @return string
      */
     public function getValue(): string;

@@ -15,6 +15,9 @@ namespace App\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
+use Psr\Cache\CacheItemInterface;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class RedisTranslationWriter.
@@ -24,6 +27,16 @@ use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 final class RedisTranslationWriter implements RedisTranslationWriterInterface
 {
     /**
+     * @var array
+     */
+    private $entries;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
@@ -31,38 +44,44 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(RedisConnectorInterface $redisConnector)
-    {
+    public function __construct(
+        SerializerInterface $serializer,
+        RedisConnectorInterface $redisConnector
+    ) {
+        $this->serializer = $serializer;
         $this->redisConnector = $redisConnector;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write(string $tag, string $channel, string $fileName, array $values): bool
+    public function write(string $channel, string $fileName, array $values): bool
     {
-        if (!$this->storeTag($tag, $fileName)) {
-            return false;
-        }
-
         $cacheItem = $this->redisConnector->getAdapter()->getItem($fileName);
 
-        if ($tag === $cacheItem->get()['tag']) {
-            return false;
+        if ($cacheItem->isHit()) {
+            $toStore = $this->checkContent($cacheItem, $values);
+
+            if (!$toStore) {
+                return false;
+            }
         }
 
-        $cacheItem->set([
-            'tag' => [
+        $tag = Uuid::uuid4()->toString();
+
+        foreach ($values as $item => $value) {
+            $translation = new RedisTranslation([
+                'channel' => $channel,
                 'tag' => $tag,
-                'timestamp' => (string) time()
-            ],
-            'channel' => $channel,
-            'value' => $values
-        ]);
-        $cacheItem->tag([
-            $cacheItem->get()['tag']['timestamp'],
-            $tag
-        ]);
+                'key' => $item,
+                'value' => $value
+            ]);
+
+            $this->entries[] = $this->serializer->serialize($translation, 'json');
+        }
+
+        $cacheItem->set($this->entries);
+        $cacheItem->tag([$tag, (string) time()]);
 
         $this->redisConnector->getAdapter()->save($cacheItem);
 
@@ -72,18 +91,28 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function storeTag(string $tag, string $fileName): bool
+    public function checkContent(CacheItemInterface $cacheValues, array $values): bool
     {
-        $cacheItem = $this->redisConnector->getAdapter()->getItem($tag);
+        static $translationContent = [];
+        static $toCheckContent = [];
 
-        if ($cacheItem->isHit()) {
-            return false;
+        foreach ($cacheValues->get() as $item => $value) {
+            $redisTranslation = $this->serializer->deserialize($value, RedisTranslation::class, 'json');
+
+            $translationContent[] = $redisTranslation->getKey();
         }
 
-        $cacheItem->set($fileName);
+        foreach ($values as $item => $value) {
+            $toCheckContent[] = $item;
+        }
 
-        $this->redisConnector->getAdapter()->save($cacheItem);
+        $finalTranslatedArray = array_unique($translationContent);
+        $finalToCheckArray = array_unique($toCheckContent);
 
-        return true;
+        if (count(array_diff($finalTranslatedArray, $finalToCheckArray)) > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

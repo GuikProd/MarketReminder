@@ -16,7 +16,7 @@ namespace App\Tests\Infra\Redis;
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Class RedisConnectorUnitTest.
@@ -51,7 +51,10 @@ class RedisConnectorUnitTest extends TestCase
             $this->redisNamespace
         );
 
-        static::assertInstanceOf(RedisConnectorInterface::class, $redisConnector);
+        static::assertInstanceOf(
+            RedisConnectorInterface::class,
+            $redisConnector
+        );
     }
 
     public function testItConfigureConnectionAndReturnAdapter()
@@ -62,7 +65,7 @@ class RedisConnectorUnitTest extends TestCase
         );
 
         static::assertInstanceOf(
-            RedisAdapter::class,
+            TagAwareAdapterInterface::class,
             $redisConnector->getAdapter()
         );
     }
