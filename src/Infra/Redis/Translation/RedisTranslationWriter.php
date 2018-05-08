@@ -53,13 +53,13 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         if ($cacheItem->isHit()) {
             $toStore = $this->checkContent($cacheItem, $values);
 
-            $this->redisConnector->getAdapter()->invalidateTags($cacheItem->getPreviousTags());
-
-            $this->redisConnector->getAdapter()->deleteItem($cacheItem->getKey());
-
             if (!$toStore) {
                 return false;
             }
+
+            $this->redisConnector->getAdapter()->invalidateTags($cacheItem->getPreviousTags());
+
+            $this->redisConnector->getAdapter()->deleteItem($cacheItem->getKey());
         }
 
         $tag = Uuid::uuid4()->toString();

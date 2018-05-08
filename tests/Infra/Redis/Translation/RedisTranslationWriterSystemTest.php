@@ -72,20 +72,24 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
      * @group Blackfire
      *
      * @requires extension blackfire
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testBlackfireProfilingItDoesNotSaveSameContentTwice()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 120kb', 'Command memory usage');
-        $configuration->assert('main.io < 3ms', 'Command IO wait');
-        $configuration->assert('main.network_in < 3kb', 'Command network call');
+        $configuration->assert('main.peak_memory < 100kb', 'Command memory usage');
+        $configuration->assert('main.io < 0.50ms', 'Command IO wait');
+        $configuration->assert('main.network_in < 750b', 'Command network call');
+
+
+        $this->redisTranslationWriter->write(
+            'fr',
+            'messages.fr.yaml',
+            $this->goodTestingData
+        );
 
         $this->assertBlackfire($configuration, function () {
-            $this->redisTranslationWriter->write(
-                'fr',
-                'messages.fr.yaml',
-                $this->goodTestingData
-            );
 
             $this->redisTranslationWriter->write(
                 'fr',
@@ -103,9 +107,9 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     public function testBlackfireProfilingWithCacheWrite()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 115kb', 'Command memory usage');
-        $configuration->assert('main.io < 2ms', 'Command IO wait');
-        $configuration->assert('main.network_in < 200kb', 'Command network call');
+        $configuration->assert('main.peak_memory < 80kb', 'Command storage memory usage');
+        $configuration->assert('main.io < 1ms', 'Command storage IO wait');
+        $configuration->assert('main.network_in < 50b', 'Command storage network call');
 
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationWriter->write(

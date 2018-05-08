@@ -92,6 +92,8 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
 
     /**
      * @group Blackfire
+     *
+     * @requires extension blackfire
      */
     public function testBlackfireProfilingWithCacheWrite()
     {
