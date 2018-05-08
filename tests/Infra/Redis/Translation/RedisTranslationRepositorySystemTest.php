@@ -20,7 +20,6 @@ use App\Infra\Redis\Translation\RedisTranslationRepository;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class RedisTranslationRepositorySystemTest.
@@ -30,11 +29,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 class RedisTranslationRepositorySystemTest extends KernelTestCase
 {
     use TestCaseTrait;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * @var RedisConnectorInterface
@@ -53,17 +47,12 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->serializer = static::$kernel->getContainer()->get('serializer');
-
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         $this->redisConnector->getAdapter()->clear();
     }
@@ -77,18 +66,13 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
      */
     public function testBlackfireProfilingAndItReturnNull()
     {
-        $tagName = md5(str_rot13((string) uniqid()));
-
         $this->redisTranslationWriter->write(
             'fr',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationRepository(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
 
         $probe = static::$blackfire->createProbe();
 
@@ -115,10 +99,7 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationRepository(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
 
         $probe = static::$blackfire->createProbe();
 

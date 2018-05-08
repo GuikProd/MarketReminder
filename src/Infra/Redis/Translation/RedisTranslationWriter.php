@@ -17,7 +17,6 @@ use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use Psr\Cache\CacheItemInterface;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class RedisTranslationWriter.
@@ -32,11 +31,6 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
     private $entries;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
@@ -44,11 +38,8 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        SerializerInterface $serializer,
-        RedisConnectorInterface $redisConnector
-    ) {
-        $this->serializer = $serializer;
+    public function __construct(RedisConnectorInterface $redisConnector)
+    {
         $this->redisConnector = $redisConnector;
     }
 
@@ -74,14 +65,12 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         $tag = Uuid::uuid4()->toString();
 
         foreach ($values as $item => $value) {
-            $translation = new RedisTranslation([
+            $this->entries[] = new RedisTranslation([
                 'channel' => $channel,
                 'tag' => $tag,
                 'key' => $item,
                 'value' => $value
             ]);
-
-            $this->entries[] = $this->serializer->serialize($translation, 'json');
         }
 
         $cacheItem->set($this->entries);
@@ -97,27 +86,25 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
      */
     public function checkContent(CacheItemInterface $cacheValues, array $values): bool
     {
+        static $translationKey = [];
         static $translationContent = [];
+        static $toCheckKey = [];
         static $toCheckContent = [];
 
         foreach ($cacheValues->get() as $item => $value) {
-            $redisTranslation = $this->serializer->deserialize(
-                $value,
-                RedisTranslation::class,
-                'json'
-            );
-
-            $translationContent[] = $redisTranslation->getKey();
+            $translationKey[] = $value->getKey();
+            $translationContent[] = $value->getValue();
         }
 
         foreach ($values as $item => $value) {
-            $toCheckContent[] = $item;
+            $toCheckKey[] = $item;
+            $toCheckContent[] = $value;
         }
 
-        $finalTranslatedArray = array_unique($translationContent);
-        $finalToCheckArray = array_unique($toCheckContent);
+        $finalArray = array_combine($translationKey, $translationContent);
+        $finalCheckArray = array_combine($toCheckKey, $toCheckContent);
 
-        if (count(array_diff($finalTranslatedArray, $finalToCheckArray)) > 0) {
+        if (count(array_diff($finalArray, $finalCheckArray)) > 0) {
             return true;
         }
 

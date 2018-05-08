@@ -17,7 +17,6 @@ use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class RedisTranslationWriterUnitTest.
@@ -26,11 +25,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class RedisTranslationWriterUnitTest extends TestCase
 {
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
     /**
      * @var RedisConnectorInterface
      */
@@ -41,7 +35,6 @@ class RedisTranslationWriterUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->redisConnector = $this->getMockBuilder(RedisConnectorInterface::class)
                                      ->disableOriginalConstructor()
                                      ->getMock();
@@ -49,10 +42,7 @@ class RedisTranslationWriterUnitTest extends TestCase
 
     public function testItImplements()
     {
-        $redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         static::assertInstanceOf(
             RedisTranslationWriterInterface::class,

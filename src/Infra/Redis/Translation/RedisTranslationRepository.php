@@ -15,7 +15,6 @@ namespace App\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class RedisTranslationRepository.
@@ -25,11 +24,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class RedisTranslationRepository implements RedisTranslationRepositoryInterface
 {
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
@@ -37,11 +31,8 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        SerializerInterface $serializer,
-        RedisConnectorInterface $redisConnector
-    ) {
-        $this->serializer = $serializer;
+    public function __construct(RedisConnectorInterface $redisConnector)
+    {
         $this->redisConnector = $redisConnector;
     }
 
@@ -56,11 +47,7 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
 
         if ($cacheItem->isHit()) {
             foreach ($cacheItem->get() as $item => $value) {
-                $translations[] = $this->serializer->deserialize(
-                    $value,
-                    RedisTranslation::class,
-                    'json'
-                );
+                $translations[] = $value;
             }
 
             return $translations;

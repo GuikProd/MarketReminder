@@ -20,7 +20,6 @@ use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationRepository;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class RedisTranslationRepositoryIntegrationTest.
@@ -29,11 +28,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
 {
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
     /**
      * @var RedisConnectorInterface
      */
@@ -58,10 +52,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         $this->redisConnector->getAdapter()->clear();
     }
@@ -77,10 +68,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationRepository(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
 
         $entry = $redisTranslationReader->getEntry('validators.fr.yaml');
 
@@ -98,10 +86,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationRepository(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
 
         $entry = $redisTranslationReader->getEntry('messages.fr.yaml');
 

@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis;
 
+use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
+use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -25,6 +27,11 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class RedisConnectorSystemTest extends KernelTestCase
 {
     use TestCaseTrait;
+
+    /**
+     * @var RedisConnectorInterface
+     */
+    private $redisConnector;
 
     /**
      * @var string
@@ -45,24 +52,25 @@ class RedisConnectorSystemTest extends KernelTestCase
 
         $this->redisDSN = static::$kernel->getContainer()->getParameter('redis.dsn');
         $this->redisNamespace = static::$kernel->getContainer()->getParameter('redis.namespace_test');
+
+        $this->redisConnector = new RedisConnector(
+            $this->redisDSN,
+            $this->redisNamespace
+        );
     }
 
     /**
      * @group Blackfire
      *
-     * @doesNotPerformAssertions
+     * @requires extension blackfire
      */
     public function testBlackfireProfilingWithCacheCleaning()
     {
-        $redisConnector = new RedisConnector(
-            $this->redisDSN,
-            $this->redisNamespace
-        );
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 700kb', 'Connector memory peak');
 
-        $probe = static::$blackfire->createProbe();
-
-        $redisConnector->getAdapter()->clear();
-
-        static::$blackfire->endProbe($probe);
+        $this->assertBlackfire($configuration, function () {
+            $this->redisConnector->getAdapter()->clear();
+        });
     }
 }

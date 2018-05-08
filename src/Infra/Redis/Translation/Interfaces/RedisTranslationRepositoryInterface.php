@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Infra\Redis\Translation\Interfaces;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Interface RedisTranslationRepositoryInterface.
@@ -26,10 +25,9 @@ interface RedisTranslationRepositoryInterface
     /**
      * RedisTranslationRepositoryInterface constructor.
      *
-     * @param SerializerInterface     $serializer
      * @param RedisConnectorInterface $redisConnector
      */
-    public function __construct(SerializerInterface $serializer, RedisConnectorInterface $redisConnector);
+    public function __construct(RedisConnectorInterface $redisConnector);
 
     /**
      * Allow to retrieve a single cache item and transform it into a RedisTranslation.

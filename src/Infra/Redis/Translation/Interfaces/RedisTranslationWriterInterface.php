@@ -15,7 +15,6 @@ namespace App\Infra\Redis\Translation\Interfaces;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use Psr\Cache\CacheItemInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Interface RedisTranslationWriterInterface.
@@ -27,13 +26,12 @@ interface RedisTranslationWriterInterface
     /**
      * RedisTranslationWriterInterface constructor.
      *
-     * @param SerializerInterface     $serializer
      * @param RedisConnectorInterface $redisConnector
      */
-    public function __construct(SerializerInterface $serializer, RedisConnectorInterface $redisConnector);
+    public function __construct(RedisConnectorInterface $redisConnector);
 
     /**
-     * Allow to store a new item in the Cache, a RedisTranslation is created, the item is stored as a JSON entry.
+     * Allow to store a new item in the Cache, a RedisTranslation is created and stored.
      *
      * For security purpose, the tag is generated using a @see Uuid::uuid4(), a check is done for
      * coherence purpose inside the "tag table".

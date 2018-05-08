@@ -1,0 +1,5 @@
+tests:
+    "Pages should load instantly":
+        path: "/.*"
+        assertions:
+            - "main.wall_time < 45ms"

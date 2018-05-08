@@ -15,10 +15,11 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
+use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class RedisTranslationWriterSystemTest.
@@ -35,14 +36,14 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     private $goodTestingData = [];
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
+
+    /**
+     * @var RedisTranslationWriterInterface
+     */
+    private $redisTranslationWriter;
 
     /**
      * {@inheritdoc}
@@ -51,75 +52,67 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->serializer = static::$kernel->getContainer()->get('serializer');
-
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        // Used to clear the cache before any test (if not, the cache will return always the same values).
+        // Used to clear the cache before any test (if not, the cache will always return the same values).
         $this->redisConnector->getAdapter()->clear();
 
         $this->goodTestingData = [
             'home.text' => 'Inventory management',
             'reset_password.title.text' => 'Réinitialiser votre mot de passe.'
         ];
+
+        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
     }
 
     /**
      * @group Blackfire
      *
-     * @doesNotPerformAssertions
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @requires extension blackfire
      */
     public function testBlackfireProfilingItDoesNotSaveSameContentTwice()
     {
-        $redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 120kb', 'Command memory usage');
+        $configuration->assert('main.io < 3ms', 'Command IO wait');
+        $configuration->assert('main.network_in < 3kb', 'Command network call');
 
-        $redisTranslationWriter->write(
-            'fr',
-            'messages.fr.yaml',
-            $this->goodTestingData
-        );
+        $this->assertBlackfire($configuration, function () {
+            $this->redisTranslationWriter->write(
+                'fr',
+                'messages.fr.yaml',
+                $this->goodTestingData
+            );
 
-        $probe = static::$blackfire->createProbe();
-
-        $redisTranslationWriter->write(
-            'fr',
-            'messages.fr.yaml',
-            $this->goodTestingData
-        );
-
-        static::$blackfire->endProbe($probe);
+            $this->redisTranslationWriter->write(
+                'fr',
+                'messages.fr.yaml',
+                $this->goodTestingData
+            );
+        });
     }
 
     /**
      * @group Blackfire
      *
-     * @doesNotPerformAssertions
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @requires extension blackfire
      */
     public function testBlackfireProfilingWithCacheWrite()
     {
-        $redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 115kb', 'Command memory usage');
+        $configuration->assert('main.io < 2ms', 'Command IO wait');
+        $configuration->assert('main.network_in < 200kb', 'Command network call');
 
-        $probe = static::$blackfire->createProbe();
-
-        $redisTranslationWriter->write(
-            'fr',
-            'validators.fr.yaml',
-            $this->goodTestingData
-        );
-
-        static::$blackfire->endProbe($probe);
+        $this->assertBlackfire($configuration, function () {
+            $this->redisTranslationWriter->write(
+                'fr',
+                'validators.fr.yaml',
+                $this->goodTestingData
+            );
+        });
     }
 }

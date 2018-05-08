@@ -17,7 +17,6 @@ use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class RedisTranslationWriterIntegrationTest.
@@ -26,11 +25,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class RedisTranslationWriterIntegrationTest extends KernelTestCase
 {
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
     /**
      * @var RedisConnectorInterface
      */
@@ -47,8 +41,6 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
     protected function setUp()
     {
         static::bootKernel();
-
-        $this->serializer = static::$kernel->getContainer()->get('serializer');
 
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
@@ -69,10 +61,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
      */
     public function testItRefuseToStoreWithSameContent()
     {
-        $redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         $redisTranslationWriter->write(
             'fr',
@@ -94,10 +83,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
      */
     public function testItRefuseToSaveWithSameFileName()
     {
-        $redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         $redisTranslationWriter->write(
             'fr',
@@ -119,10 +105,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
      */
     public function testItSaveEntries()
     {
-        $redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         $processStatus = $redisTranslationWriter->write(
             'fr',
@@ -138,10 +121,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
      */
     public function testItUpdateAndSaveItem()
     {
-        $redisTranslationWriter = new RedisTranslationWriter(
-            $this->serializer,
-            $this->redisConnector
-        );
+        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         $processStatus = $redisTranslationWriter->write(
             'fr',

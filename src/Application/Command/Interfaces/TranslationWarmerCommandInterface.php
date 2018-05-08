@@ -62,6 +62,21 @@ interface TranslationWarmerCommandInterface
     ): bool;
 
     /**
+     * @param OutputInterface $output         The console output (@see OutputInterface).
+     * @param string          $fileName       The filename to query in cache.
+     * @param \SplFileInfo    $toCompareFile  The file to compare against.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @return bool  If the cache is valid and can be used for query.
+     */
+    public function checkRedisTranslationCache(
+        OutputInterface $output,
+        string $fileName,
+        \SplFileInfo $toCompareFile
+    ): bool;
+
+    /**
      * Allow to backup every files before it translation, this way,
      * we can check the validity of the file each time.
      *

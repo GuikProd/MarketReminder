@@ -121,6 +121,12 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
         foreach ($files as $file) {
 
             try {
+                $this->checkRedisTranslationCache($output, $file->getFilename(), $file);
+            } catch (\Psr\Cache\InvalidArgumentException $exception) {
+                $output->write('<error>'.$exception->getMessage().'</error>');
+            }
+
+            try {
                 $this->warmRedisTranslationCache($input->getArgument('channel'), $output, $file);
             } catch (\Psr\Cache\InvalidArgumentException $exception) {
                 $output->write('<error>'. $exception->getMessage() . '</error>');
@@ -174,6 +180,22 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
         $output->write('<info>The translations are already cached, process skipped.</info>');
 
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function checkRedisTranslationCache(OutputInterface $output, string $fileName, \SplFileInfo $toCompareFile): bool
+    {
+        $toCheckContent = Yaml::parse($toCompareFile->getContents());
+
+        if (!$cachedContent = $this->redisTranslationRepository->getEntry($fileName)) {
+            return false;
+        }
+
+        dump($cachedContent);
+
+        return true;
     }
 
     /**

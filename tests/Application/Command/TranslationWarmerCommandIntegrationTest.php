@@ -18,21 +18,25 @@ use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\Redis\RedisConnector;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
+use App\Infra\Redis\Translation\RedisTranslationRepository;
+use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Class TranslationWarmerCommandTest.
+ * Class TranslationWarmerCommandIntegrationTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class TranslationWarmerCommandTest extends KernelTestCase
+class TranslationWarmerCommandIntegrationTest extends KernelTestCase
 {
-    use TestCaseTrait;
-
     /**
      * @var string
      */
@@ -42,6 +46,16 @@ class TranslationWarmerCommandTest extends KernelTestCase
      * @var CloudTranslationWarmerInterface
      */
     private $cloudTranslationWarmer;
+
+    /**
+     * @var RedisTranslationRepositoryInterface
+     */
+    private $redisTranslationRepository;
+
+    /**
+     * @var RedisTranslationWriterInterface
+     */
+    private $redisTranslationWriter;
 
     /**
      * @var string
@@ -55,6 +69,11 @@ class TranslationWarmerCommandTest extends KernelTestCase
     {
         static::bootKernel();
 
+        $redisConnector = new RedisConnector(
+            static::$kernel->getContainer()->getParameter('redis.dsn'),
+            static::$kernel->getContainer()->getParameter('redis.namespace_test')
+        );
+
         $this->acceptedLocales = static::$kernel->getContainer()->getParameter('accepted_locales');
         $this->translationFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
 
@@ -64,111 +83,10 @@ class TranslationWarmerCommandTest extends KernelTestCase
                 static::$kernel->getContainer()->getParameter('cloud.translation_credentials')
             )
         );
-    }
 
-    public function testItExtendsAndImplements()
-    {
-        $translationWarmerCommand = new TranslationWarmerCommand(
-            $this->acceptedLocales,
-            $this->cloudTranslationWarmer,
-            $this->translationFolder
-        );
+        $this->redisTranslationRepository = new RedisTranslationRepository($redisConnector);
 
-        static::assertInstanceOf(
-            Command::class,
-            $translationWarmerCommand
-        );
-
-        static::assertInstanceOf(
-            TranslationWarmerCommandInterface::class,
-            $translationWarmerCommand
-        );
-    }
-
-    /**
-     * Test if the Translations process is skipped due to the default file content.
-     *
-     * @group Blackfire
-     */
-    public function testBlackfireProfilingWithoutTranslation()
-    {
-        $this->createBlackfire();
-
-        $kernel = static::bootKernel();
-
-        $application = new Application($kernel);
-
-        $application->add(new TranslationWarmerCommand(
-            $this->acceptedLocales,
-            $this->cloudTranslationWarmer,
-            $this->translationFolder
-        ));
-
-        $command = $application->find('app:translation-warm');
-        $commandTester = new CommandTester($command);
-
-        $probe = static::$blackfire->createProbe();
-
-        $commandTester->execute([
-            'command' => $command->getName(),
-            'channel' => 'messages',
-            'locale' => 'en',
-        ]);
-
-        static::$blackfire->endProbe($probe);
-
-        $display = $commandTester->getDisplay();
-
-        static::assertContains(
-            'The default files already contains the translated content, the translation process is skipped.',
-            $display
-        );
-    }
-
-    /**
-     * Test if the backup process is skipped due to the fact that the backup
-     * already contain the translated content.
-     *
-     * @group Blackfire
-     */
-    public function testBlackfireProfilingWithoutBackup()
-    {
-        $this->createBlackfire();
-
-        $kernel = static::bootKernel();
-
-        $application = new Application($kernel);
-
-        $application->add(new TranslationWarmerCommand(
-            $this->acceptedLocales,
-            $this->cloudTranslationWarmer,
-            $this->translationFolder
-        ));
-
-        $command = $application->find('app:translation-warm');
-        $commandTester = new CommandTester($command);
-
-        $probe = static::$blackfire->createProbe();
-
-        $commandTester->execute([
-            'command' => $command->getName(),
-            'channel' => 'messages',
-            'locale' => 'ru',
-        ]);
-
-        static::$blackfire->endProbe($probe);
-
-        $display = $commandTester->getDisplay();
-
-        static::assertContains(
-            'No default file has been found with the translated content, the translation process is in progress.',
-            $display
-        );
-
-        static::assertNotContains(
-            'The default content of the file has been saved in the backup.',
-            $display
-        );
+        $this->redisTranslationWriter = new RedisTranslationWriter($redisConnector);
     }
 
     public function testItPreventWrongLocale()
@@ -180,6 +98,8 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $application->add(new TranslationWarmerCommand(
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
+            $this->redisTranslationRepository,
+            $this->redisTranslationWriter,
             $this->translationFolder
         ));
 
@@ -208,6 +128,8 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $application->add(new TranslationWarmerCommand(
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
+            $this->redisTranslationRepository,
+            $this->redisTranslationWriter,
             $this->translationFolder
         ));
 
@@ -236,6 +158,8 @@ class TranslationWarmerCommandTest extends KernelTestCase
         $application->add(new TranslationWarmerCommand(
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
+            $this->redisTranslationRepository,
+            $this->redisTranslationWriter,
             $this->translationFolder
         ));
 
