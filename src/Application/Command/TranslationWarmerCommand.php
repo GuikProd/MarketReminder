@@ -187,13 +187,21 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
      */
     public function checkRedisTranslationCache(OutputInterface $output, string $fileName, \SplFileInfo $toCompareFile): bool
     {
+        $cachedTranslations = [];
+
         $toCheckContent = Yaml::parse($toCompareFile->getContents());
 
         if (!$cachedContent = $this->redisTranslationRepository->getEntry($fileName)) {
             return false;
         }
 
-        dump($cachedContent);
+        foreach ($cachedContent as $item => $value) {
+            $cachedTranslations [$value->getKey()] = $value->getValue();
+        }
+
+        if (array_diff($toCheckContent, $cachedTranslations)) {
+            echo 'Hello';
+        }
 
         return true;
     }

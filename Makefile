@@ -11,12 +11,13 @@ ENV_BLACKFIRE = $(DOCKER) exec marketReminder_blackfire
 
 ## Globals commands
 start: ## Allow to create the project
-	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --no-recreate
+		$(DOCKER_COMPOSE) build --no-cache
+	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --force-recreate
 	    make install
 	    make cache-clear
 
 restart: ## Allow to recreate the project
-	    $(DOCKER_COMPOSE) up -d --build --remove-orphans
+	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --no-recreate
 	    make install
 	    make cache-clear
 
@@ -33,7 +34,6 @@ install: composer.json
 	     $(COMPOSER) clear-cache
 	     $(COMPOSER) dump-autoload --optimize --classmap-authoritative
 
-update: ## Update the dependencies
 update: composer.lock
 	     $(COMPOSER) update -a -o
 

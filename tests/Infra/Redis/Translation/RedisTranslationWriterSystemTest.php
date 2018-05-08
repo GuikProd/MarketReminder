@@ -78,10 +78,8 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     public function testBlackfireProfilingItDoesNotSaveSameContentTwice()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 100kb', 'Command memory usage');
-        $configuration->assert('main.io < 0.50ms', 'Command IO wait');
-        $configuration->assert('main.network_in < 750b', 'Command network call');
-
+        $configuration->assert('main.peak_memory < 100kb', 'Command no storage memory usage');
+        $configuration->assert('main.network_in < 750b', 'Command no storage network call');
 
         $this->redisTranslationWriter->write(
             'fr',
@@ -108,7 +106,6 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     {
         $configuration = new Configuration();
         $configuration->assert('main.peak_memory < 80kb', 'Command storage memory usage');
-        $configuration->assert('main.io < 1ms', 'Command storage IO wait');
         $configuration->assert('main.network_in < 50b', 'Command storage network call');
 
         $this->assertBlackfire($configuration, function () {

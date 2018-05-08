@@ -17,18 +17,15 @@ use App\UI\Action\Core\HomeAction;
 use App\UI\Action\Core\Interfaces\HomeActionInterface;
 use App\UI\Presenter\Core\HomePresenter;
 use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
-use App\UI\Responder\Core\HomeResponder;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * Class HomeActionTest.
+ * Class HomeActionUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class HomeActionTest extends TestCase
+class HomeActionUnitTest extends TestCase
 {
     /**
      * @var HomePresenterInterface
@@ -55,26 +52,6 @@ class HomeActionTest extends TestCase
     {
         $homeAction = new HomeAction();
 
-        static::assertInstanceOf(
-            HomeActionInterface::class,
-            $homeAction
-        );
-    }
-
-    public function testReturn()
-    {
-        $requestMock = $this->createMock(Request::class);
-
-        $homeResponder = new HomeResponder(
-            $this->twig,
-            $this->homePresenter
-        );
-
-        $homeAction = new HomeAction();
-
-        static::assertInstanceOf(
-            Response::class,
-            $homeAction($requestMock, $homeResponder)
-        );
+        static::assertInstanceOf(HomeActionInterface::class, $homeAction);
     }
 }

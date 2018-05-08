@@ -24,7 +24,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class HomeResponder implements HomeResponderInterface
+final class HomeResponder implements HomeResponderInterface
 {
     /**
      * @var HomePresenterInterface

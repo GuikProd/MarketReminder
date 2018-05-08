@@ -19,7 +19,7 @@ This project use Docker environment files in order to allow the configuration ac
 this way, you NEED to define a .env file in order to launch the build.
 
 **_In order to perform better, Docker can block your dependencies installation and return an error
-or never change your php configuration, we recommand to delete all your images/containers
+or never change your php configuration, we recommend to delete all your images/containers
 before building the project_**
 
 ```bash
@@ -36,7 +36,7 @@ Once this is done, let's build the project.
 cp .env.dist .env
 ```
 
-Update the informations linked to Docker then use Docker-Compose :
+Update the information linked to Docker then use Docker-Compose :
 
 ```bash
 make start
@@ -112,7 +112,9 @@ This project use PHPUnit, Behat and Blackfire in order to test and validate his 
 here the listing of available commands for testing purpose:
 
 ```bash
-make phpunit
+make phpunit FOLDER=desiredfolder
+
+make phpunit-blackfire FOLDER=desiredfolder
 
 make behat
 ```

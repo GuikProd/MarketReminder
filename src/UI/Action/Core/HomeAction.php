@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     }
  * )
  */
-class HomeAction implements HomeActionInterface
+final class HomeAction implements HomeActionInterface
 {
     /**
      * {@inheritdoc}

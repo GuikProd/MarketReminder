@@ -84,10 +84,12 @@ class RedisConnectorSystemTest extends KernelTestCase
     public function testBlackfireProfilingWithCacheCleaning()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 200kb', 'Connector memory peak');
+        $configuration->assert('main.peak_memory < 170kb', 'Connector memory peak');
 
         $this->assertBlackfire($configuration, function () {
-            $this->redisConnector->getAdapter()->clear();
+            $adapter = $this->redisConnector->getAdapter();
+
+            $adapter->clear();
         });
     }
 }

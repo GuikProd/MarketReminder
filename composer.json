@@ -13,6 +13,7 @@
         "grpc/grpc": "^1.6",
         "lexik/jwt-authentication-bundle": "^2.4",
         "overblog/graphql-bundle": "^0.9.1",
+        "php-http/httplug-pack": "^1.1",
         "predis/predis": "^1.1",
         "prooph/common": "^4.2",
         "ramsey/uuid": "^3.7",
