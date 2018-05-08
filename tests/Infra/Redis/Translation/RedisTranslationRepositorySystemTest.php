@@ -15,10 +15,12 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationRepository;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
+use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -34,6 +36,11 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
      * @var RedisConnectorInterface
      */
     private $redisConnector;
+
+    /**
+     * @var RedisTranslationRepositoryInterface
+     */
+    private $redisTranslationRepository;
 
     /**
      * @var RedisTranslationWriterInterface
@@ -54,60 +61,57 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
 
         $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
+        $this->redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
+
         $this->redisConnector->getAdapter()->clear();
     }
 
     /**
      * @group Blackfire
      *
-     * @doesNotPerformAssertions
+     * @requires extension blackfire
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testBlackfireProfilingAndItReturnNull()
     {
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 90kb', 'Repository call memory usage');
+        $configuration->assert('main.network_in < 500b', 'Repository network call');
+
         $this->redisTranslationWriter->write(
             'fr',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
-
-        $probe = static::$blackfire->createProbe();
-
-        $redisTranslationReader->getEntry(
-            'messages.fr.yaml',
-            ['home.text' => 'Hi !']
-        );
-
-        static::$blackfire->endProbe($probe);
+        $this->assertBlackfire($configuration, function () {
+            $this->redisTranslationRepository->getEntry('messages.fr.yaml');
+        });
     }
 
     /**
      * @group Blackfire
      *
-     * @doesNotPerformAssertions
+     * @requires extension blackfire
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testBlackfireProfilingAndItReturnAnEntry()
     {
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 80kb', 'Repository call memory usage');
+        $configuration->assert('main.network_in < 500b', 'Repository network call');
+        $configuration->assert('main.network_out < 100b', 'Repository network callees');
+
         $this->redisTranslationWriter->write(
             'fr',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
-
-        $probe = static::$blackfire->createProbe();
-
-        $redisTranslationReader->getEntry(
-            'messages.fr.yaml',
-            ['home.text' => 'hello !']
-        );
-
-        static::$blackfire->endProbe($probe);
+        $this->assertBlackfire($configuration, function () {
+            $this->redisTranslationRepository->getEntry('messages.fr.yaml');
+        });
     }
 }

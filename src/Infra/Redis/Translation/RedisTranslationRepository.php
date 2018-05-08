@@ -41,16 +41,10 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
      */
     public function getEntry(string $filename): ?array
     {
-        static $translations = [];
-
         $cacheItem = $this->redisConnector->getAdapter()->getItem($filename);
 
         if ($cacheItem->isHit()) {
-            foreach ($cacheItem->get() as $item => $value) {
-                $translations[] = $value;
-            }
-
-            return $translations;
+            return $cacheItem->get();
         }
 
         return null;
