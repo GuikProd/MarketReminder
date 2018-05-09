@@ -30,7 +30,7 @@ interface RedisTranslationRepositoryInterface
     public function __construct(RedisConnectorInterface $redisConnector);
 
     /**
-     * Allow to retrieve a single cache item and transform it into a RedisTranslation.
+     * Allow to retrieve an array of RedisTranslation using the default filename.
      *
      * @param string $filename  The name of the item to retrieve.
      *
@@ -38,5 +38,18 @@ interface RedisTranslationRepositoryInterface
      *
      * @return array  The array which contains all the translations stored using the $filename.
      */
-    public function getEntry(string $filename): ?array;
+    public function getEntries(string $filename): ?array;
+
+    /**
+     * Allow to retrieve a single RedisTranslations using the default filename, is key and the locale.
+     *
+     * @param string $filename The name of the translation file.
+     * @param string $locale   The locale used to return the translated content.
+     * @param string $key      The key used during the storage process.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @return RedisTranslationInterface|null
+     */
+    public function getSingleEntry(string $filename, string $locale, string $key): ?RedisTranslationInterface;
 }

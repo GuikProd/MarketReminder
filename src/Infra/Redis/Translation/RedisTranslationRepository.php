@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 
 /**
@@ -39,12 +40,28 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
     /**
      * {@inheritdoc}
      */
-    public function getEntry(string $filename): ?array
+    public function getEntries(string $filename): ?array
     {
         $cacheItem = $this->redisConnector->getAdapter()->getItem($filename);
 
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSingleEntry(string $filename, string $locale, string $key): ?RedisTranslationInterface
+    {
+        $cacheItem = $this->redisConnector->getAdapter()->getItem($filename);
+
+        if ($cacheItem->isHit()) {
+            foreach ($cacheItem->get() as $item => $value) {
+                return $value->getKey() === $key ? $value : null;
+            }
         }
 
         return null;

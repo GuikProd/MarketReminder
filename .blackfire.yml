@@ -3,6 +3,18 @@ tests:
         path: "/.*"
         assertions:
             - "main.wall_time < 45ms"
+    "Memory should be under control":
+        path: "/.*"
+        assertions:
+            - "main.peak_memory < 5mb"
+    "IO wait time should be minimal":
+        path: "/.*"
+        assertions:
+            - "main.io < 15ms"
+    "Network in should be minimal":
+        path: "/.*"
+        assertions:
+            - "main.network_in < 400kb"
     '"session.use_strict_mode" should be enabled':
             path:
                 - '/.*'
@@ -11,4 +23,21 @@ tests:
             command: '.*'
             assertions:
                 - { label: null, expression: 'runtime.configuration.session_use_strict_mode === true' }
+            exclude: {  }
+    '"expose_php" should be disabled':
+            path:
+                - '/.*'
+            methods:
+                - ANY
+            command: '.*'
+            assertions:
+                - { label: null, expression: 'not is_configuration_enabled("expose_php")' }
+            exclude: {  }
+    '"max_input_time" should be less than 60 seconds on Web requests':
+            path:
+                - '/.*'
+            methods:
+                - ANY
+            assertions:
+                - { label: null, expression: 'runtime.configuration.max_input_time >= 0 and runtime.configuration.max_input_time <= 60' }
             exclude: {  }

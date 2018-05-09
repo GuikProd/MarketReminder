@@ -107,8 +107,9 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     public function testBlackfireProfilingWithCacheWrite()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 80kb', 'Command storage memory usage');
-        $configuration->assert('main.network_in < 50b', 'Command storage network call');
+        $configuration->assert('main.peak_memory < 80kb', 'RedisTranslationWriter memory usage');
+        $configuration->assert('main.network_in < 50b', 'RedisTranslationWriter network int');
+        $configuration->assert('main.network_out < 1mb', 'RedisTranslationWriter network out');
 
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationWriter->write(

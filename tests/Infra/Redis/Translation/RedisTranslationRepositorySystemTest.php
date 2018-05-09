@@ -81,12 +81,13 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
 
         $this->redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
 
         $this->assertBlackfire($configuration, function () {
-            $this->redisTranslationRepository->getEntry('messages.fr.yaml');
+            $this->redisTranslationRepository->getEntries('messages.fr.yaml');
         });
     }
 
@@ -106,12 +107,13 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
 
         $this->redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
 
         $this->assertBlackfire($configuration, function () {
-            $this->redisTranslationRepository->getEntry('messages.fr.yaml');
+            $this->redisTranslationRepository->getEntries('messages.fr.yaml');
         });
     }
 }

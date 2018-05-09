@@ -69,7 +69,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
 
         $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
 
-        $entry = $redisTranslationReader->getEntry('validators.fr.yaml');
+        $entry = $redisTranslationReader->getEntries('validators.fr.yaml');
 
         static::assertNull($entry);
     }
@@ -88,9 +88,32 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
 
         $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
 
-        $entry = $redisTranslationReader->getEntry('messages.fr.yaml');
+        $entry = $redisTranslationReader->getEntries('messages.fr.yaml');
 
         static::assertCount(1, $entry);
         static::assertInstanceOf(RedisTranslationInterface::class, $entry[0]);
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItReturnASingleEntry()
+    {
+        $this->redisTranslationWriter->write(
+            'fr',
+            'messages',
+            'messages.fr.yaml',
+            ['home.text' => 'hello !']
+        );
+
+        $redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
+
+        $entry = $redisTranslationRepository->getSingleEntry(
+            'messages.fr.yaml',
+            'fr',
+            'home.text'
+        );
+
+        static::assertInstanceOf(RedisTranslationInterface::class, $entry);
     }
 }
