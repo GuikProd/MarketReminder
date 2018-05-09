@@ -83,6 +83,7 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
 
         $this->redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             $this->goodTestingData
         );
@@ -91,6 +92,7 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
 
             $this->redisTranslationWriter->write(
                 'fr',
+                'messages',
                 'messages.fr.yaml',
                 $this->goodTestingData
             );
@@ -111,6 +113,7 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationWriter->write(
                 'fr',
+                'validators',
                 'validators.fr.yaml',
                 $this->goodTestingData
             );

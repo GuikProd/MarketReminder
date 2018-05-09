@@ -64,6 +64,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
     {
         $this->redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
@@ -82,6 +83,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
     {
         $this->redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );

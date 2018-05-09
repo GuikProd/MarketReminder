@@ -46,7 +46,7 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function write(string $channel, string $fileName, array $values): bool
+    public function write(string $locale, string $channel, string $fileName, array $values): bool
     {
         $cacheItem = $this->redisConnector->getAdapter()->getItem($fileName);
 
@@ -66,6 +66,7 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
 
         foreach ($values as $item => $value) {
             $this->entries[] = new RedisTranslation([
+                '_locale' => $locale,
                 'channel' => $channel,
                 'tag' => $tag,
                 'key' => $item,

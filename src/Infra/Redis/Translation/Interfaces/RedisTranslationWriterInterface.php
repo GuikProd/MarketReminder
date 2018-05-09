@@ -38,6 +38,7 @@ interface RedisTranslationWriterInterface
      *
      * For reading purpose, the item is tagged with the Uuid tag.
      *
+     * @param string $locale   The locale used by the translation.
      * @param string $channel  The channel used by the item (used for retrieving process).
      * @param string $fileName The name of the file to cache (used as a key inside the cache along with the tag).
      * @param array  $values   The array of values to cache.
@@ -46,7 +47,7 @@ interface RedisTranslationWriterInterface
      *
      * @return bool  If the write process has succeed.
      */
-    public function write(string $channel, string $fileName, array $values): bool;
+    public function write(string $locale, string $channel, string $fileName, array $values): bool;
 
     /**
      * Allow to decide if the new values should be stored in the cache, the check is done

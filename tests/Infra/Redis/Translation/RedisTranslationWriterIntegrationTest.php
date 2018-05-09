@@ -65,12 +65,14 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
 
         $redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             $this->goodTestingData
         );
 
         $processStatus = $redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             $this->goodTestingData
         );
@@ -87,12 +89,14 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
 
         $redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             $this->goodTestingData
         );
 
         $processStatus = $redisTranslationWriter->write(
             'fr',
+            'messages',
             'messages.fr.yaml',
             $this->goodTestingData
         );
@@ -109,6 +113,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
 
         $processStatus = $redisTranslationWriter->write(
             'fr',
+            'validators',
             'validators.fr.yaml',
             $this->goodTestingData
         );
@@ -125,6 +130,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
 
         $processStatus = $redisTranslationWriter->write(
             'fr',
+            'validators',
             'validators.fr.yaml',
             ['user.creation_success' => 'Hello user !']
         );

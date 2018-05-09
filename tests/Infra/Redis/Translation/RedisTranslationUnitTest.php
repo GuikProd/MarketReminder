@@ -54,5 +54,6 @@ class RedisTranslationUnitTest extends TestCase
         static::assertSame('fr', $redisTranslation->getTag());
         static::assertSame('user.creation_success', $redisTranslation->getKey());
         static::assertSame('Ce compte a bien été créé.', $redisTranslation->getValue());
+        static::assertArrayHasKey('_locale', $redisTranslation->getOptions());
     }
 }
