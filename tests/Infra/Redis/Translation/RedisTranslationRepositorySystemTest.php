@@ -76,8 +76,8 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
     public function testBlackfireProfilingAndItReturnNull()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 90kb', 'Repository call memory usage');
-        $configuration->assert('main.network_in < 500b', 'Repository network call');
+        $configuration->assert('main.peak_memory < 90kb', 'Repository null call memory usage');
+        $configuration->assert('main.network_in < 400b', 'Repository null network call');
 
         $this->redisTranslationWriter->write(
             'fr',
@@ -101,9 +101,9 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
     public function testBlackfireProfilingAndItReturnAnEntry()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 80kb', 'Repository call memory usage');
-        $configuration->assert('main.network_in < 500b', 'Repository network call');
-        $configuration->assert('main.network_out < 100b', 'Repository network callees');
+        $configuration->assert('main.peak_memory < 80kb', 'Repository entries call memory usage');
+        $configuration->assert('main.network_in < 400b', 'Repository entries network call');
+        $configuration->assert('main.network_out < 90b', 'Repository entries network callees');
 
         $this->redisTranslationWriter->write(
             'fr',
@@ -114,6 +114,36 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
 
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationRepository->getEntries('messages.fr.yaml');
+        });
+    }
+
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testBlackfireProfilingAndItReturnASingleEntry()
+    {
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 80kb', 'Repository single entry call memory usage');
+        $configuration->assert('main.network_in < 400b', 'Repository single entry  network call');
+        $configuration->assert('main.network_out < 90b', 'Repository single entry network callees');
+
+        $this->redisTranslationWriter->write(
+            'fr',
+            'messages',
+            'messages.fr.yaml',
+            ['home.text' => 'hello !']
+        );
+
+        $this->assertBlackfire($configuration, function () {
+            $this->redisTranslationRepository->getSingleEntry(
+                'messages.fr.yaml',
+                'fr',
+                'home.text'
+            );
         });
     }
 }

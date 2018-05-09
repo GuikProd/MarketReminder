@@ -60,7 +60,9 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
 
         if ($cacheItem->isHit()) {
             foreach ($cacheItem->get() as $item => $value) {
-                return $value->getKey() === $key ? $value : null;
+                return $value->getKey() === $key && $value->getLocale() === $locale
+                    ? $value
+                    : null;
             }
         }
 
