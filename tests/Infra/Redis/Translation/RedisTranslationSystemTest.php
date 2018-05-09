@@ -15,6 +15,7 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Translation\RedisTranslation;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
+use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,15 +30,23 @@ class RedisTranslationSystemTest extends TestCase
     /**
      * @group Blackfire
      *
-     * @doesNotPerformAssertions
+     * @requires extension blackfire
      */
-    public function testOptionsResolving()
+    public function testBlackfireProfilingAndOptionsResolving()
     {
-        $redisTranslation = new RedisTranslation([
-            'channel' => 'messages',
-            'tag' => 'fr',
-            'key' => 'user.creation_success',
-            'value' => 'Ce compte a bien été créé.'
-        ]);
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 300kb', 'RedisTranslation options resolving memory cost');
+
+        $this->assertBlackfire($configuration, function () {
+            $redisTranslation = new RedisTranslation([
+                '_locale' => '',
+                'channel' => 'messages',
+                'tag' => 'fr',
+                'key' => 'user.creation_success',
+                'value' => 'Ce compte a bien été créé.'
+            ]);
+
+            $redisTranslation->getOptions();
+        });
     }
 }

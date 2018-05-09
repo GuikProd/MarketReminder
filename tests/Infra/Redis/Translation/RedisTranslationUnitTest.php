@@ -27,6 +27,7 @@ class RedisTranslationUnitTest extends TestCase
     public function testItImplements()
     {
         $redisTranslation = new RedisTranslation([
+            '_locale' => 'fr',
             'channel' => 'messages',
             'tag' => 'fr',
             'key' => 'user.creation_success',
@@ -42,6 +43,7 @@ class RedisTranslationUnitTest extends TestCase
     public function testItDefineDefaultAttributes()
     {
         $redisTranslation = new RedisTranslation([
+            '_locale' => 'fr',
             'channel' => 'messages',
             'tag' => 'fr',
             'key' => 'user.creation_success',

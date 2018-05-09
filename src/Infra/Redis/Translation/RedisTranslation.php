@@ -46,16 +46,26 @@ final class RedisTranslation implements RedisTranslationInterface
     public function configureOptions(Options $resolver): void
     {
         $resolver->setDefaults([
+            '_locale' => null,
             'channel' => null,
             'tag' => null,
             'key' => null,
             'value' => null
         ]);
 
+        $resolver->setAllowedTypes('_locale', 'string');
         $resolver->setAllowedTypes('channel', 'string');
         $resolver->setAllowedTypes('tag', 'string');
         $resolver->setAllowedTypes('key', 'string');
         $resolver->setAllowedTypes('value', 'string');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocale(): string
+    {
+        return $this->options['_locale'];
     }
 
     /**

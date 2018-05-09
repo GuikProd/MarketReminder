@@ -37,6 +37,11 @@ interface RedisTranslationInterface
     /**
      * @return string
      */
+    public function getLocale(): string;
+
+    /**
+     * @return string
+     */
     public function getChannel(): string;
 
     /**
