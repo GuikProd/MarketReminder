@@ -3,3 +3,12 @@ tests:
         path: "/.*"
         assertions:
             - "main.wall_time < 45ms"
+    '"session.use_strict_mode" should be enabled':
+            path:
+                - '/.*'
+            methods:
+                - ANY
+            command: '.*'
+            assertions:
+                - { label: null, expression: 'runtime.configuration.session_use_strict_mode === true' }
+            exclude: {  }
