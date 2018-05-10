@@ -41,7 +41,7 @@ interface RedisTranslationRepositoryInterface
     public function getEntries(string $filename): ?array;
 
     /**
-     * Allow to retrieve a single RedisTranslations using the default filename, is key and the locale.
+     * Allow to retrieve a single RedisTranslation using the default filename, is key and the locale.
      *
      * @param string $filename The name of the translation file.
      * @param string $locale   The locale used to return the translated content.

@@ -10,7 +10,7 @@ jobs:
             - run: yarn build
     deptrac:
         docker:
-            - image: circleci/php:7.2.4-apache-node-browsers
+            - image: circleci/php:7.2.5-apache-node-browsers
         steps:
             - checkout
             - run: curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
@@ -58,6 +58,45 @@ jobs:
             - run: rm -rf var/data.db
             - store_artifacts:
                 path: /tmp/phpunit-coverage
+    blackfire:
+        docker:
+            - image: circleci/php:7.2.5-apache-node-browsers
+            - image: redis
+        steps:
+            - checkout
+            - run: sudo apt install -y libsqlite3-dev zlib1g-dev
+            - run: sudo docker-php-ext-install zip
+            - run: echo $BLACKFIRE_CONFIG_FILE > ~/.blackfire.ini
+            - run: curl -L https://blackfire.io/api/v1/releases/agent/linux/amd64 | tar zxpf -
+            - run: chmod 755 agent && ./agent --config=~/.blackfire.ini --socket=unix:///tmp/blackfire.sock
+            - run: curl -L https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$(php -r "echo PHP_MAJOR_VERSION . PHP_MINOR_VERSION;")-zts | tar zxpf -
+            - run: echo "extension=$(pwd)/$(ls blackfire-*.so | tr -d '[[:space:]]')" > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/blackfire.ini
+            - run: echo "blackfire.agent_socket=unix:///tmp/blackfire.sock" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/blackfire.ini
+            - run: sudo composer self-update
+            - restore_cache:
+                keys:
+                    - composer-v1-{{ checksum "composer.json" }}
+                    - composer-v1-
+            - run: cp .env.dist .env
+            - run: cp .env.behat.dist .env.behat
+            - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/vision
+            - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_TRANSLATION_CREDENTIALS > ${HOME}/project/config/credentials/google/translation/credentials.json
+            - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
+            - run: composer install -n --optimize-autoloader --classmap-authoritative
+            - run: composer dump-autoload --optimize --classmap-authoritative
+            - save_cache:
+                key: composer-v1-{{ checksum "composer.json" }}
+                paths:
+                    - vendor
+            - run: rm -rf var/cache/*
+            - run: ./bin/console cache:warmup
+            - run: ./bin/console d:d:c --env=test
+            - run: ./bin/console d:s:c --env=test
+            - run: ./bin/console d:f:l -n --env=test
+            - run: ./bin/console doctrine:cache:clear-query
+            - run: ./bin/console doctrine:cache:clear-metadata
     behat_core_fr:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
@@ -161,6 +200,9 @@ workflows:
         jobs:
             - deptrac
             - phpunit
+    performances:
+        jobs:
+            - blackfire
     functional:
         jobs:
             - behat_core_fr
