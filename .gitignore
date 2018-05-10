@@ -29,3 +29,6 @@ public/images/profiles/
 .phpunit
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+# Blackfire
+.blackfire
