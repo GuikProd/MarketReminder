@@ -167,7 +167,7 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     {
         $configuration = new Configuration();
         $configuration->setMetadata('skip_timeline', 'false');
-        $configuration->assert('main.peak_memory < 1.5MB', 'Translations warm translation memory usage');
+        $configuration->assert('main.peak_memory < 1.6MB', 'Translations warm translation memory usage');
         $configuration->assert('main.network_in < 25kB', 'Translations warm translation network call');
         $configuration->assert('metrics.http.requests.count <= 2', 'Translation warm translation maximum HTTP requests.');
 
