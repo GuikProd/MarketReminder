@@ -39,7 +39,7 @@ Encore
             test: /\.js$/,
             loader: 'babel-loader',
             query: {
-                presets: ['es2015']
+                presets: ['es2016']
             }
         }
     )
@@ -58,6 +58,9 @@ Encore
 
     // Vue
     .addEntry('vue', './assets/vue/public/index.js')
+
+    // Polymer
+    .addEntry('home', './assets/javascript/polymer/home.js')
 ;
 
 module.exports = Encore.getWebpackConfig();

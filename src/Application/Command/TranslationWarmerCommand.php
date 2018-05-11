@@ -21,7 +21,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
@@ -98,14 +97,15 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
 
         $finder = new Finder();
 
-        $files = $finder->files()
-                        ->in($this->translationsFolder)
-                        ->name(
-                            $input->getArgument('channel').'.fr.yaml'
-                        );
+        $files = $finder->files()->in($this->translationsFolder)
+                                 ->name($input->getArgument('channel').'.fr.yaml');
 
         if (!$files->count() > 0) {
-            throw new \InvalidArgumentException(\sprintf('This channel does not exist, please retry !'));
+            throw new \InvalidArgumentException(
+                \sprintf(
+                    'This channel does not exist, please retry !'
+                )
+            );
         }
 
         if (!\in_array($input->getArgument('locale'), explode('|', $this->acceptedLocales))) {
@@ -121,22 +121,17 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
         foreach ($files as $file) {
 
             try {
-                $this->checkRedisTranslationCache($output, $file->getFilename(), $file);
+                if (!$this->checkRedisTranslationCache($output, $file->getFilename(), $file)) {
+                    $this->warmRedisTranslationCache(
+                        $input->getArgument('locale'),
+                        $input->getArgument('channel'),
+                        $output,
+                        $file
+                    );
+                }
             } catch (\Psr\Cache\InvalidArgumentException $exception) {
                 $output->write('<error>'.$exception->getMessage().'</error>');
             }
-
-            try {
-                $this->warmRedisTranslationCache($input->getArgument('channel'), $output, $file);
-            } catch (\Psr\Cache\InvalidArgumentException $exception) {
-                $output->write('<error>'. $exception->getMessage() . '</error>');
-            }
-
-            if ($this->checkFileContent($output, $input->getArgument('channel'), $input->getArgument('locale'), $file)) {
-                return;
-            }
-
-            $this->backUpTranslation($output, $file);
 
             $content = Yaml::parse($file->getContents());
 
@@ -167,12 +162,10 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     /**
      * {@inheritdoc}
      */
-    public function warmRedisTranslationCache(string $channel, OutputInterface $output, \SplFileInfo $toWarmFile): bool
+    public function warmRedisTranslationCache(string $locale, string $channel, OutputInterface $output, \SplFileInfo $toWarmFile): bool
     {
-        $content = Yaml::parse($toWarmFile->getContents());
-
-        if ($this->redisTranslationWriter->write($channel, $toWarmFile->getFilename(), $content)) {
-            $output->write('<info>The translations has been cached.</info>');
+        if ($this->redisTranslationWriter->write($locale, $channel, $toWarmFile->getFilename(), Yaml::parse($toWarmFile->getContents()))) {
+            $output->write('<info>The translations are been cached.</info>');
 
             return true;
         }
@@ -189,96 +182,18 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     {
         $cachedTranslations = [];
 
-        $toCheckContent = Yaml::parse($toCompareFile->getContents());
-
-        if (!$cachedContent = $this->redisTranslationRepository->getEntry($fileName)) {
+        if (!$cachedContent = $this->redisTranslationRepository->getEntries($fileName)) {
             return false;
         }
 
         foreach ($cachedContent as $item => $value) {
-            $cachedTranslations [$value->getKey()] = $value->getValue();
+            $cachedTranslations[$value->getKey()] = $value->getValue();
         }
 
-        if (array_diff($toCheckContent, $cachedTranslations)) {
-            echo 'Hello';
-        }
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function backUpTranslation(OutputInterface $output, \SplFileInfo $toBackUpFile): void
-    {
-        $fileSystem = new Filesystem();
-        $finder = new Finder();
-        $fileSystem->mkdir($this->translationsFolder.'/backup');
-
-        $files = $finder->files()
-                        ->in($this->translationsFolder.'/backup');
-
-        foreach ($files as $file) {
-            if (Yaml::parse($toBackUpFile->getContents()) === Yaml::parse($file->getContents())) {
-                return;
-            }
-        }
-
-        file_put_contents(
-            $this->translationsFolder.'/backup/'.time().$toBackUpFile->getBasename(),
-            Yaml::dump(
-                Yaml::parse($toBackUpFile->getContents())
-            )
-        );
-
-        $output->writeln('<info>The default content of the file has been saved in the backup.</info>');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function checkFileContent(OutputInterface $output, string $channel, string $locale, \SplFileInfo $toCompareFile): bool
-    {
-        $finder = new Finder();
-
-        $files = $finder->files()
-                        ->in($this->translationsFolder)
-                        ->name($channel.'.'.$locale.'.yaml');
-
-        if (count($files) < 1) {
-            $output->writeln(
-                '<info>No default file has been found with the translated content, the translation process is in progress.</info>'
-            );
-
+        if (count(array_diff(Yaml::parse($toCompareFile->getContents()), $cachedTranslations)) > 0) {
             return false;
         }
 
-        $defaultKeys = [];
-        $toCompareKeys = [];
-
-        foreach ($files as $file) {
-            $content = Yaml::parse($file->getContents());
-            $defaultContent = Yaml::parse($toCompareFile->getContents());
-
-            foreach ($defaultContent as $key => $value) {
-                $defaultKeys[] = $key;
-            }
-
-            foreach ($content as $key => $value) {
-                $toCompareKeys[] = $key;
-            }
-
-            if (\array_diff($defaultKeys, $toCompareKeys)) {
-                return false;
-            } else if (!\array_diff($defaultKeys, $toCompareKeys)) {
-                $output->writeln(
-                    '<info>The default files already contains the translated content, the translation process is skipped.</info>'
-                );
-
-                return true;
-            }
-        }
-
-        return false;
+        return true;
     }
 }

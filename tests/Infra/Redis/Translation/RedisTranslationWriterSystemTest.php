@@ -78,6 +78,7 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     public function testBlackfireProfilingItDoesNotSaveSameContentTwice()
     {
         $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 100kb', 'Command no storage memory usage');
         $configuration->assert('main.network_in < 750b', 'Command no storage network call');
 
@@ -107,6 +108,7 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     public function testBlackfireProfilingWithCacheWrite()
     {
         $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 80kb', 'RedisTranslationWriter memory usage');
         $configuration->assert('main.network_in < 50b', 'RedisTranslationWriter network int');
         $configuration->assert('main.network_out < 1mb', 'RedisTranslationWriter network out');

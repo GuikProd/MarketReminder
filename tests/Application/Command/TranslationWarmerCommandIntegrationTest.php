@@ -18,6 +18,7 @@ use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
@@ -43,9 +44,29 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     private $acceptedLocales;
 
     /**
+     * @var Application
+     */
+    private $application;
+
+    /**
      * @var CloudTranslationWarmerInterface
      */
     private $cloudTranslationWarmer;
+
+    /**
+     * @var TranslationWarmerCommandInterface
+     */
+    private $command;
+
+    /**
+     * @var CommandTester
+     */
+    private $commandTester;
+
+    /**
+     * @var RedisConnectorInterface
+     */
+    private $redisConnector;
 
     /**
      * @var RedisTranslationRepositoryInterface
@@ -69,7 +90,9 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $redisConnector = new RedisConnector(
+        $this->application = new Application(static::$kernel);
+
+        $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
@@ -84,34 +107,31 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
             )
         );
 
-        $this->redisTranslationRepository = new RedisTranslationRepository($redisConnector);
+        $this->redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
+        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
-        $this->redisTranslationWriter = new RedisTranslationWriter($redisConnector);
-    }
-
-    public function testItPreventWrongLocale()
-    {
-        $kernel = static::bootKernel();
-
-        $application = new Application($kernel);
-
-        $application->add(new TranslationWarmerCommand(
+        $this->application->add(new TranslationWarmerCommand(
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
             $this->redisTranslationWriter,
             $this->translationFolder
         ));
+        $this->command = $this->application->find('app:translation-warm');
+        $this->commandTester = new CommandTester($this->command);
 
-        $command = $application->find('app:translation-warm');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
+        $this->redisConnector->getAdapter()->clear();
+    }
+
+    public function testItPreventWrongLocale()
+    {
+        $this->commandTester->execute([
+            'command' => $this->command->getName(),
             'channel' => 'messages',
             'locale' => 'ru',
         ]);
 
-        $display = $commandTester->getDisplay();
+        $display = $this->commandTester->getDisplay();
 
         static::assertContains(
             'The locale isn\'t defined in the accepted locales, the generated files could not be available.',
@@ -119,62 +139,35 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
         );
     }
 
-    public function testItCheckDefaultFiles()
+    public function testItWriteTheContentInCache()
     {
-        $kernel = static::bootKernel();
-
-        $application = new Application($kernel);
-
-        $application->add(new TranslationWarmerCommand(
-            $this->acceptedLocales,
-            $this->cloudTranslationWarmer,
-            $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
-            $this->translationFolder
-        ));
-
-        $command = $application->find('app:translation-warm');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
+        $this->commandTester->execute([
+            'command' => $this->command->getName(),
             'channel' => 'messages',
             'locale' => 'en',
         ]);
 
-        $display = $commandTester->getDisplay();
-
-        static::assertContains(
-            'The default files already contains the translated content, the translation process is skipped.',
-            $display
-        );
+        static::assertContains('The translations are been cached.', $this->commandTester->getDisplay());
     }
 
     public function testItDoesNotBackupTheFile()
     {
-        $kernel = static::bootKernel();
-
-        $application = new Application($kernel);
-
-        $application->add(new TranslationWarmerCommand(
-            $this->acceptedLocales,
-            $this->cloudTranslationWarmer,
-            $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
-            $this->translationFolder
-        ));
-
-        $command = $application->find('app:translation-warm');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
+        $this->commandTester->execute([
+            'command' => $this->command->getName(),
             'channel' => 'messages',
             'locale' => 'en',
         ]);
 
-        $display = $commandTester->getDisplay();
+        $this->commandTester->execute([
+            'command' => $this->command->getName(),
+            'channel' => 'messages',
+            'locale' => 'en',
+        ]);
 
-        static::assertNotContains(
-            'The default content of the file has been saved in the backup.',
+        $display = $this->commandTester->getDisplay();
+
+        static::assertContains(
+            'The translations are already cached, process skipped.',
             $display
         );
     }

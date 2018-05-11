@@ -35,7 +35,7 @@ class RedisTranslationSystemTest extends TestCase
     public function testBlackfireProfilingAndOptionsResolving()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 300kb', 'RedisTranslation options resolving memory cost');
+        $configuration->assert('main.peak_memory < 10kB', 'RedisTranslation options resolving memory cost');
 
         $this->assertBlackfire($configuration, function () {
             $redisTranslation = new RedisTranslation([

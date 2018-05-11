@@ -16,12 +16,14 @@ namespace App\Tests\Application\Command;
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationRepository;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
+use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -41,9 +43,24 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
     private $acceptedLocales;
 
     /**
+     * @var Application
+     */
+    private $application;
+
+    /**
      * @var CloudTranslationWarmerInterface
      */
     private $cloudTranslationWarmer;
+
+    /**
+     * @var CommandTester
+     */
+    private $commandTester;
+
+    /**
+     * @var RedisConnectorInterface
+     */
+    private $redisConnector;
 
     /**
      * @var RedisTranslationRepositoryInterface
@@ -67,27 +84,27 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
     {
         static::bootKernel();
 
+        $this->application = new Application(static::$kernel);
+        $command = $this->application->find('app:translation-warm');
+        $this->commandTester = new CommandTester($command);
+
         $cloudTranslationBridge = new CloudTranslationBridge(
             static::$kernel->getContainer()->getParameter('cloud.translation_credentials.filename'),
             static::$kernel->getContainer()->getParameter('cloud.translation_credentials')
         );
 
-        $redisConnector = new RedisConnector(
+        $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
+        $this->cloudTranslationWarmer = new CloudTranslationWarmer($cloudTranslationBridge);
+        $this->redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
+        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         $this->acceptedLocales = static::$kernel->getContainer()->getParameter('accepted_locales');
-        $this->cloudTranslationWarmer = new CloudTranslationWarmer($cloudTranslationBridge);
-        $this->redisTranslationRepository = new RedisTranslationRepository(
-            $redisConnector
-        );
-        $this->redisTranslationWriter = new RedisTranslationWriter(
-            $redisConnector
-        );
         $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
 
-        $redisConnector->getAdapter()->clear();
+        $this->redisConnector->getAdapter()->clear();
     }
 
     /**
@@ -97,17 +114,46 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
      */
     public function testBlackfireProfilingWithCacheWrite()
     {
-        $kernel = static::createKernel();
-        $kernel->boot();
+        $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
+        $configuration->assert('main.peak_memory < 1.5MB', 'Translation command cache write memory usage');
+        $configuration->assert('main.network_in < 20kb', 'Translation command network call');
+        $configuration->assert('metrics.http.requests.count == 0', 'Translation command HTTP request');
 
-        $application = new Application($kernel);
-        $command = $application->find('app:translation-warm');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
+        $this->assertBlackfire($configuration, function () {
+            $this->commandTester->execute([
+                'channel' => 'messages',
+                'locale' => 'en'
+            ]);
+        });
+    }
+
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     */
+    public function testBlackfireProfilingWithoutCacheWrite()
+    {
+        // Clear the cache in order to optimize the next write and fetch.
+        $this->redisConnector->getAdapter()->clear();
+
+        $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
+        $configuration->assert('main.peak_memory < 1.3MB', 'Translation command cache without write memory usage');
+        $configuration->assert('main.network_in < 20kb', 'Translation command network call');
+        $configuration->assert('metrics.http.requests.count == 0', 'Translation command HTTP request');
+
+        $this->commandTester->execute([
             'channel' => 'messages',
             'locale' => 'en'
         ]);
 
-        $display = $commandTester->getDisplay();
+        $this->assertBlackfire($configuration, function () {
+            $this->commandTester->execute([
+                'channel' => 'messages',
+                'locale' => 'en'
+            ]);
+        });
     }
 }

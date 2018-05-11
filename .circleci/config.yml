@@ -97,6 +97,7 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
+            - run: ./vendor/bin/phpunit -v --exclude-group Blackfire --coverage-html /tmp/phpunit-coverage
     behat_core_fr:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers

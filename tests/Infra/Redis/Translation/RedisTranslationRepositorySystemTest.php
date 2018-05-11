@@ -76,6 +76,7 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
     public function testBlackfireProfilingAndItReturnNull()
     {
         $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 90kb', 'Repository null call memory usage');
         $configuration->assert('main.network_in < 400b', 'Repository null network call');
 
@@ -101,6 +102,7 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
     public function testBlackfireProfilingAndItReturnAnEntry()
     {
         $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 80kb', 'Repository entries call memory usage');
         $configuration->assert('main.network_in < 400b', 'Repository entries network call');
         $configuration->assert('main.network_out < 90b', 'Repository entries network callees');
@@ -127,6 +129,7 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
     public function testBlackfireProfilingAndItReturnASingleEntry()
     {
         $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 80kb', 'Repository single entry call memory usage');
         $configuration->assert('main.network_in < 400b', 'Repository single entry  network call');
         $configuration->assert('main.network_out < 90b', 'Repository single entry network callees');

@@ -67,6 +67,7 @@ class RedisConnectorSystemTest extends KernelTestCase
     public function testBlackfireProfilingWithAdapterInstantiation()
     {
         $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 615kb', 'Connector adapter call memory peak');
         $configuration->assert('main.network_in == 0', 'Connector network call');
         $configuration->assert('main.network_out == 0', 'Connector network callees');
@@ -84,6 +85,7 @@ class RedisConnectorSystemTest extends KernelTestCase
     public function testBlackfireProfilingWithCacheCleaning()
     {
         $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 170kb', 'Connector memory peak');
 
         $this->assertBlackfire($configuration, function () {
