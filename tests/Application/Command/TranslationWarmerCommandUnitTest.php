@@ -17,6 +17,7 @@ use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -49,6 +50,11 @@ class TranslationWarmerCommandUnitTest extends TestCase
     private $redisTranslationWriter;
 
     /**
+     * @var RedisTranslationWarmerInterface
+     */
+    private $redisTranslationWarmer;
+
+    /**
      * @var string
      */
     private $translationsFolder;
@@ -62,18 +68,13 @@ class TranslationWarmerCommandUnitTest extends TestCase
         $this->cloudTranslationWarmer = $this->createMock(CloudTranslationWarmerInterface::class);
         $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
         $this->redisTranslationWriter = $this->createMock(RedisTranslationWriterInterface::class);
+        $this->redisTranslationWarmer = $this->createMock(RedisTranslationWarmerInterface::class);
         $this->translationsFolder = '/tmp/translations';
     }
 
     public function testItImplements()
     {
-        $translationWarmerCommand = new TranslationWarmerCommand(
-            $this->acceptedLocales,
-            $this->cloudTranslationWarmer,
-            $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
-            $this->translationsFolder
-        );
+        $translationWarmerCommand = new TranslationWarmerCommand($this->redisTranslationWarmer);
 
         static::assertInstanceOf(Command::class, $translationWarmerCommand);
         static::assertInstanceOf(
