@@ -91,6 +91,48 @@ class RedisTranslationWarmerUnitTest extends KernelTestCase
     }
 
     /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testWrongChannelIsUsed()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $redisTranslationWarmer = new RedisTranslationWarmer(
+            $this->acceptedChannels,
+            $this->acceptedLocales,
+            $this->cloudTranslationWarmer,
+            $this->redisTranslationRepository,
+            $this->redisTranslationWriter,
+            $this->translationsFolder
+        );
+
+        $processStatus = $redisTranslationWarmer->warmTranslations('toto', 'en');
+
+        static::assertFalse($processStatus);
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testWrongLocaleIsUsed()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $redisTranslationWarmer = new RedisTranslationWarmer(
+            $this->acceptedChannels,
+            $this->acceptedLocales,
+            $this->cloudTranslationWarmer,
+            $this->redisTranslationRepository,
+            $this->redisTranslationWriter,
+            $this->translationsFolder
+        );
+
+        $processStatus = $redisTranslationWarmer->warmTranslations('messages', 'it');
+
+        static::assertFalse($processStatus);
+    }
+
+    /**
      * @dataProvider provideRightChannelsAndLocalesToCheck
      *
      * @param string $channel

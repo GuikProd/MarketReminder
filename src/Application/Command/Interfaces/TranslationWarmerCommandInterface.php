@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace App\Application\Command\Interfaces;
 
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
 
 /**
  * Interface TranslationWarmerCommandInterface.
@@ -27,19 +25,9 @@ interface TranslationWarmerCommandInterface
     /**
      * TranslationWarmerCommandInterface constructor.
      *
-     * @param string                              $acceptedLocales
-     * @param CloudTranslationWarmerInterface     $cloudTranslationWarmer
-     * @param RedisTranslationRepositoryInterface $redisTranslationRepository
-     * @param RedisTranslationWriterInterface     $redisTranslationWriter
-     * @param string                              $translationsFolder
+     * @param RedisTranslationWarmerInterface $redisTranslationWarmer
      *
      * {@internal} this command SHOULD call the @see Command constructor
      */
-    public function __construct(
-        string $acceptedLocales,
-        CloudTranslationWarmerInterface $cloudTranslationWarmer,
-        RedisTranslationRepositoryInterface $redisTranslationRepository,
-        RedisTranslationWriterInterface $redisTranslationWriter,
-        string $translationsFolder
-    );
+    public function __construct(RedisTranslationWarmerInterface $redisTranslationWarmer);
 }
