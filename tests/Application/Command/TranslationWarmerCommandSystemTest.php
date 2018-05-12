@@ -112,7 +112,7 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
      *
      * @requires extension blackfire
      */
-    public function testBlackfireProfilingWithCacheWrite()
+    public function testCacheWrite()
     {
         $configuration = new Configuration();
         $configuration->setMetadata('skip_timeline', 'false');
@@ -133,7 +133,7 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
      *
      * @requires extension blackfire
      */
-    public function testBlackfireProfilingWithoutCacheWrite()
+    public function testNoCacheWrite()
     {
         // Clear the cache in order to optimize the next write and fetch.
         $this->redisConnector->getAdapter()->clear();

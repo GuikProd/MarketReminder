@@ -34,11 +34,10 @@ services:
         autoconfigure: true
         public: false
         bind:
+            $acceptedChannels: "%accepted_channels%"
             $acceptedLocales: "%accepted_locales%"
             $defaultLocale: "%locale%"
             $filePath: "%kernel.images_dir%"
-            $bucketName: "%cloud.storage.bucket_name%"
-            $googleStoragePublicUrl: "%cloud.storage.public_url%"
             $emailSender: "%email.sender_address%"
 
             ## Redis
@@ -48,6 +47,8 @@ services:
             ## Cloud Storage
             $storageCredentialsFileName: "%cloud.storage_credentials.filename%"
             $storageCredentialsFolder: "%cloud.storage_credentials%"
+            $bucketName: "%cloud.storage.bucket_name%"
+            $googleStoragePublicUrl: "%cloud.storage.public_url%"
 
             ## Cloud Translation
             $translationCredentialsFileName: "%cloud.translation_credentials.filename%"

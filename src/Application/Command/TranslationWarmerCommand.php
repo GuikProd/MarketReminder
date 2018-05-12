@@ -39,7 +39,7 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     {
         $this->redisTranslationWarmer = $redisTranslationWarmer;
 
-        parent::__construct($redisTranslationWarmer);
+        parent::__construct();
     }
 
     /**
@@ -68,7 +68,7 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
             $input->getArgument('channel'),
             $input->getArgument('locale'))
         ) {
-            $output->write('<error>The translations can\'t be warmed, please retry.</error>');
+            $output->write('<error>The translations can\'t be warmed or are already proceed, please retry.</error>');
 
             return;
         }
