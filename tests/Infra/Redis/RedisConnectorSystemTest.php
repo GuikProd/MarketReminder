@@ -68,9 +68,9 @@ class RedisConnectorSystemTest extends KernelTestCase
     {
         $configuration = new Configuration();
         $configuration->setMetadata('skip_timeline', 'false');
-        $configuration->assert('main.peak_memory < 615kb', 'Connector adapter call memory peak');
-        $configuration->assert('main.network_in == 0', 'Connector network call');
-        $configuration->assert('main.network_out == 0', 'Connector network callees');
+        $configuration->assert('main.peak_memory < 610kB', 'Connector adapter call memory peak');
+        $configuration->assert('main.network_in == 0', 'Connector adapter call network in');
+        $configuration->assert('main.network_out == 0', 'Connector adapter call network out');
 
         $this->assertBlackfire($configuration, function () {
            $this->redisConnector->getAdapter();
@@ -86,7 +86,7 @@ class RedisConnectorSystemTest extends KernelTestCase
     {
         $configuration = new Configuration();
         $configuration->setMetadata('skip_timeline', 'false');
-        $configuration->assert('main.peak_memory < 170kb', 'Connector memory peak');
+        $configuration->assert('main.peak_memory < 180kB', 'Connector clear memory peak');
 
         $this->assertBlackfire($configuration, function () {
             $adapter = $this->redisConnector->getAdapter();

@@ -1,7 +1,7 @@
 import { LitElement, html } from '@polymer/lit-element';
 
-class HomeComponent extends LitElement
-{
+class HomeComponent extends LitElement {
+
     static get properties() {
         return {
             foo: String,
@@ -15,4 +15,4 @@ class HomeComponent extends LitElement
     }
 }
 
-customElements.define('my-element', HomeComponent);
+customElements.define('my-element', new HomeComponent);

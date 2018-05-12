@@ -115,10 +115,34 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testCacheIsValidAndWrongLocaleIsUsed()
+    public function testWrongChannelIsUsed()
     {
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
+        $configuration->assert('main.peak_memory < 14kB', 'Translations warm wrong channel memory usage');
+        $configuration->assert('main.network_in == 0B', 'Translations warm wrong channel network call');
+        $configuration->assert('main.network_out == 0B', 'Translations warm wrong channel network callees');
+        $configuration->assert('metrics.http.requests.count == 0', 'Translation warm wrong channel HTTP request.');
+
+        $this->redisTranslationWarmer->warmTranslations('messages', 'fr');
+
+        $this->assertBlackfire($configuration, function () {
+
+            $this->expectException(\InvalidArgumentException::class);
+
+            $this->redisTranslationWarmer->warmTranslations('toto', 'it');
+        });
+    }
+
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testWrongLocaleIsUsed()
+    {
+        $configuration = new Configuration();
         $configuration->assert('main.peak_memory < 15kB', 'Translations warm wrong locale memory usage');
         $configuration->assert('main.network_in == 0B', 'Translations warm wrong locale network call');
         $configuration->assert('main.network_out == 0B', 'Translations warm wrong locale network callees');
@@ -144,7 +168,6 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     public function testCacheIsValid()
     {
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 175kB', 'Translations warm no translation memory usage');
         $configuration->assert('main.network_in < 26kB', 'Translations warm no translation network call');
         $configuration->assert('metrics.http.requests.count == 0', 'Translation warm no translation HTTP request.');
@@ -166,7 +189,6 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     public function testCacheIsValidButTranslationIsCalled()
     {
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 1.6MB', 'Translations warm translation memory usage');
         $configuration->assert('main.network_in < 25kB', 'Translations warm translation network call');
         $configuration->assert('metrics.http.requests.count <= 2', 'Translation warm translation maximum HTTP requests.');
