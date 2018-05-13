@@ -115,7 +115,6 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
     public function testCacheWrite()
     {
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 1.5MB', 'Translation command cache write memory usage');
         $configuration->assert('main.network_in < 20kb', 'Translation command network call');
         $configuration->assert('metrics.http.requests.count == 0', 'Translation command HTTP request');
@@ -135,14 +134,11 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
      */
     public function testNoCacheWrite()
     {
-        // Clear the cache in order to optimize the next write and fetch.
-        $this->redisConnector->getAdapter()->clear();
-
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
-        $configuration->assert('main.peak_memory < 1.3MB', 'Translation command cache without write memory usage');
-        $configuration->assert('main.network_in < 20kb', 'Translation command network call');
-        $configuration->assert('metrics.http.requests.count == 0', 'Translation command HTTP request');
+        $configuration->assert('main.peak_memory < 1.3MB', 'Translation warm no cache memory usage');
+        $configuration->assert('main.network_in < 20kb', 'Translation warm no cache network in');
+        $configuration->assert('main.network_out < 50kB', 'Translation warm no cache network out');
+        $configuration->assert('metrics.http.requests.count == 0', 'Translation warm no cache HTTP request');
 
         $this->commandTester->execute([
             'channel' => 'messages',

@@ -24,12 +24,9 @@ use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationRepository;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class TranslationWarmerCommandIntegrationTest.
@@ -111,7 +108,6 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
         $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
         $this->application->add(new TranslationWarmerCommand(
-            $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
             $this->redisTranslationWriter,
@@ -121,6 +117,22 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
         $this->commandTester = new CommandTester($this->command);
 
         $this->redisConnector->getAdapter()->clear();
+    }
+
+    public function testItPreventWrongChannel()
+    {
+        $this->commandTester->execute([
+            'command' => $this->command->getName(),
+            'channel' => 'toto',
+            'locale' => 'en',
+        ]);
+
+        $display = $this->commandTester->getDisplay();
+
+        static::assertContains(
+            'The submitted locale isn\'t supported or the channel does not exist !',
+            $display
+        );
     }
 
     public function testItPreventWrongLocale()
@@ -134,7 +146,7 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
         $display = $this->commandTester->getDisplay();
 
         static::assertContains(
-            'The locale isn\'t defined in the accepted locales, the generated files could not be available.',
+            'The submitted locale isn\'t supported or the channel does not exist !',
             $display
         );
     }

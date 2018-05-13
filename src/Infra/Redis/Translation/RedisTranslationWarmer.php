@@ -80,13 +80,11 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
      */
     public function warmTranslations(string $channel, string $locale): bool
     {
-        if (!\in_array($channel, explode('|', $this->acceptedChannels))) {
+        if (!\in_array($channel, explode('|', $this->acceptedChannels))
+            || !\in_array($locale, explode('|', $this->acceptedLocales))
+        ) {
             throw new \InvalidArgumentException(
-                sprintf('This channel does not exist !')
-            );
-        } elseif (!\in_array($locale, explode('|', $this->acceptedLocales))) {
-            throw new \InvalidArgumentException(
-                sprintf('This locale isn\'t supported, please retry.')
+                sprintf('The submitted locale isn\'t supported or the channel does not exist !')
             );
         }
 
@@ -103,11 +101,8 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
         }
 
         try {
-            if (!$cacheStatus = $this->isCacheValid($channel, 'fr', $defaultContent)) {
-
-                if ($this->redisTranslationWriter->write($locale, $channel, $channel.'.fr.yaml', $defaultContent)) {
-                    return false;
-                }
+            if (!$this->isCacheValid($channel, 'fr', $defaultContent)) {
+                $this->redisTranslationWriter->write($locale, $channel, $channel.'.fr.yaml', $defaultContent);
             }
 
             if (!$newItem = $this->redisTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
@@ -120,7 +115,7 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
                     $translatedElements[] = $value['text'];
                 }
 
-                if (!$this->fileExistAndIsValid($channel.'.'.$locale.'.yaml', array_combine($toTranslateKeys, $translatedElements))) {
+                if ($this->fileExistAndIsValid($channel.'.'.$locale.'.yaml', array_combine($toTranslateKeys, $translatedElements))) {
                     return false;
                 }
 
