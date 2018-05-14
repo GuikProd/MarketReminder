@@ -75,12 +75,11 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testBlackfireProfilingItDoesNotSaveSameContentTwice()
+    public function testItDoesNotSaveSameContentTwice()
     {
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
-        $configuration->assert('main.peak_memory < 100kb', 'Command no storage memory usage');
-        $configuration->assert('main.network_in < 750b', 'Command no storage network call');
+        $configuration->assert('main.peak_memory < 100kB', 'RedisTranslationWriter no write memory usage');
+        $configuration->assert('main.network_in < 750B', 'RedisTranslationWriter no write network call');
 
         $this->redisTranslationWriter->write(
             'fr',
@@ -105,13 +104,12 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
      *
      * @requires extension blackfire
      */
-    public function testBlackfireProfilingWithCacheWrite()
+    public function testWithCacheWrite()
     {
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
-        $configuration->assert('main.peak_memory < 80kb', 'RedisTranslationWriter memory usage');
-        $configuration->assert('main.network_in < 50b', 'RedisTranslationWriter network int');
-        $configuration->assert('main.network_out < 1mb', 'RedisTranslationWriter network out');
+        $configuration->assert('main.peak_memory < 80kB', 'RedisTranslationWriter memory usage');
+        $configuration->assert('main.network_in < 50B', 'RedisTranslationWriter network int');
+        $configuration->assert('main.network_out < 1MB', 'RedisTranslationWriter network out');
 
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationWriter->write(

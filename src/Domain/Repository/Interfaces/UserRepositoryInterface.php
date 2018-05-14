@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Domain\Repository\Interfaces;
 
 use App\Domain\Models\Interfaces\UserInterface;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * Interface UserRepositoryInterface.
@@ -26,12 +27,16 @@ interface UserRepositoryInterface
      * @param string $username
      * @param string $email
      *
+     * @throws NonUniqueResultException
+     *
      * @return UserInterface|null
      */
     public function getUserByUsernameAndEmail(string $username, string $email):? UserInterface;
 
     /**
      * @param string $username
+     *
+     * @throws NonUniqueResultException
      *
      * @return UserInterface|null
      */
@@ -40,6 +45,8 @@ interface UserRepositoryInterface
     /**
      * @param string $email
      *
+     * @throws NonUniqueResultException
+     *
      * @return UserInterface|null
      */
     public function getUserByEmail(string $email):? UserInterface;
@@ -47,12 +54,16 @@ interface UserRepositoryInterface
     /**
      * @param string $token
      *
+     * @throws NonUniqueResultException
+     *
      * @return UserInterface|null
      */
     public function getUserByToken(string $token):? UserInterface;
 
     /**
      * @param string $token
+     *
+     * @throws NonUniqueResultException
      *
      * @return UserInterface|null
      */
