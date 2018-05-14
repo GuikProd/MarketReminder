@@ -49,6 +49,9 @@ class UserRepositoryTest extends KernelTestCase
         );
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testUserIsLoadedUsingUsername()
     {
         static::assertInstanceOf(
@@ -58,6 +61,9 @@ class UserRepositoryTest extends KernelTestCase
         );
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testUserIsLoadedUsingEmail()
     {
         static::assertInstanceOf(
@@ -67,6 +73,9 @@ class UserRepositoryTest extends KernelTestCase
         );
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testUserIsNotLoadedUsingUsername()
     {
         static::assertNull(
@@ -75,6 +84,9 @@ class UserRepositoryTest extends KernelTestCase
         );
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testUserIsNotLoadedUsingEmail()
     {
         static::assertNull(

@@ -77,12 +77,12 @@ interface RedisTranslationWarmerInterface
     public function isCacheValid(string $channel, string $locale, array $content): bool;
 
     /**
-     * Allow to check the content of a given file (if it was already translated).
+     * Allow to check the keys of a given file (if it was already translated).
      *
      * @param string $filename          The filename of the file to check against.
-     * @param array $translatedContent  The translated content to check against.
+     * @param array $translatedKeys     The translated keys to check against.
      *
      * @return bool  If the file is valid or not (false if the file does not exist).
      */
-    public function fileExistAndIsValid(string $filename, array $translatedContent): bool;
+    public function fileExistAndIsValid(string $filename, array $translatedKeys): bool;
 }

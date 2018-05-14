@@ -105,6 +105,10 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
                 $this->redisTranslationWriter->write($locale, $channel, $channel.'.fr.yaml', $defaultContent);
             }
 
+            if ($this->fileExistAndIsValid($channel.'.'.$locale.'.yaml', $toTranslateKeys)) {
+                return false;
+            }
+
             if (!$newItem = $this->redisTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
 
                 $translatedElements = [];
@@ -113,10 +117,6 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
 
                 foreach ($translatedContent as $value) {
                     $translatedElements[] = $value['text'];
-                }
-
-                if ($this->fileExistAndIsValid($channel.'.'.$locale.'.yaml', array_combine($toTranslateKeys, $translatedElements))) {
-                    return false;
                 }
 
                 file_put_contents(
@@ -164,14 +164,21 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
     /**
      * {@inheritdoc}
      */
-    public function fileExistAndIsValid(string $filename, array $translatedContent): bool
+    public function fileExistAndIsValid(string $filename, array $translatedKeys): bool
     {
         if (file_exists($this->translationsFolder.'/'.$filename)) {
+
+            $actualKeys = [];
+
             $fileContent = Yaml::parse(
                 file_get_contents($this->translationsFolder.'/'.$filename)
             );
 
-            if (\count(array_diff($fileContent, $translatedContent)) > 0) {
+            foreach ($fileContent as $item => $value) {
+                $actualKeys[] = $item;
+            }
+
+            if (\count(array_diff($actualKeys, $translatedKeys)) > 0) {
                 return false;
             }
 

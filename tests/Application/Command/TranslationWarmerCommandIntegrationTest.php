@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Command;
 
-use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
@@ -21,8 +20,10 @@ use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationRepository;
+use App\Infra\Redis\Translation\RedisTranslationWarmer;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Application;
@@ -38,6 +39,11 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     /**
      * @var string
      */
+    private $acceptedChannels;
+
+    /**
+     * @var string
+     */
     private $acceptedLocales;
 
     /**
@@ -49,11 +55,6 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
      * @var CloudTranslationWarmerInterface
      */
     private $cloudTranslationWarmer;
-
-    /**
-     * @var TranslationWarmerCommandInterface
-     */
-    private $command;
 
     /**
      * @var CommandTester
@@ -71,6 +72,11 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     private $redisTranslationRepository;
 
     /**
+     * @var RedisTranslationWarmerInterface
+     */
+    private $redisTranslationWarmer;
+
+    /**
      * @var RedisTranslationWriterInterface
      */
     private $redisTranslationWriter;
@@ -78,51 +84,55 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     /**
      * @var string
      */
-    private $translationFolder;
+    private $translationsFolder;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         static::bootKernel();
 
-        $this->application = new Application(static::$kernel);
+        $this->acceptedLocales = 'fr|en|it';
+
+        $cloudTranslationBridge = new CloudTranslationBridge(
+            static::$kernel->getContainer()->getParameter('cloud.translation_credentials.filename'),
+            static::$kernel->getContainer()->getParameter('cloud.translation_credentials')
+        );
 
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
-
-        $this->acceptedLocales = static::$kernel->getContainer()->getParameter('accepted_locales');
-        $this->translationFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
-
-        $this->cloudTranslationWarmer = new CloudTranslationWarmer(
-            new CloudTranslationBridge(
-                static::$kernel->getContainer()->getParameter('cloud.translation_credentials.filename'),
-                static::$kernel->getContainer()->getParameter('cloud.translation_credentials')
-            )
-        );
-
+        $this->cloudTranslationWarmer = new CloudTranslationWarmer($cloudTranslationBridge);
         $this->redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
         $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
 
-        $this->application->add(new TranslationWarmerCommand(
+        $this->acceptedChannels = static::$kernel->getContainer()->getParameter('accepted_channels');
+        $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
+
+        $this->redisTranslationWarmer = new RedisTranslationWarmer(
+            $this->acceptedChannels,
+            $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
             $this->redisTranslationWriter,
-            $this->translationFolder
-        ));
-        $this->command = $this->application->find('app:translation-warm');
-        $this->commandTester = new CommandTester($this->command);
+            $this->translationsFolder
+        );
+
+        $this->application = new Application(static::$kernel);
+        $this->application->add(new TranslationWarmerCommand($this->redisTranslationWarmer));
+        $command = $this->application->find('app:translation-warm');
+        $this->commandTester = new CommandTester($command);
 
         $this->redisConnector->getAdapter()->clear();
     }
 
     public function testItPreventWrongChannel()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->commandTester->execute([
-            'command' => $this->command->getName(),
             'channel' => 'toto',
             'locale' => 'en',
         ]);
@@ -137,8 +147,9 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
 
     public function testItPreventWrongLocale()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->commandTester->execute([
-            'command' => $this->command->getName(),
             'channel' => 'messages',
             'locale' => 'ru',
         ]);
@@ -154,33 +165,39 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     public function testItWriteTheContentInCache()
     {
         $this->commandTester->execute([
-            'command' => $this->command->getName(),
             'channel' => 'messages',
-            'locale' => 'en',
+            'locale' => 'it',
         ]);
-
-        static::assertContains('The translations are been cached.', $this->commandTester->getDisplay());
-    }
-
-    public function testItDoesNotBackupTheFile()
-    {
-        $this->commandTester->execute([
-            'command' => $this->command->getName(),
-            'channel' => 'messages',
-            'locale' => 'en',
-        ]);
-
-        $this->commandTester->execute([
-            'command' => $this->command->getName(),
-            'channel' => 'messages',
-            'locale' => 'en',
-        ]);
-
-        $display = $this->commandTester->getDisplay();
 
         static::assertContains(
-            'The translations are already cached, process skipped.',
-            $display
+            'The warm process is about to begin.',
+            $this->commandTester->getDisplay()
+        );
+        static::assertContains(
+            'The warm process is finished.',
+            $this->commandTester->getDisplay()
+        );
+        static::assertNotContains(
+            'The translations can\'t be warmed or are already proceed, please retry.',
+            $this->commandTester->getDisplay()
+        );
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItDoesNotUseCache()
+    {
+        $this->redisTranslationWarmer->warmTranslations('messages', 'en');
+
+        $this->commandTester->execute([
+            'channel' => 'messages',
+            'locale' => 'en',
+        ]);
+
+        static::assertContains(
+            'The translations can\'t be warmed or are already proceed, please retry.',
+            $this->commandTester->getDisplay()
         );
     }
 }
