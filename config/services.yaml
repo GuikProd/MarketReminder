@@ -21,6 +21,7 @@ parameters:
 
     ## Redis
     redis.dsn: '%env(REDIS_URL)%'
+    redis.test_dsn: '%env(REDIS_TEST_URL)%'
     redis.namespace_dev: "dev"
     redis.namespace_prod: "prod"
     redis.namespace_test: "test"

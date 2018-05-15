@@ -59,9 +59,18 @@ services:
         container_name: ${CONTAINER_NAME}_redis
         image: redis:alpine
         ports:
-          - '${REDIS_PORT}:6379'
+            - '${REDIS_PORT}:6379'
         links:
-          - php-fpm
+            - php-fpm
+        restart: always
+
+    redis_test:
+        container_name: ${CONTAINER_NAME}_redis-test
+        image: redis:alpine
+        ports:
+            - '6973:6379'
+        links:
+            - php-fpm
         restart: always
 
     # DB configuration

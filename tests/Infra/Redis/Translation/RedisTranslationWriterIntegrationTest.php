@@ -43,7 +43,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
         static::bootKernel();
 
         $this->redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.dsn'),
+            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
@@ -136,5 +136,14 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
         );
 
         static::assertTrue($processStatus);
+    }
+
+    /**
+     * @return \Generator
+     */
+    public function provideRightData()
+    {
+        yield array('fr', 'messages', ['home.text' => 'Inventory management']);
+        yield array('fr', 'validators', ['reset_password.title.text' => 'Réinitialiser votre mot de passe.']);
     }
 }

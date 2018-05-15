@@ -39,7 +39,7 @@ Encore
             test: /\.js$/,
             loader: 'babel-loader',
             query: {
-                presets: ['env']
+                presets: ['es2015']
             }
         }
     )

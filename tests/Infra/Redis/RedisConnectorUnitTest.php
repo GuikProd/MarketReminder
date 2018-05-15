@@ -40,7 +40,7 @@ class RedisConnectorUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->redisDSN = 'redis://localhost:6379';
+        $this->redisDSN = 'redis://localhost:6973';
         $this->redisNamespace = "test";
     }
 

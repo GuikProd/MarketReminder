@@ -30,9 +30,7 @@ class HomePresenter extends AbstractPresenter implements HomePresenterInterface
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'page' => [
-                'title' => null
-            ]
+            'page' => []
         ]);
 
         $resolver->setAllowedTypes('page', 'array');

@@ -51,15 +51,16 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         $cacheItem = $this->redisConnector->getAdapter()->getItem($fileName);
 
         if ($cacheItem->isHit()) {
-            $toStore = $this->checkContent($cacheItem, $values);
+            if (!$this->isCacheContentValid($cacheItem, $values)) {
 
-            if (!$toStore) {
-                return false;
+                $this->redisConnector->getAdapter()->invalidateTags($cacheItem->getPreviousTags());
+
+                $this->redisConnector->getAdapter()->deleteItem($cacheItem->getKey());
+
+                $this->write($locale, $channel, $fileName, $values);
             }
 
-            $this->redisConnector->getAdapter()->invalidateTags($cacheItem->getPreviousTags());
-
-            $this->redisConnector->getAdapter()->deleteItem($cacheItem->getKey());
+            return false;
         }
 
         $tag = Uuid::uuid4()->toString();
@@ -85,12 +86,12 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function checkContent(CacheItemInterface $cacheValues, array $values): bool
+    public function isCacheContentValid(CacheItemInterface $cacheValues, array $values): bool
     {
-        static $translationKey = [];
-        static $translationContent = [];
-        static $toCheckKey = [];
-        static $toCheckContent = [];
+        $translationKey = [];
+        $translationContent = [];
+        $toCheckKey = [];
+        $toCheckContent = [];
 
         foreach ($cacheValues->get() as $item => $value) {
             $translationKey[] = $value->getKey();
@@ -106,9 +107,9 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         $finalCheckArray = array_combine($toCheckKey, $toCheckContent);
 
         if (count(array_diff($finalArray, $finalCheckArray)) > 0) {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

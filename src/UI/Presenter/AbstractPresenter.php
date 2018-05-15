@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter;
 
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,9 +25,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 abstract class AbstractPresenter implements PresenterInterface
 {
     /**
+     * @var RedisTranslationRepositoryInterface
+     */
+    private $redisTranslationRepository;
+
+    /**
      * @var array
      */
     private $viewOptions;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(RedisTranslationRepositoryInterface $redisTranslationRepository)
+    {
+        $this->redisTranslationRepository = $redisTranslationRepository;
+    }
 
     /**
      * {@inheritdoc}
@@ -36,7 +50,43 @@ abstract class AbstractPresenter implements PresenterInterface
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
-        $this->viewOptions = $resolver->resolve($viewOptions);
+        try {
+            $translatedViewOptions = $this->prepareTranslations($viewOptions);
+        } catch (\Psr\Cache\InvalidArgumentException $exception) {
+            sprintf($exception->getMessage());
+        }
+
+        $this->viewOptions = $resolver->resolve($translatedViewOptions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepareTranslations(array $viewOptions): array
+    {
+        $translatedContent = [];
+
+        foreach ($viewOptions['page'] as $item =>  $value) {
+            $translatedContent[] = $this->redisTranslationRepository->getSingleEntry(
+                $value['channel'].'.'.$value['_locale'].'.yaml',
+                $value['_locale'],
+                $value['title']
+            );
+
+            foreach ($translatedContent as $key => $translation) {
+                if (!array_key_exists('value', $value)) {
+                    throw new \LogicException(
+                        sprintf('The option passed should contain a value key !')
+                    );
+                }
+
+                $value['value'] = $translation->getValue();
+            }
+
+            $viewOptions['page'][$item] = $value;
+        }
+
+        return $viewOptions;
     }
 
     /**

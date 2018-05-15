@@ -57,23 +57,7 @@
             </div>
         </div>
         {% block javascripts %}
-            <script type="module">
-                import {LitElement, html} from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module';
-
-                class MyElement extends LitElement {
-
-                    static get properties() { return { mood: String }}
-
-                    _render({mood}) {
-                        return html`<style> .mood { color: green; } </style>
-          Web Components are <span class="mood">${mood}</span>!`;
-                    }
-
-                }
-
-                customElements.define('my-element', MyElement);
-            </script>
-
+            <script src="./../node_modules/webcomponentsjs/webcomponents-bundle.js"></script>
             <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
             <script src="{{ asset('build/home.js') }}"></script>
             <script src="{{ asset('build/serviceWorker.js') }}"></script>

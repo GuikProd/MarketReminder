@@ -15,4 +15,4 @@ class HomeComponent extends LitElement {
     }
 }
 
-customElements.define('my-element', new HomeComponent);
+customElements.define('my-element', HomeComponent);

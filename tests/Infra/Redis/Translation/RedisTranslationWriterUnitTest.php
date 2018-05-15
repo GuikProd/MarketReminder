@@ -71,14 +71,14 @@ class RedisTranslationWriterUnitTest extends TestCase
     /**
      * @dataProvider provideRightData
      *
-     * @param $locale
-     * @param $channel
-     * @param $fileName
-     * @param array $values
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array  $values
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItStopIfTranslationExist($locale, $channel, $fileName, array $values)
+    public function testItStopIfTranslationExistAndIsValid(string $locale, string $channel, string $fileName, array $values)
     {
         $translations = [];
 
@@ -100,7 +100,7 @@ class RedisTranslationWriterUnitTest extends TestCase
 
         $processStatus = $redisTranslationWriter->write($locale, $channel, $fileName, $values);
 
-        static::assertFalse($processStatus);
+        static::assertTrue($processStatus);
     }
 
     /**
@@ -109,5 +109,6 @@ class RedisTranslationWriterUnitTest extends TestCase
     public function provideRightData()
     {
         yield array('fr', 'messages', 'messages.fr.yaml', ['home.text' => 'Bonjour le monde']);
+        yield array('fr', 'messages', 'messages.fr.yaml', ['home.content' => 'Bienvenue sur le contenu.']);
     }
 }

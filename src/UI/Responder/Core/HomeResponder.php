@@ -54,7 +54,12 @@ final class HomeResponder implements HomeResponderInterface
     {
         $this->homePresenter->prepareOptions([
             'page' => [
-                'title' => 'home.title'
+                'content' => [
+                    'title' => 'home.text',
+                    'channel' => 'messages',
+                    '_locale' => $request->getLocale(),
+                    'value' => ''
+                ]
             ]
         ]);
 

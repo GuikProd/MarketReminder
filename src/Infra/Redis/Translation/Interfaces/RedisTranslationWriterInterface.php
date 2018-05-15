@@ -45,18 +45,18 @@ interface RedisTranslationWriterInterface
      *
      * @throws \Psr\Cache\InvalidArgumentException @see RedisAdapter::getItem()
      *
-     * @return bool  If the write process has succeed.
+     * @return bool If the write process has succeed or if the cache item is fresh.
      */
     public function write(string $locale, string $channel, string $fileName, array $values): bool;
 
     /**
      * Allow to decide if the new values should be stored in the cache, the check is done
-     * via the $cacheValues keys along with the $values keys.
+     * via the CacheItem keys along with the new values keys.
      *
      * @param CacheItemInterface $cacheValues  The cache item already stored.
      * @param array              $values       The values to check before caching it.
      *
-     * @return bool  If the new values should be stored.
+     * @return bool If the cache content is fresh or stale.
      */
-    public function checkContent(CacheItemInterface $cacheValues, array $values): bool;
+    public function isCacheContentValid(CacheItemInterface $cacheValues, array $values): bool;
 }

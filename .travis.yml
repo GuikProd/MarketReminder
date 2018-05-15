@@ -1,56 +1,27 @@
 language: php
 php:
     - '7.2'
-stages:
-    - phpunit
-    - blackfire
-    - behat_fr
-    - behat_en
-    - encore
 services:
     - docker
-jobs:
-    include:
-        - stage: phpunit
-            before_install:
-                - docker pull redis
-                - docker pull node
-                - docker run -d -p 127.0.0.1:6379:6379 redis
-                - docker ps -a
-                - ls -l $TRAVIS_BUILD_DIR
-                - echo $GCP_PROJECT_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/bucket/credentials.json
-                - echo $GCP_TRANSLATION_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/translation/credentials.json
-                - echo $GCP_VISION_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/vision/credentials.json
-            before_script:
-                - composer install --no-scripts -n
-                - cp .env.dist .env
-                - cp .env.behat.dist .env.behat
-                - cp phpunit.xml.dist phpunit.xml
-            script:
-                - ./bin/console d:d:c --env=test
-                - ./bin/console d:s:c --env=test
-                - ./bin/console d:f:l -n --env=test
-                - vendor/bin/phpunit -v --exclude-group Blackfire
-        - stage: blackfire
-            before_install:
-                - docker pull redis
-                - docker pull node
-                - docker run -d -p 127.0.0.1:6379:6379 redis
-                - docker ps -a
-                - ls -l $TRAVIS_BUILD_DIR
-                - echo $GCP_PROJECT_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/bucket/credentials.json
-                - echo $GCP_TRANSLATION_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/translation/credentials.json
-                - echo $GCP_VISION_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/vision/credentials.json
-            before_script:
-                - composer install --no-scripts -n
-                - cp .env.dist .env
-                - cp .env.behat.dist .env.behat
-                - cp phpunit.xml.dist phpunit.xml
-            script:
-                - ./bin/console d:d:c --env=test
-                - ./bin/console d:s:c --env=test
-                - ./bin/console d:f:l -n --env=test
-                - vendor/bin/phpunit -v --exclude-group Blackfire
-                - vendor/bin/behat --profile default
+before_install:
+    - docker pull redis
+    - docker pull node
+    - docker run -d -p 127.0.0.1:6379:6379 redis
+    - docker ps -a
+    - ls -l $TRAVIS_BUILD_DIR
+    - echo $GCP_PROJECT_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/bucket/credentials.json
+    - echo $GCP_TRANSLATION_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/translation/credentials.json
+    - echo $GCP_VISION_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/vision/credentials.json
+before_script:
+    - composer install --no-scripts -n
+    - cp .env.dist .env
+    - cp .env.behat.dist .env.behat
+    - cp phpunit.xml.dist phpunit.xml
+script:
+    - ./bin/console d:d:c --env=test
+    - ./bin/console d:s:c --env=test
+    - ./bin/console d:f:l -n --env=test
+    - vendor/bin/phpunit -v --exclude-group Blackfire
+    - vendor/bin/behat --profile default
 notifications:
     email: false

@@ -40,7 +40,7 @@ class RedisConnectorIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->redisDSN = static::$kernel->getContainer()->getParameter('redis.dsn');
+        $this->redisDSN = static::$kernel->getContainer()->getParameter('redis.test_dsn');
         $this->redisNamespace = static::$kernel->getContainer()->getParameter('redis.namespace_test');
     }
 
