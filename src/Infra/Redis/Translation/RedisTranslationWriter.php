@@ -57,7 +57,7 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
 
                 $this->redisConnector->getAdapter()->deleteItem($cacheItem->getKey());
 
-                $this->write($locale, $channel, $fileName, $values);
+                return $this->write($locale, $channel, $fileName, $values);
             }
 
             return false;
@@ -78,9 +78,7 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         $cacheItem->set($this->entries);
         $cacheItem->tag($tag);
 
-        $this->redisConnector->getAdapter()->save($cacheItem);
-
-        return true;
+        return $this->redisConnector->getAdapter()->save($cacheItem);
     }
 
     /**
@@ -106,10 +104,6 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         $finalArray = array_combine($translationKey, $translationContent);
         $finalCheckArray = array_combine($toCheckKey, $toCheckContent);
 
-        if (count(array_diff($finalArray, $finalCheckArray)) > 0) {
-            return false;
-        }
-
-        return true;
+        return count(array_diff($finalArray, $finalCheckArray)) > 0 ? false : true;
     }
 }

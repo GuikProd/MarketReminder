@@ -100,7 +100,7 @@ class RedisTranslationWriterUnitTest extends TestCase
 
         $processStatus = $redisTranslationWriter->write($locale, $channel, $fileName, $values);
 
-        static::assertTrue($processStatus);
+        static::assertFalse($processStatus);
     }
 
     /**

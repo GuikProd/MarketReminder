@@ -57,6 +57,8 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
+        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+
         // Used to clear the cache before any test (if not, the cache will always return the same values).
         $this->redisConnector->getAdapter()->clear();
 
@@ -64,8 +66,6 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
             'home.text' => 'Inventory management',
             'reset_password.title.text' => 'Réinitialiser votre mot de passe.'
         ];
-
-        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
     }
 
     /**
@@ -78,8 +78,8 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     public function testItDoesNotSaveSameContentTwice()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 100kB', 'RedisTranslationWriter no write memory usage');
-        $configuration->assert('main.network_in < 750B', 'RedisTranslationWriter no write network call');
+        $configuration->assert('main.peak_memory < 80kB', 'RedisTranslationWriter no write memory usage');
+        $configuration->assert('main.network_in < 710B', 'RedisTranslationWriter no write network call');
 
         $this->redisTranslationWriter->write(
             'fr',
@@ -107,8 +107,8 @@ class RedisTranslationWriterSystemTest extends KernelTestCase
     public function testWithCacheWrite()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 80kB', 'RedisTranslationWriter memory usage');
-        $configuration->assert('main.network_in < 50B', 'RedisTranslationWriter network int');
+        $configuration->assert('main.peak_memory < 70kB', 'RedisTranslationWriter memory usage');
+        $configuration->assert('main.network_in < 30B', 'RedisTranslationWriter network in');
         $configuration->assert('main.network_out < 1MB', 'RedisTranslationWriter network out');
 
         $this->assertBlackfire($configuration, function () {

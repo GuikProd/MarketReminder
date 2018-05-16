@@ -15,6 +15,7 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationWriter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -31,9 +32,9 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
     private $redisConnector;
 
     /**
-     * @var array
+     * @var RedisTranslationWriterInterface
      */
-    private $goodTestingData = [];
+    private $redisTranslationWriter;
 
     /**
      * {@inheritdoc}
@@ -47,91 +48,81 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
+        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+
         // Used to clear the cache before any test (if not, the cache will return always the same values).
         $this->redisConnector->getAdapter()->clear();
-
-        $this->goodTestingData = [
-            'home.text' => 'Inventory management',
-            'reset_password.title.text' => 'Réinitialiser votre mot de passe.'
-        ];
     }
 
     /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToStoreWithSameContent()
+    public function testItRefuseToStoreWithSameContent(string $locale, string $channel, string $fileName, array $values)
     {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+        $this->redisTranslationWriter->write($locale, $channel, $fileName, $values);
 
-        $redisTranslationWriter->write(
-            'fr',
-            'messages',
-            'messages.fr.yaml',
-            $this->goodTestingData
-        );
-
-        $processStatus = $redisTranslationWriter->write(
-            'fr',
-            'messages',
-            'messages.fr.yaml',
-            $this->goodTestingData
+        $processStatus = $this->redisTranslationWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            $values
         );
 
         static::assertFalse($processStatus);
     }
 
     /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToSaveWithSameFileName()
+    public function testItSaveEntries(string $locale, string $channel, string $fileName, array $values)
     {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
-
-        $redisTranslationWriter->write(
-            'fr',
-            'messages',
-            'messages.fr.yaml',
-            $this->goodTestingData
-        );
-
-        $processStatus = $redisTranslationWriter->write(
-            'fr',
-            'messages',
-            'messages.fr.yaml',
-            $this->goodTestingData
-        );
-
-        static::assertFalse($processStatus);
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItSaveEntries()
-    {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
-
-        $processStatus = $redisTranslationWriter->write(
-            'fr',
-            'validators',
-            'validators.fr.yaml',
-            $this->goodTestingData
+        $processStatus = $this->redisTranslationWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            $values
         );
 
         static::assertTrue($processStatus);
     }
 
     /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItUpdateAndSaveItem()
+    public function testItUpdateAndSaveItem(string $locale, string $channel, string $fileName, array $values)
     {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+        $this->redisTranslationWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            $values
+        );
 
-        $processStatus = $redisTranslationWriter->write(
-            'fr',
-            'validators',
-            'validators.fr.yaml',
+        $processStatus = $this->redisTranslationWriter->write(
+            $locale,
+            $channel,
+            $fileName,
             ['user.creation_success' => 'Hello user !']
         );
 
@@ -143,7 +134,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
      */
     public function provideRightData()
     {
-        yield array('fr', 'messages', ['home.text' => 'Inventory management']);
-        yield array('fr', 'validators', ['reset_password.title.text' => 'Réinitialiser votre mot de passe.']);
+        yield array('fr', 'messages', 'messages.fr.yaml', ['home.text' => 'Inventory management']);
+        yield array('fr', 'validators', 'validators.fr.yaml', ['reset_password.title.text' => 'Réinitialiser votre mot de passe.']);
     }
 }
