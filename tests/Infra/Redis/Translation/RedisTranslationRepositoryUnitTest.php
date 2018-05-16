@@ -17,6 +17,7 @@ use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\RedisTranslationRepository;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Class RedisTranslationRepositoryUnitTest.
@@ -25,7 +26,6 @@ use PHPUnit\Framework\TestCase;
  */
 class RedisTranslationRepositoryUnitTest extends TestCase
 {
-
     /**
      * @var RedisConnectorInterface
      */
@@ -37,17 +37,26 @@ class RedisTranslationRepositoryUnitTest extends TestCase
     protected function setUp()
     {
         $this->redisConnector = $this->getMockBuilder(RedisConnectorInterface::class)
-                                         ->disableOriginalConstructor()
-                                         ->getMock();
+                                     ->disableOriginalConstructor()
+                                     ->getMock();
+
+        $this->redisConnector->method('getAdapter')->willReturn(TagAwareAdapterInterface::class);
     }
 
     public function testItImplements()
     {
-        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
+        $redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
 
         static::assertInstanceOf(
             RedisTranslationRepositoryInterface::class,
-            $redisTranslationReader
+            $redisTranslationRepository
         );
+    }
+    /**
+     * @return \Generator
+     */
+    public function provideRightData()
+    {
+        yield array('messages.fr.yaml', 'fr', 'home.text');
     }
 }

@@ -67,6 +67,17 @@ abstract class AbstractPresenter implements PresenterInterface
         $translatedContent = [];
 
         foreach ($viewOptions['page'] as $item =>  $value) {
+
+            if (!$this->redisTranslationRepository->getSingleEntry(
+                $value['channel'].'.'.$value['_locale'].'.yaml',
+                $value['_locale'],
+                $value['title']
+            )) {
+                throw new \InvalidArgumentException(
+                    sprintf('No entry can be found, please warm the translations !')
+                );
+            }
+
             $translatedContent[] = $this->redisTranslationRepository->getSingleEntry(
                 $value['channel'].'.'.$value['_locale'].'.yaml',
                 $value['_locale'],

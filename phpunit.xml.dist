@@ -36,8 +36,8 @@
         <!-- Redis configuration -->
         <env name="REDIS_PORT" value="6379" />
         <env name="REDIS_URL" value="redis://localhost"/>
-        <env name="REDIS_PORT" value="6973" />
-        <env name="REDIS_URL" value="redis://localhost"/>
+        <env name="REDIS_TEST_PORT" value="6973" />
+        <env name="REDIS_TEST_URL" value="redis://localhost"/>
 
         <!-- Google Storage configuration -->
         <env name="GOOGLE_BUCKET_NAME" value="marketreminder-dev" />

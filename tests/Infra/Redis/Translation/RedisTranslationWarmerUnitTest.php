@@ -159,7 +159,9 @@ class RedisTranslationWarmerUnitTest extends KernelTestCase
             $this->translationsFolder
         );
 
-        $redisTranslationWarmer->warmTranslations($channel, $locale);
+        $processStatus = $redisTranslationWarmer->warmTranslations($channel, $locale);
+
+        static::assertTrue($processStatus);
     }
 
     /**
