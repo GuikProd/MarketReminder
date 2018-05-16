@@ -91,13 +91,15 @@ doctrine-cache: ## Allow to clean the Doctrine cache
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-metadata
 
 redis-cache:
-	    $(ENV_PHP) ./bin/console redis:flushall
+	    $(ENV_PHP) ./bin/console redis:flushall -n
 
 phpunit: ## Launch all PHPUnit tests
 phpunit: tests
+	    make redis-cache
 	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
 
 phpunit-blackfire: ## Allow to launch Blackfire tests
+	    make redis-cache
 	    $(ENV_PHP) vendor/bin/phpunit --group Blackfire tests/$(FOLDER)
 
 behat: ## Launch all Behat tests
@@ -105,6 +107,7 @@ behat: features
 	    make check-schema
 	    make fixtures_test
 	    make doctrine-cache
+	    make redis-cache
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands
@@ -136,7 +139,7 @@ logs: ## Allow to see the varnish logs
 
 ## Blackfire commands
 profile_php: ## Allow to profile a page using Blackfire and PHP environment
-	    $(ENV_BLACKFIRE) blackfire curl http://172.19.0.1:8080$(URL) --samples $(SAMPLES)
+	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
 
 profile_varnish: ## Allow to profile a page using Blackfire and Varnish environment
-	    $(ENV_BLACKFIRE) blackfire curl http://172.19.0.1$(URL) --samples $(SAMPLES)
+	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)

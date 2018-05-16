@@ -102,8 +102,8 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
 
         try {
             if (!$this->isCacheValid($channel, 'fr', $defaultContent)) {
-                if (!$this->redisTranslationWriter->write($locale, $channel, $channel.'.fr.yaml', $defaultContent)) {
-                    return false;
+                if (!$this->redisTranslationWriter->write('fr', $channel, $channel.'fr.yaml', $defaultContent)) {
+                    // If the cache already contain the "fr" entries, the process continue.
                 }
             }
 
@@ -121,10 +121,12 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
                     $translatedElements[] = $value['text'];
                 }
 
-                file_put_contents(
-                    $this->translationsFolder.'/'.$channel.'.'.$locale.'.yaml',
-                    Yaml::dump(array_combine($toTranslateKeys, $translatedElements))
-                );
+                if ('fr' !== $locale) {
+                    file_put_contents(
+                        $this->translationsFolder.'/'.$channel.'.'.$locale.'.yaml',
+                        Yaml::dump(array_combine($toTranslateKeys, $translatedElements))
+                    );
+                }
 
                 $this->redisTranslationWriter->write(
                     $locale,
