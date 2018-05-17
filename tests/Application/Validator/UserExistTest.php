@@ -29,10 +29,7 @@ class UserExistTest extends TestCase
     {
         $userExist = new UserExist();
 
-        static::assertInstanceOf(
-            Constraint::class,
-            $userExist
-        );
+        static::assertInstanceOf(Constraint::class, $userExist);
     }
 
     public function testViolationMessage()
@@ -41,20 +38,14 @@ class UserExistTest extends TestCase
 
         $userExist->message = 'Toto';
 
-        static::assertSame(
-            'Toto',
-            $userExist->message
-        );
+        static::assertSame('Toto', $userExist->message);
     }
 
     public function testValidatedBy()
     {
         $userExist = new UserExist();
 
-        static::assertSame(
-            UserExistValidator::class,
-            $userExist->validatedBy()
-        );
+        static::assertSame(UserExistValidator::class, $userExist->validatedBy());
     }
 
     public function testValidationScope()

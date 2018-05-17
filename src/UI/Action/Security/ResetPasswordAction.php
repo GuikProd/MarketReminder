@@ -18,11 +18,10 @@ use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Form\Type\ResetPasswordType;
-use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,9 +52,9 @@ class ResetPasswordAction implements ResetPasswordActionInterface
     private $formFactory;
 
     /**
-     * @var ResetPasswordPresenterInterface
+     * @var PresenterInterface
      */
-    private $resetPasswordPresenter;
+    private $presenter;
 
     /**
      * @var ResetPasswordTypeHandlerInterface
@@ -73,13 +72,13 @@ class ResetPasswordAction implements ResetPasswordActionInterface
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         FormFactoryInterface $formFactory,
-        ResetPasswordPresenterInterface $resetPasswordPresenter,
+        PresenterInterface $resetPasswordPresenter,
         ResetPasswordTypeHandlerInterface $resetPasswordTypeHandler,
         UserRepositoryInterface $userRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->formFactory = $formFactory;
-        $this->resetPasswordPresenter = $resetPasswordPresenter;
+        $this->presenter = $resetPasswordPresenter;
         $this->resetPasswordTypeHandler = $resetPasswordTypeHandler;
         $this->userRepository = $userRepository;
     }
@@ -94,7 +93,7 @@ class ResetPasswordAction implements ResetPasswordActionInterface
 
         if (!$user = $this->userRepository->getUserByResetPasswordToken($request->attributes->get('token'))) {
 
-            $this->resetPasswordPresenter->prepareOptions([
+            $this->presenter->prepareOptions([
                 'notification' => [
                     'content' => 'user.notification.wrong_reset_password_token',
                     'type' => 'failure'
@@ -104,8 +103,8 @@ class ResetPasswordAction implements ResetPasswordActionInterface
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
                 new SessionMessageEvent(
-                    $this->resetPasswordPresenter->getNotificationMessage()['type'],
-                    $this->resetPasswordPresenter->getNotificationMessage()['content']
+                    $this->presenter->getNotificationMessage()['type'],
+                    $this->presenter->getNotificationMessage()['content']
                 )
             );
 

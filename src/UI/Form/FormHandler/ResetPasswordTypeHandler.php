@@ -20,7 +20,7 @@ use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
-use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -43,9 +43,9 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
     private $encoderFactory;
 
     /**
-     * @var ResetPasswordPresenterInterface
+     * @var PresenterInterface
      */
-    private $resetPasswordPresenter;
+    private $presenter;
 
     /**
      * @var UserRepositoryInterface
@@ -58,12 +58,12 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         EncoderFactoryInterface $encoderFactory,
-        ResetPasswordPresenterInterface $resetPasswordPresenter,
+        PresenterInterface $resetPasswordPresenter,
         UserRepositoryInterface $userRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->encoderFactory = $encoderFactory;
-        $this->resetPasswordPresenter = $resetPasswordPresenter;
+        $this->presenter = $resetPasswordPresenter;
         $this->userRepository = $userRepository;
     }
 
@@ -80,7 +80,7 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
 
             $this->userRepository->flush();
 
-            $this->resetPasswordPresenter->prepareOptions([
+            $this->presenter->prepareOptions([
                 'notification' => [
                     'content' => 'user.notification.password_reset_success',
                     'title' => 'user.notification.password_reset.header'
@@ -91,7 +91,7 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
                 SessionMessageEvent::NAME,
                 new SessionMessageEvent(
                     'success',
-                    $this->resetPasswordPresenter->getNotificationMessage()['content']
+                    $this->presenter->getNotificationMessage()['content']
                 )
             );
 

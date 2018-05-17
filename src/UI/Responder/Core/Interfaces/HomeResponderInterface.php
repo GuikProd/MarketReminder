@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Core\Interfaces;
 
-use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -28,12 +28,12 @@ interface HomeResponderInterface
     /**
      * HomeResponderInterface constructor.
      *
-     * @param Environment            $twig
-     * @param HomePresenterInterface $presenter
+     * @param Environment        $twig
+     * @param PresenterInterface $presenter
      */
     public function __construct(
         Environment $twig,
-        HomePresenterInterface $presenter
+        PresenterInterface $presenter
     );
 
     /**

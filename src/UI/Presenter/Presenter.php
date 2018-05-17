@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter;
 
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class AbstractPresenter.
+ * Class Presenter.
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-abstract class AbstractPresenter implements PresenterInterface
+final class Presenter implements PresenterInterface
 {
     /**
      * @var RedisTranslationRepositoryInterface
@@ -69,35 +71,47 @@ abstract class AbstractPresenter implements PresenterInterface
         foreach ($viewOptions['page'] as $item =>  $value) {
 
             if (!$this->redisTranslationRepository->getSingleEntry(
-                $value['channel'].'.'.$value['_locale'].'.yaml',
-                $value['_locale'],
-                $value['title']
+                $value['channel'].'.'.$viewOptions['_locale'].'.yaml',
+                $viewOptions['_locale'],
+                $value['key']
             )) {
-                throw new \InvalidArgumentException(
-                    sprintf('No entry can be found, please warm the translations !')
-                );
+                $value['value'] = $value['key'];
             }
 
             $translatedContent[] = $this->redisTranslationRepository->getSingleEntry(
-                $value['channel'].'.'.$value['_locale'].'.yaml',
-                $value['_locale'],
-                $value['title']
+                $value['channel'].'.'.$viewOptions['_locale'].'.yaml',
+                $viewOptions['_locale'],
+                $value['key']
             );
 
-            foreach ($translatedContent as $key => $translation) {
-                if (!array_key_exists('value', $value)) {
-                    throw new \LogicException(
-                        sprintf('The option passed should contain a value key !')
-                    );
-                }
+            if (count($translatedContent) > 0 && $translatedContent[0] instanceof RedisTranslationInterface) {
+                foreach ($translatedContent as $key => $translation) {
+                    if (!array_key_exists('value', $value)) {
+                        $value['value'] = '';
+                    }
 
-                $value['value'] = $translation->getValue();
+                    $value['value'] = $translation->getValue();
+                }
             }
 
             $viewOptions['page'][$item] = $value;
         }
 
         return $viewOptions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(Options $resolver): void
+    {
+        $resolver->setDefaults([
+            '_locale' => '',
+            'page' => []
+        ]);
+
+        $resolver->setAllowedTypes('_locale', 'string');
+        $resolver->setAllowedTypes('page', 'array');
     }
 
     /**

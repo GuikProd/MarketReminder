@@ -17,7 +17,7 @@ use App\Application\Event\User\Interfaces\UserAskResetPasswordEventInterface;
 use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
 use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
 use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -31,18 +31,18 @@ interface UserSubscriberInterface
     /**
      * UserSubscriberInterface constructor.
      *
-     * @param string                      $emailSender
-     * @param \Swift_Mailer               $swiftMailer
-     * @param TranslatorInterface         $translator
-     * @param Environment                 $twig
-     * @param UserEmailPresenterInterface $presenter
+     * @param string               $emailSender
+     * @param \Swift_Mailer        $swiftMailer
+     * @param TranslatorInterface  $translator
+     * @param Environment          $twig
+     * @param PresenterInterface   $presenter
      */
     public function __construct(
         string $emailSender,
         \Swift_Mailer $swiftMailer,
         TranslatorInterface $translator,
         Environment $twig,
-        UserEmailPresenterInterface $presenter
+        PresenterInterface $presenter
     );
 
     /**

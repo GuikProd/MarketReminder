@@ -15,7 +15,7 @@ namespace App\UI\Form\FormHandler\Interfaces;
 
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -32,13 +32,13 @@ interface ResetPasswordTypeHandlerInterface
      *
      * @param EncoderFactoryInterface         $encoderFactory
      * @param EventDispatcherInterface        $eventDispatcher
-     * @param ResetPasswordPresenterInterface $resetPasswordPresenter
+     * @param PresenterInterface $resetPasswordPresenter
      * @param UserRepositoryInterface         $userRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         EncoderFactoryInterface $encoderFactory,
-        ResetPasswordPresenterInterface $resetPasswordPresenter,
+        PresenterInterface $resetPasswordPresenter,
         UserRepositoryInterface $userRepository
     );
 

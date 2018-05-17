@@ -18,7 +18,7 @@ use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Form\FormHandler\ResetPasswordTypeHandler;
-use App\UI\Presenter\AbstractPresenter;
+use App\UI\Presenter\Presenter;
 use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
 use App\UI\Presenter\Security\ResetPasswordPresenter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;

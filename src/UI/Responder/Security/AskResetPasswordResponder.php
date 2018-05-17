@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security;
 
-use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,9 +29,9 @@ use Twig\Environment;
 class AskResetPasswordResponder implements AskResetPasswordResponderInterface
 {
     /**
-     * @var AskResetPasswordPresenterInterface
+     * @var PresenterInterface
      */
-    private $askResetPresenter;
+    private $presenter;
 
     /**
      * @var Environment
@@ -47,11 +47,11 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
      * {@inheritdoc}
      */
     public function __construct(
-        AskResetPasswordPresenterInterface $presenter,
         Environment $twig,
+        PresenterInterface $presenter,
         UrlGeneratorInterface $urlGenerator
     ) {
-        $this->askResetPresenter = $presenter;
+        $this->presenter = $presenter;
         $this->twig = $twig;
         $this->urlGenerator = $urlGenerator;
     }
@@ -64,7 +64,7 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
         FormInterface $askResetPasswordForm = null
     ): Response {
 
-        $this->askResetPresenter->prepareOptions([
+        $this->presenter->prepareOptions([
             'card' => [
                 'header' => 'security.resetPasswordToken_header',
                 'button' => 'security.resetPasswordToken',
@@ -79,7 +79,7 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
             ? $response = new RedirectResponse($this->urlGenerator->generate('index'))
             : $response = new Response(
                 $this->twig->render('security/ask_reset_password_token.html.twig', [
-                    'presenter' => $this->askResetPresenter
+                    'presenter' => $this->presenter
                 ])
             );
 

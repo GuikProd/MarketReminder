@@ -18,7 +18,7 @@ use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
 use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
 use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -51,9 +51,9 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     private $twig;
 
     /**
-     * @var UserEmailPresenterInterface
+     * @var PresenterInterface
      */
-    private $userEmailPresenter;
+    private $presenter;
 
     /**
      * {@inheritdoc}
@@ -63,13 +63,13 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
         \Swift_Mailer $swiftMailer,
         TranslatorInterface $translator,
         Environment $twig,
-        UserEmailPresenterInterface $presenter
+        PresenterInterface $presenter
     ) {
         $this->emailSender = $emailSender;
         $this->swiftMailer = $swiftMailer;
         $this->translator = $translator;
         $this->twig = $twig;
-        $this->userEmailPresenter = $presenter;
+        $this->presenter = $presenter;
     }
 
     /**
@@ -94,7 +94,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      */
     public function onUserAskResetPasswordEvent(UserAskResetPasswordEventInterface $event): void
     {
-        $this->userEmailPresenter->prepareOptions([
+        $this->presenter->prepareOptions([
             'email' => [
                 'content' => [
                     'text' => 'user.ask_reset_password.content',
@@ -111,13 +111,13 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
         $askResetPasswordMail = (new \Swift_Message)
             ->setSubject(
                 $this->translator
-                     ->trans($this->userEmailPresenter->getEmail()['subject'])
+                     ->trans($this->presenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($this->userEmailPresenter->getUser()->getEmail())
+            ->setTo($this->presenter->getUser()->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/user_ask_reset_password.html.twig', [
-                    'presenter' => $this->userEmailPresenter
+                    'presenter' => $this->presenter
                 ]), 'text/html'
             );
 
@@ -133,7 +133,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      */
     public function onUserCreated(UserCreatedEventInterface $event): void
     {
-        $this->userEmailPresenter->prepareOptions([
+        $this->presenter->prepareOptions([
             'email' => [
                 'content' => [
                     'first_part' => 'user.registration.welcome.content_first_part',
@@ -151,13 +151,13 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
         $registrationMail = (new \Swift_Message)
             ->setSubject(
                 $this->translator
-                     ->trans($this->userEmailPresenter->getEmail()['subject'])
+                     ->trans($this->presenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($this->userEmailPresenter->getUser()->getEmail())
+            ->setTo($this->presenter->getUser()->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/registration_mail.html.twig', [
-                    'presenter' => $this->userEmailPresenter
+                    'presenter' => $this->presenter
                 ]), 'text/html'
             );
 
@@ -173,7 +173,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      */
     public function onUserResetPassword(UserResetPasswordEventInterface $event): void
     {
-        $this->userEmailPresenter->prepareOptions([
+        $this->presenter->prepareOptions([
             'email' => [
                 'content' => [
                     'text' => 'user.reset_password.content',
@@ -190,13 +190,13 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
         $resetPasswordMessage = (new \Swift_Message)
             ->setSubject(
                 $this->translator
-                     ->trans($this->userEmailPresenter->getEmail()['subject'])
+                     ->trans($this->presenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($this->userEmailPresenter->getUser()->getEmail())
+            ->setTo($this->presenter->getUser()->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/user_reset_password.html.twig', [
-                    'presenter' => $this->userEmailPresenter
+                    'presenter' => $this->presenter
                 ]), 'text/html'
             );
 
@@ -212,7 +212,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      */
     public function onUserValidated(UserValidatedEventInterface $event): void
     {
-        $this->userEmailPresenter->prepareOptions([
+        $this->presenter->prepareOptions([
             'email' => [
                 'content' => [
 
@@ -226,13 +226,13 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
         $validationMail = (new \Swift_Message)
             ->setSubject(
                 $this->translator
-                     ->trans($this->userEmailPresenter->getEmail()['subject'])
+                     ->trans($this->presenter->getEmail()['subject'])
             )
             ->setFrom($this->emailSender)
-            ->setTo($this->userEmailPresenter->getUser()->getEmail())
+            ->setTo($this->presenter->getUser()->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/validation_mail.html.twig', [
-                    'presenter' => $this->userEmailPresenter
+                    'presenter' => $this->presenter
                 ]), 'text/html'
             );
 

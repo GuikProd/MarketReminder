@@ -11,16 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\UI\Presenter\Core;
+namespace App\Tests\Application\Subscriber;
 
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class HomePresenterIntegrationTest.
- * 
+ * Class UserSubscriberSystemTest.
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class HomePresenterIntegrationTest extends KernelTestCase
+class UserSubscriberSystemTest extends KernelTestCase
 {
-
+    use TestCaseTrait;
 }

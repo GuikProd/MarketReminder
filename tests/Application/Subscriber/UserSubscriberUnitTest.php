@@ -14,31 +14,35 @@ declare(strict_types=1);
 namespace App\Tests\Application\Subscriber;
 
 use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
-use App\Application\Event\User\UserCreatedEvent;
+use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
+use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
 use App\Application\Event\User\UserResetPasswordEvent;
 use App\Application\Event\User\UserValidatedEvent;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\Application\Subscriber\UserSubscriber;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
 use App\UI\Presenter\User\UserEmailPresenter;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
- * Class UserSubscriberTest.
+ * Class UserSubscriberUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserSubscriberTest extends TestCase
+class UserSubscriberUnitTest extends TestCase
 {
-    use TestCaseTrait;
-
     /**
      * @var string
      */
     private $emailSender;
+
+    /**
+     * @var RedisTranslationRepositoryInterface
+     */
+    private $redisTranslationRepository;
 
     /**
      * @var \Swift_Mailer
@@ -66,11 +70,12 @@ class UserSubscriberTest extends TestCase
     protected function setUp()
     {
         $this->emailSender = 'test@marketReminder.com';
+        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
         $this->swiftMailer = $this->createMock(\Swift_Mailer::class);
         $this->translator = $this->createMock(TranslatorInterface::class);
         $this->twig = $this->createMock(Environment::class);
 
-        $this->userEmailPresenter = new UserEmailPresenter();
+        $this->userEmailPresenter = new UserEmailPresenter($this->redisTranslationRepository);
     }
 
     public function testItImplements()
@@ -88,44 +93,7 @@ class UserSubscriberTest extends TestCase
         static::assertInstanceOf(UserSubscriberInterface::class, $userSubscriber);
     }
 
-    /**
-     * @group Blackfire
-     *
-     * @doestNotPerformAssertions
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function testBlackfireProfilingAndUserCreatedEventIsListened()
-    {
-        $userCreatedEvent = $this->createMock(UserCreatedEventInterface::class);
-
-        $userSubscriber = new UserSubscriber(
-            $this->emailSender,
-            $this->swiftMailer,
-            $this->translator,
-            $this->twig,
-            $this->userEmailPresenter
-        );
-
-        $userSubscriber->onUserCreated($userCreatedEvent);
-    }
-
-    public function testUserCreatedEventIsListened()
-    {
-        $userSubscriber = new UserSubscriber(
-            $this->emailSender,
-            $this->swiftMailer,
-            $this->translator,
-            $this->twig,
-            $this->userEmailPresenter
-        );
-
-        static::assertArrayHasKey(UserCreatedEvent::NAME, $userSubscriber::getSubscribedEvents());
-    }
-
-    public function testUserValidatedEventIsListened()
+    public function testEventsAreListened()
     {
         $userSubscriber = new UserSubscriber(
             $this->emailSender,
@@ -136,23 +104,15 @@ class UserSubscriberTest extends TestCase
         );
 
         static::assertArrayHasKey(
-            UserValidatedEvent::NAME,
+            UserCreatedEventInterface::NAME,
             $userSubscriber::getSubscribedEvents()
         );
-    }
-
-    public function testUserResetPasswordEventIsListened()
-    {
-        $userSubscriber = new UserSubscriber(
-            $this->emailSender,
-            $this->swiftMailer,
-            $this->translator,
-            $this->twig,
-            $this->userEmailPresenter
-        );
-
         static::assertArrayHasKey(
-            UserResetPasswordEvent::NAME,
+            UserValidatedEventInterface::NAME,
+            $userSubscriber::getSubscribedEvents()
+        );
+        static::assertArrayHasKey(
+            UserResetPasswordEventInterface::NAME,
             $userSubscriber::getSubscribedEvents()
         );
     }

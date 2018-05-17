@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security;
 
-use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,9 +34,9 @@ class ResetPasswordResponder implements ResetPasswordResponderInterface
     private $twig;
 
     /**
-     * @var ResetPasswordPresenterInterface
+     * @var PresenterInterface
      */
-    private $resetPasswordPresenter;
+    private $presenter;
 
     /**
      * @var UrlGeneratorInterface
@@ -48,11 +48,11 @@ class ResetPasswordResponder implements ResetPasswordResponderInterface
      */
     public function __construct(
         Environment $twig,
-        ResetPasswordPresenterInterface $resetPasswordPresenter,
+        PresenterInterface $resetPasswordPresenter,
         UrlGeneratorInterface $urlGenerator
     ) {
         $this->twig = $twig;
-        $this->resetPasswordPresenter = $resetPasswordPresenter;
+        $this->presenter = $resetPasswordPresenter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -68,7 +68,7 @@ class ResetPasswordResponder implements ResetPasswordResponderInterface
         FormInterface $form = null
     ): Response {
 
-        $this->resetPasswordPresenter->prepareOptions([
+        $this->presenter->prepareOptions([
             'form' => $form,
             'page' => [
                 'title' => 'reset_password.title',
@@ -83,7 +83,7 @@ class ResetPasswordResponder implements ResetPasswordResponderInterface
                 $this->urlGenerator->generate('index'))
             : $response = new Response(
                 $this->twig->render('security/reset_password.html.twig', [
-                    'presenter' => $this->resetPasswordPresenter
+                    'presenter' => $this->presenter
                 ]));
 
         return $response;

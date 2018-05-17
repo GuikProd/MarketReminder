@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Presenter\Interfaces;
 
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Interface PresenterInterface.
@@ -36,11 +36,34 @@ interface PresenterInterface
     public function prepareOptions(array $viewOptions = array()): void;
 
     /**
-     * @param OptionsResolver $resolver
+     * Allow to define the default structure of every presenter.
+     *
+     * For simplicity purpose, here's a default structure :
+     *
+     * ```php
+     * '_locale' => '',
+     * 'page' => [
+     *     'button' => [
+     *         'channel' => 'messages',
+     *         'key' => 'home.text',
+     *         'class' => '',
+     *         'id' => ''
+     *     ]
+     * ]
+     * ```
+     *
+     * In order to execute properly, the 'value' key should be blank,
+     * once the presenter is build, the RedisTranslationRepository
+     * is used in order to retrieve the translated text.
+     *
+     * @internal The default structure is free as long as the
+     *           channel and key keys are defined.
+     *
+     * @param Options $resolver @see OptionsResolver
      *
      * @throws \LogicException
      */
-    public function configureOptions(OptionsResolver $resolver): void;
+    public function configureOptions(Options $resolver): void;
 
     /**
      * @param array $viewOptions

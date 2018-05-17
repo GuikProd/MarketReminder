@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Core;
 
-use App\UI\Presenter\Core\HomePresenter;
-use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
+use App\UI\Presenter\Presenter;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use PHPUnit\Framework\TestCase;
@@ -23,16 +24,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * Class HomeResponderTest.
+ * Class HomeResponderUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class HomeResponderTest extends TestCase
+class HomeResponderUnitTest extends TestCase
 {
     /**
-     * @var HomePresenterInterface
+     * @var PresenterInterface
      */
     private $homePresenter;
+
+    /**
+     * @var RedisTranslationRepositoryInterface
+     */
+    private $redisTranslationRepository;
 
     /**
      * @var Environment
@@ -44,18 +50,17 @@ class HomeResponderTest extends TestCase
      */
     protected function setUp()
     {
-        $this->homePresenter = new HomePresenter();
+        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
         $this->twig = $this->createMock(Environment::class);
+
+        $this->homePresenter = new Presenter($this->redisTranslationRepository);
 
         $this->twig->method('getCharset')->willReturn('utf-8');
     }
 
     public function testItImplements()
     {
-        $homeResponder = new HomeResponder(
-            $this->twig,
-            $this->homePresenter
-        );
+        $homeResponder = new HomeResponder($this->twig, $this->homePresenter);
 
         static::assertInstanceOf(
             HomeResponderInterface::class,
@@ -72,14 +77,8 @@ class HomeResponderTest extends TestCase
     {
         $requestMock = $this->createMock(Request::class);
 
-        $homeResponder = new HomeResponder(
-            $this->twig,
-            $this->homePresenter
-        );
+        $homeResponder = new HomeResponder($this->twig, $this->homePresenter);
 
-        static::assertInstanceOf(
-            Response::class,
-            $homeResponder($requestMock)
-        );
+        static::assertInstanceOf(Response::class, $homeResponder($requestMock));
     }
 }
