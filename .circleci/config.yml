@@ -49,6 +49,10 @@ jobs:
                     - vendor
             - run: rm -rf var/cache/*
             - run: ./bin/console cache:warmup
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
@@ -128,6 +132,10 @@ jobs:
                     - vendor
             - run: rm -rf var/cache/*
             - run: ./bin/console cache:warmup
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
@@ -164,6 +172,10 @@ jobs:
                     - vendor
             - run: rm -rf var/cache/*
             - run: ./bin/console cache:warmup
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
@@ -212,4 +224,14 @@ workflows:
     staging:
         jobs:
             - gcloud_docker_build
+                filters:
+                    branches:
+                        only:
+                            - master
+                            - develop
             - gcloud_kubernetes_check
+                filters:
+                    branches:
+                        only:
+                            - master
+                            - develop
