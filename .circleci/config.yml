@@ -223,13 +223,13 @@ workflows:
             - behat_core_en
     staging:
         jobs:
-            - gcloud_docker_build
+            - gcloud_docker_build:
                 filters:
                     branches:
                         only:
                             - master
                             - develop
-            - gcloud_kubernetes_check
+            - gcloud_kubernetes_check:
                 filters:
                     branches:
                         only:
