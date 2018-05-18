@@ -15,7 +15,9 @@ namespace App\Tests\UI\Presenter;
 
 use App\Infra\Redis\RedisConnector;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationRepository;
+use App\Infra\Redis\Translation\RedisTranslationWriter;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -42,6 +44,11 @@ class PresenterSystemTest extends KernelTestCase
     private $redisTranslationRepository;
 
     /**
+     * @var RedisTranslationWriterInterface
+     */
+    private $redisTranslationWriter;
+
+    /**
      * @var array
      */
     private $testingData = [];
@@ -59,7 +66,10 @@ class PresenterSystemTest extends KernelTestCase
         );
 
         $this->redisTranslationRepository = new RedisTranslationRepository($redisConnector);
+        $this->redisTranslationWriter = new RedisTranslationWriter($redisConnector);
         $this->presenter = new Presenter($this->redisTranslationRepository);
+
+        $this->testingData = ['channel' => 'messages', 'key' => 'home.text'];
     }
 
     /**
@@ -67,31 +77,60 @@ class PresenterSystemTest extends KernelTestCase
      *
      * @requires extension blackfire
      *
-     * @dataProvider provideRightOptionsWithoutCache
-     *
-     * @param string $locale
-     * @param array $values
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItResolveOptionsWithoutCache(string $locale, array $values)
+    public function testItResolveOptionsWithoutCache()
     {
+        $this->redisTranslationWriter->write(
+            'fr',
+            $this->testingData['channel'],
+            'messages.fr.yaml',
+            [$this->testingData['key'] => 'Bonjour le monde']
+        );
+
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
-        $configuration->assert('main.peak_memory < 50kB', 'Presenter content call without cache memory usage');
+        $configuration->assert('main.peak_memory < 65kB', 'Presenter content call without cache memory usage');
+        $configuration->assert('main.network_in < 25B', 'Presenter content call without cache network in');
+        $configuration->assert('main.network_out < 180B', 'Presenter content call without cache network out');
 
         $this->assertBlackfire($configuration, function () {
             $this->presenter->prepareOptions([
-                '_locale' => $locale,
-                'page' => $values
+                '_locale' => 'en',
+                'page' => [
+                    'button' => $this->testingData
+                ]
             ]);
         });
     }
 
     /**
-     * @return \Generator
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function provideRightOptionsWithoutCache()
+    public function testItResolveOptionsWithCache()
     {
-        yield array('fr', ['button' => ['channel' => 'messages', 'key' => 'home.text']]);
-        yield array('en', ['link' => ['channel' => 'messages', 'key' => 'home.link.welcome']]);
+        $this->redisTranslationWriter->write(
+            'fr',
+            $this->testingData['channel'],
+            'messages.fr.yaml',
+            [$this->testingData['key'] => 'Bonjour le monde']
+        );
+
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 100kB', 'Presenter content call with cache memory usage');
+        $configuration->assert('main.network_in < 800B', 'Presenter content call with cache network in');
+        $configuration->assert('main.network_out < 200B', 'Presenter content call with cache network out');
+
+        $this->assertBlackfire($configuration, function () {
+            $this->presenter->prepareOptions([
+                '_locale' => 'fr',
+                'page' => [
+                    'button' => $this->testingData
+                ]
+            ]);
+        });
     }
 }
