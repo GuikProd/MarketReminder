@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -66,11 +65,9 @@ final class Presenter implements PresenterInterface
      */
     public function prepareTranslations(array $viewOptions): array
     {
-        $translatedContent = [];
-
         foreach ($viewOptions['page'] as $item =>  $value) {
 
-            if (!$this->redisTranslationRepository->getSingleEntry(
+            if (!$redisTranslation = $this->redisTranslationRepository->getSingleEntry(
                 $value['channel'].'.'.$viewOptions['_locale'].'.yaml',
                 $viewOptions['_locale'],
                 $value['key']
@@ -78,20 +75,8 @@ final class Presenter implements PresenterInterface
                 $value['value'] = $value['key'];
             }
 
-            $translatedContent[] = $this->redisTranslationRepository->getSingleEntry(
-                $value['channel'].'.'.$viewOptions['_locale'].'.yaml',
-                $viewOptions['_locale'],
-                $value['key']
-            );
-
-            if (count($translatedContent) > 0 && $translatedContent[0] instanceof RedisTranslationInterface) {
-                foreach ($translatedContent as $key => $translation) {
-                    if (!array_key_exists('value', $value)) {
-                        $value['value'] = '';
-                    }
-
-                    $value['value'] = $translation->getValue();
-                }
+            if (!array_key_exists('value', $value) && $redisTranslation->getKey() == $value['key']) {
+                $value['value'] = $redisTranslation->getValue();
             }
 
             $viewOptions['page'][$item] = $value;

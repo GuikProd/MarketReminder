@@ -1,0 +1,13 @@
+gcp:
+    storage:
+        activated: true
+        credentials_filename: 'credentials.json'
+        credentials_folder: '%kernel.project_dir%/config/credentials/google/bucket'
+    translation:
+        activated: true
+        credentials_filename: 'credentials.json'
+        credentials_folder: '%kernel.project_dir%/config/credentials/google/translation'
+    vision:
+        activated: true
+        credentials_filename: 'credentials.json'
+        credentials_folder: '%kernel.project_dir%/config/credentials/google/vision'

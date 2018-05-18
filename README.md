@@ -6,7 +6,7 @@ The source code of the web application/API used for MarketReminder mobile applic
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/06883408-e402-40da-842e-724eadbde07b/mini.png)](https://insight.sensiolabs.com/projects/06883408-e402-40da-842e-724eadbde07b)
 [![Build Status](https://travis-ci.org/Guikingone/MarketReminder.svg?branch=master)](https://travis-ci.org/Guikingone/MarketReminder)
-[![CircleCI](https://circleci.com/gh/Guikingone/MarketReminder.svg?style=svg)](https://circleci.com/gh/Guikingone/MarketReminder)
+[![CircleCI](https://circleci.com/gh/GuikProd/MarketReminder.svg?style=svg)](https://circleci.com/gh/GuikProd/MarketReminder)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0975d1e66031b5235e08/maintainability)](https://codeclimate.com/github/Guikingone/MarketReminder/maintainability)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d2ba90dea73e4225ba366d2495391865)](https://www.codacy.com/app/Guikingone/MarketReminder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Guikingone/MarketReminder&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Guikingone/MarketReminder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Guikingone/MarketReminder/?branch=master)

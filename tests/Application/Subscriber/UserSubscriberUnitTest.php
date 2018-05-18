@@ -13,16 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Subscriber;
 
-use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
-use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
-use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
-use App\Application\Event\User\UserResetPasswordEvent;
-use App\Application\Event\User\UserValidatedEvent;
+use App\Application\Event\User\UserEvent;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\Application\Subscriber\UserSubscriber;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use App\UI\Presenter\User\Interfaces\UserEmailPresenterInterface;
-use App\UI\Presenter\User\UserEmailPresenter;
+use App\UI\Presenter\Interfaces\PresenterInterface;
+use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -60,9 +56,9 @@ class UserSubscriberUnitTest extends TestCase
     private $twig;
 
     /**
-     * @var UserEmailPresenterInterface
+     * @var PresenterInterface
      */
-    private $userEmailPresenter;
+    private $presenter;
 
     /**
      * {@inheritdoc}
@@ -75,7 +71,7 @@ class UserSubscriberUnitTest extends TestCase
         $this->translator = $this->createMock(TranslatorInterface::class);
         $this->twig = $this->createMock(Environment::class);
 
-        $this->userEmailPresenter = new UserEmailPresenter($this->redisTranslationRepository);
+        $this->presenter = new Presenter($this->redisTranslationRepository);
     }
 
     public function testItImplements()
@@ -85,7 +81,7 @@ class UserSubscriberUnitTest extends TestCase
             $this->swiftMailer,
             $this->translator,
             $this->twig,
-            $this->userEmailPresenter
+            $this->presenter
         );
 
         static::assertClassHasAttribute('swiftMailer', UserSubscriber::class);
@@ -100,19 +96,23 @@ class UserSubscriberUnitTest extends TestCase
             $this->swiftMailer,
             $this->translator,
             $this->twig,
-            $this->userEmailPresenter
+            $this->presenter
         );
 
         static::assertArrayHasKey(
-            UserCreatedEventInterface::NAME,
+            UserEvent::USER_ASK_RESET_PASSWORD,
             $userSubscriber::getSubscribedEvents()
         );
         static::assertArrayHasKey(
-            UserValidatedEventInterface::NAME,
+            UserEvent::USER_CREATED,
             $userSubscriber::getSubscribedEvents()
         );
         static::assertArrayHasKey(
-            UserResetPasswordEventInterface::NAME,
+            UserEvent::USER_RESET_PASSWORD,
+            $userSubscriber::getSubscribedEvents()
+        );
+        static::assertArrayHasKey(
+            UserEvent::USER_VALIDATED,
             $userSubscriber::getSubscribedEvents()
         );
     }
@@ -124,14 +124,14 @@ class UserSubscriberUnitTest extends TestCase
      */
     public function testUserResetPasswordEventLogicIsTriggered()
     {
-        $userResetPasswordEventMock = $this->createMock(UserResetPasswordEvent::class);
+        $userResetPasswordEventMock = $this->createMock(UserEvent::class);
 
         $userSubscriber = new UserSubscriber(
             $this->emailSender,
             $this->swiftMailer,
             $this->translator,
             $this->twig,
-            $this->userEmailPresenter
+            $this->presenter
         );
 
         static::assertNull(
@@ -146,14 +146,14 @@ class UserSubscriberUnitTest extends TestCase
      */
     public function testUserValidatedEventLogicIsTriggered()
     {
-        $userValidatedEvent = $this->createMock(UserValidatedEvent::class);
+        $userValidatedEvent = $this->createMock(UserEvent::class);
 
         $userSubscriber = new UserSubscriber(
             $this->emailSender,
             $this->swiftMailer,
             $this->translator,
             $this->twig,
-            $this->userEmailPresenter
+            $this->presenter
         );
 
         static::assertNull(

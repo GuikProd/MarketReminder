@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\Event\User\Interfaces;
+namespace App\Domain\Event\Interfaces;
 
 use App\Domain\Models\Interfaces\UserInterface;
 
@@ -23,14 +23,20 @@ use App\Domain\Models\Interfaces\UserInterface;
 interface UserEventInterface
 {
     /**
-     * UserCreatedEventInterface constructor.
+     * UserEventInterface constructor.
      *
+     * @param string $locale
      * @param UserInterface $user
      */
-    public function __construct(UserInterface $user);
+    public function __construct(string $locale, UserInterface $user);
 
     /**
      * @return UserInterface
      */
     public function getUser(): UserInterface;
+
+    /**
+     * @return string
+     */
+    public function getLocale(): string;
 }

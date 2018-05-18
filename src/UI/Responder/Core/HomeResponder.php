@@ -53,12 +53,11 @@ final class HomeResponder implements HomeResponderInterface
     public function __invoke(Request $request): Response
     {
         $this->presenter->prepareOptions([
+            '_locale' => $request->getLocale(),
             'page' => [
                 'content' => [
-                    'title' => 'home.text',
-                    'channel' => 'messages',
-                    '_locale' => $request->getLocale(),
-                    'value' => ''
+                    'key' => 'home.text',
+                    'channel' => 'messages'
                 ]
             ]
         ]);

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Application\DependencyInjection\GCPExtension;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -68,6 +69,9 @@ class Kernel extends BaseKernel
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
     {
         $confDir = dirname(__DIR__).'/config';
+
+        $container->registerExtension(new GCPExtension());
+
         $loader->load($confDir.'/packages/*'.self::CONFIG_EXTS, 'glob');
         if (is_dir($confDir.'/packages/'.$this->environment)) {
             $loader->load($confDir.'/packages/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');

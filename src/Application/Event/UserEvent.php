@@ -11,19 +11,32 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\Event\User;
+namespace App\Application\Event;
 
-use App\Application\Event\User\Interfaces\UserEventInterface;
+use App\Domain\Event\Interfaces\UserEventInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class AbstractUserEvent.
+ * Class UserEvent.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-abstract class AbstractUserEvent extends Event implements UserEventInterface
+final class UserEvent extends Event implements UserEventInterface
 {
+    const USER_ASK_RESET_PASSWORD = 'user.ask_reset_password';
+
+    const USER_CREATED = 'user.created';
+
+    const USER_RESET_PASSWORD = 'user.reset_password';
+
+    const USER_VALIDATED = 'user.validated';
+
+    /**
+     * @var string
+     */
+    private $locale;
+
     /**
      * @var UserInterface
      */
@@ -32,8 +45,11 @@ abstract class AbstractUserEvent extends Event implements UserEventInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(UserInterface $user)
-    {
+    public function __construct(
+        string $locale,
+        UserInterface $user
+    ) {
+        $this->locale = $locale;
         $this->user = $user;
     }
 
@@ -43,5 +59,13 @@ abstract class AbstractUserEvent extends Event implements UserEventInterface
     public function getUser(): UserInterface
     {
         return $this->user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }

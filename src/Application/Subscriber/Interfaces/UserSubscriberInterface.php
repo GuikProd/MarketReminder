@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace App\Application\Subscriber\Interfaces;
 
-use App\Application\Event\User\Interfaces\UserAskResetPasswordEventInterface;
-use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
-use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
-use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
+use App\Application\Event\UserEvent;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -46,22 +43,22 @@ interface UserSubscriberInterface
     );
 
     /**
-     * @param UserAskResetPasswordEventInterface $event
+     * @param UserEvent $event
      */
-    public function onUserAskResetPasswordEvent(UserAskResetPasswordEventInterface $event): void;
+    public function onUserAskResetPasswordEvent(UserEvent $event): void;
 
     /**
-     * @param UserCreatedEventInterface  $event
+     * @param UserEvent $event
      */
-    public function onUserCreated(UserCreatedEventInterface $event): void;
+    public function onUserCreated(UserEvent $event): void;
 
     /**
-     * @param UserResetPasswordEventInterface $event
+     * @param UserEvent $event
      */
-    public function onUserResetPassword(UserResetPasswordEventInterface $event): void;
+    public function onUserResetPassword(UserEvent $event): void;
 
     /**
-     * @param UserValidatedEventInterface  $event
+     * @param UserEvent $event
      */
-    public function onUserValidated(UserValidatedEventInterface $event): void;
+    public function onUserValidated(UserEvent $event): void;
 }

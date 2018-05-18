@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace App\Application\Subscriber;
 
-use App\Application\Event\User\Interfaces\UserAskResetPasswordEventInterface;
-use App\Application\Event\User\Interfaces\UserCreatedEventInterface;
-use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
-use App\Application\Event\User\Interfaces\UserValidatedEventInterface;
+use App\Application\Event\UserEvent;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -28,7 +25,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterface
+final class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterface
 {
     /**
      * @var string
@@ -78,10 +75,10 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
     public static function getSubscribedEvents()
     {
         return [
-            UserAskResetPasswordEventInterface::NAME => 'onUserAskResetPasswordEvent',
-            UserCreatedEventInterface::NAME => 'onUserCreated',
-            UserValidatedEventInterface::NAME => 'onUserValidated',
-            UserResetPasswordEventInterface::NAME => 'onUserResetPassword'
+            UserEvent::USER_ASK_RESET_PASSWORD => 'onUserAskResetPasswordEvent',
+            UserEvent::USER_CREATED => 'onUserCreated',
+            UserEvent::USER_RESET_PASSWORD => 'onUserResetPassword',
+            UserEvent::USER_VALIDATED => 'onUserValidated'
         ];
     }
 
@@ -92,7 +89,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function onUserAskResetPasswordEvent(UserAskResetPasswordEventInterface $event): void
+    public function onUserAskResetPasswordEvent(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
             'email' => [
@@ -131,7 +128,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function onUserCreated(UserCreatedEventInterface $event): void
+    public function onUserCreated(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
             'email' => [
@@ -171,9 +168,10 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function onUserResetPassword(UserResetPasswordEventInterface $event): void
+    public function onUserResetPassword(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
+            '_locale' => '',
             'email' => [
                 'content' => [
                     'text' => 'user.reset_password.content',
@@ -210,7 +208,7 @@ class UserSubscriber implements EventSubscriberInterface, UserSubscriberInterfac
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function onUserValidated(UserValidatedEventInterface $event): void
+    public function onUserValidated(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
             'email' => [

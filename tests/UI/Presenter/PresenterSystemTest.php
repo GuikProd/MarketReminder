@@ -89,9 +89,9 @@ class PresenterSystemTest extends KernelTestCase
         );
 
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 65kB', 'Presenter content call without cache memory usage');
-        $configuration->assert('main.network_in < 25B', 'Presenter content call without cache network in');
-        $configuration->assert('main.network_out < 180B', 'Presenter content call without cache network out');
+        $configuration->assert('main.peak_memory < 50kB', 'Presenter content call without cache memory usage');
+        $configuration->assert('main.network_in < 15B', 'Presenter content call without cache network in');
+        $configuration->assert('main.network_out < 100B', 'Presenter content call without cache network out');
 
         $this->assertBlackfire($configuration, function () {
             $this->presenter->prepareOptions([
@@ -120,9 +120,9 @@ class PresenterSystemTest extends KernelTestCase
         );
 
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 100kB', 'Presenter content call with cache memory usage');
-        $configuration->assert('main.network_in < 800B', 'Presenter content call with cache network in');
-        $configuration->assert('main.network_out < 200B', 'Presenter content call with cache network out');
+        $configuration->assert('main.peak_memory < 85kB', 'Presenter content call with cache memory usage');
+        $configuration->assert('main.network_in < 400B', 'Presenter content call with cache network in');
+        $configuration->assert('main.network_out < 100B', 'Presenter content call with cache network out');
 
         $this->assertBlackfire($configuration, function () {
             $this->presenter->prepareOptions([
