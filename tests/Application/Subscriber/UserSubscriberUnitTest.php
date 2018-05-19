@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Subscriber;
 
-use App\Application\Event\User\UserEvent;
+use App\Application\Event\UserEvent;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\Application\Subscriber\UserSubscriber;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;

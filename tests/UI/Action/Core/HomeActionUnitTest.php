@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Core;
 
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Action\Core\HomeAction;
 use App\UI\Action\Core\Interfaces\HomeActionInterface;
-use App\UI\Presenter\Core\HomePresenter;
-use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
+use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
@@ -28,9 +29,14 @@ use Twig\Environment;
 class HomeActionUnitTest extends TestCase
 {
     /**
-     * @var HomePresenterInterface
+     * @var PresenterInterface
      */
     private $homePresenter;
+
+    /**
+     * @var RedisTranslationRepositoryInterface
+     */
+    private $redisTranslationRepository;
 
     /**
      * @var Environment
@@ -42,10 +48,12 @@ class HomeActionUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->homePresenter = new HomePresenter();
+        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
         $this->twig = $this->createMock(Environment::class);
 
         $this->twig->method('getCharset')->willReturn('utf-8');
+
+        $this->homePresenter = new Presenter($this->redisTranslationRepository);
     }
 
     public function testItImplements()

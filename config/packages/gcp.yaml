@@ -3,6 +3,8 @@ gcp:
         activated: true
         credentials_filename: 'credentials.json'
         credentials_folder: '%kernel.project_dir%/config/credentials/google/bucket'
+        bucket_name: '%env(GOOGLE_BUCKET_NAME)%'
+        bucket_public_url: '%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%'
     translation:
         activated: true
         credentials_filename: 'credentials.json'
@@ -11,3 +13,8 @@ gcp:
         activated: true
         credentials_filename: 'credentials.json'
         credentials_folder: '%kernel.project_dir%/config/credentials/google/vision'
+        forbidden_labels:
+            - 'drugs'
+            - 'gun'
+            - 'sex'
+            - 'money'
