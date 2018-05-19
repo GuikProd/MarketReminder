@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Form\FormHandler;
 
 use App\Application\Event\SessionMessageEvent;
-use App\Application\Event\User\Interfaces\UserAskResetPasswordEventInterface;
-use App\Application\Event\User\UserAskResetPasswordEvent;
+use App\Application\Event\UserEvent;
 use App\Application\Helper\Security\TokenGeneratorHelper;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
@@ -83,8 +82,8 @@ class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterfac
             $this->userRepository->flush();
 
             $this->eventDispatcher->dispatch(
-                UserAskResetPasswordEventInterface::NAME,
-                new UserAskResetPasswordEvent($user)
+                UserEvent::USER_ASK_RESET_PASSWORD,
+                new UserEvent($user)
             );
 
             $this->eventDispatcher->dispatch(

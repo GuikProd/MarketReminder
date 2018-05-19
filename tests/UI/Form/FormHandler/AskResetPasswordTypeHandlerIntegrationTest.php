@@ -26,11 +26,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 /**
- * Class AskResetPasswordTypeHandlerTest.
+ * Class AskResetPasswordTypeHandlerIntegrationTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class AskResetPasswordTypeHandlerTest extends KernelTestCase
+class AskResetPasswordTypeHandlerIntegrationTest extends KernelTestCase
 {
     /**
      * @var EventDispatcherInterface

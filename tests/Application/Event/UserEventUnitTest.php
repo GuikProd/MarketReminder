@@ -52,9 +52,4 @@ class UserEventUnitTest extends TestCase
         static::assertInstanceOf(UserEventInterface::class, $event);
         static::assertInstanceOf(Event::class, $event);
     }
-
-    public function testEventAreRegistered()
-    {
-        $userEvent = new UserEvent($this->locale, $this->user);
-    }
 }

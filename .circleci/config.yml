@@ -141,6 +141,10 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: vendor/bin/behat --profile fr
             - run: rm -rf var/data.db
     behat_core_en:
@@ -181,6 +185,10 @@ jobs:
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: vendor/bin/behat --profile en
             - run: rm -rf var/data.db
     gcloud_docker_build:

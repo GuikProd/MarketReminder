@@ -6,16 +6,16 @@
     <body>
         <section>
             <h2>
-                {{ presenter.email.header|trans }}
+                {{ presenter.page.header.value }}
             </h2>
             <div>
                 <p>
-                    {{ presenter.email.content.first_part|trans }}
+                    {{ presenter.page.content_first.value }}
                 </p>
                 <p>
-                    {{ presenter.email.content.second_part|trans }}
-                    <a href="{{ url('web_validation', {'token': presenter.user.validationToken}) }}">
-                        {{ presenter.email.content.link.text|trans }}
+                    {{ presenter.page.content_second.value }}
+                    <a href="{{ url('web_validation', {'token': presenter.page.user.validationToken}) }}">
+                        {{ presenter.page.link.value }}
                     </a>
                 </p>
             </div>

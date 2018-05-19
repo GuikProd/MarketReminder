@@ -166,7 +166,7 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     {
         $this->commandTester->execute([
             'channel' => 'messages',
-            'locale' => 'it',
+            'locale' => 'fr',
         ]);
 
         static::assertContains(
@@ -196,6 +196,14 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
         ]);
 
         static::assertContains(
+            'The warm process is about to begin.',
+            $this->commandTester->getDisplay()
+        );
+        static::assertContains(
+            'The warm process is finished.',
+            $this->commandTester->getDisplay()
+        );
+        static::assertNotContains(
             'The translations can\'t be warmed or are already proceed, please retry.',
             $this->commandTester->getDisplay()
         );

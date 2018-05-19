@@ -16,6 +16,8 @@ namespace App\Tests\Application\Subscriber;
 use App\Application\Event\UserEvent;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\Application\Subscriber\UserSubscriber;
+use App\Domain\Event\Interfaces\UserEventInterface;
+use App\Domain\Models\Interfaces\UserInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
@@ -46,11 +48,6 @@ class UserSubscriberUnitTest extends TestCase
     private $swiftMailer;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * @var Environment
      */
     private $twig;
@@ -61,6 +58,11 @@ class UserSubscriberUnitTest extends TestCase
     private $presenter;
 
     /**
+     * @var UserEventInterface
+     */
+    private $userEvent;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp()
@@ -68,10 +70,10 @@ class UserSubscriberUnitTest extends TestCase
         $this->emailSender = 'test@marketReminder.com';
         $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
         $this->swiftMailer = $this->createMock(\Swift_Mailer::class);
-        $this->translator = $this->createMock(TranslatorInterface::class);
         $this->twig = $this->createMock(Environment::class);
 
         $this->presenter = new Presenter($this->redisTranslationRepository);
+        $this->userEvent = new UserEvent('fr', $this->createMock(UserInterface::class));
     }
 
     public function testItImplements()
@@ -79,7 +81,6 @@ class UserSubscriberUnitTest extends TestCase
         $userSubscriber = new UserSubscriber(
             $this->emailSender,
             $this->swiftMailer,
-            $this->translator,
             $this->twig,
             $this->presenter
         );
@@ -94,7 +95,6 @@ class UserSubscriberUnitTest extends TestCase
         $userSubscriber = new UserSubscriber(
             $this->emailSender,
             $this->swiftMailer,
-            $this->translator,
             $this->twig,
             $this->presenter
         );
@@ -122,20 +122,103 @@ class UserSubscriberUnitTest extends TestCase
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function testUserResetPasswordEventLogicIsTriggered()
+    public function testUserAskResetPasswordEventLogicIsTriggered()
     {
-        $userResetPasswordEventMock = $this->createMock(UserEvent::class);
-
         $userSubscriber = new UserSubscriber(
             $this->emailSender,
             $this->swiftMailer,
-            $this->translator,
             $this->twig,
             $this->presenter
         );
 
-        static::assertNull(
-            $userSubscriber->onUserResetPassword($userResetPasswordEventMock)
+        $userSubscriber->onUserAskResetPasswordEvent($this->userEvent);
+
+        static::assertSame('fr', $this->presenter->getViewOptions()['_locale']);
+        static::assertInstanceOf(
+            UserInterface::class,
+            $this->presenter->getPage()['user']
+        );
+        static::assertSame(
+            'user.ask_reset_password.content',
+            $this->presenter->getPage()['content']['key']
+        );
+        static::assertSame(
+            'user.ask_reset_password.link.text',
+            $this->presenter->getPage()['link']['key']
+        );
+        static::assertSame(
+            'user.ask_reset_password.header',
+            $this->presenter->getPage()['header']['key']
+        );
+        static::assertSame(
+            'user.ask_reset_password.header',
+            $this->presenter->getPage()['subject']['key']
+        );
+    }
+
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function testUserCreatedEventIsTriggered()
+    {
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->twig,
+            $this->presenter
+        );
+
+        $userSubscriber->onUserCreated($this->userEvent);
+
+        static::assertSame('fr', $this->presenter->getViewOptions()['_locale']);
+        static::assertInstanceOf(
+            UserInterface::class,
+            $this->presenter->getPage()['user']
+        );
+        static::assertSame(
+            'user.registration.welcome.content_first_part',
+            $this->presenter->getPage()['content_first']['key']
+        );
+        static::assertSame(
+            'user.registration.welcome.content_second_part',
+            $this->presenter->getPage()['content_second']['key']
+        );
+        static::assertSame(
+            'user.registration.welcome.content.link.text',
+            $this->presenter->getPage()['link']['key']
+        );
+        static::assertSame(
+            'user.registration.welcome.header',
+            $this->presenter->getPage()['header']['key']
+        );
+        static::assertSame(
+            'user.registration.welcome.header',
+            $this->presenter->getPage()['subject']['key']
+        );
+    }
+
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function testUserResetPasswordEventIsTriggered()
+    {
+        $userSubscriber = new UserSubscriber(
+            $this->emailSender,
+            $this->swiftMailer,
+            $this->twig,
+            $this->presenter
+        );
+
+        $userSubscriber->onUserResetPassword($this->userEvent);
+
+        static::assertSame('fr', $this->presenter->getViewOptions()['_locale']);
+        static::assertInstanceOf(
+            UserInterface::class,
+            $this->presenter->getPage()['user']
         );
     }
 
@@ -146,18 +229,19 @@ class UserSubscriberUnitTest extends TestCase
      */
     public function testUserValidatedEventLogicIsTriggered()
     {
-        $userValidatedEvent = $this->createMock(UserEvent::class);
-
         $userSubscriber = new UserSubscriber(
             $this->emailSender,
             $this->swiftMailer,
-            $this->translator,
             $this->twig,
             $this->presenter
         );
 
-        static::assertNull(
-            $userSubscriber->onUserValidated($userValidatedEvent)
+        $userSubscriber->onUserValidated($this->userEvent);
+
+        static::assertSame('fr', $this->presenter->getViewOptions()['_locale']);
+        static::assertInstanceOf(
+            UserInterface::class,
+            $this->presenter->getPage()['user']
         );
     }
 }

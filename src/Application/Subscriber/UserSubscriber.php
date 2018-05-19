@@ -17,7 +17,6 @@ use App\Application\Event\UserEvent;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -38,11 +37,6 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     private $swiftMailer;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * @var Environment
      */
     private $twig;
@@ -58,13 +52,11 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function __construct(
         string $emailSender,
         \Swift_Mailer $swiftMailer,
-        TranslatorInterface $translator,
         Environment $twig,
         PresenterInterface $presenter
     ) {
         $this->emailSender = $emailSender;
         $this->swiftMailer = $swiftMailer;
-        $this->translator = $translator;
         $this->twig = $twig;
         $this->presenter = $presenter;
     }
@@ -92,26 +84,32 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserAskResetPasswordEvent(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            'email' => [
+            '_locale' => $event->getLocale(),
+            'page' => [
+                'user' => $event->getUser(),
                 'content' => [
-                    'text' => 'user.ask_reset_password.content',
-                    'link' => [
-                        'text' => 'user.ask_reset_password.link.text'
-                    ]
+                    'key' => 'user.ask_reset_password.content',
+                    'channel' => 'messages'
                 ],
-                'header' => 'user.ask_reset_password.header',
-                'subject' => 'user.ask_reset_password.header'
-            ],
-            'user' => $event->getUser()
+                'link' => [
+                    'key' => 'user.ask_reset_password.link.text',
+                    'channel' => 'messages'
+                ],
+                'header' => [
+                    'key' => 'user.ask_reset_password.header',
+                    'channel' => 'messages'
+                ],
+                'subject' => [
+                    'key' => 'user.ask_reset_password.header',
+                    'channel' => 'messages'
+                ]
+            ]
         ]);
 
         $askResetPasswordMail = (new \Swift_Message)
-            ->setSubject(
-                $this->translator
-                     ->trans($this->presenter->getEmail()['subject'])
-            )
+            ->setSubject($this->presenter->getPage()['subject']['value'])
             ->setFrom($this->emailSender)
-            ->setTo($this->presenter->getUser()->getEmail())
+            ->setTo($this->presenter->getPage()['user']->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/user_ask_reset_password.html.twig', [
                     'presenter' => $this->presenter
@@ -131,27 +129,36 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserCreated(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            'email' => [
-                'content' => [
-                    'first_part' => 'user.registration.welcome.content_first_part',
-                    'second_part' => 'user.registration.welcome.content_second_part',
-                    'link' => [
-                        'text' => 'user.registration.welcome.content.link.text'
-                    ]
+            '_locale' => $event->getLocale(),
+            'page' => [
+                'user' => $event->getUser(),
+                'content_first' => [
+                    'key' => 'user.registration.welcome.content_first_part',
+                    'channel' => 'messages'
                 ],
-                'header' => 'user.registration.welcome.header',
-                'subject' => 'user.registration.welcome.header'
-            ],
-            'user' => $event->getUser()
+                'content_second' => [
+                    'key' => 'user.registration.welcome.content_second_part',
+                    'channel' => 'messages'
+                ],
+                'link' => [
+                    'key' => 'user.registration.welcome.content.link.text',
+                    'channel' => 'messages'
+                ],
+                'header' => [
+                    'key' => 'user.registration.welcome.header',
+                    'channel' => 'messages'
+                ],
+                'subject' => [
+                    'key' => 'user.registration.welcome.header',
+                    'channel' => 'messages'
+                ]
+            ]
         ]);
 
         $registrationMail = (new \Swift_Message)
-            ->setSubject(
-                $this->translator
-                     ->trans($this->presenter->getEmail()['subject'])
-            )
+            ->setSubject($this->presenter->getPage()['subject']['value'])
             ->setFrom($this->emailSender)
-            ->setTo($this->presenter->getUser()->getEmail())
+            ->setTo($this->presenter->getPage()['user']->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/registration_mail.html.twig', [
                     'presenter' => $this->presenter
@@ -171,27 +178,32 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserResetPassword(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => '',
-            'email' => [
-                'content' => [
-                    'text' => 'user.reset_password.content',
-                    'link' => [
-                        'text' => 'security.login'
-                    ]
+            '_locale' => $event->getLocale(),
+            'page' => [
+                'user' => $event->getUser(),
+                'body' => [
+                    'key' => 'user.reset_password.content',
+                    'channel' => 'messages'
                 ],
-                'header' => 'user.reset_password.header',
-                'subject' => 'user.reset_password.header'
-            ],
-            'user' => $event->getUser()
+                'link' => [
+                    'key' => 'security.login',
+                    'channel' => 'messages'
+                ],
+                'header' => [
+                    'key' => 'user.reset_password.header',
+                    'channel' => 'messages',
+                ],
+                'subject' => [
+                    'key' => 'user.reset_password.header',
+                    'channel' => 'messages'
+                ]
+            ]
         ]);
 
         $resetPasswordMessage = (new \Swift_Message)
-            ->setSubject(
-                $this->translator
-                     ->trans($this->presenter->getEmail()['subject'])
-            )
+            ->setSubject($this->presenter->getPage()['subject']['value'])
             ->setFrom($this->emailSender)
-            ->setTo($this->presenter->getUser()->getEmail())
+            ->setTo($this->presenter->getPage()['user']->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/user_reset_password.html.twig', [
                     'presenter' => $this->presenter
@@ -211,23 +223,28 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserValidated(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            'email' => [
+            '_locale' => $event->getLocale(),
+            'page' => [
+                'user' => $event->getUser(),
                 'content' => [
-
+                    'key' => '',
+                    'channel' => 'messages'
                 ],
-                'header' => '',
-                'subject' => ''
-            ],
-            'user' => $event->getUser()
+                'header' => [
+                    'key' => '',
+                    'channel' => 'messages'
+                ],
+                'subject' => [
+                    'key' => '',
+                    'channel' => 'messages'
+                ]
+            ]
         ]);
 
         $validationMail = (new \Swift_Message)
-            ->setSubject(
-                $this->translator
-                     ->trans($this->presenter->getEmail()['subject'])
-            )
+            ->setSubject($this->presenter->getPage()['subject']['value'])
             ->setFrom($this->emailSender)
-            ->setTo($this->presenter->getUser()->getEmail())
+            ->setTo($this->presenter->getPage()['user']->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/validation_mail.html.twig', [
                     'presenter' => $this->presenter

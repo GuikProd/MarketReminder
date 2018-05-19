@@ -15,7 +15,6 @@ namespace App\Application\Subscriber\Interfaces;
 
 use App\Application\Event\UserEvent;
 use App\UI\Presenter\Interfaces\PresenterInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -30,14 +29,12 @@ interface UserSubscriberInterface
      *
      * @param string               $emailSender
      * @param \Swift_Mailer        $swiftMailer
-     * @param TranslatorInterface  $translator
      * @param Environment          $twig
      * @param PresenterInterface   $presenter
      */
     public function __construct(
         string $emailSender,
         \Swift_Mailer $swiftMailer,
-        TranslatorInterface $translator,
         Environment $twig,
         PresenterInterface $presenter
     );

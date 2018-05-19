@@ -67,6 +67,8 @@ final class Presenter implements PresenterInterface
     {
         foreach ($viewOptions['page'] as $item =>  $value) {
 
+            if (!is_array($value)) { continue; }
+
             if (!$redisTranslation = $this->redisTranslationRepository->getSingleEntry(
                 $value['channel'].'.'.$viewOptions['_locale'].'.yaml',
                 $viewOptions['_locale'],

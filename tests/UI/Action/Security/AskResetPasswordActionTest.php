@@ -16,8 +16,7 @@ namespace App\Tests\UI\Action\Security;
 use App\UI\Action\Security\AskResetPasswordAction;
 use App\UI\Action\Security\Interfaces\AskResetPasswordActionInterface;
 use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
-use App\UI\Presenter\Security\AskResetPasswordPresenter;
-use App\UI\Presenter\Security\Interfaces\AskResetPasswordPresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\AskResetPasswordResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -37,9 +36,9 @@ use Twig\Environment;
 class AskResetPasswordActionTest extends TestCase
 {
     /**
-     * @var AskResetPasswordPresenterInterface
+     * @var AskResetPasswordTypeHandlerInterface
      */
-    private $askResetPasswordPresenter;
+    private $askResetPasswordTypeHandler;
 
     /**
      * @var FormFactoryInterface
@@ -52,16 +51,16 @@ class AskResetPasswordActionTest extends TestCase
     private $formView;
 
     /**
-     * @var AskResetPasswordTypeHandlerInterface
+     * @var PresenterInterface
      */
-    private $askResetPasswordTypeHandler;
+    private $presenter;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->askResetPasswordPresenter = new AskResetPasswordPresenter();
+        $this->presenter = $this->createMock(PresenterInterface::class);
 
         $this->askResetPasswordTypeHandler = $this->createMock(AskResetPasswordTypeHandlerInterface::class);
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
@@ -109,8 +108,8 @@ class AskResetPasswordActionTest extends TestCase
         );
 
         $askResetPasswordResponder = new AskResetPasswordResponder(
-            $this->askResetPasswordPresenter,
             $twigMock,
+            $this->presenter,
             $urlGeneratorMock
         );
 
@@ -144,8 +143,8 @@ class AskResetPasswordActionTest extends TestCase
         );
 
         $askResetPasswordResponder = new AskResetPasswordResponder(
-            $this->askResetPasswordPresenter,
             $twigMock,
+            $this->presenter,
             $urlGeneratorMock
         );
 
