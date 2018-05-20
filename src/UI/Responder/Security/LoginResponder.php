@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class LoginResponder
+final class LoginResponder
 {
     /**
      * @var Environment

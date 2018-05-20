@@ -33,12 +33,17 @@ class HomeResponderUnitTest extends TestCase
     /**
      * @var PresenterInterface
      */
-    private $homePresenter;
+    private $presenter;
 
     /**
      * @var RedisTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
+
+    /**
+     * @var Request
+     */
+    private $request;
 
     /**
      * @var Environment
@@ -53,14 +58,16 @@ class HomeResponderUnitTest extends TestCase
         $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
         $this->twig = $this->createMock(Environment::class);
 
-        $this->homePresenter = new Presenter($this->redisTranslationRepository);
+        $this->presenter = new Presenter($this->redisTranslationRepository);
+        $this->request = $this->createMock(Request::class);
+        $this->request->method('getLocale')->willReturn('fr');
 
         $this->twig->method('getCharset')->willReturn('utf-8');
     }
 
     public function testItImplements()
     {
-        $homeResponder = new HomeResponder($this->twig, $this->homePresenter);
+        $homeResponder = new HomeResponder($this->twig, $this->presenter);
 
         static::assertInstanceOf(
             HomeResponderInterface::class,
@@ -75,10 +82,11 @@ class HomeResponderUnitTest extends TestCase
      */
     public function testResponseIsReturned()
     {
-        $requestMock = $this->createMock(Request::class);
+        $homeResponder = new HomeResponder($this->twig, $this->presenter);
 
-        $homeResponder = new HomeResponder($this->twig, $this->homePresenter);
-
-        static::assertInstanceOf(Response::class, $homeResponder($requestMock));
+        static::assertInstanceOf(
+            Response::class,
+            $homeResponder($this->request)
+        );
     }
 }

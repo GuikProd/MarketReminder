@@ -17,6 +17,7 @@ use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -26,7 +27,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class AskResetPasswordResponder implements AskResetPasswordResponderInterface
+final class AskResetPasswordResponder implements AskResetPasswordResponderInterface
 {
     /**
      * @var PresenterInterface
@@ -61,17 +62,26 @@ class AskResetPasswordResponder implements AskResetPasswordResponderInterface
      */
     public function __invoke(
         $isRedirect = false,
+        Request $request,
         FormInterface $askResetPasswordForm = null
     ): Response {
 
         $this->presenter->prepareOptions([
-            'card' => [
-                'header' => 'security.resetPasswordToken_header',
-                'button' => 'security.resetPasswordToken',
-            ],
+            '_locale' => $request->getLocale(),
             'form' => $askResetPasswordForm,
             'page' => [
-                'title' => 'reset_password.title'
+                'card_button' => [
+                    'key' => 'security.resetPasswordToken',
+                    'channel' => 'messages'
+                ],
+                'card_header' => [
+                    'key' => 'security.resetPasswordToken_header',
+                    'channel' => 'messages'
+                ],
+                'title' => [
+                    'key' => 'reset_password.title',
+                    'channel' => 'messages'
+                ]
             ]
         ]);
 

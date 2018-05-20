@@ -16,6 +16,7 @@ namespace App\UI\Presenter;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationPresenterInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -68,8 +69,6 @@ final class Presenter implements PresenterInterface, RedisTranslationPresenterIn
     {
         foreach ($viewOptions['page'] as $item =>  $value) {
 
-            if (!is_array($value)) { continue; }
-
             if (!$redisTranslation = $this->redisTranslationRepository->getSingleEntry(
                 $value['channel'].'.'.$viewOptions['_locale'].'.yaml',
                 $viewOptions['_locale'],
@@ -95,10 +94,12 @@ final class Presenter implements PresenterInterface, RedisTranslationPresenterIn
     {
         $resolver->setDefaults([
             '_locale' => '',
+            'form' => null,
             'page' => []
         ]);
 
         $resolver->setAllowedTypes('_locale', 'string');
+        $resolver->setAllowedTypes('form', array('null', FormInterface::class));
         $resolver->setAllowedTypes('page', 'array');
     }
 

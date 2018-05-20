@@ -26,7 +26,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ResetPasswordResponder implements ResetPasswordResponderInterface
+final class ResetPasswordResponder implements ResetPasswordResponderInterface
 {
     /**
      * @var Environment
@@ -69,11 +69,16 @@ class ResetPasswordResponder implements ResetPasswordResponderInterface
     ): Response {
 
         $this->presenter->prepareOptions([
+            '_locale' => '',
             'form' => $form,
             'page' => [
-                'title' => 'reset_password.title',
+                'title' => [
+                    'key' => 'reset_password.title',
+                    'channel' => 'messages',
+                ],
                 'button' => [
-                    'content' => 'reset_password.button.text'
+                    'key' => 'reset_password.button.text',
+                    'channel' => 'messages'
                 ]
             ]
         ]);

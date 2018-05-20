@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Security;
 
-use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
-use App\UI\Presenter\Security\ResetPasswordPresenter;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
+use App\UI\Presenter\Presenter;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,23 +26,26 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
- * Class ResetPasswordResponderTest.
+ * Class ResetPasswordResponderUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ResetPasswordResponderTest extends TestCase
+class ResetPasswordResponderUnitTest extends TestCase
 {
-    use TestCaseTrait;
-
     /**
      * @var FormInterface
      */
     private $form;
 
     /**
-     * @var ResetPasswordPresenterInterface
+     * @var PresenterInterface
      */
-    private $resetPasswordPresenter;
+    private $presenter;
+
+    /**
+     * @var RedisTranslationRepositoryInterface
+     */
+    private $redisTranslationRepository;
 
     /**
      * @var Environment
@@ -60,18 +63,20 @@ class ResetPasswordResponderTest extends TestCase
     protected function setUp()
     {
         $this->form = $this->createMock(FormInterface::class);
-        $this->resetPasswordPresenter = new ResetPasswordPresenter();
+        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
         $this->urlGenerator->method('generate')->willReturn('/fr/');
+
+        $this->presenter = new Presenter($this->redisTranslationRepository);
     }
 
     public function testItImplements()
     {
         $resetPasswordResponder = new ResetPasswordResponder(
             $this->twig,
-            $this->resetPasswordPresenter,
+            $this->presenter,
             $this->urlGenerator
         );
 
@@ -79,54 +84,6 @@ class ResetPasswordResponderTest extends TestCase
             ResetPasswordResponderInterface::class,
             $resetPasswordResponder
         );
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     *
-     * @group Blackfire
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function testBlackfireProfilingAndRedirectResponseIsReturned()
-    {
-        $resetPasswordResponder = new ResetPasswordResponder(
-            $this->twig,
-            $this->resetPasswordPresenter,
-            $this->urlGenerator
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $resetPasswordResponder(true);
-
-        static::$blackfire->endProbe($probe);
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     *
-     * @group Blackfire
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function testBlackfireProfilingAndResponseIsReturned()
-    {
-        $resetPasswordResponder = new ResetPasswordResponder(
-            $this->twig,
-            $this->resetPasswordPresenter,
-            $this->urlGenerator
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $resetPasswordResponder(false, $this->form);
-
-        static::$blackfire->endProbe($probe);
     }
 
     /**
@@ -138,7 +95,7 @@ class ResetPasswordResponderTest extends TestCase
     {
         $resetPasswordResponder = new ResetPasswordResponder(
             $this->twig,
-            $this->resetPasswordPresenter,
+            $this->presenter,
             $this->urlGenerator
         );
 
@@ -157,7 +114,7 @@ class ResetPasswordResponderTest extends TestCase
     {
         $resetPasswordResponder = new ResetPasswordResponder(
             $this->twig,
-            $this->resetPasswordPresenter,
+            $this->presenter,
             $this->urlGenerator
         );
 

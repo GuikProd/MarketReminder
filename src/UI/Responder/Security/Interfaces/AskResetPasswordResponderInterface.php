@@ -15,6 +15,7 @@ namespace App\UI\Responder\Security\Interfaces;
 
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -41,6 +42,7 @@ interface AskResetPasswordResponderInterface
 
     /**
      * @param bool               $redirect
+     * @param Request            $request
      * @param FormInterface|null $askResetPasswordTokenFormView
      *
      * @return Response
@@ -51,6 +53,7 @@ interface AskResetPasswordResponderInterface
      */
     public function __invoke(
         $redirect = false,
+        Request $request,
         FormInterface $askResetPasswordTokenFormView = null
     ): Response;
 }

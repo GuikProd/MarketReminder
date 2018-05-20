@@ -68,12 +68,9 @@ class AskResetPasswordAction implements AskResetPasswordActionInterface
                                      ->handleRequest($request);
 
         if ($this->askResetPasswordTypeHandler->handle($askResetPasswordForm)) {
-            return $responder(true);
+            return $responder(true, $request);
         }
 
-        return $responder(
-            false,
-            $askResetPasswordForm
-        );
+        return $responder(false, $request, $askResetPasswordForm);
     }
 }
