@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Form\FormHandler;
 
 use App\Application\Event\SessionMessageEvent;
-use App\Application\Event\User\Interfaces\UserResetPasswordEventInterface;
-use App\Application\Event\User\UserResetPasswordEvent;
+use App\Application\Event\UserEvent;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
@@ -96,8 +95,8 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
             );
 
             $this->eventDispatcher->dispatch(
-                UserResetPasswordEventInterface::NAME,
-                new UserResetPasswordEvent($user)
+                UserEvent::USER_RESET_PASSWORD,
+                new UserEvent($user)
             );
 
             return true;

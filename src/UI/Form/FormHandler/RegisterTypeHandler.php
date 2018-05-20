@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\UI\Form\FormHandler;
 
-use App\Application\Event\User\UserCreatedEvent;
 use App\Application\Event\SessionMessageEvent;
+use App\Application\Event\UserEvent;
 use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
@@ -153,8 +153,8 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
             $this->userRepository->save($this->userBuilder->getUser());
 
             $this->eventDispatcher->dispatch(
-                UserCreatedEvent::NAME,
-                new UserCreatedEvent($this->userBuilder->getUser())
+                UserEvent::USER_CREATED,
+                new UserEvent($this->userBuilder->getUser())
             );
 
             $this->eventDispatcher->dispatch(

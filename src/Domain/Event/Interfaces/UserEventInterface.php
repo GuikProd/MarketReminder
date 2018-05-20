@@ -25,18 +25,12 @@ interface UserEventInterface
     /**
      * UserEventInterface constructor.
      *
-     * @param string $locale
      * @param UserInterface $user
      */
-    public function __construct(string $locale, UserInterface $user);
+    public function __construct(UserInterface $user);
 
     /**
      * @return UserInterface
      */
     public function getUser(): UserInterface;
-
-    /**
-     * @return string
-     */
-    public function getLocale(): string;
 }

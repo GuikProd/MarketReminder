@@ -17,6 +17,7 @@ use App\Application\Event\UserEvent;
 use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -47,18 +48,25 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     private $presenter;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
         string $emailSender,
         \Swift_Mailer $swiftMailer,
         Environment $twig,
-        PresenterInterface $presenter
+        PresenterInterface $presenter,
+        RequestStack $requestStack
     ) {
         $this->emailSender = $emailSender;
         $this->swiftMailer = $swiftMailer;
         $this->twig = $twig;
         $this->presenter = $presenter;
+        $this->locale = $requestStack->getCurrentRequest()->getLocale();
     }
 
     /**
@@ -84,7 +92,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserAskResetPasswordEvent(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => $event->getLocale(),
+            '_locale' => $this->locale,
             'page' => [
                 'user' => $event->getUser(),
                 'content' => [
@@ -129,7 +137,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserCreated(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => $event->getLocale(),
+            '_locale' => $this->locale,
             'page' => [
                 'user' => $event->getUser(),
                 'content_first' => [
@@ -178,7 +186,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserResetPassword(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => $event->getLocale(),
+            '_locale' => $this->locale,
             'page' => [
                 'user' => $event->getUser(),
                 'body' => [
@@ -223,7 +231,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserValidated(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => $event->getLocale(),
+            '_locale' => $this->locale,
             'page' => [
                 'user' => $event->getUser(),
                 'content' => [

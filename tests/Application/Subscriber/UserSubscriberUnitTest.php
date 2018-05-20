@@ -22,7 +22,8 @@ use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -41,6 +42,11 @@ class UserSubscriberUnitTest extends TestCase
      * @var RedisTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
 
     /**
      * @var \Swift_Mailer
@@ -69,11 +75,17 @@ class UserSubscriberUnitTest extends TestCase
     {
         $this->emailSender = 'test@marketReminder.com';
         $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
+        $this->requestStack = $this->createMock(RequestStack::class);
         $this->swiftMailer = $this->createMock(\Swift_Mailer::class);
         $this->twig = $this->createMock(Environment::class);
 
+        $request = $this->createMock(Request::class);
+
+        $request->method('getLocale')->willReturn('fr');
+        $this->requestStack->method('getCurrentRequest')->willReturn($request);
+
         $this->presenter = new Presenter($this->redisTranslationRepository);
-        $this->userEvent = new UserEvent('fr', $this->createMock(UserInterface::class));
+        $this->userEvent = new UserEvent($this->createMock(UserInterface::class));
     }
 
     public function testItImplements()
@@ -82,7 +94,8 @@ class UserSubscriberUnitTest extends TestCase
             $this->emailSender,
             $this->swiftMailer,
             $this->twig,
-            $this->presenter
+            $this->presenter,
+            $this->requestStack
         );
 
         static::assertClassHasAttribute('swiftMailer', UserSubscriber::class);
@@ -96,7 +109,8 @@ class UserSubscriberUnitTest extends TestCase
             $this->emailSender,
             $this->swiftMailer,
             $this->twig,
-            $this->presenter
+            $this->presenter,
+            $this->requestStack
         );
 
         static::assertArrayHasKey(
@@ -128,7 +142,8 @@ class UserSubscriberUnitTest extends TestCase
             $this->emailSender,
             $this->swiftMailer,
             $this->twig,
-            $this->presenter
+            $this->presenter,
+            $this->requestStack
         );
 
         $userSubscriber->onUserAskResetPasswordEvent($this->userEvent);
@@ -167,7 +182,8 @@ class UserSubscriberUnitTest extends TestCase
             $this->emailSender,
             $this->swiftMailer,
             $this->twig,
-            $this->presenter
+            $this->presenter,
+            $this->requestStack
         );
 
         $userSubscriber->onUserCreated($this->userEvent);
@@ -210,7 +226,8 @@ class UserSubscriberUnitTest extends TestCase
             $this->emailSender,
             $this->swiftMailer,
             $this->twig,
-            $this->presenter
+            $this->presenter,
+            $this->requestStack
         );
 
         $userSubscriber->onUserResetPassword($this->userEvent);
@@ -233,7 +250,8 @@ class UserSubscriberUnitTest extends TestCase
             $this->emailSender,
             $this->swiftMailer,
             $this->twig,
-            $this->presenter
+            $this->presenter,
+            $this->requestStack
         );
 
         $userSubscriber->onUserValidated($this->userEvent);

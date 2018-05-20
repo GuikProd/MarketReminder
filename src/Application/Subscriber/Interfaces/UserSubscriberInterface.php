@@ -15,6 +15,7 @@ namespace App\Application\Subscriber\Interfaces;
 
 use App\Application\Event\UserEvent;
 use App\UI\Presenter\Interfaces\PresenterInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -31,12 +32,14 @@ interface UserSubscriberInterface
      * @param \Swift_Mailer        $swiftMailer
      * @param Environment          $twig
      * @param PresenterInterface   $presenter
+     * @param RequestStack         $requestStack
      */
     public function __construct(
         string $emailSender,
         \Swift_Mailer $swiftMailer,
         Environment $twig,
-        PresenterInterface $presenter
+        PresenterInterface $presenter,
+        RequestStack $requestStack
     );
 
     /**

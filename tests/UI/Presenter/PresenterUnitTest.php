@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\UI\Presenter;
 
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
+use App\Infra\Redis\Translation\Interfaces\RedisTranslationPresenterInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\RedisTranslation;
 use App\UI\Presenter\Interfaces\PresenterInterface;
@@ -46,6 +47,10 @@ class PresenterUnitTest extends TestCase
         $presenter = new Presenter($this->redisTranslationRepository);
 
         static::assertInstanceOf(PresenterInterface::class, $presenter);
+        static::assertInstanceOf(
+            RedisTranslationPresenterInterface::class,
+            $presenter
+        );
     }
 
     /**

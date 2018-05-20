@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter\Interfaces;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
@@ -23,13 +22,6 @@ use Symfony\Component\OptionsResolver\Options;
  */
 interface PresenterInterface
 {
-    /**
-     * PresenterInterface constructor.
-     *
-     * @param RedisTranslationRepositoryInterface $redisTranslationRepository
-     */
-    public function __construct(RedisTranslationRepositoryInterface $redisTranslationRepository);
-
     /**
      * @param array $viewOptions
      */
@@ -64,16 +56,6 @@ interface PresenterInterface
      * @throws \LogicException
      */
     public function configureOptions(Options $resolver): void;
-
-    /**
-     * @param array $viewOptions
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \LogicException
-     *
-     * @return array The new view options translated.
-     */
-    public function prepareTranslations(array $viewOptions): array;
 
     /**
      * @return array

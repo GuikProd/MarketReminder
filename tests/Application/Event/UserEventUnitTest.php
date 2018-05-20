@@ -27,11 +27,6 @@ use Symfony\Component\EventDispatcher\Event;
 class UserEventUnitTest extends TestCase
 {
     /**
-     * @var string
-     */
-    private $locale;
-
-    /**
      * @var UserInterface
      */
     private $user;
@@ -41,13 +36,12 @@ class UserEventUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->locale = 'fr';
         $this->user = $this->createMock(UserInterface::class);
     }
 
     public function testItImplements()
     {
-        $event = new UserEvent($this->locale, $this->user);
+        $event = new UserEvent($this->user);
 
         static::assertInstanceOf(UserEventInterface::class, $event);
         static::assertInstanceOf(Event::class, $event);

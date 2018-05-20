@@ -33,11 +33,6 @@ final class UserEvent extends Event implements UserEventInterface
     const USER_VALIDATED = 'user.validated';
 
     /**
-     * @var string
-     */
-    private $locale;
-
-    /**
      * @var UserInterface
      */
     private $user;
@@ -45,11 +40,8 @@ final class UserEvent extends Event implements UserEventInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        string $locale,
-        UserInterface $user
-    ) {
-        $this->locale = $locale;
+    public function __construct(UserInterface $user)
+    {
         $this->user = $user;
     }
 
@@ -59,13 +51,5 @@ final class UserEvent extends Event implements UserEventInterface
     public function getUser(): UserInterface
     {
         return $this->user;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLocale(): string
-    {
-        return $this->locale;
     }
 }
