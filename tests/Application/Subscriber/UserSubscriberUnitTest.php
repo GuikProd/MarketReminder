@@ -151,7 +151,7 @@ class UserSubscriberUnitTest extends TestCase
         static::assertSame('fr', $this->presenter->getViewOptions()['_locale']);
         static::assertInstanceOf(
             UserInterface::class,
-            $this->presenter->getPage()['user']
+            $this->presenter->getViewOptions()['user']
         );
         static::assertSame(
             'user.ask_reset_password.content',
@@ -191,7 +191,7 @@ class UserSubscriberUnitTest extends TestCase
         static::assertSame('fr', $this->presenter->getViewOptions()['_locale']);
         static::assertInstanceOf(
             UserInterface::class,
-            $this->presenter->getPage()['user']
+            $this->presenter->getViewOptions()['user']
         );
         static::assertSame(
             'user.registration.welcome.content_first_part',
@@ -235,7 +235,7 @@ class UserSubscriberUnitTest extends TestCase
         static::assertSame('fr', $this->presenter->getViewOptions()['_locale']);
         static::assertInstanceOf(
             UserInterface::class,
-            $this->presenter->getPage()['user']
+            $this->presenter->getViewOptions()['user']
         );
     }
 
@@ -259,7 +259,7 @@ class UserSubscriberUnitTest extends TestCase
         static::assertSame('fr', $this->presenter->getViewOptions()['_locale']);
         static::assertInstanceOf(
             UserInterface::class,
-            $this->presenter->getPage()['user']
+            $this->presenter->getViewOptions()['user']
         );
     }
 }

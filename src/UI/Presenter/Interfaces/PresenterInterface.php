@@ -34,6 +34,8 @@ interface PresenterInterface
      *
      * ```php
      * '_locale' => '',
+     * 'form' => FormInterface::class,
+     * 'user' => UserInterface::class,
      * 'page' => [
      *     'button' => [
      *         'channel' => 'messages',

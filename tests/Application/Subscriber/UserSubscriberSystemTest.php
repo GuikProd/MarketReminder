@@ -26,6 +26,8 @@ use App\UI\Presenter\Presenter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -63,6 +65,11 @@ class UserSubscriberSystemTest extends KernelTestCase
     private $presenter;
 
     /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
      * @var UserInterface
      */
     private $user;
@@ -87,7 +94,12 @@ class UserSubscriberSystemTest extends KernelTestCase
         $this->emailSender = static::$kernel->getContainer()->getParameter('email.sender_address');
         $this->swiftMailer = static::$kernel->getContainer()->get('mailer');
         $this->twig = static::$kernel->getContainer()->get('twig');
+
+        $this->requestStack = $this->createMock(RequestStack::class);
         $this->user = $this->createMock(UserInterface::class);
+        $request = $this->createMock(Request::class);
+        $this->requestStack->method('getCurrentRequest')->willReturn($request);
+        $request->method('getLocale')->willReturn('fr');
 
         $redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.dsn'),
@@ -98,16 +110,14 @@ class UserSubscriberSystemTest extends KernelTestCase
 
         $this->presenter = new Presenter($this->redisTranslationRepository);
 
-        $this->userEvent = new UserEvent(
-            static::$kernel->getContainer()->getParameter('locale'),
-            $this->user
-        );
+        $this->userEvent = new UserEvent($this->user);
 
         $this->userSubscriber = new UserSubscriber(
             $this->emailSender,
             $this->swiftMailer,
             $this->twig,
-            $this->presenter
+            $this->presenter,
+            $this->requestStack
         );
     }
 

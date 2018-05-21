@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter;
 
+use App\Domain\Models\Interfaces\UserInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationPresenterInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
@@ -68,7 +69,6 @@ final class Presenter implements PresenterInterface, RedisTranslationPresenterIn
     public function prepareTranslations(array $viewOptions): array
     {
         foreach ($viewOptions['page'] as $item =>  $value) {
-
             if (!$redisTranslation = $this->redisTranslationRepository->getSingleEntry(
                 $value['channel'].'.'.$viewOptions['_locale'].'.yaml',
                 $viewOptions['_locale'],
@@ -95,12 +95,14 @@ final class Presenter implements PresenterInterface, RedisTranslationPresenterIn
         $resolver->setDefaults([
             '_locale' => '',
             'form' => null,
+            'user' => null,
             'page' => []
         ]);
 
         $resolver->setAllowedTypes('_locale', 'string');
         $resolver->setAllowedTypes('form', array('null', FormInterface::class));
         $resolver->setAllowedTypes('page', 'array');
+        $resolver->setAllowedTypes('user', array('null', UserInterface::class));
     }
 
     /**

@@ -94,7 +94,6 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
         $this->presenter->prepareOptions([
             '_locale' => $this->locale,
             'page' => [
-                'user' => $event->getUser(),
                 'content' => [
                     'key' => 'user.ask_reset_password.content',
                     'channel' => 'messages'
@@ -111,13 +110,14 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
                     'key' => 'user.ask_reset_password.header',
                     'channel' => 'messages'
                 ]
-            ]
+            ],
+            'user' => $event->getUser(),
         ]);
 
         $askResetPasswordMail = (new \Swift_Message)
             ->setSubject($this->presenter->getPage()['subject']['value'])
             ->setFrom($this->emailSender)
-            ->setTo($this->presenter->getPage()['user']->getEmail())
+            ->setTo($this->presenter->getViewOptions()['user']->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/user_ask_reset_password.html.twig', [
                     'presenter' => $this->presenter
@@ -139,7 +139,6 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
         $this->presenter->prepareOptions([
             '_locale' => $this->locale,
             'page' => [
-                'user' => $event->getUser(),
                 'content_first' => [
                     'key' => 'user.registration.welcome.content_first_part',
                     'channel' => 'messages'
@@ -160,13 +159,14 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
                     'key' => 'user.registration.welcome.header',
                     'channel' => 'messages'
                 ]
-            ]
+            ],
+            'user' => $event->getUser(),
         ]);
 
         $registrationMail = (new \Swift_Message)
             ->setSubject($this->presenter->getPage()['subject']['value'])
             ->setFrom($this->emailSender)
-            ->setTo($this->presenter->getPage()['user']->getEmail())
+            ->setTo($this->presenter->getViewOptions()['user']->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/registration_mail.html.twig', [
                     'presenter' => $this->presenter
@@ -188,7 +188,6 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
         $this->presenter->prepareOptions([
             '_locale' => $this->locale,
             'page' => [
-                'user' => $event->getUser(),
                 'body' => [
                     'key' => 'user.reset_password.content',
                     'channel' => 'messages'
@@ -205,13 +204,14 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
                     'key' => 'user.reset_password.header',
                     'channel' => 'messages'
                 ]
-            ]
+            ],
+            'user' => $event->getUser(),
         ]);
 
         $resetPasswordMessage = (new \Swift_Message)
             ->setSubject($this->presenter->getPage()['subject']['value'])
             ->setFrom($this->emailSender)
-            ->setTo($this->presenter->getPage()['user']->getEmail())
+            ->setTo($this->presenter->getViewOptions()['user']->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/user_reset_password.html.twig', [
                     'presenter' => $this->presenter
@@ -233,7 +233,6 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
         $this->presenter->prepareOptions([
             '_locale' => $this->locale,
             'page' => [
-                'user' => $event->getUser(),
                 'content' => [
                     'key' => '',
                     'channel' => 'messages'
@@ -246,13 +245,14 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
                     'key' => '',
                     'channel' => 'messages'
                 ]
-            ]
+            ],
+            'user' => $event->getUser(),
         ]);
 
         $validationMail = (new \Swift_Message)
             ->setSubject($this->presenter->getPage()['subject']['value'])
             ->setFrom($this->emailSender)
-            ->setTo($this->presenter->getPage()['user']->getEmail())
+            ->setTo($this->presenter->getViewOptions()['user']->getEmail())
             ->setBody(
                 $this->twig->render('emails/security/validation_mail.html.twig', [
                     'presenter' => $this->presenter
