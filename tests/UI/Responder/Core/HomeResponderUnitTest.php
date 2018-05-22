@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Core;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
-use App\UI\Presenter\Presenter;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use PHPUnit\Framework\TestCase;
@@ -36,11 +34,6 @@ class HomeResponderUnitTest extends TestCase
     private $presenter;
 
     /**
-     * @var RedisTranslationRepositoryInterface
-     */
-    private $redisTranslationRepository;
-
-    /**
      * @var Request
      */
     private $request;
@@ -55,13 +48,11 @@ class HomeResponderUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
         $this->twig = $this->createMock(Environment::class);
-
-        $this->presenter = new Presenter($this->redisTranslationRepository);
+        $this->presenter = $this->createMock(PresenterInterface::class);
         $this->request = $this->createMock(Request::class);
-        $this->request->method('getLocale')->willReturn('fr');
 
+        $this->request->method('getLocale')->willReturn('fr');
         $this->twig->method('getCharset')->willReturn('utf-8');
     }
 

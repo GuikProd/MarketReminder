@@ -22,7 +22,7 @@ use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Form\FormHandler\RegisterTypeHandler;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
@@ -30,11 +30,11 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Class RegisterTypeHandlerTest.
+ * Class RegisterTypeHandlerUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RegisterTypeHandlerTest extends KernelTestCase
+class RegisterTypeHandlerUnitTest extends TestCase
 {
     /**
      * @var CloudStoragePersisterHelperInterface
@@ -84,10 +84,10 @@ class RegisterTypeHandlerTest extends KernelTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->cloudStoragePersister = $this->createMock(CloudStoragePersisterHelperInterface::class);
-        $this->eventDispatcher = static::bootKernel()->getContainer()->get('event_dispatcher');
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->passwordEncoderFactory = $this->createMock(EncoderFactoryInterface::class);
         $this->imageBuilder = $this->createMock(ImageBuilderInterface::class);
         $this->imageUploaderHelper = $this->createMock(ImageUploaderHelperInterface::class);

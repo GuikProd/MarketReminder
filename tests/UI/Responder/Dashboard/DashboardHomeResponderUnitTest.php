@@ -19,21 +19,29 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * Class DashboardHomeResponderTest.
+ * Class DashboardHomeResponderUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class DashboardHomeResponderTest extends TestCase
+class DashboardHomeResponderUnitTest extends TestCase
 {
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->twig = $this->createMock(Environment::class);
+    }
+
     public function testInvokeReturn()
     {
-        $twigMock = $this->createMock(Environment::class);
+        $dashboardHomeResponder = new DashboardHomeResponder($this->twig);
 
-        $dashboardHomeResponder = new DashboardHomeResponder($twigMock);
-
-        static::assertInstanceOf(
-            Response::class,
-            $dashboardHomeResponder()
-        );
+        static::assertInstanceOf(Response::class, $dashboardHomeResponder());
     }
 }

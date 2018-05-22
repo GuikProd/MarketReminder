@@ -18,8 +18,6 @@ use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
 use App\UI\Action\Security\ResetPasswordAction;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
-use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
-use App\UI\Presenter\Security\ResetPasswordPresenter;
 use App\UI\Responder\Security\ResetPasswordResponder;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;

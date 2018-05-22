@@ -19,7 +19,6 @@ use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
-use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -29,7 +28,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
+final class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
 {
     /**
      * @var EventDispatcherInterface
@@ -42,11 +41,6 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
     private $encoderFactory;
 
     /**
-     * @var PresenterInterface
-     */
-    private $presenter;
-
-    /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
@@ -57,12 +51,10 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         EncoderFactoryInterface $encoderFactory,
-        PresenterInterface $resetPasswordPresenter,
         UserRepositoryInterface $userRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->encoderFactory = $encoderFactory;
-        $this->presenter = $resetPasswordPresenter;
         $this->userRepository = $userRepository;
     }
 
@@ -79,18 +71,11 @@ class ResetPasswordTypeHandler implements ResetPasswordTypeHandlerInterface
 
             $this->userRepository->flush();
 
-            $this->presenter->prepareOptions([
-                'notification' => [
-                    'content' => 'user.notification.password_reset_success',
-                    'title' => 'user.notification.password_reset.header'
-                ]
-            ]);
-
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
                 new SessionMessageEvent(
                     'success',
-                    $this->presenter->getNotificationMessage()['content']
+                    'user.notification.password_reset_success'
                 )
             );
 

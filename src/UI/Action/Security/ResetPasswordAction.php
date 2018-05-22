@@ -39,7 +39,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     }
  * )
  */
-class ResetPasswordAction implements ResetPasswordActionInterface
+final class ResetPasswordAction implements ResetPasswordActionInterface
 {
     /**
      * @var EventDispatcherInterface

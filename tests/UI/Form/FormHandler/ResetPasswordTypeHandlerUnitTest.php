@@ -18,25 +18,19 @@ use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Form\FormHandler\ResetPasswordTypeHandler;
-use App\UI\Presenter\Presenter;
-use App\UI\Presenter\Security\Interfaces\ResetPasswordPresenterInterface;
-use App\UI\Presenter\Security\ResetPasswordPresenter;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
- * Class ResetPasswordTypeHandlerTest.
+ * Class ResetPasswordTypeHandlerUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ResetPasswordTypeHandlerTest extends KernelTestCase
+class ResetPasswordTypeHandlerUnitTest extends TestCase
 {
-    use TestCaseTrait;
-
     /**
      * @var EncoderFactoryInterface
      */
@@ -51,11 +45,6 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
      * @var FormInterface
      */
     private $formInterface;
-
-    /**
-     * @var ResetPasswordPresenterInterface
-     */
-    private $resetPasswordPresenter;
 
     /**
      * @var UserInterface
@@ -88,16 +77,6 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
                                 'Ie1FDLTOTO',
                                 'dzazddzaazdda'
                             ));
-
-        $this->resetPasswordPresenter = $this->getMockBuilder(ResetPasswordPresenter::class)
-                                             ->enableOriginalConstructor()
-                                             ->getMock();
-
-        $this->resetPasswordPresenter->method('getNotificationMessage')
-                                     ->willReturn([
-                                         'content' => '',
-                                         'title' => ''
-                                     ]);
     }
 
     public function testItImplements()
@@ -105,7 +84,6 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
         $resetPasswordTypeHandler = new ResetPasswordTypeHandler(
             $this->eventDispatcher,
             $this->encoderFactory,
-            $this->resetPasswordPresenter,
             $this->userRepository
         );
 
@@ -113,27 +91,6 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
             ResetPasswordTypeHandlerInterface::class,
             $resetPasswordTypeHandler
         );
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @doesNotPerformAssertions
-     */
-    public function testBlackfireProfilingWithWrongDataAreSubmitted()
-    {
-        $resetPasswordTypeHandler = new ResetPasswordTypeHandler(
-            $this->eventDispatcher,
-            $this->encoderFactory,
-            $this->resetPasswordPresenter,
-            $this->userRepository
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $resetPasswordTypeHandler->handle($this->formInterface, $this->user);
-
-        static::$blackfire->endProbe($probe);
     }
 
     public function testWrongDataAreSubmitted()
@@ -144,7 +101,6 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
         $resetPasswordTypeHandler = new ResetPasswordTypeHandler(
             $this->eventDispatcher,
             $this->encoderFactory,
-            $this->resetPasswordPresenter,
             $this->userRepository
         );
 
@@ -161,7 +117,6 @@ class ResetPasswordTypeHandlerTest extends KernelTestCase
         $resetPasswordTypeHandler = new ResetPasswordTypeHandler(
             $this->eventDispatcher,
             $this->encoderFactory,
-            $this->resetPasswordPresenter,
             $this->userRepository
         );
 

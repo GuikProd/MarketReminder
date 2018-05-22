@@ -18,7 +18,7 @@ use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserResetPassword\DTO\UserResetPasswordDTO;
 use App\UI\Form\FormHandler\AskResetPasswordTypeHandler;
 use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -26,11 +26,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 /**
- * Class AskResetPasswordTypeHandlerIntegrationTest.
+ * Class AskResetPasswordTypeHandlerUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class AskResetPasswordTypeHandlerIntegrationTest extends KernelTestCase
+class AskResetPasswordTypeHandlerUnitTest extends TestCase
 {
     /**
      * @var EventDispatcherInterface
@@ -50,11 +50,9 @@ class AskResetPasswordTypeHandlerIntegrationTest extends KernelTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
-        static::bootKernel();
-
-        $this->eventDispatcher = static::$kernel->getContainer()->get('event_dispatcher');
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->session = new Session(new MockArraySessionStorage());
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
     }
