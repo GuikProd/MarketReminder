@@ -1,3 +1,4 @@
+import '@webcomponents/webcomponentsjs/webcomponents-loader.js';
 import { LitElement, html } from '@polymer/lit-element';
 
 class HomeComponent extends LitElement {

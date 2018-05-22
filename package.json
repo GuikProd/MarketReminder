@@ -32,6 +32,7 @@
         "@material/toolbar": "^0.35.0",
         "@material/top-app-bar": "^0.35.0",
         "@polymer/lit-element": "^0.5.1",
+        "@polymer/polymer": "^3.0.2",
         "@webcomponents/webcomponentsjs": "^2.0.0",
         "babel-preset-env": "^1.7.0",
         "babel-preset-es2016": "^6.24.1",

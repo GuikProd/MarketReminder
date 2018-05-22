@@ -401,7 +401,7 @@
     "@polymer/polymer" "^3.0.0-pre.13"
     lit-html "^0.10.0"
 
-"@polymer/polymer@^3.0.0-pre.13":
+"@polymer/polymer@^3.0.0-pre.13", "@polymer/polymer@^3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@polymer/polymer/-/polymer-3.0.2.tgz#626e6f9fae9716b0962ce0211e21df242153eab2"
   dependencies:
