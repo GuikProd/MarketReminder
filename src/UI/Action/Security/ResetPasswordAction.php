@@ -108,16 +108,16 @@ final class ResetPasswordAction implements ResetPasswordActionInterface
                 )
             );
 
-            return $responder(true);
+            return $responder($request, true);
         }
 
         $form = $this->formFactory->create(ResetPasswordType::class)
                                   ->handleRequest($request);
 
         if ($this->resetPasswordTypeHandler->handle($form, $user)) {
-            return $responder(true);
+            return $responder($request, true);
         }
 
-        return $responder(false, $form);
+        return $responder($request, false, $form);
     }
 }

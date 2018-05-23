@@ -50,7 +50,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     /**
      * @var string
      */
-    private $locale;
+    private $requestStack;
 
     /**
      * {@inheritdoc}
@@ -66,7 +66,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
         $this->swiftMailer = $swiftMailer;
         $this->twig = $twig;
         $this->presenter = $presenter;
-        $this->locale = $requestStack->getCurrentRequest()->getLocale();
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -92,7 +92,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserAskResetPasswordEvent(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => $this->locale,
+            '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
             'page' => [
                 'content' => [
                     'key' => 'user.ask_reset_password.content',
@@ -137,7 +137,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserCreated(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => $this->locale,
+            '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
             'page' => [
                 'content_first' => [
                     'key' => 'user.registration.welcome.content_first_part',
@@ -186,7 +186,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserResetPassword(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => $this->locale,
+            '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
             'page' => [
                 'body' => [
                     'key' => 'user.reset_password.content',
@@ -231,7 +231,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     public function onUserValidated(UserEvent $event): void
     {
         $this->presenter->prepareOptions([
-            '_locale' => $this->locale,
+            '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
             'page' => [
                 'content' => [
                     'key' => '',

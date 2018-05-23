@@ -58,7 +58,9 @@
             </div>
         </div>
         {% block javascripts %}
-            <script src="./../node_modules/webcomponentsjs/webcomponents-bundle.js"></script>
+            <script src="{{ asset('build/webcomponents/custom-elements-es5-adapter.js') }}"></script>
+            <script src="{{ asset('build/webcomponents/webcomponents-bundle.js') }}"></script>
+            <script src="{{ asset('build/webcomponents/webcomponents-loader.js') }}"></script>
             <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
             <script src="{{ asset('build/home.js') }}"></script>
             <script src="{{ asset('build/serviceWorker.js') }}"></script>

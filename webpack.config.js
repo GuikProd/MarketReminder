@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 Encore
     .setOutputPath('public/build/')
@@ -39,10 +40,17 @@ Encore
             test: /\.js$/,
             loader: 'babel-loader',
             query: {
-                presets: ['es2016']
+                presets: ['es2015']
             }
         }
     )
+    .addPlugin(new CopyWebpackPlugin([
+        {
+            from: "node_modules/@webcomponents/webcomponentsjs/*js",
+            to: "webcomponents/",
+            flatten: true
+        }
+    ]))
 
     // Style
     .addStyleEntry('core', './assets/scss/public/core.scss')
