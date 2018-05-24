@@ -21,6 +21,7 @@ use App\UI\Responder\Security\ResetPasswordResponder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -48,6 +49,11 @@ class ResetPasswordResponderUnitTest extends TestCase
     private $redisTranslationRepository;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * @var Environment
      */
     private $twig;
@@ -64,9 +70,11 @@ class ResetPasswordResponderUnitTest extends TestCase
     {
         $this->form = $this->createMock(FormInterface::class);
         $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
+        $this->request = $this->createMock(Request::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
+        $this->request->method('getLocale')->willReturn('fr');
         $this->urlGenerator->method('generate')->willReturn('/fr/');
 
         $this->presenter = new Presenter($this->redisTranslationRepository);
@@ -101,7 +109,7 @@ class ResetPasswordResponderUnitTest extends TestCase
 
         static::assertInstanceOf(
             RedirectResponse::class,
-            $resetPasswordResponder(true)
+            $resetPasswordResponder($this->request,true)
         );
     }
 
@@ -120,7 +128,7 @@ class ResetPasswordResponderUnitTest extends TestCase
 
         static::assertInstanceOf(
             Response::class,
-            $resetPasswordResponder(false, $this->form)
+            $resetPasswordResponder($this->request,false, $this->form)
         );
     }
 }
