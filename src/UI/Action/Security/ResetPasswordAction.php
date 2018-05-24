@@ -18,7 +18,6 @@ use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Form\Type\ResetPasswordType;
-use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;

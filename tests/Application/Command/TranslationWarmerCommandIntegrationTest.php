@@ -101,7 +101,7 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
         );
 
         $this->redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.dsn'),
+            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
         $this->cloudTranslationWarmer = new CloudTranslationWarmer($cloudTranslationBridge);

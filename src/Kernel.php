@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Application\DependencyInjection\GCPExtension;
+use App\Application\DependencyInjection\RedisExtension;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -71,6 +72,7 @@ class Kernel extends BaseKernel
         $confDir = dirname(__DIR__).'/config';
 
         $container->registerExtension(new GCPExtension());
+        $container->registerExtension(new RedisExtension());
 
         $loader->load($confDir.'/packages/*'.self::CONFIG_EXTS, 'glob');
         if (is_dir($confDir.'/packages/'.$this->environment)) {
