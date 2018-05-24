@@ -18,8 +18,8 @@ use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
 use App\UI\Action\Security\ResetPasswordAction;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -30,14 +30,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
- * Class ResetPasswordActionTest.
+ * Class ResetPasswordActionUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ResetPasswordActionTest extends TestCase
+class ResetPasswordActionUnitTest extends TestCase
 {
-    use TestCaseTrait;
-
     /**
      * @var EventDispatcherInterface
      */
@@ -59,9 +57,9 @@ class ResetPasswordActionTest extends TestCase
     private $request;
 
     /**
-     * @var ResetPasswordPresenterInterface
+     * @var PresenterInterface
      */
-    private $resetPasswordPresenter;
+    private $presenter;
 
     /**
      * @var ResetPasswordTypeHandlerInterface
@@ -91,7 +89,7 @@ class ResetPasswordActionTest extends TestCase
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->formInterface = $this->createMock(FormInterface::class);
-        $this->resetPasswordPresenter = $this->createMock(ResetPasswordPresenterInterface::class);
+        $this->presenter = $this->createMock(PresenterInterface::class);
         $this->resetPasswordTypeHandler = $this->createMock(ResetPasswordTypeHandlerInterface::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
@@ -101,16 +99,6 @@ class ResetPasswordActionTest extends TestCase
                           ->willReturn($this->formInterface);
 
         $this->formInterface->method('handleRequest')->willReturnSelf();
-
-        $this->resetPasswordPresenter = $this->getMockBuilder(ResetPasswordPresenter::class)
-                                             ->enableOriginalConstructor()
-                                             ->getMock();
-
-        $this->resetPasswordPresenter->method('getNotificationMessage')
-                                     ->willReturn([
-                                         'content' => '',
-                                         'type' => ''
-                                     ]);
 
         $this->request = Request::create('/fr/reset-password/dadddad', 'POST');
         $this->request->initialize([], [], ['token' => 'dadddad']);
@@ -123,7 +111,6 @@ class ResetPasswordActionTest extends TestCase
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,
             $this->formFactory,
-            $this->resetPasswordPresenter,
             $this->resetPasswordTypeHandler,
             $this->userRepository
         );
@@ -134,48 +121,17 @@ class ResetPasswordActionTest extends TestCase
         );
     }
 
-    /**
-     * @group Blackfire
-     *
-     * @doesNotPerformAssertions
-     */
-    public function testBlackfireProfilingDuringWrongProcess()
-    {
-        $this->userRepository->method('getUserByResetPasswordToken')->willReturn(null);
-
-        $resetPasswordResponder = new ResetPasswordResponder(
-            $this->twig,
-            $this->resetPasswordPresenter,
-            $this->urlGenerator
-        );
-
-        $resetPasswordAction = new ResetPasswordAction(
-            $this->eventDispatcher,
-            $this->formFactory,
-            $this->resetPasswordPresenter,
-            $this->resetPasswordTypeHandler,
-            $this->userRepository
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $resetPasswordAction($this->request, $resetPasswordResponder);
-
-        static::$blackfire->endProbe($probe);
-    }
-
     public function testItReturnDuringWrongProcess()
     {
         $resetPasswordResponder = new ResetPasswordResponder(
             $this->twig,
-            $this->resetPasswordPresenter,
+            $this->presenter,
             $this->urlGenerator
         );
 
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,
             $this->formFactory,
-            $this->resetPasswordPresenter,
             $this->resetPasswordTypeHandler,
             $this->userRepository
         );
@@ -192,14 +148,13 @@ class ResetPasswordActionTest extends TestCase
     {
         $resetPasswordResponder = new ResetPasswordResponder(
             $this->twig,
-            $this->resetPasswordPresenter,
+            $this->presenter,
             $this->urlGenerator
         );
 
         $resetPasswordAction = new ResetPasswordAction(
             $this->eventDispatcher,
             $this->formFactory,
-            $this->resetPasswordPresenter,
             $this->resetPasswordTypeHandler,
             $this->userRepository
         );

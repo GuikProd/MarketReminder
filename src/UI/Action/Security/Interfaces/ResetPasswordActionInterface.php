@@ -15,7 +15,6 @@ namespace App\UI\Action\Security\Interfaces;
 
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
-use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -34,14 +33,12 @@ interface ResetPasswordActionInterface
      *
      * @param EventDispatcherInterface          $eventDispatcher
      * @param FormFactoryInterface              $formFactory
-     * @param PresenterInterface                $resetPasswordPresenter
      * @param ResetPasswordTypeHandlerInterface $resetPasswordTypeHandler
      * @param UserRepositoryInterface           $userRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         FormFactoryInterface $formFactory,
-        PresenterInterface $resetPasswordPresenter,
         ResetPasswordTypeHandlerInterface $resetPasswordTypeHandler,
         UserRepositoryInterface $userRepository
     );

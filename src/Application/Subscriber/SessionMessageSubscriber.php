@@ -24,7 +24,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class SessionMessageSubscriber implements EventSubscriberInterface, SessionMessageSubscriberInterface
+final class SessionMessageSubscriber implements EventSubscriberInterface, SessionMessageSubscriberInterface
 {
     /**
      * @var SessionInterface

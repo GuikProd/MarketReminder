@@ -17,11 +17,11 @@ use App\Application\Event\SessionMessageEvent;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class SessionMessageEventTest.
+ * Class SessionMessageEventUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class SessionMessageEventTest extends TestCase
+class SessionMessageEventUnitTest extends TestCase
 {
     public function testFailureMessage()
     {

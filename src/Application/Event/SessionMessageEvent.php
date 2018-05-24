@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\Event;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class SessionMessageEvent extends Event implements SessionMessageEventInterface
+final class SessionMessageEvent extends Event implements SessionMessageEventInterface
 {
     /**
      * @var string

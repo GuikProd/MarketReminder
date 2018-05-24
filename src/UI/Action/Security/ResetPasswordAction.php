@@ -52,11 +52,6 @@ final class ResetPasswordAction implements ResetPasswordActionInterface
     private $formFactory;
 
     /**
-     * @var PresenterInterface
-     */
-    private $presenter;
-
-    /**
      * @var ResetPasswordTypeHandlerInterface
      */
     private $resetPasswordTypeHandler;
@@ -72,13 +67,11 @@ final class ResetPasswordAction implements ResetPasswordActionInterface
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         FormFactoryInterface $formFactory,
-        PresenterInterface $resetPasswordPresenter,
         ResetPasswordTypeHandlerInterface $resetPasswordTypeHandler,
         UserRepositoryInterface $userRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->formFactory = $formFactory;
-        $this->presenter = $resetPasswordPresenter;
         $this->resetPasswordTypeHandler = $resetPasswordTypeHandler;
         $this->userRepository = $userRepository;
     }
@@ -93,18 +86,11 @@ final class ResetPasswordAction implements ResetPasswordActionInterface
 
         if (!$user = $this->userRepository->getUserByResetPasswordToken($request->attributes->get('token'))) {
 
-            $this->presenter->prepareOptions([
-                'notification' => [
-                    'content' => 'user.notification.wrong_reset_password_token',
-                    'type' => 'failure'
-                ]
-            ]);
-
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
                 new SessionMessageEvent(
-                    $this->presenter->getNotificationMessage()['type'],
-                    $this->presenter->getNotificationMessage()['content']
+                    'failure',
+                    'user.notification.wrong_reset_password_token'
                 )
             );
 
