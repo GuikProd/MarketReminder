@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     path="/reset-password/ask"
  * )
  */
-class AskResetPasswordAction implements AskResetPasswordActionInterface
+final class AskResetPasswordAction implements AskResetPasswordActionInterface
 {
     /**
      * @var FormFactoryInterface

@@ -30,6 +30,11 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
     private $redisConnector;
 
     /**
+     * @var RedisTranslationInterface
+     */
+    private $cacheEntry;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(RedisConnectorInterface $redisConnector)
@@ -60,10 +65,12 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
 
         if ($cacheItem->isHit()) {
             foreach ($cacheItem->get() as $item => $value) {
-                return $value->getKey() === $key && $value->getLocale() === $locale
-                    ? $value
-                    : null;
+                if ($value->getKey() === $key && $value->getLocale() === $locale) {
+                    $this->cacheEntry = $value;
+                }
             }
+
+            return $this->cacheEntry;
         }
 
         return null;
