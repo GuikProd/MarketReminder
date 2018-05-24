@@ -17,12 +17,12 @@ use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslationRepository;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\Redis\Translation\CloudTranslationRepository;
 use App\Infra\Redis\Translation\RedisTranslationWarmer;
-use App\Infra\Redis\Translation\RedisTranslationWriter;
+use App\Infra\Redis\Translation\CloudTranslationWriter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -48,7 +48,7 @@ class RedisTranslationWarmerIntegrationTest extends KernelTestCase
     private $cloudTranslationWarmer;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -58,7 +58,7 @@ class RedisTranslationWarmerIntegrationTest extends KernelTestCase
     private $redisTranslationWarmer;
 
     /**
-     * @var RedisTranslationWriterInterface
+     * @var CloudTranslationWriterInterface
      */
     private $redisTranslationWriter;
 
@@ -89,8 +89,8 @@ class RedisTranslationWarmerIntegrationTest extends KernelTestCase
         );
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer($cloudTranslationBridge);
-        $this->redisTranslationRepository = new RedisTranslationRepository($redisConnector);
-        $this->redisTranslationWriter = new RedisTranslationWriter($redisConnector);
+        $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
+        $this->redisTranslationWriter = new CloudTranslationWriter($redisConnector);
 
         $this->redisTranslationWarmer = new RedisTranslationWarmer(
             $this->acceptedChannels,

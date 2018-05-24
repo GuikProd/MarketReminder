@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
-use App\Infra\Redis\Translation\RedisTranslation;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationItemInterface;
+use App\Infra\Redis\Translation\CloudTranslationItem;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,7 +26,7 @@ class RedisTranslationUnitTest extends TestCase
 {
     public function testItImplements()
     {
-        $redisTranslation = new RedisTranslation([
+        $redisTranslation = new CloudTranslationItem([
             '_locale' => 'fr',
             'channel' => 'messages',
             'tag' => 'fr',
@@ -35,14 +35,14 @@ class RedisTranslationUnitTest extends TestCase
         ]);
 
         static::assertInstanceOf(
-            RedisTranslationInterface::class,
+            CloudTranslationItemInterface::class,
             $redisTranslation
         );
     }
 
     public function testItDefineDefaultAttributes()
     {
-        $redisTranslation = new RedisTranslation([
+        $redisTranslation = new CloudTranslationItem([
             '_locale' => 'fr',
             'channel' => 'messages',
             'tag' => 'fr',

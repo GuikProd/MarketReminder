@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\UI\Responder\Core;
 
 use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\RedisTranslationRepository;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\CloudTranslationRepository;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use App\UI\Responder\Core\HomeResponder;
@@ -46,7 +46,7 @@ class HomeResponderSystemTest extends KernelTestCase
     private $presenter;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -72,7 +72,7 @@ class HomeResponderSystemTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationRepository = new RedisTranslationRepository($redisConnector);
+        $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
         $this->presenter = new Presenter($this->redisTranslationRepository);
         $this->request = Request::create('/fr/', 'GET');
         $this->twig = static::$kernel->getContainer()->get('twig');

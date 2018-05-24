@@ -21,7 +21,7 @@ use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class CloudTranslationWarmer implements CloudTranslationWarmerInterface
+final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
 {
     /**
      * @var CloudTranslationBridgeInterface

@@ -11,18 +11,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis\Translation;
+namespace App\Infra\GCP\CloudTranslation;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class RedisTranslation.
+ * Class CloudTranslationItem.
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-final class RedisTranslation implements RedisTranslationInterface
+final class CloudTranslationItem implements CloudTranslationItemInterface
 {
     /**
      * @var array

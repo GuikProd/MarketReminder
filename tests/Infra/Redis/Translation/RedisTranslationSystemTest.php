@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\Redis\Translation\RedisTranslation;
+use App\Infra\Redis\Translation\CloudTranslationItem;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;
@@ -35,10 +35,10 @@ class RedisTranslationSystemTest extends TestCase
     public function testBlackfireProfilingAndOptionsResolving()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 10kB', 'RedisTranslation options resolving memory cost');
+        $configuration->assert('main.peak_memory < 10kB', 'CloudTranslationItem options resolving memory cost');
 
         $this->assertBlackfire($configuration, function () {
-            $redisTranslation = new RedisTranslation([
+            $redisTranslation = new CloudTranslationItem([
                 '_locale' => '',
                 'channel' => 'messages',
                 'tag' => 'fr',

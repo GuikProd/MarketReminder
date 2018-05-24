@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\Redis;
+namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

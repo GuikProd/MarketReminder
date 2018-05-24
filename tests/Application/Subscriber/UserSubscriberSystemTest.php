@@ -19,8 +19,8 @@ use App\Application\Subscriber\UserSubscriber;
 use App\Domain\Event\Interfaces\UserEventInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\RedisTranslationRepository;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\CloudTranslationRepository;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -45,7 +45,7 @@ class UserSubscriberSystemTest extends KernelTestCase
     private $emailSender;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -106,7 +106,7 @@ class UserSubscriberSystemTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationRepository = new RedisTranslationRepository($redisConnector);
+        $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
 
         $this->presenter = new Presenter($this->redisTranslationRepository);
 

@@ -13,24 +13,25 @@ declare(strict_types=1);
 
 namespace App\Infra\Redis\Translation\Interfaces;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
 
 /**
- * Interface RedisTranslationRepositoryInterface.
+ * Interface CloudTranslationRepositoryInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface RedisTranslationRepositoryInterface
+interface CloudTranslationRepositoryInterface
 {
     /**
-     * RedisTranslationRepositoryInterface constructor.
+     * CloudTranslationRepositoryInterface constructor.
      *
-     * @param RedisConnectorInterface $redisConnector
+     * @param ConnectorInterface $redisConnector
      */
-    public function __construct(RedisConnectorInterface $redisConnector);
+    public function __construct(ConnectorInterface $redisConnector);
 
     /**
-     * Allow to retrieve an array of RedisTranslation using the default filename.
+     * Allow to retrieve an array of CloudTranslationItem using the default filename.
      *
      * @param string $filename  The name of the item to retrieve.
      *
@@ -41,7 +42,7 @@ interface RedisTranslationRepositoryInterface
     public function getEntries(string $filename): ?array;
 
     /**
-     * Allow to retrieve a single RedisTranslation using the default filename, is key and the locale.
+     * Allow to retrieve a single CloudTranslationItem using the default filename, is key and the locale.
      *
      * @param string $filename The name of the translation file.
      * @param string $locale   The locale used to return the translated content.
@@ -49,7 +50,7 @@ interface RedisTranslationRepositoryInterface
      *
      * @throws \Psr\Cache\InvalidArgumentException
      *
-     * @return RedisTranslationInterface|null
+     * @return CloudTranslationItemInterface|null
      */
-    public function getSingleEntry(string $filename, string $locale, string $key): ?RedisTranslationInterface;
+    public function getSingleEntry(string $filename, string $locale, string $key): ?CloudTranslationItemInterface;
 }

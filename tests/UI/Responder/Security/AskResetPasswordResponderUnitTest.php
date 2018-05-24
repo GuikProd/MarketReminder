@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Security;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use App\UI\Responder\Security\AskResetPasswordResponder;
@@ -39,7 +39,7 @@ class AskResetPasswordResponderUnitTest extends TestCase
     private $presenter;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -63,7 +63,7 @@ class AskResetPasswordResponderUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
+        $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->presenter = new Presenter($this->redisTranslationRepository);

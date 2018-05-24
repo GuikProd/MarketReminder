@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslationRepository;
-use App\Infra\Redis\Translation\RedisTranslationWriter;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\Redis\Translation\CloudTranslationRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -34,7 +34,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
     private $redisConnector;
 
     /**
-     * @var RedisTranslationWriterInterface
+     * @var CloudTranslationWriterInterface
      */
     private $redisTranslationWriter;
 
@@ -50,7 +50,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+        $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
 
         $this->redisConnector->getAdapter()->clear();
     }
@@ -67,7 +67,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
+        $redisTranslationReader = new CloudTranslationRepository($this->redisConnector);
 
         $entry = $redisTranslationReader->getEntries('validators.fr.yaml');
 
@@ -86,12 +86,12 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationReader = new RedisTranslationRepository($this->redisConnector);
+        $redisTranslationReader = new CloudTranslationRepository($this->redisConnector);
 
         $entry = $redisTranslationReader->getEntries('messages.fr.yaml');
 
         static::assertCount(1, $entry);
-        static::assertInstanceOf(RedisTranslationInterface::class, $entry[0]);
+        static::assertInstanceOf(CloudTranslationItemInterface::class, $entry[0]);
     }
 
     /**
@@ -106,7 +106,7 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
             ['home.text' => 'hello !']
         );
 
-        $redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
+        $redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
 
         $entry = $redisTranslationRepository->getSingleEntry(
             'messages.fr.yaml',
@@ -114,6 +114,6 @@ class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
             'home.text'
         );
 
-        static::assertInstanceOf(RedisTranslationInterface::class, $entry);
+        static::assertInstanceOf(CloudTranslationItemInterface::class, $entry);
     }
 }

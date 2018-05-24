@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\Redis\Translation;
+namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\Redis\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

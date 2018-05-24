@@ -15,10 +15,10 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
 use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslationRepository;
-use App\Infra\Redis\Translation\RedisTranslationWriter;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\Redis\Translation\CloudTranslationRepository;
+use App\Infra\Redis\Translation\CloudTranslationWriter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -38,12 +38,12 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
     private $redisConnector;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
     /**
-     * @var RedisTranslationWriterInterface
+     * @var CloudTranslationWriterInterface
      */
     private $redisTranslationWriter;
 
@@ -59,9 +59,9 @@ class RedisTranslationRepositorySystemTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+        $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
 
-        $this->redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
+        $this->redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
 
         $this->redisConnector->getAdapter()->clear();
     }

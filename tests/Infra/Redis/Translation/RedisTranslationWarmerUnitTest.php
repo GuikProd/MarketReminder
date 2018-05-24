@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
+use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslation;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\Redis\Translation\RedisTranslationWarmer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -44,12 +44,12 @@ class RedisTranslationWarmerUnitTest extends KernelTestCase
     private $cloudTranslationWarmer;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
     /**
-     * @var RedisTranslationWriterInterface
+     * @var CloudTranslationWriterInterface
      */
     private $redisTranslationWriter;
 
@@ -68,8 +68,8 @@ class RedisTranslationWarmerUnitTest extends KernelTestCase
         $this->acceptedChannels = 'messages|validators';
         $this->acceptedLocales = 'fr|en';
         $this->cloudTranslationWarmer = $this->createMock(CloudTranslationWarmerInterface::class);
-        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
-        $this->redisTranslationWriter = $this->createMock(RedisTranslationWriterInterface::class);
+        $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
+        $this->redisTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);
         $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
     }
 
@@ -172,7 +172,7 @@ class RedisTranslationWarmerUnitTest extends KernelTestCase
     public function provideRightChannelsAndLocalesToCheck()
     {
         yield array('messages', 'en', [
-            'messages.en.yaml' => new RedisTranslation([
+            'messages.en.yaml' => new CloudTranslationItem([
                 '_locale' => 'en',
                 'channel' => 'messages',
                 'tag' => 'dedede',
@@ -181,7 +181,7 @@ class RedisTranslationWarmerUnitTest extends KernelTestCase
             ])
         ]);
         yield array('validators', 'fr', [
-            'validators.fr.yaml' => new RedisTranslation([
+            'validators.fr.yaml' => new CloudTranslationItem([
                 '_locale' => 'fr',
                 'channel' => 'validators',
                 'tag' => 'dzdddz',

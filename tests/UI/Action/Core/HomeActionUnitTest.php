@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Core;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Action\Core\HomeAction;
 use App\UI\Action\Core\Interfaces\HomeActionInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
@@ -34,7 +34,7 @@ class HomeActionUnitTest extends TestCase
     private $homePresenter;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -48,7 +48,7 @@ class HomeActionUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
+        $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
         $this->twig = $this->createMock(Environment::class);
 
         $this->twig->method('getCharset')->willReturn('utf-8');

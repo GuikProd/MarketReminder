@@ -11,9 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis;
+namespace App\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use Predis\Client;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
@@ -24,7 +25,7 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-final class RedisConnector implements RedisConnectorInterface
+final class RedisConnector implements RedisConnectorInterface, ConnectorInterface
 {
     /**
      * @var TagAwareAdapterInterface

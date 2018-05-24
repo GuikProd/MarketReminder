@@ -11,19 +11,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis\Translation;
+namespace App\Infra\GCP\CloudTranslation;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Psr\Cache\CacheItemInterface;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class RedisTranslationWriter.
- * 
+ * Class CloudTranslationWriter.
+ *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-final class RedisTranslationWriter implements RedisTranslationWriterInterface
+final class CloudTranslationWriter implements CloudTranslationWriterInterface
 {
     /**
      * @var array
@@ -31,16 +31,16 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
     private $entries;
 
     /**
-     * @var RedisConnectorInterface
+     * @var ConnectorInterface
      */
-    private $redisConnector;
+    private $connector;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(RedisConnectorInterface $redisConnector)
+    public function __construct(ConnectorInterface $redisConnector)
     {
-        $this->redisConnector = $redisConnector;
+        $this->connector = $redisConnector;
     }
 
     /**
@@ -48,14 +48,14 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
      */
     public function write(string $locale, string $channel, string $fileName, array $values): bool
     {
-        $cacheItem = $this->redisConnector->getAdapter()->getItem($fileName);
+        $cacheItem = $this->connector->getAdapter()->getItem($fileName);
 
         if ($cacheItem->isHit()) {
             if (!$this->isCacheContentValid($cacheItem, $values)) {
 
-                $this->redisConnector->getAdapter()->invalidateTags($cacheItem->getPreviousTags());
+                $this->connector->getAdapter()->invalidateTags($cacheItem->getPreviousTags());
 
-                $this->redisConnector->getAdapter()->deleteItem($cacheItem->getKey());
+                $this->connector->getAdapter()->deleteItem($cacheItem->getKey());
 
                 return $this->write($locale, $channel, $fileName, $values);
             }
@@ -66,7 +66,7 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         $tag = Uuid::uuid4()->toString();
 
         foreach ($values as $item => $value) {
-            $this->entries[] = new RedisTranslation([
+            $this->entries[] = new CloudTranslationItem([
                 '_locale' => $locale,
                 'channel' => $channel,
                 'tag' => $tag,
@@ -78,7 +78,7 @@ final class RedisTranslationWriter implements RedisTranslationWriterInterface
         $cacheItem->set($this->entries);
         $cacheItem->tag($tag);
 
-        return $this->redisConnector->getAdapter()->save($cacheItem);
+        return $this->connector->getAdapter()->save($cacheItem);
     }
 
     /**

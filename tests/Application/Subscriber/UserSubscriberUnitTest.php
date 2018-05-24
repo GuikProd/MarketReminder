@@ -18,7 +18,7 @@ use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\Application\Subscriber\UserSubscriber;
 use App\Domain\Event\Interfaces\UserEventInterface;
 use App\Domain\Models\Interfaces\UserInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +39,7 @@ class UserSubscriberUnitTest extends TestCase
     private $emailSender;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -74,7 +74,7 @@ class UserSubscriberUnitTest extends TestCase
     protected function setUp()
     {
         $this->emailSender = 'test@marketReminder.com';
-        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
+        $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
         $this->requestStack = $this->createMock(RequestStack::class);
         $this->swiftMailer = $this->createMock(\Swift_Mailer::class);
         $this->twig = $this->createMock(Environment::class);

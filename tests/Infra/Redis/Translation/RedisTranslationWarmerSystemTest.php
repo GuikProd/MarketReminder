@@ -17,12 +17,12 @@ use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslationRepository;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\Redis\Translation\CloudTranslationRepository;
 use App\Infra\Redis\Translation\RedisTranslationWarmer;
-use App\Infra\Redis\Translation\RedisTranslationWriter;
+use App\Infra\Redis\Translation\CloudTranslationWriter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -52,7 +52,7 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     private $cloudTranslationWarmer;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -62,7 +62,7 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     private $redisTranslationWarmer;
 
     /**
-     * @var RedisTranslationWriterInterface
+     * @var CloudTranslationWriterInterface
      */
     private $redisTranslationWriter;
 
@@ -93,8 +93,8 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
         );
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer($cloudTranslationBridge);
-        $this->redisTranslationRepository = new RedisTranslationRepository($redisConnector);
-        $this->redisTranslationWriter = new RedisTranslationWriter($redisConnector);
+        $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
+        $this->redisTranslationWriter = new CloudTranslationWriter($redisConnector);
 
         $this->redisTranslationWarmer = new RedisTranslationWarmer(
             $this->acceptedChannels,
@@ -118,9 +118,9 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     public function testWrongChannelIsUsed()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 14kB', 'Translations warm wrong channel memory usage');
-        $configuration->assert('main.network_in == 0B', 'Translations warm wrong channel network call');
-        $configuration->assert('main.network_out == 0B', 'Translations warm wrong channel network callees');
+        $configuration->assert('main.peak_memory < 14kB', 'Translation warm wrong channel memory usage');
+        $configuration->assert('main.network_in == 0B', 'Translation warm wrong channel network call');
+        $configuration->assert('main.network_out == 0B', 'Translation warm wrong channel network callees');
         $configuration->assert('metrics.http.requests.count == 0', 'Translation warm wrong channel HTTP request.');
 
         $this->redisTranslationWarmer->warmTranslations('messages', 'fr');
@@ -143,9 +143,9 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     public function testWrongLocaleIsUsed()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 15kB', 'Translations warm wrong locale memory usage');
-        $configuration->assert('main.network_in == 0B', 'Translations warm wrong locale network call');
-        $configuration->assert('main.network_out == 0B', 'Translations warm wrong locale network callees');
+        $configuration->assert('main.peak_memory < 15kB', 'Translation warm wrong locale memory usage');
+        $configuration->assert('main.network_in == 0B', 'Translation warm wrong locale network call');
+        $configuration->assert('main.network_out == 0B', 'Translation warm wrong locale network callees');
         $configuration->assert('metrics.http.requests.count == 0', 'Translation warm wrong locale HTTP request.');
 
         $this->redisTranslationWarmer->warmTranslations('messages', 'fr');
@@ -168,8 +168,8 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     public function testCacheIsValid()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 175kB', 'Translations warm no translation memory usage');
-        $configuration->assert('main.network_in < 26kB', 'Translations warm no translation network call');
+        $configuration->assert('main.peak_memory < 175kB', 'Translation warm no translation memory usage');
+        $configuration->assert('main.network_in < 26kB', 'Translation warm no translation network call');
         $configuration->assert('metrics.http.requests.count == 0', 'Translation warm no translation HTTP request.');
 
         $this->redisTranslationWarmer->warmTranslations('messages', 'fr');
@@ -189,8 +189,8 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     public function testCacheIsValidButTranslationIsCalled()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 1.6MB', 'Translations warm translation memory usage');
-        $configuration->assert('main.network_in < 25kB', 'Translations warm translation network call');
+        $configuration->assert('main.peak_memory < 1.6MB', 'Translation warm translation memory usage');
+        $configuration->assert('main.network_in < 25kB', 'Translation warm translation network call');
         $configuration->assert('metrics.http.requests.count <= 2', 'Translation warm translation maximum HTTP requests.');
 
         $this->redisTranslationWarmer->warmTranslations('messages', 'fr');

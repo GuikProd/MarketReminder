@@ -69,6 +69,8 @@
         "psr-4": {
             "App\\": "src/",
             "App\\Application\\": "src/Application/",
+            "App\\Application\\Cache\\": "src/Application/Cache/",
+            "App\\Application\\Cache\\Interfaces\\": "src/Application/Cache/Interfaces/",
             "App\\Application\\CacheWarmer\\": "src/Application/CacheWarmer/",
             "App\\Application\\CacheWarmer\\Interfaces\\": "src/Application/CacheWarmer/Interfaces/",
             "App\\Application\\Helper\\Image\\": "src/Application/Helper/Image/",
@@ -96,6 +98,9 @@
             "App\\Domain\\UseCase\\UserResetPassword\\DTO\\Interfaces\\": "src/Domain/UseCase/UserResetPassword/DTO/Interfaces/",
             "App\\Domain\\UseCase\\UserResetPassword\\Model\\": "src/Domain/UseCase/ResetPassword/Model/",
             "App\\Form\\Type\\": "src/Form/Type/",
+            "App\\Infra\\APCu\\": "src/Infra/APCu/",
+            "App\\Infra\\APCu\\Cache\\": "src/Infra/APCu/Cache/",
+            "App\\Infra\\APCu\\Cache\\Interfaces\\": "src/Infra/APCu/Cache/Interfaces/",
             "App\\Infra\\Doctrine\\Repository\\": "src/Infra/Doctrine/Repository/",
             "App\\Infra\\Form\\FormHandler\\": "src/Infra/Form/FormHandler/",
             "App\\Infra\\Form\\FormSubscriber\\": "src/Infra/Form/FormSubscriber/",

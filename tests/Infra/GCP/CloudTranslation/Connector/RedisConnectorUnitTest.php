@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\Redis;
+namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 

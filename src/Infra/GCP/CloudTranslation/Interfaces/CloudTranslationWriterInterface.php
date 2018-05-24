@@ -11,27 +11,27 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis\Translation\Interfaces;
+namespace App\Infra\GCP\CloudTranslation\Interfaces;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use Psr\Cache\CacheItemInterface;
 
 /**
- * Interface RedisTranslationWriterInterface.
+ * Interface CloudTranslationWriterInterface.
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface RedisTranslationWriterInterface
+interface CloudTranslationWriterInterface
 {
     /**
-     * RedisTranslationWriterInterface constructor.
+     * CloudTranslationWriterInterface constructor.
      *
-     * @param RedisConnectorInterface $redisConnector
+     * @param ConnectorInterface $redisConnector
      */
-    public function __construct(RedisConnectorInterface $redisConnector);
+    public function __construct(ConnectorInterface $redisConnector);
 
     /**
-     * Allow to store a new item in the Cache, a RedisTranslation is created and stored.
+     * Allow to store a new item in the Cache, a CloudTranslationItem is created and stored.
      *
      * For security purpose, the tag is generated using a @see Uuid::uuid4().
      *
@@ -45,7 +45,7 @@ interface RedisTranslationWriterInterface
      * @param string $fileName The name of the file to cache (used as a key inside the cache along with the tag).
      * @param array  $values   The array of values to cache.
      *
-     * @throws \Psr\Cache\InvalidArgumentException @see RedisAdapter::getItem()
+     * @throws \Psr\Cache\InvalidArgumentException @see TagAwareAdapter::getItem()
      *
      * @return bool If the write process has succeed or if the cache item is fresh.
      */

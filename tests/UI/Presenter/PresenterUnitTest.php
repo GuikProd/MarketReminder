@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Presenter;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationItemInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationPresenterInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\RedisTranslation;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\CloudTranslationItem;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +30,7 @@ use Ramsey\Uuid\Uuid;
 class PresenterUnitTest extends TestCase
 {
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -39,7 +39,7 @@ class PresenterUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->redisTranslationRepository = $this->createMock(RedisTranslationRepositoryInterface::class);
+        $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
     }
 
     public function testItImplements()
@@ -74,9 +74,9 @@ class PresenterUnitTest extends TestCase
     /**
      * @dataProvider provideRedisTranslations
      *
-     * @param RedisTranslationInterface $redisTranslation
+     * @param CloudTranslationItemInterface $redisTranslation
      */
-    public function testItResolveOptionsWithCache(RedisTranslationInterface $redisTranslation)
+    public function testItResolveOptionsWithCache(CloudTranslationItemInterface $redisTranslation)
     {
         $this->redisTranslationRepository->method('getSingleEntry')->willReturn($redisTranslation);
 
@@ -108,14 +108,14 @@ class PresenterUnitTest extends TestCase
      */
     public function provideRedisTranslations()
     {
-        yield array(new RedisTranslation([
+        yield array(new CloudTranslationItem([
             '_locale' => 'fr',
             'channel' => 'messages',
             'tag' => Uuid::uuid4()->toString(),
             'key' => 'home.text',
             'value' => ''
         ]));
-        yield array(new RedisTranslation([
+        yield array(new CloudTranslationItem([
             '_locale' => 'en',
             'channel' => 'messages',
             'tag' => Uuid::uuid4()->toString(),

@@ -11,9 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis\Interfaces;
-
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+namespace App\Infra\GCP\CloudTranslation\Connector\Interfaces;
 
 /**
  * Interface RedisConnectorInterface.
@@ -29,13 +27,4 @@ interface RedisConnectorInterface
      * @param string $namespace  The namespace used by the Redis server.
      */
     public function __construct(string $redisDSN, string $namespace);
-
-    /**
-     * Instantiate the RedisAdapter (wrapped with a TagAwareAdapter for cache invalidation).
-     *
-     * A @see Predis client is returned.
-     *
-     * @return TagAwareAdapterInterface
-     */
-    public function getAdapter(): TagAwareAdapterInterface;
 }

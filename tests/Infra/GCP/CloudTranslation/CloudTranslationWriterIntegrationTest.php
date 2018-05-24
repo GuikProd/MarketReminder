@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslationWriter;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class RedisTranslationWriterIntegrationTest.
+ * Class CloudTranslationWriterIntegrationTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationWriterIntegrationTest extends KernelTestCase
+class CloudTranslationWriterIntegrationTest extends KernelTestCase
 {
     /**
      * @var RedisConnectorInterface
@@ -32,7 +32,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
     private $redisConnector;
 
     /**
-     * @var RedisTranslationWriterInterface
+     * @var CloudTranslationWriterInterface
      */
     private $redisTranslationWriter;
 
@@ -48,10 +48,7 @@ class RedisTranslationWriterIntegrationTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
-
-        // Used to clear the cache before any test (if not, the cache will return always the same values).
-        $this->redisConnector->getAdapter()->clear();
+        $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
     }
 
     /**

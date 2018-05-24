@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\RedisTranslationRepository;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\CloudTranslationRepository;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
@@ -45,10 +45,10 @@ class RedisTranslationRepositoryUnitTest extends TestCase
 
     public function testItImplements()
     {
-        $redisTranslationRepository = new RedisTranslationRepository($this->redisConnector);
+        $redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
 
         static::assertInstanceOf(
-            RedisTranslationRepositoryInterface::class,
+            CloudTranslationRepositoryInterface::class,
             $redisTranslationRepository
         );
     }

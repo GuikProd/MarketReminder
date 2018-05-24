@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace App\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -42,12 +42,12 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
     private $cloudTranslationWarmer;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
     /**
-     * @var RedisTranslationWriterInterface
+     * @var CloudTranslationWriterInterface
      */
     private $redisTranslationWriter;
 
@@ -63,8 +63,8 @@ final class RedisTranslationWarmer implements RedisTranslationWarmerInterface
         string $acceptedChannels,
         string $acceptedLocales,
         CloudTranslationWarmerInterface $cloudTranslationWarmer,
-        RedisTranslationRepositoryInterface $redisTranslationRepository,
-        RedisTranslationWriterInterface $redisTranslationWriter,
+        CloudTranslationRepositoryInterface $redisTranslationRepository,
+        CloudTranslationWriterInterface $redisTranslationWriter,
         string $translationsFolder
     ) {
         $this->acceptedChannels = $acceptedChannels;

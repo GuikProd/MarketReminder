@@ -13,21 +13,22 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslation;
-use App\Infra\Redis\Translation\RedisTranslationWriter;
+use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
- * Class RedisTranslationWriterUnitTest.
+ * Class CloudTranslationWriterUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationWriterUnitTest extends TestCase
+class CloudTranslationWriterUnitTest extends TestCase
 {
     /**
      * @var TagAwareAdapterInterface
@@ -38,6 +39,11 @@ class RedisTranslationWriterUnitTest extends TestCase
      * @var CacheItemInterface
      */
     private $cacheItem;
+
+    /**
+     * @var ApcuConnectorInterface
+     */
+    private $apcuConnector;
 
     /**
      * @var RedisConnectorInterface
@@ -51,19 +57,29 @@ class RedisTranslationWriterUnitTest extends TestCase
     {
         $this->adapter = $this->createMock(TagAwareAdapterInterface::class);
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
-        $this->redisConnector = $this->getMockBuilder(RedisConnectorInterface::class)
-                                     ->disableOriginalConstructor()
-                                     ->getMock();
+        $this->apcuConnector = $this->createMock(ApcuConnectorInterface::class);
+        $this->redisConnector = $this->createMock(RedisConnectorInterface::class);
 
+        $this->apcuConnector->method('getAdapter')->willReturn($this->adapter);
         $this->redisConnector->method('getAdapter')->willReturn($this->adapter);
     }
 
-    public function testItImplements()
+    public function testItImplementsWithApcuConnector()
     {
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+        $redisTranslationWriter = new CloudTranslationWriter($this->apcuConnector);
 
         static::assertInstanceOf(
-            RedisTranslationWriterInterface::class,
+            CloudTranslationWriterInterface::class,
+            $redisTranslationWriter
+        );
+    }
+
+    public function testItImplementsWithRedisConnector()
+    {
+        $redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
+
+        static::assertInstanceOf(
+            CloudTranslationWriterInterface::class,
             $redisTranslationWriter
         );
     }
@@ -83,7 +99,7 @@ class RedisTranslationWriterUnitTest extends TestCase
         $translations = [];
 
         foreach ($values as $item => $value) {
-            $translations[] = new RedisTranslation([
+            $translations[] = new CloudTranslationItem([
                 '_locale' => $locale,
                 'channel' => $channel,
                 'tag' => Uuid::uuid4()->toString(),
@@ -96,7 +112,7 @@ class RedisTranslationWriterUnitTest extends TestCase
         $this->cacheItem->method('isHit')->willReturn(true);
         $this->cacheItem->method('get')->willReturn($translations);
 
-        $redisTranslationWriter = new RedisTranslationWriter($this->redisConnector);
+        $redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
 
         $processStatus = $redisTranslationWriter->write($locale, $channel, $fileName, $values);
 

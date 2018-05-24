@@ -11,19 +11,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis\Translation\Interfaces;
+namespace App\Infra\GCP\CloudTranslation\Interfaces;
 
 use Symfony\Component\OptionsResolver\Options;
 
 /**
- * Interface RedisTranslationInterface.
+ * Interface CloudTranslationItemInterface.
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface RedisTranslationInterface
+interface CloudTranslationItemInterface
 {
     /**
-     * RedisTranslationInterface constructor.
+     * CloudTranslationItemInterface constructor.
      *
      * @param array $options
      */

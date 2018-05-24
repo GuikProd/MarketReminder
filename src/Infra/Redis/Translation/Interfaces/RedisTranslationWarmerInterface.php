@@ -28,16 +28,16 @@ interface RedisTranslationWarmerInterface
      * @param string                              $acceptedChannels
      * @param string                              $acceptedLocales
      * @param CloudTranslationWarmerInterface     $cloudTranslationWarmer
-     * @param RedisTranslationRepositoryInterface $redisTranslationRepository
-     * @param RedisTranslationWriterInterface     $redisTranslationWriter
+     * @param CloudTranslationRepositoryInterface $redisTranslationRepository
+     * @param CloudTranslationWriterInterface     $redisTranslationWriter
      * @param string                              $translationsFolder
      */
     public function __construct(
         string $acceptedChannels,
         string $acceptedLocales,
         CloudTranslationWarmerInterface $cloudTranslationWarmer,
-        RedisTranslationRepositoryInterface $redisTranslationRepository,
-        RedisTranslationWriterInterface $redisTranslationWriter,
+        CloudTranslationRepositoryInterface $redisTranslationRepository,
+        CloudTranslationWriterInterface $redisTranslationWriter,
         string $translationsFolder
     );
 

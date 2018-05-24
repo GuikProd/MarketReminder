@@ -23,9 +23,9 @@ interface RedisTranslationPresenterInterface
     /**
      * PresenterInterface constructor.
      *
-     * @param RedisTranslationRepositoryInterface $redisTranslationRepository
+     * @param CloudTranslationRepositoryInterface $redisTranslationRepository
      */
-    public function __construct(RedisTranslationRepositoryInterface $redisTranslationRepository);
+    public function __construct(CloudTranslationRepositoryInterface $redisTranslationRepository);
 
     /**
      * @param array $viewOptions

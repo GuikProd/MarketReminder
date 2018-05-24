@@ -15,7 +15,7 @@ namespace App\UI\Presenter;
 
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Infra\Redis\Translation\Interfaces\RedisTranslationPresenterInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -29,7 +29,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class Presenter implements PresenterInterface, RedisTranslationPresenterInterface
 {
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
@@ -41,7 +41,7 @@ final class Presenter implements PresenterInterface, RedisTranslationPresenterIn
     /**
      * {@inheritdoc}
      */
-    public function __construct(RedisTranslationRepositoryInterface $redisTranslationRepository)
+    public function __construct(CloudTranslationRepositoryInterface $redisTranslationRepository)
     {
         $this->redisTranslationRepository = $redisTranslationRepository;
     }

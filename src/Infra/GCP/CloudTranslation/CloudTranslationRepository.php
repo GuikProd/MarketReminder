@@ -13,33 +13,33 @@ declare(strict_types=1);
 
 namespace App\Infra\Redis\Translation;
 
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 
 /**
- * Class RedisTranslationRepository.
+ * Class CloudTranslationRepository.
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-final class RedisTranslationRepository implements RedisTranslationRepositoryInterface
+final class CloudTranslationRepository implements CloudTranslationRepositoryInterface
 {
     /**
-     * @var RedisConnectorInterface
+     * @var ConnectorInterface
      */
-    private $redisConnector;
+    private $connector;
 
     /**
-     * @var RedisTranslationInterface
+     * @var CloudTranslationItemInterface
      */
     private $cacheEntry;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(RedisConnectorInterface $redisConnector)
+    public function __construct(ConnectorInterface $connector)
     {
-        $this->redisConnector = $redisConnector;
+        $this->connector = $connector;
     }
 
     /**
@@ -47,7 +47,7 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
      */
     public function getEntries(string $filename): ?array
     {
-        $cacheItem = $this->redisConnector->getAdapter()->getItem($filename);
+        $cacheItem = $this->connector->getAdapter()->getItem($filename);
 
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
@@ -59,9 +59,9 @@ final class RedisTranslationRepository implements RedisTranslationRepositoryInte
     /**
      * {@inheritdoc}
      */
-    public function getSingleEntry(string $filename, string $locale, string $key): ?RedisTranslationInterface
+    public function getSingleEntry(string $filename, string $locale, string $key): ?CloudTranslationItemInterface
     {
-        $cacheItem = $this->redisConnector->getAdapter()->getItem($filename);
+        $cacheItem = $this->connector->getAdapter()->getItem($filename);
 
         if ($cacheItem->isHit()) {
             foreach ($cacheItem->get() as $item => $value) {

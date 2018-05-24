@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Tests\UI\Presenter;
 
 use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWriterInterface;
-use App\Infra\Redis\Translation\RedisTranslationRepository;
-use App\Infra\Redis\Translation\RedisTranslationWriter;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\Redis\Translation\CloudTranslationRepository;
+use App\Infra\Redis\Translation\CloudTranslationWriter;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -39,12 +39,12 @@ class PresenterSystemTest extends KernelTestCase
     private $presenter;
 
     /**
-     * @var RedisTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface
      */
     private $redisTranslationRepository;
 
     /**
-     * @var RedisTranslationWriterInterface
+     * @var CloudTranslationWriterInterface
      */
     private $redisTranslationWriter;
 
@@ -65,8 +65,8 @@ class PresenterSystemTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationRepository = new RedisTranslationRepository($redisConnector);
-        $this->redisTranslationWriter = new RedisTranslationWriter($redisConnector);
+        $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
+        $this->redisTranslationWriter = new CloudTranslationWriter($redisConnector);
         $this->presenter = new Presenter($this->redisTranslationRepository);
 
         $this->testingData = ['channel' => 'messages', 'key' => 'home.text'];

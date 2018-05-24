@@ -47,7 +47,7 @@ interface PresenterInterface
      * ```
      *
      * In order to execute properly, the 'value' key should be blank,
-     * once the presenter is build, the RedisTranslationRepository
+     * once the presenter is build, the CloudTranslationRepository
      * is used in order to retrieve the translated text.
      *
      * @internal The default structure is free as long as the
