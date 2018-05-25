@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\ApcuConnector;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -27,9 +29,19 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class CloudTranslationWriterIntegrationTest extends KernelTestCase
 {
     /**
+     * @var ApcuConnectorInterface
+     */
+    private $apcuConnector;
+
+    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
+
+    /**
+     * @var CloudTranslationWriterInterface
+     */
+    private $apcuTranslationWriter;
 
     /**
      * @var CloudTranslationWriterInterface
@@ -43,11 +55,14 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
+        $this->apcuConnector = new ApcuConnector('test');
+
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
+        $this->apcuTranslationWriter = new CloudTranslationWriter($this->apcuConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
     }
 
@@ -61,7 +76,31 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToStoreWithSameContent(string $locale, string $channel, string $fileName, array $values)
+    public function testItRefuseToStoreWithSameContentAndApcu(string $locale, string $channel, string $fileName, array $values)
+    {
+        $this->apcuTranslationWriter->write($locale, $channel, $fileName, $values);
+
+        $processStatus = $this->apcuTranslationWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            $values
+        );
+
+        static::assertFalse($processStatus);
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItRefuseToStoreWithSameContentAndRedis(string $locale, string $channel, string $fileName, array $values)
     {
         $this->redisTranslationWriter->write($locale, $channel, $fileName, $values);
 

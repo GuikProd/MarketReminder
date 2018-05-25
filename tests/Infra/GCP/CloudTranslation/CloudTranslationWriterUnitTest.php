@@ -17,7 +17,7 @@ use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Ramsey\Uuid\Uuid;

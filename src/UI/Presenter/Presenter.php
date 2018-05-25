@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\UI\Presenter;
 
 use App\Domain\Models\Interfaces\UserInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationPresenterInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationPresenterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -26,7 +26,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * 
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-final class Presenter implements PresenterInterface, RedisTranslationPresenterInterface
+final class Presenter implements PresenterInterface, CloudTranslationPresenterInterface
 {
     /**
      * @var CloudTranslationRepositoryInterface

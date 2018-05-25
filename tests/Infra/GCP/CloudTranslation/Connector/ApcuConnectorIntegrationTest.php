@@ -15,19 +15,16 @@ namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
 use App\Infra\GCP\CloudTranslation\Connector\ApcuConnector;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
-use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
- * Class ApcuConnectorSystemTest.
+ * Class ApcuConnectorIntegrationTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class ApcuConnectorSystemTest extends TestCase
+class ApcuConnectorIntegrationTest extends TestCase
 {
-    use TestCaseTrait;
-
     /**
      * @var ApcuConnectorInterface
      */
@@ -41,18 +38,11 @@ class ApcuConnectorSystemTest extends TestCase
         $this->apcuConnector = new ApcuConnector('test');
     }
 
-    /**
-     * @group Blackfire
-     *
-     * @requires extension blackfire
-     */
-    public function testConnectorCall()
+    public function testItReturnAdapter()
     {
-        $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 260kB', 'APCu connector call memory usage');
-
-        $this->assertBlackfire($configuration, function() {
-            $this->apcuConnector->getAdapter();
-        });
+        static::assertInstanceOf(
+            TagAwareAdapterInterface::class,
+            $this->apcuConnector->getAdapter()
+        );
     }
 }

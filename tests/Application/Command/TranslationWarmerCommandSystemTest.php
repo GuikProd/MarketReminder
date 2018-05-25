@@ -15,16 +15,16 @@ namespace App\Tests\Application\Command;
 
 use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
-use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\Redis\Interfaces\RedisConnectorInterface;
-use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\Redis\Translation\CloudTranslationRepository;
-use App\Infra\Redis\Translation\RedisTranslationWarmer;
-use App\Infra\Redis\Translation\CloudTranslationWriter;
+use App\Infra\Redis\Translation\CloudTranslationWarmer;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -56,7 +56,7 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
     private $application;
 
     /**
-     * @var CloudTranslationWarmerInterface
+     * @var CloudTranslationHelperInterface
      */
     private $cloudTranslationWarmer;
 
@@ -76,7 +76,7 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
     private $redisTranslationRepository;
 
     /**
-     * @var RedisTranslationWarmerInterface
+     * @var CloudTranslationWarmerInterface
      */
     private $redisTranslationWarmer;
 
@@ -108,14 +108,14 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
-        $this->cloudTranslationWarmer = new CloudTranslationWarmer($cloudTranslationBridge);
+        $this->cloudTranslationWarmer = new CloudTranslationHelper($cloudTranslationBridge);
         $this->redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
 
         $this->acceptedChannels = static::$kernel->getContainer()->getParameter('accepted_channels');
         $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
 
-        $this->redisTranslationWarmer = new RedisTranslationWarmer(
+        $this->redisTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
@@ -142,7 +142,6 @@ class TranslationWarmerCommandSystemTest extends KernelTestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 280kB', 'Translation command wrong channel memory usage');
         $configuration->assert('main.network_in == 0B', 'Translation command wrong channel network in');
         $configuration->assert('main.network_out == 0B', 'Translation command wrong channel network out');

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Application\DependencyInjection;
+namespace App\Infra\GCP\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -21,7 +21,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class GCPConfiguration implements ConfigurationInterface
+final class GCPConfiguration implements ConfigurationInterface
 {
     /**
      * {@inheritdoc}

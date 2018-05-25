@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Command;
 
 use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,14 +28,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class TranslationWarmerCommand extends Command implements TranslationWarmerCommandInterface
 {
     /**
-     * @var RedisTranslationWarmerInterface
+     * @var CloudTranslationWarmerInterface
      */
     private $redisTranslationWarmer;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(RedisTranslationWarmerInterface $redisTranslationWarmer)
+    public function __construct(CloudTranslationWarmerInterface $redisTranslationWarmer)
     {
         $this->redisTranslationWarmer = $redisTranslationWarmer;
 

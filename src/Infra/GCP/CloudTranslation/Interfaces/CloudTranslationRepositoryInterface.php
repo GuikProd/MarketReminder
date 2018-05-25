@@ -11,10 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis\Translation\Interfaces;
+namespace App\Infra\GCP\CloudTranslation\Interfaces;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
 
 /**
  * Interface CloudTranslationRepositoryInterface.

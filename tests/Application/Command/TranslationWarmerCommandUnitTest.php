@@ -15,10 +15,10 @@ namespace App\Tests\Application\Command;
 
 use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Application\Command\TranslationWarmerCommand;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 
@@ -35,7 +35,7 @@ class TranslationWarmerCommandUnitTest extends TestCase
     private $acceptedLocales;
 
     /**
-     * @var CloudTranslationWarmerInterface
+     * @var CloudTranslationHelperInterface
      */
     private $cloudTranslationWarmer;
 
@@ -50,7 +50,7 @@ class TranslationWarmerCommandUnitTest extends TestCase
     private $redisTranslationWriter;
 
     /**
-     * @var RedisTranslationWarmerInterface
+     * @var CloudTranslationWarmerInterface
      */
     private $redisTranslationWarmer;
 
@@ -65,10 +65,10 @@ class TranslationWarmerCommandUnitTest extends TestCase
     protected function setUp()
     {
         $this->acceptedLocales = 'fr|en';
-        $this->cloudTranslationWarmer = $this->createMock(CloudTranslationWarmerInterface::class);
+        $this->cloudTranslationWarmer = $this->createMock(CloudTranslationHelperInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
         $this->redisTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);
-        $this->redisTranslationWarmer = $this->createMock(RedisTranslationWarmerInterface::class);
+        $this->redisTranslationWarmer = $this->createMock(CloudTranslationWarmerInterface::class);
         $this->translationsFolder = '/tmp/translations';
     }
 

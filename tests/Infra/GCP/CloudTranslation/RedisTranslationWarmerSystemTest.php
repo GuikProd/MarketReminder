@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
-use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\Redis\Translation\CloudTranslationRepository;
-use App\Infra\Redis\Translation\RedisTranslationWarmer;
-use App\Infra\Redis\Translation\CloudTranslationWriter;
+use App\Infra\Redis\Translation\CloudTranslationWarmer;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -47,7 +47,7 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     private $acceptedLocales;
 
     /**
-     * @var CloudTranslationWarmerInterface
+     * @var CloudTranslationHelperInterface
      */
     private $cloudTranslationWarmer;
 
@@ -57,7 +57,7 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
     private $redisTranslationRepository;
 
     /**
-     * @var RedisTranslationWarmerInterface
+     * @var CloudTranslationWarmerInterface
      */
     private $redisTranslationWarmer;
 
@@ -92,11 +92,11 @@ class RedisTranslationWarmerSystemTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->cloudTranslationWarmer = new CloudTranslationWarmer($cloudTranslationBridge);
+        $this->cloudTranslationWarmer = new CloudTranslationHelper($cloudTranslationBridge);
         $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($redisConnector);
 
-        $this->redisTranslationWarmer = new RedisTranslationWarmer(
+        $this->redisTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,

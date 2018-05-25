@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis\Translation;
+namespace App\Infra\GCP\CloudTranslation;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 
 /**
  * Class CloudTranslationRepository.
@@ -62,6 +62,8 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     public function getSingleEntry(string $filename, string $locale, string $key): ?CloudTranslationItemInterface
     {
         $cacheItem = $this->connector->getAdapter()->getItem($filename);
+
+        dump($cacheItem);
 
         if ($cacheItem->isHit()) {
             foreach ($cacheItem->get() as $item => $value) {

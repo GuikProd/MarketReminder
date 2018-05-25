@@ -18,7 +18,7 @@ use App\Infra\GCP\CloudTranslation\Connector\ApcuConnector;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -90,7 +90,7 @@ class CloudTranslationWriterSystemTest extends KernelTestCase
     public function testItDoesNotSaveSameContentTwiceWithApcu()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 30kB', 'CloudTranslationWriter no write memory apcu usage');
+        $configuration->assert('main.peak_memory < 50kB', 'CloudTranslationWriter no write memory apcu usage');
         $configuration->assert('main.network_in == 0B', 'CloudTranslationWriter no write network apcu call');
 
         $this->apcuTranslationWriter->write(
@@ -121,8 +121,8 @@ class CloudTranslationWriterSystemTest extends KernelTestCase
     public function testItDoesNotSaveSameContentTwiceWithRedis()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 80kB', 'CloudTranslationWriter no write memory usage');
-        $configuration->assert('main.network_in < 710B', 'CloudTranslationWriter no write network call');
+        $configuration->assert('main.peak_memory < 80kB', 'CloudTranslationWriter no write memory redis usage');
+        $configuration->assert('main.network_in < 710B', 'CloudTranslationWriter no write network redis call');
 
         $this->redisTranslationWriter->write(
             'fr',

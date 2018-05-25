@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Application\Command\Interfaces;
 
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationWarmerInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 
 /**
  * Interface TranslationWarmerCommandInterface.
@@ -25,9 +25,9 @@ interface TranslationWarmerCommandInterface
     /**
      * TranslationWarmerCommandInterface constructor.
      *
-     * @param RedisTranslationWarmerInterface $redisTranslationWarmer
+     * @param CloudTranslationWarmerInterface $redisTranslationWarmer
      *
      * {@internal} this command SHOULD call the @see Command constructor
      */
-    public function __construct(RedisTranslationWarmerInterface $redisTranslationWarmer);
+    public function __construct(CloudTranslationWarmerInterface $redisTranslationWarmer);
 }

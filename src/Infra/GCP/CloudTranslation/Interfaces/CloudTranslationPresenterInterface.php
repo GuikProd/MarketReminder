@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\Redis\Translation\Interfaces;
+namespace App\Infra\GCP\CloudTranslation\Interfaces;
 
 /**
- * Interface RedisTranslationPresenterInterface.
+ * Interface CloudTranslationPresenterInterface.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-interface RedisTranslationPresenterInterface
+interface CloudTranslationPresenterInterface
 {
     /**
      * PresenterInterface constructor.

@@ -62,7 +62,7 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Domain/Models,Domain/UseCase,Migrations,Repository,Kernel.php}'
+        exclude: '../src/{Domain/Models,Domain/UseCase,Infra/GCPMigrations,Repository,Kernel.php}'
 
     App\UI\Action\:
         resource: '../src/UI/Action'

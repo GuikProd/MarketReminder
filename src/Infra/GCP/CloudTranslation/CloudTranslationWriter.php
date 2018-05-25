@@ -104,6 +104,6 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
         $finalArray = array_combine($translationKey, $translationContent);
         $finalCheckArray = array_combine($toCheckKey, $toCheckContent);
 
-        return count(array_diff($finalArray, $finalCheckArray)) > 0 ? false : true;
+        return \count(array_diff($finalArray, $finalCheckArray)) > 0 ? false : true;
     }
 }

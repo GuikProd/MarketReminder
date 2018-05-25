@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\UI\Presenter;
 
 use App\Infra\Redis\Translation\Interfaces\CloudTranslationItemInterface;
-use App\Infra\Redis\Translation\Interfaces\RedisTranslationPresenterInterface;
+use App\Infra\Redis\Translation\Interfaces\CloudTranslationPresenterInterface;
 use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\Redis\Translation\CloudTranslationItem;
 use App\UI\Presenter\Interfaces\PresenterInterface;
@@ -48,7 +48,7 @@ class PresenterUnitTest extends TestCase
 
         static::assertInstanceOf(PresenterInterface::class, $presenter);
         static::assertInstanceOf(
-            RedisTranslationPresenterInterface::class,
+            CloudTranslationPresenterInterface::class,
             $presenter
         );
     }

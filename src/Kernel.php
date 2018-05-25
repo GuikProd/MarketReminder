@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Application\DependencyInjection\GCPExtension;
 use App\Application\DependencyInjection\RedisExtension;
+use App\Infra\GCP\DependencyInjection\GCPExtension;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
