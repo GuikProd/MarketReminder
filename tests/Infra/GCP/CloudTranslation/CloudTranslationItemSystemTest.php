@@ -19,11 +19,11 @@ use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class RedisTranslationSystemTest.
+ * Class CloudTranslationItemSystemTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationSystemTest extends TestCase
+class CloudTranslationItemSystemTest extends TestCase
 {
     use TestCaseTrait;
 
@@ -32,21 +32,19 @@ class RedisTranslationSystemTest extends TestCase
      *
      * @requires extension blackfire
      */
-    public function testBlackfireProfilingAndOptionsResolving()
+    public function testOptionsResolving()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 10kB', 'CloudTranslationItem options resolving memory cost');
+        $configuration->assert('main.peak_memory < 300kB', 'CloudTranslationItem options resolving memory cost');
 
         $this->assertBlackfire($configuration, function () {
-            $redisTranslation = new CloudTranslationItem([
+            new CloudTranslationItem([
                 '_locale' => '',
                 'channel' => 'messages',
                 'tag' => 'fr',
                 'key' => 'user.creation_success',
                 'value' => 'Ce compte a bien été créé.'
             ]);
-
-            $redisTranslation->getOptions();
         });
     }
 }

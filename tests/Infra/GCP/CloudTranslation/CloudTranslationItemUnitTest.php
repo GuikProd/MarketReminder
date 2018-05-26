@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationItemInterface;
-use App\Infra\Redis\Translation\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class RedisTranslationUnitTest.
+ * Class CloudTranslationItemUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationUnitTest extends TestCase
+class CloudTranslationItemUnitTest extends TestCase
 {
     public function testItImplements()
     {

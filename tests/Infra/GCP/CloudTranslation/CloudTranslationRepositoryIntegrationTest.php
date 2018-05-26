@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
+use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
-use App\Infra\Redis\Translation\CloudTranslationRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class RedisTranslationRepositoryIntegrationTest.
+ * Class CloudTranslationRepositoryIntegrationTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationRepositoryIntegrationTest extends KernelTestCase
+class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
 {
     /**
      * @var RedisConnectorInterface

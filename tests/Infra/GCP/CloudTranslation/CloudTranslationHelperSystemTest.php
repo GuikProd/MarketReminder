@@ -63,7 +63,10 @@ class CloudTranslationHelperSystemTest extends KernelTestCase
     public function testItTranslateASingleElement()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 200kB', 'CloudTranslationHelper single translation warm memory usage');
+        $configuration->assert('main.peak_memory < 1.45MB', 'CloudTranslationHelper single translation warm memory usage');
+        $configuration->assert('metrics.http.requests.count <= 2', 'CloudTranslationHelper single translation HTTP requests');
+        $configuration->assert('main.network_in < 1.55kB', 'CloudTranslationHelper single translation network in');
+        $configuration->assert('main.network_out < 780B', 'CloudTranslationHelper single translation network out');
 
         $this->assertBlackfire($configuration, function() {
             $this->cloudTranslationHelper->warmTranslation('Bien le bonjour', 'en');
@@ -78,7 +81,10 @@ class CloudTranslationHelperSystemTest extends KernelTestCase
     public function testItTranslateAnArrayOfElements()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 200kB', 'CloudTranslationHelper multiples translations warm memory usage');
+        $configuration->assert('main.peak_memory < 170kB', 'CloudTranslationHelper multiples translations warm memory usage');
+        $configuration->assert('metrics.http.requests.count <= 2', 'CloudTranslationHelper multiples translation HTTP requests');
+        $configuration->assert('main.network_in < 1.55kB', 'CloudTranslationHelper multiples translation network in');
+        $configuration->assert('main.network_out < 785B', 'CloudTranslationHelper multiples translation network out');
 
         $this->assertBlackfire($configuration, function() {
             $this->cloudTranslationHelper->warmArrayTranslation([

@@ -1,5 +1,5 @@
-FROM composer
-FROM php:fpm-alpine3.7
+FROM composer:latest
+FROM php:fpm-alpine
 
 ENV WORKPATH "/var/www/marketReminder"
 
@@ -13,6 +13,7 @@ RUN set -xe \
           		graphviz \
           		make \
           		autoconf \
+          		git \
           	&& docker-php-ext-install \
           		intl \
           		pdo_pgsql \

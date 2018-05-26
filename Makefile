@@ -28,7 +28,6 @@ clean: ## Allow to delete the generated files and clean the project folder
 	    rm -rf .env ./node_modules ./vendor
 
 ## PHP commands
-install: ## Install the project
 install: composer.json
 	     $(COMPOSER) install -a -o
 	     $(COMPOSER) clear-cache
@@ -70,7 +69,6 @@ create-schema: ## Allow to create the BDD schema
 	    $(ENV_PHP) ./bin/console d:d:c --env=dev
 	    $(ENV_PHP) ./bin/console d:d:c --env=test
 
-check-schema: ## Check the mapping
 check-schema: config/doctrine
 	    $(ENV_PHP) ./bin/console doctrine:schema:validate
 
@@ -78,31 +76,24 @@ update-schema: ## Allow to update the schema
 	    $(ENV_PHP) ./bin/console d:s:u --dump-sql
 	    $(ENV_PHP) ./bin/console d:s:u --force
 
-fixtures_test: ## Allow to load the fixtures in the test env
-fixtures_test: src/DataFixtures
-	    $(ENV_PHP) ./bin/console doctrine:fixtures:load -n --env=test
-
-fixtures_dev: ## Allow to load the fixtures in the dev env
-fixtures_dev: src/DataFixtures
-	    $(ENV_PHP) ./bin/console d:f:l -n --env=dev
+fixtures: src/DataFixtures
+	    $(ENV_PHP) ./bin/console doctrine:fixtures:load -n --env=${ENV}
 
 doctrine-cache: ## Allow to clean the Doctrine cache
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-query
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-metadata
 
-redis-cache:
+redis-cache: ## Allow to clean the Redis cache
 	    $(ENV_PHP) ./bin/console redis:flushall -n
 
-phpunit: ## Launch all PHPUnit tests
 phpunit: tests
 	    make redis-cache
 	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
 
-phpunit-blackfire: ## Allow to launch Blackfire tests
+phpunit-blackfire: tests
 	    make redis-cache
 	    $(ENV_PHP) vendor/bin/phpunit --group Blackfire tests/$(FOLDER)
 
-behat: ## Launch all Behat tests
 behat: features
 	    make check-schema
 	    make fixtures_test
