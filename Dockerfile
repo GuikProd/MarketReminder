@@ -1,4 +1,3 @@
-FROM composer:latest
 FROM php:fpm-alpine
 
 ENV WORKPATH "/var/www/marketReminder"
@@ -37,7 +36,7 @@ COPY docker/php/conf/php.ini /usr/local/etc/php/php.ini
 
 # Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
-COPY --from=0 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Blackfire (Docker approach) & Blackfire Player
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \

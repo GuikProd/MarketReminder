@@ -185,4 +185,13 @@ class CloudTranslationWriterSystemTest extends KernelTestCase
             );
         });
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        $this->apcuConnector = null;
+        $this->redisConnector = null;
+    }
 }

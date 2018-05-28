@@ -64,6 +64,9 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
 
         $this->apcuTranslationWriter = new CloudTranslationWriter($this->apcuConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
+
+        $this->apcuConnector->getAdapter()->clear();
+        $this->redisConnector->getAdapter()->clear();
     }
 
     /**
@@ -124,7 +127,29 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItSaveEntries(string $locale, string $channel, string $fileName, array $values)
+    public function testItSaveEntriesWithAPCu(string $locale, string $channel, string $fileName, array $values)
+    {
+        $processStatus = $this->apcuTranslationWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            $values
+        );
+
+        static::assertTrue($processStatus);
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItSaveEntriesWithRedis(string $locale, string $channel, string $fileName, array $values)
     {
         $processStatus = $this->redisTranslationWriter->write(
             $locale,
@@ -146,7 +171,36 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItUpdateAndSaveItem(string $locale, string $channel, string $fileName, array $values)
+    public function testItUpdateAndSaveItemWithAPCu(string $locale, string $channel, string $fileName, array $values)
+    {
+        $this->apcuTranslationWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            $values
+        );
+
+        $processStatus = $this->apcuTranslationWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            ['user.creation_success' => 'Hello user !']
+        );
+
+        static::assertTrue($processStatus);
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItUpdateAndSaveItemWithRedis(string $locale, string $channel, string $fileName, array $values)
     {
         $this->redisTranslationWriter->write(
             $locale,
@@ -172,5 +226,14 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
     {
         yield array('fr', 'messages', 'messages.fr.yaml', ['home.text' => 'Inventory management']);
         yield array('fr', 'validators', 'validators.fr.yaml', ['reset_password.title.text' => 'Réinitialiser votre mot de passe.']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        $this->apcuConnector = null;
+        $this->redisConnector = null;
     }
 }
