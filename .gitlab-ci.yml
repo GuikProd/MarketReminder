@@ -1,6 +1,6 @@
 image: php:fpm-alpine
-before_script:
-    - apt-get update -y
 test:
+    before_script:
+        - apk add --no-cache make git autoconf
     script:
         - echo "Hello World"
