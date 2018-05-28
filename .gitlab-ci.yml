@@ -1,4 +1,4 @@
-image: php-fpm:latest
+image: php:fpm-alpine
 before_script:
     - apt-get update -y
 test:
