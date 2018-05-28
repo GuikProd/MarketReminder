@@ -1,0 +1,4 @@
+image: php-fpm:latest
+before_script:
+    - apt-get update -y
+    - echo "Hello World"
