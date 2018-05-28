@@ -1,6 +1,17 @@
-image: php:fpm-alpine
-test:
+stages:
+    - frontend
+    - unit_tests
+    - functional_tests
+    - deployment
+
+encore:
+    stage: frontend
+    image: node:alpine
     before_script:
-        - apk add --no-cache make git autoconf
+        - yarn install
     script:
-        - echo "Hello World"
+        - ./node_modules/.bin/encore production
+    cache:
+        paths:
+            - node_modules/
+            - public/build/
