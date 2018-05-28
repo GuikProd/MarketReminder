@@ -79,8 +79,12 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToStoreWithSameContentAndApcu(string $locale, string $channel, string $fileName, array $values)
-    {
+    public function testItRefuseToStoreWithSameContentAndApcu(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
         $this->apcuTranslationWriter->write($locale, $channel, $fileName, $values);
 
         $processStatus = $this->apcuTranslationWriter->write(
@@ -103,8 +107,12 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToStoreWithSameContentAndRedis(string $locale, string $channel, string $fileName, array $values)
-    {
+    public function testItRefuseToStoreWithSameContentAndRedis(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
         $this->redisTranslationWriter->write($locale, $channel, $fileName, $values);
 
         $processStatus = $this->redisTranslationWriter->write(
@@ -127,8 +135,12 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItSaveEntriesWithAPCu(string $locale, string $channel, string $fileName, array $values)
-    {
+    public function testItSaveEntriesWithAPCu(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
         $processStatus = $this->apcuTranslationWriter->write(
             $locale,
             $channel,
@@ -149,8 +161,12 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItSaveEntriesWithRedis(string $locale, string $channel, string $fileName, array $values)
-    {
+    public function testItSaveEntriesWithRedis(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
         $processStatus = $this->redisTranslationWriter->write(
             $locale,
             $channel,
@@ -171,8 +187,12 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItUpdateAndSaveItemWithAPCu(string $locale, string $channel, string $fileName, array $values)
-    {
+    public function testItUpdateAndSaveItemWithAPCu(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
         $this->apcuTranslationWriter->write(
             $locale,
             $channel,
@@ -200,8 +220,12 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItUpdateAndSaveItemWithRedis(string $locale, string $channel, string $fileName, array $values)
-    {
+    public function testItUpdateAndSaveItemWithRedis(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
         $this->redisTranslationWriter->write(
             $locale,
             $channel,

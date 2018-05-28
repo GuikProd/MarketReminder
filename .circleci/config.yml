@@ -26,6 +26,7 @@ jobs:
             - run: mkdir -p /tmp/phpunit-coverage
             - run: sudo apt install -y libsqlite3-dev zlib1g-dev
             - run: sudo docker-php-ext-install zip
+            - run: pecl install apcu
             - run: sudo docker-php-ext-enable apcu
             - run: sudo composer self-update
             - restore_cache:
@@ -72,6 +73,7 @@ jobs:
             - setup_remote_docker
             - run: sudo apt install -y libsqlite3-dev zlib1g-dev
             - run: sudo docker-php-ext-install zip
+            - run: pecl install apcu
             - run: sudo docker-php-ext-enable apcu
             - run: sudo composer self-update
             - restore_cache:
@@ -117,6 +119,7 @@ jobs:
             - setup_remote_docker
             - run: sudo apt install -y libsqlite3-dev zlib1g-dev
             - run: sudo docker-php-ext-install zip
+            - run: pecl install apcu
             - run: sudo docker-php-ext-enable apcu
             - run: sudo composer self-update
             - restore_cache:
