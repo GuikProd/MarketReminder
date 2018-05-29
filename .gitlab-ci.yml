@@ -25,7 +25,7 @@ deptrac:
         - chmod +x deptrac.phar
         - mv ./deptrac.phar /usr/bin/deptrac
     script:
-        - deptract
+        - deptrac
 
 phpunit:
     stage: unit_tests
@@ -61,4 +61,3 @@ phpunit:
         - cp docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
     script:
         - echo "Hello world"
-        
