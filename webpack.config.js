@@ -64,9 +64,6 @@ Encore
     .addEntry('serviceWorker', './assets/javascript/pwa/app.js')
     .addEntry('sw', './assets/javascript/pwa/sw.js')
 
-    // Vue
-    .addEntry('vue', './assets/vue/public/index.js')
-
     // Polymer
     .addEntry('home', './assets/javascript/polymer/home.js')
 ;

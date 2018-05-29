@@ -14,19 +14,19 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
-use App\Infra\Redis\Translation\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class RedisTranslationWarmerUnitTest.
+ * Class CloudTranslationWarmerUnitTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationWarmerUnitTest extends KernelTestCase
+class CloudTranslationWarmerUnitTest extends KernelTestCase
 {
     /**
      * @var string

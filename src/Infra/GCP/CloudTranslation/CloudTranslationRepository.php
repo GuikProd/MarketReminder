@@ -16,6 +16,7 @@ namespace App\Infra\GCP\CloudTranslation;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
+use Psr\Cache\CacheItemInterface;
 
 /**
  * Class CloudTranslationRepository.
@@ -49,7 +50,7 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     {
         $cacheItem = $this->connector->getAdapter()->getItem($filename);
 
-        if ($cacheItem->isHit()) {
+        if ($cacheItem instanceof CacheItemInterface && $cacheItem->isHit()) {
             return $cacheItem->get();
         }
 

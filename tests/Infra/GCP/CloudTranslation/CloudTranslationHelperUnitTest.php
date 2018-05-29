@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation;
 
+use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
+use Google\Cloud\Translate\TranslateClient;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,5 +24,18 @@ use PHPUnit\Framework\TestCase;
  */
 class CloudTranslationHelperUnitTest extends TestCase
 {
+    /**
+     * @var CloudTranslationBridgeInterface
+     */
+    private $cloudTranslationBridge;
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->cloudTranslationBridge = $this->createMock(CloudTranslationBridgeInterface::class);
+        $this->cloudTranslationBridge->method('getTranslateClient')
+                                     ->willReturn($this->createMock(TranslateClient::class));
+    }
 }

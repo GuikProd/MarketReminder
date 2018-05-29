@@ -15,24 +15,24 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
+use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
-use App\Infra\Redis\Translation\CloudTranslationRepository;
-use App\Infra\Redis\Translation\CloudTranslationWarmer;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class RedisTranslationWarmerSystemTest.
+ * Class CloudTranslationWarmerSystemTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationWarmerSystemTest extends KernelTestCase
+class CloudTranslationWarmerSystemTest extends KernelTestCase
 {
     use TestCaseTrait;
 

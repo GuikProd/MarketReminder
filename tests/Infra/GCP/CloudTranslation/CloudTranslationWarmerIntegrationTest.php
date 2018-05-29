@@ -15,22 +15,22 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
+use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
-use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
-use App\Infra\Redis\Translation\CloudTranslationRepository;
-use App\Infra\Redis\Translation\CloudTranslationWarmer;
-use App\Infra\Redis\Translation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class RedisTranslationWarmerIntegrationTest.
+ * Class CloudTranslationWarmerIntegrationTest.
  *
  * @author Guillaume Loulier <contact@guillaumeloulier.fr>
  */
-class RedisTranslationWarmerIntegrationTest extends KernelTestCase
+class CloudTranslationWarmerIntegrationTest extends KernelTestCase
 {
     /**
      * @var string
