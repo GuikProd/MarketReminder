@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>s
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>s
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Class RegisterTypeHandlerUnitTest.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class RegisterTypeHandlerUnitTest extends TestCase
 {
