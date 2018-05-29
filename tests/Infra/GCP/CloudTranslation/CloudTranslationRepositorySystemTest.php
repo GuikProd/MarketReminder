@@ -15,8 +15,6 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\ApcuConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
@@ -35,11 +33,6 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
     use TestCaseTrait;
 
     /**
-     * @var ApcuConnectorInterface
-     */
-    private $apcuConnector;
-
-    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
@@ -47,17 +40,7 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
     /**
      * @var CloudTranslationRepositoryInterface
      */
-    private $apcuTranslationRepository;
-
-    /**
-     * @var CloudTranslationRepositoryInterface
-     */
     private $redisTranslationRepository;
-
-    /**
-     * @var CloudTranslationWriterInterface
-     */
-    private $apcuTranslationWriter;
 
     /**
      * @var CloudTranslationWriterInterface
@@ -71,45 +54,15 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->apcuConnector = new ApcuConnector('test');
-
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->apcuTranslationWriter = new CloudTranslationWriter($this->apcuConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
-
-        $this->apcuTranslationRepository = new CloudTranslationRepository($this->apcuConnector);
         $this->redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
 
         $this->redisConnector->getAdapter()->clear();
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @requires extension blackfire
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItReturnNullWithAPCu()
-    {
-        $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 15kB', 'Repository null call memory APCu usage');
-        $configuration->assert('main.network_in == 0B', 'Repository null network APCu call');
-
-        $this->apcuTranslationWriter->write(
-            'fr',
-            'messages',
-            'messages.fr.yaml',
-            ['home.text' => 'hello !']
-        );
-
-        $this->assertBlackfire($configuration, function () {
-            $this->apcuTranslationRepository->getEntries('validators.fr.yaml');
-        });
     }
 
     /**
@@ -144,32 +97,6 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItReturnAnEntryWithAPCu()
-    {
-        $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 50kB', 'Repository entries call memory APCu usage');
-        $configuration->assert('main.network_in == 0B', 'Repository entries network APCu call');
-        $configuration->assert('main.network_out == 0B', 'Repository entries network APCu callees');
-
-        $this->apcuTranslationWriter->write(
-            'fr',
-            'messages',
-            'messages.fr.yaml',
-            ['home.text' => 'hello !']
-        );
-
-        $this->assertBlackfire($configuration, function () {
-            $this->apcuTranslationRepository->getEntries('messages.fr.yaml');
-        });
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @requires extension blackfire
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testItReturnAnEntryWithRedis()
     {
         $configuration = new Configuration();
@@ -186,36 +113,6 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
 
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationRepository->getEntries('messages.fr.yaml');
-        });
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @requires extension blackfire
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItReturnASingleEntryWithAPCu()
-    {
-        $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 50kB', 'Repository single entry call memory APCu usage');
-        $configuration->assert('main.network_in == 0B', 'Repository single entry network APCu call');
-        $configuration->assert('main.network_out == 0B', 'Repository single entry network APCu callees');
-
-        $this->apcuTranslationWriter->write(
-            'fr',
-            'messages',
-            'messages.fr.yaml',
-            ['home.text' => 'hello !']
-        );
-
-        $this->assertBlackfire($configuration, function () {
-            $this->apcuTranslationRepository->getSingleEntry(
-                'messages.fr.yaml',
-                'fr',
-                'home.text'
-            );
         });
     }
 

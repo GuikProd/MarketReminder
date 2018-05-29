@@ -20,8 +20,6 @@ use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
-use App\Infra\GCP\CloudTranslation\Connector\ApcuConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
@@ -68,25 +66,7 @@ final class GCPExtension extends Extension
                 $container->setAlias(CloudTranslationBridgeInterface::class, CloudTranslationBridge::class);
             }
 
-            // Storage engine
-            if ('apcu' === $config['translation']['storage_engine']) {
-                if (!$container->hasDefinition(ApcuConnector::class)) {
-                    $container->register(ApcuConnector::class, ApcuConnector::class)
-                        ->addArgument(getenv('APP_ENV'))
-                        ->addTag('gcp.translation_connector');
-                    $container->setAlias(ApcuConnectorInterface::class, ApcuConnector::class);
-                    $container->setAlias(ConnectorInterface::class, ApcuConnector::class);
-                }
-
-                if (!$container->hasDefinition(CloudTranslationRepository::class)) {
-                    $container->register(CloudTranslationRepository::class, CloudTranslationRepository::class)
-                              ->addArgument($container->getDefinition(ApcuConnector::class))
-                              ->setPublic(false)
-                              ->addTag('gcp.translation');
-                    $container->setAlias(CloudTranslationRepositoryInterface::class, CloudTranslationRepository::class);
-                }
-
-            } elseif ('redis' === $config['translation']['storage_engine']) {
+            if ('redis' === $config['translation']['storage_engine']) {
                 if (!$container->hasDefinition(RedisConnector::class)) {
                     $container->register(RedisConnector::class, RedisConnector::class)
                               ->addArgument(getenv('REDIS_URL'))

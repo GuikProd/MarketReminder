@@ -15,8 +15,6 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\ApcuConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
@@ -30,11 +28,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
 {
-    /**
-     * @var ApcuConnectorInterface
-     */
-    private $apcuConnector;
-
     /**
      * @var CloudTranslationWriterInterface
      */
@@ -57,42 +50,14 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->apcuConnector = new ApcuConnector('test');
-
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->apcuTranslationWriter = new CloudTranslationWriter($this->apcuConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
 
         $this->redisConnector->getAdapter()->clear();
-    }
-
-    /**
-     * @dataProvider provideTranslationItem
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $filename
-     * @param array  $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItReturnNullWithAPCu(
-        string $locale,
-        string $channel,
-        string $filename,
-        array $values
-    ) {
-        $this->redisTranslationWriter->write($locale, $channel, $filename, $values);
-
-        $apcuTranslationRepository = new CloudTranslationRepository($this->apcuConnector);
-
-        $entry = $apcuTranslationRepository->getEntries('validators.fr.yaml');
-
-        static::assertNull($entry);
     }
 
     /**
@@ -131,35 +96,6 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItReturnAnEntryWithAPCu(
-        string $locale,
-        string $channel,
-        string $filename,
-        array $values,
-        string $key
-    ) {
-        $this->apcuTranslationWriter->write($locale, $channel, $filename, $values);
-
-        $apcuTranslationRepository = new CloudTranslationRepository($this->apcuConnector);
-
-        $entry = $apcuTranslationRepository->getEntries($filename);
-
-        static::assertCount(1, $entry);
-        static::assertInstanceOf(CloudTranslationItemInterface::class, $entry[0]);
-        static::assertSame($key, $entry[0]->getKey());
-    }
-
-    /**
-     * @dataProvider provideTranslationItems
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $filename
-     * @param array  $values
-     * @param string $key
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testItReturnAnEntryWithRedis(
         string $locale,
         string $channel,
@@ -176,33 +112,6 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
         static::assertCount(1, $entry);
         static::assertInstanceOf(CloudTranslationItemInterface::class, $entry[0]);
         static::assertSame($key, $entry[0]->getKey());
-    }
-
-    /**
-     * @dataProvider provideTranslationItems
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $filename
-     * @param array  $values
-     * @param string $key
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItReturnASingleEntryWithAPCu(
-        string $locale,
-        string $channel,
-        string $filename,
-        array $values,
-        string $key
-    ) {
-        $this->apcuTranslationWriter->write($locale, $channel, $filename, $values);
-
-        $apcuTranslationRepository = new CloudTranslationRepository($this->apcuConnector);
-
-        $entry = $apcuTranslationRepository->getSingleEntry($filename, $locale, $key);
-
-        static::assertInstanceOf(CloudTranslationItemInterface::class, $entry);
     }
 
     /**
@@ -253,7 +162,6 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
      */
     protected function tearDown()
     {
-        $this->apcuConnector = null;
         $this->redisConnector = null;
     }
 }

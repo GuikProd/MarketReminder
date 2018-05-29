@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\ApcuConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
@@ -29,19 +27,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class CloudTranslationWriterIntegrationTest extends KernelTestCase
 {
     /**
-     * @var ApcuConnectorInterface
-     */
-    private $apcuConnector;
-
-    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
-
-    /**
-     * @var CloudTranslationWriterInterface
-     */
-    private $apcuTranslationWriter;
 
     /**
      * @var CloudTranslationWriterInterface
@@ -55,46 +43,14 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->apcuConnector = new ApcuConnector('test');
-
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->apcuTranslationWriter = new CloudTranslationWriter($this->apcuConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
 
-        $this->apcuConnector->getAdapter()->clear();
         $this->redisConnector->getAdapter()->clear();
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $fileName
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItRefuseToStoreWithSameContentAndApcu(
-        string $locale,
-        string $channel,
-        string $fileName,
-        array $values
-    ) {
-        $this->apcuTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        $processStatus = $this->apcuTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            $values
-        );
-
-        static::assertFalse($processStatus);
     }
 
     /**
@@ -135,32 +91,6 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItSaveEntriesWithAPCu(
-        string $locale,
-        string $channel,
-        string $fileName,
-        array $values
-    ) {
-        $processStatus = $this->apcuTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            $values
-        );
-
-        static::assertTrue($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $fileName
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testItSaveEntriesWithRedis(
         string $locale,
         string $channel,
@@ -172,39 +102,6 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
             $channel,
             $fileName,
             $values
-        );
-
-        static::assertTrue($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $fileName
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItUpdateAndSaveItemWithAPCu(
-        string $locale,
-        string $channel,
-        string $fileName,
-        array $values
-    ) {
-        $this->apcuTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            $values
-        );
-
-        $processStatus = $this->apcuTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            ['user.creation_success' => 'Hello user !']
         );
 
         static::assertTrue($processStatus);
@@ -257,7 +154,6 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
      */
     protected function tearDown()
     {
-        $this->apcuConnector = null;
         $this->redisConnector = null;
     }
 }

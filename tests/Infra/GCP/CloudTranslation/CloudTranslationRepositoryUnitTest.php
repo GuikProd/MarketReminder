@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ApcuConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
@@ -29,11 +28,6 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 class CloudTranslationRepositoryUnitTest extends TestCase
 {
     /**
-     * @var ApcuConnectorInterface
-     */
-    private $apcuConnector;
-
-    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;
@@ -44,11 +38,8 @@ class CloudTranslationRepositoryUnitTest extends TestCase
     protected function setUp()
     {
         $tagAwareAdapter = $this->createMock(TagAwareAdapterInterface::class);
-
-        $this->apcuConnector = $this->createMock(ConnectorInterface::class);
         $this->redisConnector = $this->createMock(ConnectorInterface::class);
 
-        $this->apcuConnector->method('getAdapter')->willReturn($tagAwareAdapter);
         $this->redisConnector->method('getAdapter')->willReturn($tagAwareAdapter);
     }
 
@@ -59,29 +50,6 @@ class CloudTranslationRepositoryUnitTest extends TestCase
         static::assertInstanceOf(
             CloudTranslationRepositoryInterface::class,
             $redisTranslationRepository
-        );
-
-        $apcuConnector = new CloudTranslationRepository($this->apcuConnector);
-
-        static::assertInstanceOf(
-            CloudTranslationRepositoryInterface::class,
-            $apcuConnector
-        );
-    }
-
-    /**
-     * @dataProvider provideFilename
-     *
-     * @param string $fileName
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItReturnNullWithAPCu(string $fileName)
-    {
-        $apcuTranslationRepository = new CloudTranslationRepository($this->apcuConnector);
-
-        static::assertNull(
-            $apcuTranslationRepository->getEntries($fileName)
         );
     }
 

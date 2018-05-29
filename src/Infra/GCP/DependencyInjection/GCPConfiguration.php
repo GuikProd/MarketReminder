@@ -49,7 +49,6 @@ final class GCPConfiguration implements ConfigurationInterface
                         ->scalarNode('credentials_folder')->isRequired()->end()
                         ->enumNode('storage_engine')
                             ->values([
-                                'apcu',
                                 'redis'
                             ])
                         ->end()

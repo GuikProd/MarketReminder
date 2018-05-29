@@ -8435,16 +8435,16 @@
         },
         {
             "name": "blackfire/php-sdk",
-            "version": "v1.14.0",
+            "version": "v1.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blackfireio/php-sdk.git",
-                "reference": "8a1047e7fbbefa2b80afff8823c3e03e6119faaa"
+                "reference": "f71e132a79369e5f684d980bba6e6827714e3b40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blackfireio/php-sdk/zipball/8a1047e7fbbefa2b80afff8823c3e03e6119faaa",
-                "reference": "8a1047e7fbbefa2b80afff8823c3e03e6119faaa",
+                "url": "https://api.github.com/repos/blackfireio/php-sdk/zipball/f71e132a79369e5f684d980bba6e6827714e3b40",
+                "reference": "f71e132a79369e5f684d980bba6e6827714e3b40",
                 "shasum": ""
             },
             "require": {
@@ -8486,7 +8486,7 @@
                 "uprofiler",
                 "xhprof"
             ],
-            "time": "2018-05-18T09:28:03+00:00"
+            "time": "2018-05-29T08:05:30+00:00"
         },
         {
             "name": "container-interop/container-interop",
