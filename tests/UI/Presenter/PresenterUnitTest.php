@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Presenter;
 
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationItemInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationPresenterInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationPresenterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;

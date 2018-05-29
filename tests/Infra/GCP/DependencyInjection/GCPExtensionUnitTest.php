@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\DependencyInjection;
 
-use App\Application\DependencyInjection\GCPExtension;
+use App\Infra\GCP\DependencyInjection\GCPExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 

@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Presenter;
 
-use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationWriterInterface;
-use App\Infra\Redis\Translation\CloudTranslationRepository;
-use App\Infra\Redis\Translation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

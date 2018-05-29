@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\DependencyInjection;
 
-use App\Application\DependencyInjection\GCPConfiguration;
+use App\Infra\GCP\DependencyInjection\GCPConfiguration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
