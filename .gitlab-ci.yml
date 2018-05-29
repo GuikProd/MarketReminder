@@ -24,6 +24,7 @@ deptrac:
         - curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
         - chmod +x deptrac.phar
         - mv ./deptrac.phar /usr/bin/deptrac
+    script:
         - deptract
 
 phpunit:
@@ -58,3 +59,6 @@ phpunit:
               && apk add --no-cache --virtual .php-phpexts-rundeps $runDeps \
               && apk del .build-deps
         - cp docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
+    script:
+        - echo "Hello world"
+        
