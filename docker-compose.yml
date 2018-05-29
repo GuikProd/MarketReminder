@@ -76,7 +76,7 @@ services:
     # DB configuration
     postgresql:
         container_name: ${CONTAINER_NAME}_postgresql
-        image: postgres:9.6
+        image: postgres:9.6-alpine
         environment:
             POSTGRES_DB: '${POSTGRES_DB}'
             POSTGRES_USER: '${POSTGRES_USER}'

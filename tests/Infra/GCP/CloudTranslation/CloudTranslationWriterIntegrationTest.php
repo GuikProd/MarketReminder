@@ -20,7 +20,6 @@ use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class CloudTranslationWriterIntegrationTest.
