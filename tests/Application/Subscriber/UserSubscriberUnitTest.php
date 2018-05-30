@@ -18,7 +18,7 @@ use App\Application\Subscriber\Interfaces\UserSubscriberInterface;
 use App\Application\Subscriber\UserSubscriber;
 use App\Domain\Event\Interfaces\UserEventInterface;
 use App\Domain\Models\Interfaces\UserInterface;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;

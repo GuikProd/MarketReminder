@@ -29,11 +29,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
 {
     /**
-     * @var CloudTranslationWriterInterface
-     */
-    private $apcuTranslationWriter;
-
-    /**
      * @var RedisConnectorInterface
      */
     private $redisConnector;

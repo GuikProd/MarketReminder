@@ -33,9 +33,4 @@ class RedisConfigurationUnitTest extends TestCase
             $redisConfiguration
         );
     }
-
-    public function testItProcessConfiguration()
-    {
-
-    }
 }

@@ -69,7 +69,10 @@ class CloudTranslationHelperSystemTest extends KernelTestCase
         $configuration->assert('main.network_out < 780B', 'CloudTranslationHelper single translation network out');
 
         $this->assertBlackfire($configuration, function() {
-            $this->cloudTranslationHelper->warmTranslation('Bien le bonjour', 'en');
+            $this->cloudTranslationHelper->warmTranslation(
+                'Bien le bonjour',
+                'en'
+            );
         });
     }
 

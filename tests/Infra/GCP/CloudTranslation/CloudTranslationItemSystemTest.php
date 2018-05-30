@@ -39,7 +39,7 @@ class CloudTranslationItemSystemTest extends TestCase
 
         $this->assertBlackfire($configuration, function () {
             new CloudTranslationItem([
-                '_locale' => '',
+                '_locale' => 'fr',
                 'channel' => 'messages',
                 'tag' => 'fr',
                 'key' => 'user.creation_success',

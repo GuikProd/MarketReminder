@@ -11,14 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\GCP\DataCollector\Interfaces;
+namespace App\Tests\Application\Subscriber;
+
+use Blackfire\Bridge\PhpUnit\TestCaseTrait;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Interface GCPDataCollectorInterface.
+ * Class SessionMessageSubscriberSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-interface GCPDataCollectorInterface
+class SessionMessageSubscriberSystemTest extends KernelTestCase
 {
-
+    use TestCaseTrait;
 }

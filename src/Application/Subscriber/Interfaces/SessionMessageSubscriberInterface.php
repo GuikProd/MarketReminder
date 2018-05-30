@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace App\Application\Subscriber\Interfaces;
 
 use App\Application\Event\Interfaces\SessionMessageEventInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Interface SessionMessageSubscriberInterface
@@ -27,16 +28,20 @@ interface SessionMessageSubscriberInterface
     /**
      * SessionMessageSubscriberInterface constructor.
      *
+     * @param CloudTranslationRepositoryInterface $repository
+     * @param RequestStack $requestStack
      * @param SessionInterface $session
-     * @param TranslatorInterface $translator
      */
     public function __construct(
-        SessionInterface $session,
-        TranslatorInterface $translator
+        CloudTranslationRepositoryInterface $repository,
+        RequestStack $requestStack,
+        SessionInterface $session
     );
 
     /**
      * @param SessionMessageEventInterface $event
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function onSessionMessage(SessionMessageEventInterface $event): void;
 }

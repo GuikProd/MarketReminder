@@ -92,7 +92,7 @@ phpunit: tests
 
 phpunit-blackfire: tests
 	    make redis-cache
-	    $(ENV_PHP) vendor/bin/phpunit --group Blackfire tests/$(FOLDER)
+	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)
 
 behat: features
 	    make check-schema

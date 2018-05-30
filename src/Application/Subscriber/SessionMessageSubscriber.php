@@ -15,9 +15,10 @@ namespace App\Application\Subscriber;
 
 use App\Application\Event\Interfaces\SessionMessageEventInterface;
 use App\Application\Subscriber\Interfaces\SessionMessageSubscriberInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class SessionMessageSubscriber
@@ -27,24 +28,31 @@ use Symfony\Component\Translation\TranslatorInterface;
 final class SessionMessageSubscriber implements EventSubscriberInterface, SessionMessageSubscriberInterface
 {
     /**
+     * @var CloudTranslationRepositoryInterface
+     */
+    private $cloudTranslationRepository;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
      * @var SessionInterface
      */
     private $session;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(
-        SessionInterface $session,
-        TranslatorInterface $translator
+        CloudTranslationRepositoryInterface $repository,
+        RequestStack $requestStack,
+        SessionInterface $session
     ) {
+        $this->cloudTranslationRepository = $repository;
+        $this->requestStack = $requestStack;
         $this->session = $session;
-        $this->translator = $translator;
     }
 
     /**
@@ -62,15 +70,16 @@ final class SessionMessageSubscriber implements EventSubscriberInterface, Sessio
      */
     public function onSessionMessage(SessionMessageEventInterface $event): void
     {
-        if ($event->getMessage() === '' || !$event->getFlashBag()) {
+        if ('' === $event->getMessage() || !$event->getFlashBag()) {
             return;
         }
 
-        $this->session->getFlashBag()
-                      ->add(
-                          $event->getFlashBag(),
-                          $this->translator
-                               ->trans($event->getMessage(), [], 'messages')
-                      );
+        $cacheEntry = $this->cloudTranslationRepository->getSingleEntry(
+            'session'.'.'.$this->requestStack->getCurrentRequest()->getLocale().'.yaml',
+            $this->requestStack->getCurrentRequest()->getLocale(),
+            $event->getMessage()
+        );
+
+        $this->session->getFlashBag()->add($event->getFlashBag(), $cacheEntry->getValue());
     }
 }

@@ -43,11 +43,6 @@ class CloudTranslationWriterSystemTest extends KernelTestCase
     /**
      * @var CloudTranslationWriterInterface
      */
-    private $apcuTranslationWriter;
-
-    /**
-     * @var CloudTranslationWriterInterface
-     */
     private $redisTranslationWriter;
 
     /**

@@ -1,7 +1,7 @@
 parameters:
     locale: 'fr'
     accepted_locales: 'fr|en'
-    accepted_channels: 'messages|validators'
+    accepted_channels: 'messages|validators|session'
     kernel.docker_dir: "%kernel.project_dir%/docker/config"
     kernel.images_dir: "%kernel.project_dir%/public/images/profiles"
 
