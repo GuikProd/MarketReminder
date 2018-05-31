@@ -20,10 +20,12 @@ use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
+use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
@@ -66,6 +68,7 @@ final class GCPExtension extends Extension
                 $container->setAlias(CloudTranslationBridgeInterface::class, CloudTranslationBridge::class);
             }
 
+            // Storage engine
             if ('redis' === $config['translation']['storage_engine']) {
                 if (!$container->hasDefinition(RedisConnector::class)) {
                     $container->register(RedisConnector::class, RedisConnector::class)
@@ -81,6 +84,44 @@ final class GCPExtension extends Extension
                               ->addArgument($container->getDefinition(RedisConnector::class))
                               ->setPublic(false)
                               ->addTag('gcp.translation');
+                }
+            } elseif ('filesystem' === $config['translation']['storage_engine']) {
+                if (!$container->hasDefinition(FileSystemConnector::class)) {
+                    $container->register(FileSystemConnector::class, FileSystemConnector::class)
+                              ->addArgument(getenv('APP_ENV'))
+                              ->addTag('gcp.translation_connector');
+                    $container->setAlias(FileSystemConnectorInterface::class, FileSystemConnector::class);
+                    $container->setAlias(ConnectorInterface::class, FileSystemConnector::class);
+                }
+
+                if (!$container->hasDefinition(CloudTranslationRepository::class)) {
+                    $container->register(CloudTranslationRepository::class, CloudTranslationRepository::class)
+                              ->addArgument($container->getDefinition(FileSystemConnector::class))
+                              ->setPublic(false)
+                              ->addTag('gcp.translation');
+                }
+            }
+
+            // Backup engine
+            if ('filesystem' === $config['translation']['backup_engine']) {
+                if (!$container->hasDefinition(FileSystemConnector::class)) {
+                    $container->register(FileSystemConnector::class, FileSystemConnector::class)
+                              ->addArgument(getenv('REDIS_URL'))
+                              ->addArgument(getenv('APP_ENV'))
+                              ->addMethodCall('setBackup', [true])
+                              ->addTag('gcp.translation_connector.backup');
+                    $container->setAlias(FileSystemConnectorInterface::class, FileSystemConnector::class);
+                    $container->setAlias(BackupConnectorInterface::class, FileSystemConnector::class);
+                }
+            } elseif ('redis' === $config['translation']['backup_engine']) {
+                if (!$container->hasDefinition(RedisConnector::class)) {
+                    $container->register(RedisConnector::class, RedisConnector::class)
+                              ->addArgument(getenv('REDIS_URL'))
+                              ->addArgument(getenv('APP_ENV'))
+                              ->addMethodCall('setBackup', [true])
+                              ->addTag('gcp.translation_connector.backup');
+                    $container->setAlias(FileSystemConnectorInterface::class, RedisConnector::class);
+                    $container->setAlias(BackupConnectorInterface::class, RedisConnector::class);
                 }
             }
 

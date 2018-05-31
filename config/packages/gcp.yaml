@@ -10,6 +10,7 @@ gcp:
         credentials_filename: 'credentials.json'
         credentials_folder: '%kernel.project_dir%/config/credentials/google/translation'
         storage_engine: 'redis'
+        backup_engine: 'filesystem'
     vision:
         activated: true
         credentials_filename: 'credentials.json'

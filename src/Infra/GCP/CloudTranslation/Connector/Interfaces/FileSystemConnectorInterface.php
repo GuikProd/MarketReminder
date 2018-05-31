@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the MarketReminder project.
  *
@@ -9,19 +11,19 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Application\Mutators;
-
-use Overblog\GraphQLBundle\Definition\Argument;
-use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
+namespace App\Infra\GCP\CloudTranslation\Connector\Interfaces;
 
 /**
- * Class ImageMutator.
+ * Interface FileSystemConnectorInterface.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class ImageMutator implements MutationInterface
+interface FileSystemConnectorInterface
 {
-    public function createImage(Argument $argument)
-    {
-    }
+    /**
+     * FileSystemConnectorInterface constructor.
+     *
+     * @param string $namespace
+     */
+    public function __construct(string $namespace);
 }

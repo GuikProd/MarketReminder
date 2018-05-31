@@ -92,4 +92,32 @@ class RedisConnectorSystemTest extends KernelTestCase
             $this->redisConnector->getAdapter()->clear();
         });
     }
+
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     */
+    public function testItShouldBeABackup()
+    {
+        $configuration = new Configuration();
+        $configuration->setMetadata('skip_timeline', 'false');
+        $configuration->assert('main.peak_memory < 5kB', 'Connector backup memory peak');
+        $configuration->assert('main.network_in == 0B', 'Connector backup network in');
+        $configuration->assert('main.network_out == 0B', 'Connector backup network out');
+
+        $this->assertBlackfire($configuration, function () {
+            $this->redisConnector->setBackup(true);
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->redisConnector = null;
+    }
 }

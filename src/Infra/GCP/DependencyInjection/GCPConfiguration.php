@@ -49,6 +49,13 @@ final class GCPConfiguration implements ConfigurationInterface
                         ->scalarNode('credentials_folder')->isRequired()->end()
                         ->enumNode('storage_engine')
                             ->values([
+                                'redis',
+                                'filesystem'
+                            ])
+                        ->end()
+                        ->enumNode('backup_engine')
+                            ->values([
+                                'filesystem',
                                 'redis'
                             ])
                         ->end()
