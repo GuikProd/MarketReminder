@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -27,7 +28,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class CloudTranslationWriterIntegrationTest extends KernelTestCase
 {
     /**
-     * @var RedisConnectorInterface
+     * @var ConnectorInterface
+     */
+    private $fileSystemConnector;
+
+    /**
+     * @var ConnectorInterface
      */
     private $redisConnector;
 
@@ -43,14 +49,128 @@ class CloudTranslationWriterIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
+        $this->fileSystemConnector = new FileSystemConnector('test');
         $this->redisConnector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
 
-        $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
-
+        $this->fileSystemConnector->getAdapter()->clear();
         $this->redisConnector->getAdapter()->clear();
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItRefuseToStoreSameContentWithFileSystemAndFileSystemBackup(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
+        $fileSystemBackUp = new FileSystemConnector('test');
+        $fileSystemBackUp->setBackup(true);
+
+        $fileSystemWriter = new CloudTranslationWriter($fileSystemBackUp, $this->fileSystemConnector);
+        $fileSystemWriter->write($locale, $channel, $fileName, $values);
+
+        $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
+
+        static::assertFalse($processStatus);
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItRefuseToStoreSameContentWithFileSystemAndRedisBackup(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
+        $redisBackup = new RedisConnector(
+            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
+            static::$kernel->getContainer()->getParameter('redis.namespace_test')
+        );
+        $redisBackup->setBackup(true);
+
+        $fileSystemWriter = new CloudTranslationWriter($redisBackup, $this->fileSystemConnector);
+        $fileSystemWriter->write($locale, $channel, $fileName, $values);
+
+        $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
+
+        static::assertFalse($processStatus);
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItRefuseToStoreSameContentWithRedisAndRedisBackup(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
+        $redisBackup = new RedisConnector(
+            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
+            static::$kernel->getContainer()->getParameter('redis.namespace_test')
+        );
+        $redisBackup->setBackup(true);
+
+        $redisWriter = new CloudTranslationWriter($redisBackup, $this->redisConnector);
+        $redisWriter->write($locale, $channel, $fileName, $values);
+
+        $processStatus = $redisWriter->write($locale, $channel, $fileName, $values);
+
+        static::assertFalse($processStatus);
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItRefuseToStoreSameContentWithRedisAndFileSystemBackup(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
+        $fileSystemBackUp = new FileSystemConnector('test');
+        $fileSystemBackUp->setBackup(true);
+
+        $redisWriter = new CloudTranslationWriter($fileSystemBackUp, $this->redisConnector);
+        $redisWriter->write($locale, $channel, $fileName, $values);
+
+        $processStatus = $redisWriter->write($locale, $channel, $fileName, $values);
+
+        static::assertFalse($processStatus);
     }
 
     /**

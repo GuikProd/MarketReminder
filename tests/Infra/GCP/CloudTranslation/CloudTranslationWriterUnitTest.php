@@ -15,8 +15,8 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -41,25 +41,36 @@ class CloudTranslationWriterUnitTest extends TestCase
     private $cacheItem;
 
     /**
-     * @var RedisConnectorInterface
+     * @var BackupConnectorInterface
      */
-    private $redisConnector;
+    private $backupConnector;
+
+    /**
+     * @var ConnectorInterface
+     */
+    private $connector;
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
      */
     protected function setUp()
     {
         $this->adapter = $this->createMock(TagAwareAdapterInterface::class);
+        $this->connector = $this->createMock(ConnectorInterface::class);
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
-        $this->redisConnector = $this->createMock(ConnectorInterface::class);
+        $this->backupConnector = $this->createMock(BackupConnectorInterface::class);
 
-        $this->redisConnector->method('getAdapter')->willReturn($this->adapter);
+        $this->connector->method('getAdapter')->willReturn($this->adapter);
     }
 
-    public function testItImplementsWithRedisConnector()
+    public function testItImplementsWithConnector()
     {
-        $redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
+        $redisTranslationWriter = new CloudTranslationWriter(
+            $this->backupConnector,
+            $this->connector
+        );
 
         static::assertInstanceOf(
             CloudTranslationWriterInterface::class,
@@ -77,7 +88,7 @@ class CloudTranslationWriterUnitTest extends TestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItStopIfTranslationExistAndIsValidWithRedis(string $locale, string $channel, string $fileName, array $values)
+    public function testItStopIfTranslationExistAndIsValid(string $locale, string $channel, string $fileName, array $values)
     {
         $translations = [];
 
@@ -95,11 +106,39 @@ class CloudTranslationWriterUnitTest extends TestCase
         $this->cacheItem->method('isHit')->willReturn(true);
         $this->cacheItem->method('get')->willReturn($translations);
 
-        $redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
+        $redisTranslationWriter = new CloudTranslationWriter(
+            $this->backupConnector,
+            $this->connector
+        );
 
         $processStatus = $redisTranslationWriter->write($locale, $channel, $fileName, $values);
 
         static::assertFalse($processStatus);
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $locale
+     * @param string $channel
+     * @param string $fileName
+     * @param array $values
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItWriteInCacheAndCreateABackUp(string $locale, string $channel, string $fileName, array $values)
+    {
+        $this->adapter->method('getItem')->willReturn($this->cacheItem);
+        $this->cacheItem->method('isHit')->willReturn(false);
+
+        $redisTranslationWriter = new CloudTranslationWriter(
+            $this->backupConnector,
+            $this->connector
+        );
+
+        $processStatus = $redisTranslationWriter->write($locale, $channel, $fileName, $values);
+
+        static::assertTrue($processStatus);
     }
 
     /**

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Interfaces;
 
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use Psr\Cache\CacheItemInterface;
 
@@ -26,9 +27,13 @@ interface CloudTranslationWriterInterface
     /**
      * CloudTranslationWriterInterface constructor.
      *
+     * @param BackupConnectorInterface $backupConnector
      * @param ConnectorInterface $redisConnector
      */
-    public function __construct(ConnectorInterface $redisConnector);
+    public function __construct(
+        BackupConnectorInterface $backupConnector,
+        ConnectorInterface $redisConnector
+    );
 
     /**
      * Allow to store a new item in the Cache, a CloudTranslationItem is created and stored.
@@ -61,4 +66,15 @@ interface CloudTranslationWriterInterface
      * @return bool If the cache content is fresh or stale.
      */
     public function isCacheContentValid(CacheItemInterface $cacheValues, array $values): bool;
+
+    /**
+     * Allow to decide if the new values should be stored in the backup, the check is done
+     * via the CacheItem keys along with the new values keys.
+     *
+     * @param CacheItemInterface $cacheValues The cache item already stored.
+     * @param array              $values      The values to check before back up it.
+     *
+     * @return bool If the backup has been updated with the new values.
+     */
+    public function warmBackUp(CacheItemInterface $cacheValues, array $values): bool;
 }

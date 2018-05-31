@@ -101,7 +101,6 @@ class RedisConnectorSystemTest extends KernelTestCase
     public function testItShouldBeABackup()
     {
         $configuration = new Configuration();
-        $configuration->setMetadata('skip_timeline', 'false');
         $configuration->assert('main.peak_memory < 5kB', 'Connector backup memory peak');
         $configuration->assert('main.network_in == 0B', 'Connector backup network in');
         $configuration->assert('main.network_out == 0B', 'Connector backup network out');

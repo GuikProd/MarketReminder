@@ -125,11 +125,17 @@
     "doctrine/orm": {
         "version": "v2.6.0"
     },
+    "dunglas/panthere": {
+        "version": "1.0.x-dev"
+    },
     "egulias/email-validator": {
         "version": "2.1.3"
     },
     "fabpot/goutte": {
         "version": "v3.2.2"
+    },
+    "facebook/webdriver": {
+        "version": "1.6.0"
     },
     "firebase/php-jwt": {
         "version": "v5.0.0"

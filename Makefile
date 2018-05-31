@@ -39,6 +39,9 @@ update: composer.lock
 require: ## Allow to install a new dependencies
 	    $(COMPOSER) req $(PACKAGE) -a -o
 
+require-dev:
+	    $(COMPOSER) req --dev $(PACKAGE) -a -o
+
 remove: ## Allow to remove a dependencie
 	    $(COMPOSER) remove $(PACKAGE) -a -o
 
@@ -56,7 +59,7 @@ translation: ## Allow to warm the translation
 	    $(ENV_PHP) ./bin/console app:translation-warm $(CHANNEL) $(LOCALE)
 
 container: ## Allow to debug the container
-	    $(ENV_PHP) ./bin/console debug:container $(SERVICE) --show-private
+	    $(ENV_PHP) ./bin/console debug:container --show-private
 
 event:
 	    $(ENV_PHP) ./bin/console debug:event-dispatcher

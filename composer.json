@@ -53,6 +53,7 @@
         "behatch/contexts": "^3.1",
         "blackfire/php-sdk": "^1.14",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "dunglas/panthere": "^1.0@dev",
         "phpmetrics/phpmetrics": "^2.3",
         "phpunit/phpunit": "^7.1",
         "symfony/dotenv": "^4.1",
