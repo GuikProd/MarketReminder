@@ -44,6 +44,8 @@ phpunit:
                   make \
                   autoconf \
                   git \
+                  zip \
+                  unzip \
               && docker-php-ext-install \
                   intl \
                   pdo_pgsql \
@@ -51,7 +53,7 @@ phpunit:
               && pecl install apcu \
                   && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
                   && docker-php-ext-install pdo_mysql opcache json pdo_pgsql pgsql mysqli \
-                  && docker-php-ext-enable apcu mysqli \
+                  && docker-php-ext-enable apcu mysqli zip \
               && runDeps="$( \
                   scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
                    | tr ',' '\n' \
