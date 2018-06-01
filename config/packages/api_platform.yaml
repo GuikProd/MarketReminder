@@ -1,5 +1,6 @@
 api_platform:
     title: "MarketReminder"
+    version: 1.0.0
     graphql:
         enabled: true
         graphiql:

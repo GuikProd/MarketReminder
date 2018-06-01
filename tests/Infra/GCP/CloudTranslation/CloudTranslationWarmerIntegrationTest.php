@@ -14,11 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
+use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
@@ -43,24 +46,29 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
     private $acceptedLocales;
 
     /**
+     * @var CloudTranslationBackupWriterInterface
+     */
+    private $cloudTranslationBackupWriter;
+
+    /**
      * @var CloudTranslationHelperInterface
      */
-    private $cloudTranslationWarmer;
+    private $cloudTranslationHelper;
 
     /**
      * @var CloudTranslationRepositoryInterface
      */
-    private $redisTranslationRepository;
+    private $cloudTranslationRepository;
 
     /**
      * @var CloudTranslationWarmerInterface
      */
-    private $redisTranslationWarmer;
+    private $cloudTranslationWarmer;
 
     /**
      * @var CloudTranslationWriterInterface
      */
-    private $redisTranslationWriter;
+    private $cloudTranslationWriter;
 
     /**
      * @var string
@@ -87,17 +95,20 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
+        $fileSystemConnector = new FileSystemConnector('test');
+        $fileSystemConnector->setBackup(true);
 
-        $this->cloudTranslationWarmer = new CloudTranslationHelper($cloudTranslationBridge);
-        $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
-        $this->redisTranslationWriter = new CloudTranslationWriter($redisConnector);
+        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($fileSystemConnector);
+        $this->cloudTranslationHelper = new CloudTranslationHelper($cloudTranslationBridge);
+        $this->cloudTranslationRepository = new CloudTranslationRepository($redisConnector);
+        $this->cloudTranslationWriter = new CloudTranslationWriter($this->cloudTranslationBackupWriter, $redisConnector);
 
-        $this->redisTranslationWarmer = new CloudTranslationWarmer(
+        $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
             $this->acceptedLocales,
-            $this->cloudTranslationWarmer,
-            $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
+            $this->cloudTranslationHelper,
+            $this->cloudTranslationRepository,
+            $this->cloudTranslationWriter,
             $this->translationsFolder
         );
 
@@ -116,7 +127,7 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $processStatus = $this->redisTranslationWarmer->warmTranslations($channel, $locale);
+        $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
 
         static::assertFalse($processStatus);
     }
@@ -133,7 +144,7 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $processStatus = $this->redisTranslationWarmer->warmTranslations($channel, $locale);
+        $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
 
         static::assertFalse($processStatus);
     }
@@ -148,7 +159,7 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
      */
     public function testCacheIsValid(string $channel, string $locale)
     {
-        $processStatus = $this->redisTranslationWarmer->warmTranslations($channel, $locale);
+        $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
 
         static::assertTrue($processStatus);
     }

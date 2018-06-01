@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Psr\Cache\CacheItemInterface;
 use Ramsey\Uuid\Uuid;
@@ -27,9 +27,9 @@ use Ramsey\Uuid\Uuid;
 final class CloudTranslationWriter implements CloudTranslationWriterInterface
 {
     /**
-     * @var BackupConnectorInterface
+     * @var CloudTranslationBackupWriterInterface
      */
-    private $backUpConnector;
+    private $cloudTranslationBackupWriter;
 
     /**
      * @var ConnectorInterface
@@ -45,11 +45,11 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
      * {@inheritdoc}
      */
     public function __construct(
-        BackupConnectorInterface $backupConnector,
-        ConnectorInterface $redisConnector
+        CloudTranslationBackupWriterInterface $cloudTranslationBackupWriter,
+        ConnectorInterface $connector
     ) {
-        $this->backUpConnector = $backupConnector;
-        $this->connector = $redisConnector;
+        $this->cloudTranslationBackupWriter = $cloudTranslationBackupWriter;
+        $this->connector = $connector;
     }
 
     /**
@@ -87,12 +87,8 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
         $cacheItem->set($this->entries);
         $cacheItem->tag($tag);
 
-        if (!$this->backUpConnector->isBackup()) {
-            throw new \LogicException(sprintf('The backup connector should be prepared !'));
-        }
-
-        if (!$this->warmBackUp($cacheItem, $values)) {
-            return false;
+        if (!$this->cloudTranslationBackupWriter->warmBackUp($channel, $locale, $values)) {
+            // If the backup is fresh, the process continue.
         }
 
         return $this->connector->getAdapter()->save($cacheItem);
@@ -122,15 +118,5 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
         $finalCheckArray = array_combine($toCheckKey, $toCheckContent);
 
         return \count(array_diff($finalArray, $finalCheckArray)) > 0 ? false : true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function warmBackUp(CacheItemInterface $cacheValues, array $values): bool
-    {
-        $backUpItem = $this->backUpConnector->getAdapter()->getItem($cacheValues->getKey());
-
-        return false;
     }
 }

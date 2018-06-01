@@ -17,6 +17,7 @@ use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -28,7 +29,7 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationWriterUnitTest extends TestCase
+final class CloudTranslationWriterUnitTest extends TestCase
 {
     /**
      * @var TagAwareAdapterInterface
@@ -46,6 +47,11 @@ class CloudTranslationWriterUnitTest extends TestCase
     private $backupConnector;
 
     /**
+     * @var CloudTranslationBackupWriterInterface
+     */
+    private $cloudTranslationBackUpWriter;
+
+    /**
      * @var ConnectorInterface
      */
     private $connector;
@@ -58,9 +64,10 @@ class CloudTranslationWriterUnitTest extends TestCase
     protected function setUp()
     {
         $this->adapter = $this->createMock(TagAwareAdapterInterface::class);
+        $this->backupConnector = $this->createMock(BackupConnectorInterface::class);
+        $this->cloudTranslationBackUpWriter = $this->createMock(CloudTranslationBackupWriterInterface::class);
         $this->connector = $this->createMock(ConnectorInterface::class);
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
-        $this->backupConnector = $this->createMock(BackupConnectorInterface::class);
 
         $this->connector->method('getAdapter')->willReturn($this->adapter);
     }
@@ -68,7 +75,7 @@ class CloudTranslationWriterUnitTest extends TestCase
     public function testItImplementsWithConnector()
     {
         $redisTranslationWriter = new CloudTranslationWriter(
-            $this->backupConnector,
+            $this->cloudTranslationBackUpWriter,
             $this->connector
         );
 
@@ -107,7 +114,7 @@ class CloudTranslationWriterUnitTest extends TestCase
         $this->cacheItem->method('get')->willReturn($translations);
 
         $redisTranslationWriter = new CloudTranslationWriter(
-            $this->backupConnector,
+            $this->cloudTranslationBackUpWriter,
             $this->connector
         );
 
@@ -132,7 +139,7 @@ class CloudTranslationWriterUnitTest extends TestCase
         $this->cacheItem->method('isHit')->willReturn(false);
 
         $redisTranslationWriter = new CloudTranslationWriter(
-            $this->backupConnector,
+            $this->cloudTranslationBackUpWriter,
             $this->connector
         );
 

@@ -19,6 +19,7 @@ use App\Infra\GCP\Bridge\CloudVisionBridge;
 use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
+use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
@@ -26,6 +27,7 @@ use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
@@ -112,6 +114,13 @@ final class GCPExtension extends Extension
                               ->addTag('gcp.translation_connector.backup');
                     $container->setAlias(FileSystemConnectorInterface::class, FileSystemConnector::class);
                     $container->setAlias(BackupConnectorInterface::class, FileSystemConnector::class);
+
+                    if (!$container->hasDefinition(CloudTranslationBackupWriter::class)) {
+                        $container->register(CloudTranslationBackupWriter::class, CloudTranslationBackupWriter::class)
+                                  ->addArgument($container->getDefinition(FileSystemConnector::class))
+                                  ->addTag('gcp.translation_backup');
+                        $container->setAlias(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriter::class);
+                    }
                 }
             } elseif ('redis' === $config['translation']['backup_engine']) {
                 if (!$container->hasDefinition(RedisConnector::class)) {
@@ -122,6 +131,13 @@ final class GCPExtension extends Extension
                               ->addTag('gcp.translation_connector.backup');
                     $container->setAlias(FileSystemConnectorInterface::class, RedisConnector::class);
                     $container->setAlias(BackupConnectorInterface::class, RedisConnector::class);
+
+                    if (!$container->hasDefinition(CloudTranslationBackupWriter::class)) {
+                        $container->register(CloudTranslationBackupWriter::class, CloudTranslationBackupWriter::class)
+                                  ->addArgument($container->getDefinition(RedisConnector::class))
+                                  ->addTag('gcp.translation_backup');
+                        $container->setAlias(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriter::class);
+                    }
                 }
             }
 

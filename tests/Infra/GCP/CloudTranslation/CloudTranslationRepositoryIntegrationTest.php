@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
+use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -29,14 +33,24 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
 {
     /**
+     * @var BackupConnectorInterface
+     */
+    private $backUpConnector;
+
+    /**
      * @var RedisConnectorInterface
      */
-    private $redisConnector;
+    private $connector;
+
+    /**
+     * @var CloudTranslationBackupWriterInterface
+     */
+    private $cloudTranslationBackUpWriter;
 
     /**
      * @var CloudTranslationWriterInterface
      */
-    private $redisTranslationWriter;
+    private $cloudTranslationWriter;
 
     /**
      * {@inheritdoc}
@@ -45,14 +59,17 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->redisConnector = new RedisConnector(
+        $this->connector = new RedisConnector(
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
+        $this->backUpConnector = new FileSystemConnector('test');
+        $this->backUpConnector->setBackup(true);
 
-        $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
+        $this->cloudTranslationBackUpWriter = new CloudTranslationBackupWriter($this->backUpConnector);
+        $this->cloudTranslationWriter = new CloudTranslationWriter($this->cloudTranslationBackUpWriter, $this->connector);
 
-        $this->redisConnector->getAdapter()->clear();
+        $this->connector->getAdapter()->clear();
     }
 
     /**
@@ -71,9 +88,9 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
         string $filename,
         array $values
     ) {
-        $this->redisTranslationWriter->write($locale, $channel, $filename, $values);
+        $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 
-        $redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
+        $redisTranslationRepository = new CloudTranslationRepository($this->connector);
 
         $entry = $redisTranslationRepository->getEntries('validators.fr.yaml');
 
@@ -98,9 +115,9 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
         array $values,
         string $key
     ) {
-        $this->redisTranslationWriter->write($locale, $channel, $filename, $values);
+        $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 
-        $redisTranslationReader = new CloudTranslationRepository($this->redisConnector);
+        $redisTranslationReader = new CloudTranslationRepository($this->connector);
 
         $entry = $redisTranslationReader->getEntries($filename);
 
@@ -127,9 +144,9 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
         array $values,
         string $key
     ) {
-        $this->redisTranslationWriter->write($locale, $channel, $filename, $values);
+        $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 
-        $redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
+        $redisTranslationRepository = new CloudTranslationRepository($this->connector);
 
         $entry = $redisTranslationRepository->getSingleEntry($filename, $locale, $key);
 
@@ -157,6 +174,6 @@ class CloudTranslationRepositoryIntegrationTest extends KernelTestCase
      */
     protected function tearDown()
     {
-        $this->redisConnector = null;
+        $this->connector = null;
     }
 }
