@@ -15,27 +15,20 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
+use App\Tests\TestCase\ConnectorTestCase;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Class CloudTranslationRepositorySystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationRepositorySystemTest extends KernelTestCase
+class CloudTranslationRepositorySystemTest extends ConnectorTestCase
 {
     use TestCaseTrait;
-
-    /**
-     * @var RedisConnectorInterface
-     */
-    private $redisConnector;
 
     /**
      * @var CloudTranslationRepositoryInterface
@@ -45,24 +38,40 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
     /**
      * @var CloudTranslationWriterInterface
      */
-    private $redisTranslationWriter;
+    private $cloudTranslationWriter;
 
     /**
-     * {@inheritdoc}
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    protected function setUp()
+    public function testItReturnNullWithFileSystem()
     {
-        static::bootKernel();
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 15kB', 'Repository null Filesystem memory usage');
+        $configuration->assert('main.network_in == 0B', 'Repository null Filesystem network in');
+        $configuration->assert('main.network_out == 0B', 'Repository null Filesystem network out');
 
-        $this->redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test')
+        $this->createFileSystemCacheAndFileSystemBackUp();
+
+        $this->cloudTranslationWriter = new CloudTranslationWriter(
+            $this->cloudTranslationBackupWriter,
+            $this->connector
+        );
+        $this->cloudTranslationWriter->write(
+            'fr',
+            'messages',
+            'messages.fr.yaml',
+            ['home.text' => 'hello !']
         );
 
-        $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
-        $this->redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
+        $this->redisTranslationRepository = new CloudTranslationRepository($this->connector);
 
-        $this->redisConnector->getAdapter()->clear();
+        $this->assertBlackfire($configuration, function () {
+            $this->redisTranslationRepository->getEntries('validators.fr.yaml');
+        });
     }
 
     /**
@@ -78,12 +87,20 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
         $configuration->assert('main.peak_memory < 90kB', 'Repository null call memory redis usage');
         $configuration->assert('main.network_in < 400B', 'Repository null network redis call');
 
-        $this->redisTranslationWriter->write(
+        $this->createRedisCacheAndRedisBackUp();
+
+        $this->cloudTranslationWriter = new CloudTranslationWriter(
+            $this->cloudTranslationBackupWriter,
+            $this->connector
+        );
+        $this->cloudTranslationWriter->write(
             'fr',
             'messages',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
+
+        $this->redisTranslationRepository = new CloudTranslationRepository($this->connector);
 
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationRepository->getEntries('validators.fr.yaml');
@@ -97,19 +114,62 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItReturnAnEntryWithRedis()
+    public function testItReturnAnEntryWithFileSystem()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 80kB', 'Repository entries call memory Redis usage');
-        $configuration->assert('main.network_in < 400B', 'Repository entries network Redis call');
-        $configuration->assert('main.network_out < 90B', 'Repository entries network Redis callees');
+        $configuration->assert('main.peak_memory < 50kB', 'Repository entries call memory FileSystem usage');
+        $configuration->assert('main.network_in == 0B', 'Repository entries FileSystem network in');
+        $configuration->assert('main.network_out == 0B', 'Repository entries FileSystem network out');
 
-        $this->redisTranslationWriter->write(
+        $this->createFileSystemCacheAndFileSystemBackUp();
+
+        $this->cloudTranslationWriter = new CloudTranslationWriter(
+            $this->cloudTranslationBackupWriter,
+            $this->connector
+        );
+        $this->cloudTranslationWriter->write(
             'fr',
             'messages',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
+
+        $this->redisTranslationRepository = new CloudTranslationRepository($this->connector);
+
+        $this->assertBlackfire($configuration, function () {
+            $this->redisTranslationRepository->getEntries('messages.fr.yaml');
+        });
+    }
+
+
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItReturnAnEntryWithRedis()
+    {
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 80kB', 'Repository entries call memory Redis usage');
+        $configuration->assert('main.network_in < 400B', 'Repository entries Redis network in');
+        $configuration->assert('main.network_out < 90B', 'Repository entries Redis network out');
+
+        $this->createRedisCacheAndRedisBackUp();
+
+        $this->cloudTranslationWriter = new CloudTranslationWriter(
+            $this->cloudTranslationBackupWriter,
+            $this->connector
+        );
+        $this->cloudTranslationWriter->write(
+            'fr',
+            'messages',
+            'messages.fr.yaml',
+            ['home.text' => 'hello !']
+        );
+
+        $this->redisTranslationRepository = new CloudTranslationRepository($this->connector);
 
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationRepository->getEntries('messages.fr.yaml');
@@ -130,12 +190,20 @@ class CloudTranslationRepositorySystemTest extends KernelTestCase
         $configuration->assert('main.network_in < 380B', 'Repository single entry network Redis call');
         $configuration->assert('main.network_out < 90B', 'Repository single entry network Redis callees');
 
-        $this->redisTranslationWriter->write(
+        $this->createRedisCacheAndRedisBackUp();
+
+        $this->cloudTranslationWriter = new CloudTranslationWriter(
+            $this->cloudTranslationBackupWriter,
+            $this->connector
+        );
+        $this->cloudTranslationWriter->write(
             'fr',
             'messages',
             'messages.fr.yaml',
             ['home.text' => 'hello !']
         );
+
+        $this->redisTranslationRepository = new CloudTranslationRepository($this->connector);
 
         $this->assertBlackfire($configuration, function () {
             $this->redisTranslationRepository->getSingleEntry(

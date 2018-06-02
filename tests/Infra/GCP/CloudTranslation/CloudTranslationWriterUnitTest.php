@@ -13,69 +13,26 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
-use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemInterface;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use App\Tests\TestCase\ConnectorTestCase;
 
 /**
  * Class CloudTranslationWriterUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationWriterUnitTest extends TestCase
+final class CloudTranslationWriterUnitTest extends ConnectorTestCase
 {
     /**
-     * @var TagAwareAdapterInterface
-     */
-    private $adapter;
-
-    /**
-     * @var CacheItemInterface
-     */
-    private $cacheItem;
-
-    /**
-     * @var BackupConnectorInterface
-     */
-    private $backupConnector;
-
-    /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    private $cloudTranslationBackUpWriter;
-
-    /**
-     * @var ConnectorInterface
-     */
-    private $connector;
-
-    /**
-     * {@inheritdoc}
-     *
      * @throws \ReflectionException
      */
-    protected function setUp()
+    public function testItImplements()
     {
-        $this->adapter = $this->createMock(TagAwareAdapterInterface::class);
-        $this->backupConnector = $this->createMock(BackupConnectorInterface::class);
-        $this->cloudTranslationBackUpWriter = $this->createMock(CloudTranslationBackupWriterInterface::class);
-        $this->connector = $this->createMock(ConnectorInterface::class);
-        $this->cacheItem = $this->createMock(CacheItemInterface::class);
+        $this->createFileSystemCacheAndFileSystemBackUpMockWithGoodProcess();
 
-        $this->connector->method('getAdapter')->willReturn($this->adapter);
-    }
-
-    public function testItImplementsWithConnector()
-    {
         $redisTranslationWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackUpWriter,
+            $this->cloudTranslationBackupWriter,
             $this->connector
         );
 
@@ -91,34 +48,27 @@ final class CloudTranslationWriterUnitTest extends TestCase
      * @param string $locale
      * @param string $channel
      * @param string $fileName
-     * @param array  $values
+     * @param array $values
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
-    public function testItStopIfTranslationExistAndIsValid(string $locale, string $channel, string $fileName, array $values)
-    {
-        $translations = [];
+    public function testItStopIfTranslationExistAndIsValidWithFileSystemCache(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
+        $this->createFileSystemCacheAndFileSystemBackUpMockWithGoodProcess();
 
-        foreach ($values as $item => $value) {
-            $translations[] = new CloudTranslationItem([
-                '_locale' => $locale,
-                'channel' => $channel,
-                'tag' => Uuid::uuid4()->toString(),
-                'key' => $item,
-                'value' => $value
-            ]);
-        }
-
-        $this->adapter->method('getItem')->willReturn($this->cacheItem);
-        $this->cacheItem->method('isHit')->willReturn(true);
-        $this->cacheItem->method('get')->willReturn($translations);
-
-        $redisTranslationWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackUpWriter,
+        $fileSystemWriter = new CloudTranslationWriter(
+            $this->cloudTranslationBackupWriter,
             $this->connector
         );
 
-        $processStatus = $redisTranslationWriter->write($locale, $channel, $fileName, $values);
+        $fileSystemWriter->write($locale, $channel, $channel.'.'.$locale.'.yaml', $values);
+
+        $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
 
         static::assertFalse($processStatus);
     }
@@ -132,18 +82,22 @@ final class CloudTranslationWriterUnitTest extends TestCase
      * @param array $values
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
-    public function testItWriteInCacheAndCreateABackUp(string $locale, string $channel, string $fileName, array $values)
-    {
-        $this->adapter->method('getItem')->willReturn($this->cacheItem);
-        $this->cacheItem->method('isHit')->willReturn(false);
+    public function testItWriteInCacheAndCreateABackUpWithFileSystemCache(
+        string $locale,
+        string $channel,
+        string $fileName,
+        array $values
+    ) {
+        $this->createFileSystemCacheAndFileSystemBackUpMockWithGoodProcess();
 
-        $redisTranslationWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackUpWriter,
+        $fileSystemWriter = new CloudTranslationWriter(
+            $this->cloudTranslationBackupWriter,
             $this->connector
         );
 
-        $processStatus = $redisTranslationWriter->write($locale, $channel, $fileName, $values);
+        $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
 
         static::assertTrue($processStatus);
     }

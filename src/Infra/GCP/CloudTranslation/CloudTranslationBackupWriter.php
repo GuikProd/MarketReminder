@@ -42,10 +42,6 @@ final class CloudTranslationBackupWriter implements CloudTranslationBackupWriter
      */
     public function warmBackUp(string $channel, string $locale, array $newValues, string $format = 'yaml'): bool
     {
-        if (!$this->backupConnector->isBackup()) {
-            throw new \LogicException(sprintf('The connector should accept the back up tasks.'));
-        }
-
         $backupItem = $this->backupConnector->getAdapter()->getItem($channel.'.'.$locale.'.'.$format);
 
         if (empty($backupItem->get())) {
