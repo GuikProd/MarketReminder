@@ -23,16 +23,16 @@ use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
+use App\Tests\TestCase\ConnectorTestCase;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Class CloudTranslationWarmerSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationWarmerSystemTest extends KernelTestCase
+class CloudTranslationWarmerSystemTest extends ConnectorTestCase
 {
     use TestCaseTrait;
 
@@ -96,14 +96,6 @@ class CloudTranslationWarmerSystemTest extends KernelTestCase
         $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($redisConnector);
 
-        $this->redisTranslationWarmer = new CloudTranslationWarmer(
-            $this->acceptedChannels,
-            $this->acceptedLocales,
-            $this->cloudTranslationWarmer,
-            $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
-            $this->translationsFolder
-        );
 
         $redisConnector->getAdapter()->clear();
     }
@@ -115,13 +107,25 @@ class CloudTranslationWarmerSystemTest extends KernelTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testWrongChannelIsUsed()
+    public function testWrongChannelIsUsedWithFileSystemConnectorAndFileSystemBackup()
     {
         $configuration = new Configuration();
         $configuration->assert('main.peak_memory < 14kB', 'Translation warm wrong channel memory usage');
         $configuration->assert('main.network_in == 0B', 'Translation warm wrong channel network call');
         $configuration->assert('main.network_out == 0B', 'Translation warm wrong channel network callees');
         $configuration->assert('metrics.http.requests.count == 0', 'Translation warm wrong channel HTTP request.');
+
+        $this->createFileSystemConnector();
+        $this->createFileSystemBackUp();
+
+        $this->cloudTranslationWarmer = new CloudTranslationWarmer(
+            $this->acceptedChannels,
+            $this->acceptedLocales,
+            $this->cloudTranslationWarmer,
+            $this->redisTranslationRepository,
+            $this->redisTranslationWriter,
+            $this->translationsFolder
+        );
 
         $this->redisTranslationWarmer->warmTranslations('messages', 'fr');
 

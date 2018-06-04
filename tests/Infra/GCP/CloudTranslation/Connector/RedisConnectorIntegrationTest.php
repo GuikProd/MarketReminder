@@ -52,15 +52,4 @@ class RedisConnectorIntegrationTest extends KernelTestCase
 
         static::assertTrue($redisConnector->getAdapter()->clear());
     }
-
-    public function testItShouldBeABackup()
-    {
-        $redisConnector = new RedisConnector(
-            $this->redisDSN,
-            $this->redisNamespace
-        );
-        $redisConnector->setBackup(true);
-
-        static::assertTrue($redisConnector->isBackup());
-    }
 }

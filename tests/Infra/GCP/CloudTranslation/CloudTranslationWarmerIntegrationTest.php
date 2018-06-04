@@ -14,26 +14,20 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
-use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
-use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\TestCase\ConnectorTestCase;
 
 /**
  * Class CloudTranslationWarmerIntegrationTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationWarmerIntegrationTest extends KernelTestCase
+final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
 {
     /**
      * @var string
@@ -44,11 +38,6 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
      * @var string
      */
     private $acceptedLocales;
-
-    /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    private $cloudTranslationBackupWriter;
 
     /**
      * @var CloudTranslationHelperInterface
@@ -66,11 +55,6 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
     private $cloudTranslationWarmer;
 
     /**
-     * @var CloudTranslationWriterInterface
-     */
-    private $cloudTranslationWriter;
-
-    /**
      * @var string
      */
     private $translationsFolder;
@@ -80,7 +64,7 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
      */
     protected function setUp()
     {
-        static::bootKernel();
+        parent::setUp();
 
         $this->acceptedLocales = static::$kernel->getContainer()->getParameter('accepted_locales');
         $this->acceptedChannels = static::$kernel->getContainer()->getParameter('accepted_channels');
@@ -91,17 +75,24 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('cloud.translation_credentials')
         );
 
-        $redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test')
-        );
-        $fileSystemConnector = new FileSystemConnector('test');
-        $fileSystemConnector->setBackup(true);
-
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($fileSystemConnector);
         $this->cloudTranslationHelper = new CloudTranslationHelper($cloudTranslationBridge);
-        $this->cloudTranslationRepository = new CloudTranslationRepository($redisConnector);
-        $this->cloudTranslationWriter = new CloudTranslationWriter($this->cloudTranslationBackupWriter, $redisConnector);
+    }
+
+    /**
+     * @dataProvider provideWrongChannel
+     *
+     * @param string $channel
+     * @param string $locale
+     */
+    public function testWrongChannelWithFileSystemCacheAndFileSystemBackUp(
+        string $channel,
+        string $locale
+    ) {
+        static::expectException(\InvalidArgumentException::class);
+
+        $this->createFileSystemConnector();
+        $this->createFileSystemBackUp();
+        $this->cloudTranslationRepository = new CloudTranslationRepository($this->connector);
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
@@ -111,21 +102,6 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
-
-        $redisConnector->getAdapter()->clear();
-    }
-
-    /**
-     * @dataProvider provideWrongChannel
-     *
-     * @param string $channel
-     * @param string $locale
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testWrongChannel(string $channel, string $locale)
-    {
-        $this->expectException(\InvalidArgumentException::class);
 
         $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
 
@@ -137,12 +113,25 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
      *
      * @param string $channel
      * @param string $locale
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testWrongLocale(string $channel, string $locale)
-    {
-        $this->expectException(\InvalidArgumentException::class);
+    public function testWrongLocaleWithRedisCacheAndRedisBackUp(
+        string $channel,
+        string $locale
+    ) {
+        static::expectException(\InvalidArgumentException::class);
+
+        $this->createRedisConnector();
+        $this->createRedisBackUp();
+        $this->cloudTranslationRepository = new CloudTranslationRepository($this->connector);
+
+        $this->cloudTranslationWarmer = new CloudTranslationWarmer(
+            $this->acceptedChannels,
+            $this->acceptedLocales,
+            $this->cloudTranslationHelper,
+            $this->cloudTranslationRepository,
+            $this->cloudTranslationWriter,
+            $this->translationsFolder
+        );
 
         $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
 
@@ -154,11 +143,54 @@ class CloudTranslationWarmerIntegrationTest extends KernelTestCase
      *
      * @param string $channel
      * @param string $locale
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testCacheIsValid(string $channel, string $locale)
-    {
+    public function testCacheIsValidWithFileSystemCacheAndFileSystemBackUp(
+        string $channel,
+        string $locale
+    ) {
+
+        $this->createFileSystemConnector();
+        $this->createFileSystemBackUp();
+        $this->cloudTranslationRepository = new CloudTranslationRepository($this->connector);
+
+        $this->cloudTranslationWarmer = new CloudTranslationWarmer(
+            $this->acceptedChannels,
+            $this->acceptedLocales,
+            $this->cloudTranslationHelper,
+            $this->cloudTranslationRepository,
+            $this->cloudTranslationWriter,
+            $this->translationsFolder
+        );
+
+        $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
+
+        static::assertTrue($processStatus);
+    }
+
+    /**
+     * @dataProvider provideRightData
+     *
+     * @param string $channel
+     * @param string $locale
+     */
+    public function testCacheIsValidWithRedisCacheAndRedisBackUp(
+        string $channel,
+        string $locale
+    ) {
+
+        $this->createRedisConnector();
+        $this->createRedisBackUp();
+        $this->cloudTranslationRepository = new CloudTranslationRepository($this->connector);
+
+        $this->cloudTranslationWarmer = new CloudTranslationWarmer(
+            $this->acceptedChannels,
+            $this->acceptedLocales,
+            $this->cloudTranslationHelper,
+            $this->cloudTranslationRepository,
+            $this->cloudTranslationWriter,
+            $this->translationsFolder
+        );
+
         $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
 
         static::assertTrue($processStatus);

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
 use PHPUnit\Framework\TestCase;
@@ -36,10 +35,6 @@ class FileSystemConnectorUnitTest extends TestCase
             $fileSystemConnector
         );
         static::assertInstanceOf(
-            BackupConnectorInterface::class,
-            $fileSystemConnector
-        );
-        static::assertInstanceOf(
             FileSystemConnectorInterface::class,
             $fileSystemConnector
         );
@@ -53,13 +48,5 @@ class FileSystemConnectorUnitTest extends TestCase
             TagAwareAdapterInterface::class,
             $fileSystemConnector->getAdapter()
         );
-    }
-
-    public function testItShouldBeABackup()
-    {
-        $fileSystemConnector = new FileSystemConnector('test');
-        $fileSystemConnector->setBackup(true);
-
-        static::assertTrue($fileSystemConnector->isBackup());
     }
 }

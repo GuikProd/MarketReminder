@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -25,13 +24,8 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class FileSystemConnector implements FileSystemConnectorInterface, ConnectorInterface, BackupConnectorInterface
+final class FileSystemConnector implements FileSystemConnectorInterface, ConnectorInterface
 {
-    /**
-     * @var bool
-     */
-    private $backup = false;
-
     /**
      * @var string
      */
@@ -53,21 +47,5 @@ final class FileSystemConnector implements FileSystemConnectorInterface, Connect
         return new TagAwareAdapter(
             new FilesystemAdapter($this->namespace)
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setBackup(bool $backup): void
-    {
-        $this->backup = $backup;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isBackup(): bool
-    {
-        return $this->backup;
     }
 }

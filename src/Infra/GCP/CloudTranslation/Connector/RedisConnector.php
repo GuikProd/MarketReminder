@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use Predis\Client;
@@ -26,17 +25,12 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class RedisConnector implements RedisConnectorInterface, ConnectorInterface, BackupConnectorInterface
+final class RedisConnector implements RedisConnectorInterface, ConnectorInterface
 {
     /**
      * @var TagAwareAdapterInterface
      */
     private $adapter;
-
-    /**
-     * @var bool
-     */
-    private $backup = false;
 
     /**
      * @var string
@@ -79,21 +73,5 @@ final class RedisConnector implements RedisConnectorInterface, ConnectorInterfac
         );
 
         return $this->adapter;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setBackup(bool $backup): void
-    {
-        $this->backup = $backup;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isBackup(): bool
-    {
-        return $this->backup;
     }
 }

@@ -24,17 +24,11 @@ use App\Tests\TestCase\ConnectorTestCase;
  */
 final class CloudTranslationWriterUnitTest extends ConnectorTestCase
 {
-    /**
-     * @throws \ReflectionException
-     */
-    public function testItImplements()
+    public function testItImplementsWithFileSystemConnector()
     {
-        $this->createFileSystemCacheAndFileSystemBackUpMockWithGoodProcess();
+        $this->createFileSystemConnector();
 
-        $redisTranslationWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackupWriter,
-            $this->connector
-        );
+        $redisTranslationWriter = new CloudTranslationWriter($this->connector);
 
         static::assertInstanceOf(
             CloudTranslationWriterInterface::class,
@@ -51,7 +45,6 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
      * @param array $values
      *
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function testItStopIfTranslationExistAndIsValidWithFileSystemCache(
         string $locale,
@@ -59,12 +52,9 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemCacheAndFileSystemBackUpMockWithGoodProcess();
+        $this->createFileSystemConnector();
 
-        $fileSystemWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackupWriter,
-            $this->connector
-        );
+        $fileSystemWriter = new CloudTranslationWriter($this->connector);
 
         $fileSystemWriter->write($locale, $channel, $channel.'.'.$locale.'.yaml', $values);
 
@@ -82,7 +72,6 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
      * @param array $values
      *
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function testItWriteInCacheAndCreateABackUpWithFileSystemCache(
         string $locale,
@@ -90,12 +79,9 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemCacheAndFileSystemBackUpMockWithGoodProcess();
+        $this->createFileSystemConnector();
 
-        $fileSystemWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackupWriter,
-            $this->connector
-        );
+        $fileSystemWriter = new CloudTranslationWriter($this->connector);
 
         $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
 

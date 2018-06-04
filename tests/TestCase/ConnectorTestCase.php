@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\TestCase;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
+use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -29,7 +30,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 abstract class ConnectorTestCase extends KernelTestCase
 {
     /**
-     * @var BackupConnectorInterface
+     * @var ConnectorInterface
      */
     protected $backUpConnector;
 
@@ -37,6 +38,11 @@ abstract class ConnectorTestCase extends KernelTestCase
      * @var CloudTranslationBackupWriterInterface
      */
     protected $cloudTranslationBackupWriter;
+
+    /**
+     * @var CloudTranslationWriterInterface
+     */
+    protected $cloudTranslationWriter;
 
     /**
      * @var ConnectorInterface
@@ -51,113 +57,46 @@ abstract class ConnectorTestCase extends KernelTestCase
         static::bootKernel();
     }
 
-    /**
-     * Create a Filesystem Cache & Filesystem backup via a Mock.
-     *
-     * @throws \ReflectionException
-     */
-    protected function createFileSystemCacheAndFileSystemBackUpMockWithGoodProcess()
+    protected function createFileSystemConnector()
     {
-        $this->backUpConnector = new FileSystemConnector('backup_test');
         $this->connector = new FileSystemConnector('test');
-        $this->cloudTranslationBackupWriter = $this->createMock(CloudTranslationBackupWriterInterface::class);
 
-        $this->backUpConnector->setBackup(true);
+        $this->cloudTranslationWriter = new CloudTranslationWriter($this->connector);
 
-        $this->backUpConnector->getAdapter()->clear();
         $this->connector->getAdapter()->clear();
     }
 
-    /**
-     * Create a Filesystem Cache & Filesystem backup.
-     */
-    protected function createFileSystemCacheAndFileSystemBackUp()
+    protected function createRedisConnector()
     {
-        $this->backUpConnector = new FileSystemConnector('backup_test');
-        $this->connector = new FileSystemConnector('test');
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
-
-        $this->backUpConnector->setBackup(true);
-
-        $this->backUpConnector->getAdapter()->clear();
-        $this->connector->getAdapter()->clear();
-    }
-
-    /**
-     * Create a Filesystem Cache & Redis backup via a Mock.
-     *
-     * @throws \ReflectionException
-     */
-    protected function createFileSystemCacheAndRedisBackUpMockWithGoodProcess()
-    {
-        $this->backUpConnector = new RedisConnector(
-            static::$container->getParameter('redis.test_dsn'),
-            static::$container->getParameter('redis.namespace_test').'_backup'
-        );
-        $this->connector = new FileSystemConnector('test');
-        $this->cloudTranslationBackupWriter = $this->createMock(CloudTranslationBackupWriterInterface::class);
-
-        $this->backUpConnector->setBackup(true);
-
-        $this->backUpConnector->getAdapter()->clear();
-        $this->connector->getAdapter()->clear();
-    }
-
-    /**
-     * Create a Filesystem Cache & Redis backup.
-     */
-    protected function createFileSystemCacheAndRedisBackUp()
-    {
-        $this->backUpConnector = new RedisConnector(
-            static::$container->getParameter('redis.test_dsn'),
-            static::$container->getParameter('redis.namespace_test').'_backup'
-        );
-        $this->connector = new FileSystemConnector('test');
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
-
-        $this->backUpConnector->setBackup(true);
-
-        $this->backUpConnector->getAdapter()->clear();
-        $this->connector->getAdapter()->clear();
-    }
-
-    /**
-     * Create a Redis Cache & Filesystem backup.
-     */
-    protected function createRedisCacheAndFileSystemBackUp()
-    {
-        $this->backUpConnector = new FileSystemConnector('backup_test');
         $this->connector = new RedisConnector(
             static::$container->getParameter('redis.test_dsn'),
             static::$container->getParameter('redis.namespace_test')
         );
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
 
-        $this->backUpConnector->setBackup(true);
+        $this->cloudTranslationWriter = new CloudTranslationWriter($this->connector);
 
-        $this->backUpConnector->getAdapter()->clear();
         $this->connector->getAdapter()->clear();
     }
 
-    /**
-     * Create a Redis Cache & Redis backup.
-     */
-    protected function createRedisCacheAndRedisBackUp()
+    protected function createFileSystemBackUp()
+    {
+        $this->backUpConnector = new FileSystemConnector('backup_test');
+
+        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
+
+        $this->backUpConnector->getAdapter()->clear();
+    }
+
+    protected function createRedisBackUp()
     {
         $this->backUpConnector = new RedisConnector(
             static::$container->getParameter('redis.test_dsn'),
             static::$container->getParameter('redis.namespace_test').'_backup'
         );
-        $this->connector = new RedisConnector(
-            static::$container->getParameter('redis.test_dsn'),
-            static::$container->getParameter('redis.namespace_test')
-        );
+
         $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
 
-        $this->backUpConnector->setBackup(true);
-
         $this->backUpConnector->getAdapter()->clear();
-        $this->connector->getAdapter()->clear();
     }
 
     /**

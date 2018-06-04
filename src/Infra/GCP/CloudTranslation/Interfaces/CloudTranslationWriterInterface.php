@@ -26,13 +26,9 @@ interface CloudTranslationWriterInterface
     /**
      * CloudTranslationWriterInterface constructor.
      *
-     * @param CloudTranslationBackupWriterInterface $backupWriter
      * @param ConnectorInterface $redisConnector
      */
-    public function __construct(
-        CloudTranslationBackupWriterInterface $backupWriter,
-        ConnectorInterface $redisConnector
-    );
+    public function __construct(ConnectorInterface $redisConnector);
 
     /**
      * Allow to store a new item in the Cache, a CloudTranslationItem is created and stored.

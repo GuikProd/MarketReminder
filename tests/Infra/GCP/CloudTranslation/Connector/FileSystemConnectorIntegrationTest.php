@@ -40,12 +40,4 @@ class FileSystemConnectorIntegrationTest extends TestCase
 
         static::assertTrue($fileSystemConnector->getAdapter()->clear());
     }
-
-    public function testItShouldBeABackup()
-    {
-        $fileSystemConnector = new FileSystemConnector('test');
-        $fileSystemConnector->setBackup(true);
-
-        static::assertTrue($fileSystemConnector->isBackup());
-    }
 }

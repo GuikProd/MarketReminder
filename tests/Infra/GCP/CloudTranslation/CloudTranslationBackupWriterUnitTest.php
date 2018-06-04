@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Infra\GCP\CloudTranslation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -26,24 +26,22 @@ use PHPUnit\Framework\TestCase;
 class CloudTranslationBackupWriterUnitTest extends TestCase
 {
     /**
-     * @var BackupConnectorInterface
+     * @var ConnectorInterface
      */
     private $fileSystemBackupConnector;
 
     /**
-     * @var BackupConnectorInterface
+     * @var ConnectorInterface
      */
     private $redisBackupConnector;
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \ReflectionException
      */
     protected function setUp()
     {
-        $this->fileSystemBackupConnector = $this->createMock(BackupConnectorInterface::class);
-        $this->redisBackupConnector = $this->createMock(BackupConnectorInterface::class);
+        $this->fileSystemBackupConnector = $this->createMock(ConnectorInterface::class);
+        $this->redisBackupConnector = $this->createMock(ConnectorInterface::class);
     }
 
     public function testItImplements()

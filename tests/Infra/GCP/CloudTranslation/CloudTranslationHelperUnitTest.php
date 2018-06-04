@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Infra\GCP\CloudTranslation;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
+use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
 use Google\Cloud\Translate\TranslateClient;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationHelperUnitTest extends TestCase
+final class CloudTranslationHelperUnitTest extends TestCase
 {
     /**
      * @var CloudTranslationBridgeInterface
@@ -37,5 +39,15 @@ class CloudTranslationHelperUnitTest extends TestCase
         $this->cloudTranslationBridge = $this->createMock(CloudTranslationBridgeInterface::class);
         $this->cloudTranslationBridge->method('getTranslateClient')
                                      ->willReturn($this->createMock(TranslateClient::class));
+    }
+
+    public function testItImplements()
+    {
+        $cloudTranslationHelper = new CloudTranslationHelper($this->cloudTranslationBridge);
+
+        static::assertInstanceOf(
+            CloudTranslationHelperInterface::class,
+            $cloudTranslationHelper
+        );
     }
 }

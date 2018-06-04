@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Interfaces;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 
 /**
  * Interface CloudTranslationBackupWriterInterface.
@@ -25,9 +25,9 @@ interface CloudTranslationBackupWriterInterface
     /**
      * CloudTranslationBackupWriterInterface constructor.
      *
-     * @param BackupConnectorInterface $backupConnector
+     * @param ConnectorInterface $backupConnector
      */
-    public function __construct(BackupConnectorInterface $backupConnector);
+    public function __construct(ConnectorInterface $backupConnector);
 
     /**
      * Allow to create a backup of the default cache item.
@@ -36,6 +36,8 @@ interface CloudTranslationBackupWriterInterface
      * @param string $locale    The locale used by the item to back up.
      * @param array  $newValues The new values to back up.
      * @param string $format    The format of the content stored (default to YAML).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      *
      * @return bool If the back up has succeed or not.
      */

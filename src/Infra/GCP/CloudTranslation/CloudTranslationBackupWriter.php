@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -25,14 +25,14 @@ use Ramsey\Uuid\Uuid;
 final class CloudTranslationBackupWriter implements CloudTranslationBackupWriterInterface
 {
     /**
-     * @var BackupConnectorInterface
+     * @var ConnectorInterface
      */
     private $backupConnector;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(BackupConnectorInterface $backupConnector)
+    public function __construct(ConnectorInterface $backupConnector)
     {
         $this->backupConnector = $backupConnector;
     }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +29,7 @@ class FileSystemConnectorSystemTest extends TestCase
     use TestCaseTrait;
 
     /**
-     * @var FileSystemConnectorInterface
+     * @var ConnectorInterface
      */
     private $fileSystemConnector;
 
@@ -68,21 +68,6 @@ class FileSystemConnectorSystemTest extends TestCase
 
         $this->assertBlackfire($configuration, function () {
             $this->fileSystemConnector->getAdapter()->clear();
-        });
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @requires extension blackfire
-     */
-    public function testItShouldBeABackup()
-    {
-        $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 5kB', 'FileSystem Connector backup memory peak');
-
-        $this->assertBlackfire($configuration, function () {
-            $this->fileSystemConnector->setBackup(true);
         });
     }
 

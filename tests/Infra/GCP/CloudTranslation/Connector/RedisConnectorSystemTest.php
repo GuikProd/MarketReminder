@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
@@ -29,7 +29,7 @@ class RedisConnectorSystemTest extends KernelTestCase
     use TestCaseTrait;
 
     /**
-     * @var RedisConnectorInterface
+     * @var ConnectorInterface
      */
     private $redisConnector;
 
@@ -90,23 +90,6 @@ class RedisConnectorSystemTest extends KernelTestCase
 
         $this->assertBlackfire($configuration, function () {
             $this->redisConnector->getAdapter()->clear();
-        });
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @requires extension blackfire
-     */
-    public function testItShouldBeABackup()
-    {
-        $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 5kB', 'Connector backup memory peak');
-        $configuration->assert('main.network_in == 0B', 'Connector backup network in');
-        $configuration->assert('main.network_out == 0B', 'Connector backup network out');
-
-        $this->assertBlackfire($configuration, function () {
-            $this->redisConnector->setBackup(true);
         });
     }
 

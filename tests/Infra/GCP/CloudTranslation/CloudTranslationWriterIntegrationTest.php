@@ -16,48 +16,16 @@ namespace App\Tests\Infra\Redis\Translation;
 use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\TestCase\ConnectorTestCase;
 
 /**
  * Class CloudTranslationWriterIntegrationTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationWriterIntegrationTest extends KernelTestCase
+final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
 {
-    /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    private $cloudTranslationBackupWriter;
-
-    /**
-     * @var BackupConnectorInterface
-     */
-    private $backUpConnector;
-
-    /**
-     * @var ConnectorInterface
-     */
-    private $connector;
-
-    /**
-     * @var CloudTranslationWriterInterface
-     */
-    private $cloudTranslationWriter;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
-    {
-        static::bootKernel();
-    }
-
     /**
      * @dataProvider provideRightData
      *
@@ -74,12 +42,12 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemCacheAndFileSystemBackUp();
+        $this->createFileSystemConnector();
+        $this->createFileSystemBackUp();
 
-        $fileSystemWriter = new CloudTranslationWriter($this->cloudTranslationBackupWriter, $this->connector);
-        $fileSystemWriter->write($locale, $channel, $fileName, $values);
+        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
-        $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
+        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         static::assertFalse($processStatus);
     }
@@ -100,12 +68,12 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemCacheAndRedisBackUp();
+        $this->createFileSystemConnector();
+        $this->createRedisBackUp();
 
-        $fileSystemWriter = new CloudTranslationWriter($this->cloudTranslationBackupWriter, $this->connector);
-        $fileSystemWriter->write($locale, $channel, $fileName, $values);
+        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
-        $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
+        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         static::assertFalse($processStatus);
     }
@@ -126,12 +94,12 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
         string $fileName,
         array $values
     ) {
-        $this->createRedisCacheAndRedisBackUp();
+        $this->createRedisConnector();
+        $this->createRedisBackUp();
 
-        $redisWriter = new CloudTranslationWriter($this->cloudTranslationBackupWriter, $this->connector);
-        $redisWriter->write($locale, $channel, $fileName, $values);
+        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
-        $processStatus = $redisWriter->write($locale, $channel, $fileName, $values);
+        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         static::assertFalse($processStatus);
     }
@@ -152,12 +120,12 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
         string $fileName,
         array $values
     ) {
-        $this->createRedisCacheAndFileSystemBackUp();
+        $this->createRedisConnector();
+        $this->createFileSystemBackUp();
 
-        $redisWriter = new CloudTranslationWriter($this->cloudTranslationBackupWriter, $this->connector);
-        $redisWriter->write($locale, $channel, $fileName, $values);
+        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
-        $processStatus = $redisWriter->write($locale, $channel, $fileName, $values);
+        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         static::assertFalse($processStatus);
     }
@@ -178,19 +146,10 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemCacheAndFileSystemBackUp();
+        $this->createFileSystemConnector();
+        $this->createFileSystemBackUp();
 
-        $this->cloudTranslationWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackupWriter,
-            $this->connector
-        );
-
-        $processStatus = $this->cloudTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            $values
-        );
+        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         static::assertTrue($processStatus);
     }
@@ -211,19 +170,10 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
         string $fileName,
         array $values
     ) {
-        $this->createRedisCacheAndRedisBackUp();
+        $this->createRedisConnector();
+        $this->createRedisBackUp();
 
-        $this->cloudTranslationWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackupWriter,
-            $this->connector
-        );
-
-        $processStatus = $this->cloudTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            $values
-        );
+        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         static::assertTrue($processStatus);
     }
@@ -244,19 +194,10 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemCacheAndFileSystemBackUp();
+        $this->createFileSystemConnector();
+        $this->createFileSystemBackUp();
 
-        $this->cloudTranslationWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackupWriter,
-            $this->connector
-        );
-
-        $this->cloudTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            $values
-        );
+        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         $processStatus = $this->cloudTranslationWriter->write(
             $locale,
@@ -284,19 +225,10 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
         string $fileName,
         array $values
     ) {
-        $this->createRedisCacheAndRedisBackUp();
+        $this->createRedisConnector();
+        $this->createRedisBackUp();
 
-        $this->cloudTranslationWriter = new CloudTranslationWriter(
-            $this->cloudTranslationBackupWriter,
-            $this->connector
-        );
-
-        $this->cloudTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            $values
-        );
+        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         $processStatus = $this->cloudTranslationWriter->write(
             $locale,
@@ -309,92 +241,11 @@ final class CloudTranslationWriterIntegrationTest extends KernelTestCase
     }
 
     /**
-     * Create a Filesystem Cache & Filesystem backup.
-     */
-    private function createFileSystemCacheAndFileSystemBackUp()
-    {
-        $this->backUpConnector = new FileSystemConnector('backup_test');
-        $this->connector = new FileSystemConnector('test');
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
-
-        $this->backUpConnector->setBackup(true);
-
-        $this->backUpConnector->getAdapter()->clear();
-        $this->connector->getAdapter()->clear();
-    }
-
-    /**
-     * Create a Filesystem Cache & Redis backup.
-     */
-    private function createFileSystemCacheAndRedisBackUp()
-    {
-        $this->backUpConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test').'_backup'
-        );
-        $this->connector = new FileSystemConnector('test');
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
-
-        $this->backUpConnector->setBackup(true);
-
-        $this->backUpConnector->getAdapter()->clear();
-        $this->connector->getAdapter()->clear();
-    }
-
-    /**
-     * Create a Redis Cache & Filesystem backup.
-     */
-    private function createRedisCacheAndFileSystemBackUp()
-    {
-        $this->backUpConnector = new FileSystemConnector('backup_test');
-        $this->connector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test')
-        );
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
-
-        $this->backUpConnector->setBackup(true);
-
-        $this->backUpConnector->getAdapter()->clear();
-        $this->connector->getAdapter()->clear();
-    }
-
-    /**
-     * Create a Redis Cache & Redis backup.
-     */
-    private function createRedisCacheAndRedisBackUp()
-    {
-        $this->backUpConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test').'_backup'
-        );
-        $this->connector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test')
-        );
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
-
-        $this->backUpConnector->setBackup(true);
-
-        $this->backUpConnector->getAdapter()->clear();
-        $this->connector->getAdapter()->clear();
-    }
-
-    /**
      * @return \Generator
      */
     public function provideRightData()
     {
         yield array('fr', 'messages', 'messages.fr.yaml', ['home.text' => 'Inventory management']);
         yield array('fr', 'validators', 'validators.fr.yaml', ['reset_password.title.text' => 'Réinitialiser votre mot de passe.']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown()
-    {
-        $this->backUpConnector = null;
-        $this->connector = null;
     }
 }

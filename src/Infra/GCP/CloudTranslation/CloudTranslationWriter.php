@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Infra\GCP\CloudTranslation;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Psr\Cache\CacheItemInterface;
 use Ramsey\Uuid\Uuid;
@@ -26,11 +25,6 @@ use Ramsey\Uuid\Uuid;
  */
 final class CloudTranslationWriter implements CloudTranslationWriterInterface
 {
-    /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    private $cloudTranslationBackupWriter;
-
     /**
      * @var ConnectorInterface
      */
@@ -44,11 +38,8 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        CloudTranslationBackupWriterInterface $cloudTranslationBackupWriter,
-        ConnectorInterface $connector
-    ) {
-        $this->cloudTranslationBackupWriter = $cloudTranslationBackupWriter;
+    public function __construct(ConnectorInterface $connector)
+    {
         $this->connector = $connector;
     }
 
@@ -86,10 +77,6 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
 
         $cacheItem->set($this->entries);
         $cacheItem->tag($tag);
-
-        if (!$this->cloudTranslationBackupWriter->warmBackUp($channel, $locale, $values)) {
-            // If the backup is fresh, the process continue.
-        }
 
         return $this->connector->getAdapter()->save($cacheItem);
     }

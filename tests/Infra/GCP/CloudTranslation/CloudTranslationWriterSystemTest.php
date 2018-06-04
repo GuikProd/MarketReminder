@@ -13,20 +13,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
+use App\Tests\TestCase\ConnectorTestCase;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Class CloudTranslationWriterSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationWriterSystemTest extends KernelTestCase
+class CloudTranslationWriterSystemTest extends ConnectorTestCase
 {
     use TestCaseTrait;
 
@@ -36,33 +32,49 @@ class CloudTranslationWriterSystemTest extends KernelTestCase
     private $goodTestingData = [];
 
     /**
-     * @var RedisConnectorInterface
-     */
-    private $redisConnector;
-
-    /**
-     * @var CloudTranslationWriterInterface
-     */
-    private $redisTranslationWriter;
-
-    /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        static::bootKernel();
-
-        $this->redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test')
-        );
-
-        $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
+        parent::setUp();
 
         $this->goodTestingData = [
             'home.text' => 'Inventory management',
             'reset_password.title.text' => 'Réinitialiser votre mot de passe.'
         ];
+    }
+
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testItDoesNotSaveSameContentTwiceWithFileSystem()
+    {
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 80kB', 'CloudTranslationWriter no write memory Filesystem usage');
+        $configuration->assert('main.network_in == 0B', 'CloudTranslationWriter no write network Filesystem call');
+
+        $this->createFileSystemConnector();
+
+        $this->cloudTranslationWriter->write(
+            'fr',
+            'messages',
+            'messages.fr.yaml',
+            $this->goodTestingData
+        );
+
+        $this->assertBlackfire($configuration, function () {
+
+            $this->cloudTranslationWriter->write(
+                'fr',
+                'messages',
+                'messages.fr.yaml',
+                $this->goodTestingData
+            );
+        });
     }
 
     /**
@@ -78,7 +90,9 @@ class CloudTranslationWriterSystemTest extends KernelTestCase
         $configuration->assert('main.peak_memory < 80kB', 'CloudTranslationWriter no write memory redis usage');
         $configuration->assert('main.network_in < 710B', 'CloudTranslationWriter no write network redis call');
 
-        $this->redisTranslationWriter->write(
+        $this->createRedisConnector();
+
+        $this->cloudTranslationWriter->write(
             'fr',
             'messages',
             'messages.fr.yaml',
@@ -87,10 +101,34 @@ class CloudTranslationWriterSystemTest extends KernelTestCase
 
         $this->assertBlackfire($configuration, function () {
 
-            $this->redisTranslationWriter->write(
+            $this->cloudTranslationWriter->write(
                 'fr',
                 'messages',
                 'messages.fr.yaml',
+                $this->goodTestingData
+            );
+        });
+    }
+
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     */
+    public function testWithCacheWriteAndFileSystemUsage()
+    {
+        $configuration = new Configuration();
+        $configuration->assert('main.peak_memory < 70kB', 'CloudTranslationWriter Filesystem usage memory usage');
+        $configuration->assert('main.network_in == 0B', 'CloudTranslationWriter Filesystem usage network in');
+        $configuration->assert('main.network_out == 0B', 'CloudTranslationWriter Filesystem usage network out');
+
+        $this->createFileSystemConnector();
+
+        $this->assertBlackfire($configuration, function () {
+            $this->cloudTranslationWriter->write(
+                'fr',
+                'validators',
+                'validators.fr.yaml',
                 $this->goodTestingData
             );
         });
@@ -108,21 +146,15 @@ class CloudTranslationWriterSystemTest extends KernelTestCase
         $configuration->assert('main.network_in < 30B', 'CloudTranslationWriter redis usage network in');
         $configuration->assert('main.network_out < 1MB', 'CloudTranslationWriter redis usage network out');
 
+        $this->createRedisConnector();
+
         $this->assertBlackfire($configuration, function () {
-            $this->redisTranslationWriter->write(
+            $this->cloudTranslationWriter->write(
                 'fr',
                 'validators',
                 'validators.fr.yaml',
                 $this->goodTestingData
             );
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown()
-    {
-        $this->redisConnector = null;
     }
 }

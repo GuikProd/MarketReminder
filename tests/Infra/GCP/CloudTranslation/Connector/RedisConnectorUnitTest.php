@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
@@ -61,10 +60,6 @@ class RedisConnectorUnitTest extends TestCase
             RedisConnectorInterface::class,
             $redisConnector
         );
-        static::assertInstanceOf(
-            BackupConnectorInterface::class,
-            $redisConnector
-        );
     }
 
     public function testItConfigureConnectionAndReturnAdapter()
@@ -78,16 +73,5 @@ class RedisConnectorUnitTest extends TestCase
             TagAwareAdapterInterface::class,
             $redisConnector->getAdapter()
         );
-    }
-
-    public function testItShouldBeABackup()
-    {
-        $redisConnector = new RedisConnector(
-            $this->redisDSN,
-            $this->redisNamespace
-        );
-        $redisConnector->setBackup(true);
-
-        static::assertTrue($redisConnector->isBackup());
     }
 }
