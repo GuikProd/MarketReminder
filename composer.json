@@ -56,7 +56,6 @@
         "blackfire/php-sdk": "^1.14",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "phpmetrics/phpmetrics": "^2.3",
-        "phpunit/phpunit": "^7.1",
         "symfony/dotenv": "^4.1",
         "symfony/flex": "^1.0"
     },

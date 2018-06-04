@@ -91,11 +91,11 @@ redis-cache: ## Allow to clean the Redis cache
 
 phpunit: tests
 	    make redis-cache
-	    $(ENV_PHP) vendor/bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
+	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
 
 phpunit-blackfire: tests
 	    make redis-cache
-	    $(ENV_PHP) vendor/bin/phpunit --group Blackfire tests/$(FOLDER)
+	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)
 
 behat: features
 	    make check-schema

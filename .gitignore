@@ -15,10 +15,6 @@ docker/nginx/logs/
 # Global
 coverage/**/
 report/*
-###> phpunit/phpunit ###
-/phpunit.xml
-###< phpunit/phpunit ###
-
 # Google Cloud
 public/images/profiles/
 
