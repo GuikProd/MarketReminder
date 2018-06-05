@@ -22,7 +22,7 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class FileSystemConnectorIntegrationTest extends TestCase
+final class FileSystemConnectorIntegrationTest extends TestCase
 {
     public function testItReturnAdapter()
     {

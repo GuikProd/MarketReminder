@@ -15,6 +15,7 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
@@ -26,7 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationWarmerUnitTest extends KernelTestCase
+final class CloudTranslationWarmerUnitTest extends KernelTestCase
 {
     /**
      * @var string
@@ -49,9 +50,14 @@ class CloudTranslationWarmerUnitTest extends KernelTestCase
     private $redisTranslationRepository;
 
     /**
+     * @var CloudTranslationBackupWriterInterface
+     */
+    private $cloudTranslationBackUpWriter;
+
+    /**
      * @var CloudTranslationWriterInterface
      */
-    private $redisTranslationWriter;
+    private $cloudTranslationWriter;
 
     /**
      * @var string
@@ -69,7 +75,8 @@ class CloudTranslationWarmerUnitTest extends KernelTestCase
         $this->acceptedLocales = 'fr|en';
         $this->cloudTranslationWarmer = $this->createMock(CloudTranslationHelperInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
-        $this->redisTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);
+        $this->cloudTranslationBackUpWriter = $this->createMock(CloudTranslationBackupWriterInterface::class);
+        $this->cloudTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);
         $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
     }
 
@@ -80,7 +87,8 @@ class CloudTranslationWarmerUnitTest extends KernelTestCase
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
+            $this->cloudTranslationBackUpWriter,
+            $this->cloudTranslationWriter,
             $this->translationsFolder
         );
 
@@ -102,7 +110,8 @@ class CloudTranslationWarmerUnitTest extends KernelTestCase
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
+            $this->cloudTranslationBackUpWriter,
+            $this->cloudTranslationWriter,
             $this->translationsFolder
         );
 
@@ -123,7 +132,8 @@ class CloudTranslationWarmerUnitTest extends KernelTestCase
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
+            $this->cloudTranslationBackUpWriter,
+            $this->cloudTranslationWriter,
             $this->translationsFolder
         );
 
@@ -155,7 +165,8 @@ class CloudTranslationWarmerUnitTest extends KernelTestCase
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
-            $this->redisTranslationWriter,
+            $this->cloudTranslationBackUpWriter,
+            $this->cloudTranslationWriter,
             $this->translationsFolder
         );
 

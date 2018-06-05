@@ -23,19 +23,21 @@ interface CloudTranslationWarmerInterface
     /**
      * CloudTranslationWarmerInterface constructor.
      *
-     * @param string                              $acceptedChannels
-     * @param string                              $acceptedLocales
-     * @param CloudTranslationHelperInterface     $cloudTranslationWarmer
-     * @param CloudTranslationRepositoryInterface $redisTranslationRepository
-     * @param CloudTranslationWriterInterface     $redisTranslationWriter
-     * @param string                              $translationsFolder
+     * @param string                                $acceptedChannels
+     * @param string                                $acceptedLocales
+     * @param CloudTranslationHelperInterface       $cloudTranslationWarmer
+     * @param CloudTranslationRepositoryInterface   $cloudTranslationRepository
+     * @param CloudTranslationBackupWriterInterface $cloudTranslationBackupWriter
+     * @param CloudTranslationWriterInterface       $cloudTranslationWriter
+     * @param string                                $translationsFolder
      */
     public function __construct(
         string $acceptedChannels,
         string $acceptedLocales,
         CloudTranslationHelperInterface $cloudTranslationWarmer,
-        CloudTranslationRepositoryInterface $redisTranslationRepository,
-        CloudTranslationWriterInterface $redisTranslationWriter,
+        CloudTranslationRepositoryInterface $cloudTranslationRepository,
+        CloudTranslationBackupWriterInterface $cloudTranslationBackupWriter,
+        CloudTranslationWriterInterface $cloudTranslationWriter,
         string $translationsFolder
     );
 

@@ -25,9 +25,13 @@ interface CloudTranslationRepositoryInterface
     /**
      * CloudTranslationRepositoryInterface constructor.
      *
-     * @param ConnectorInterface $redisConnector
+     * @param ConnectorInterface $connector
+     * @param ConnectorInterface $backUpConnector
      */
-    public function __construct(ConnectorInterface $redisConnector);
+    public function __construct(
+        ConnectorInterface $connector,
+        ConnectorInterface $backUpConnector
+    );
 
     /**
      * Allow to retrieve an array of CloudTranslationItem using the default filename.

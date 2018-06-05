@@ -66,13 +66,13 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
     {
         parent::setUp();
 
-        $this->acceptedLocales = static::$kernel->getContainer()->getParameter('accepted_locales');
-        $this->acceptedChannels = static::$kernel->getContainer()->getParameter('accepted_channels');
-        $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
+        $this->acceptedLocales = static::$container->getParameter('accepted_locales');
+        $this->acceptedChannels = static::$container->getParameter('accepted_channels');
+        $this->translationsFolder = static::$container->getParameter('translator.default_path');
 
         $cloudTranslationBridge = new CloudTranslationBridge(
-            static::$kernel->getContainer()->getParameter('cloud.translation_credentials.filename'),
-            static::$kernel->getContainer()->getParameter('cloud.translation_credentials')
+            static::$container->getParameter('cloud.translation_credentials.filename'),
+            static::$container->getParameter('cloud.translation_credentials')
         );
 
         $this->cloudTranslationHelper = new CloudTranslationHelper($cloudTranslationBridge);
@@ -99,6 +99,7 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
+            $this->cloudTranslationBackupWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -129,6 +130,7 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
+            $this->cloudTranslationBackupWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -158,6 +160,7 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
+            $this->cloudTranslationBackupWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -187,6 +190,7 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
+            $this->cloudTranslationBackupWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );

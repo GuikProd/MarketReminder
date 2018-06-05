@@ -93,15 +93,31 @@ phpunit: tests
 	    make redis-cache
 	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
 
+
+phpunit-functional: tests
+	    make check-schema
+	    make fixtures ENV=test
+	    make doctrine-cache
+	    make redis-cache
+	    make translation CHANNEL=messages LOCALE=fr
+	    make translation CHANNEL=messages LOCALE=en
+	    make translation CHANNEL=validators LOCALE=fr
+	    make translation CHANNEL=validators LOCALE=fr
+	    $(ENV_PHP) ./bin/phpunit --group Functional tests/$(FOLDER)
+
 phpunit-blackfire: tests
 	    make redis-cache
 	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)
 
 behat: features
 	    make check-schema
-	    make fixtures_test
+	    make fixtures ENV=test
 	    make doctrine-cache
 	    make redis-cache
+	    make translation CHANNEL=messages LOCALE=fr
+	    make translation CHANNEL=messages LOCALE=en
+	    make translation CHANNEL=validators LOCALE=fr
+	    make translation CHANNEL=validators LOCALE=fr
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands

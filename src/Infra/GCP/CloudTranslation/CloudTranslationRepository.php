@@ -28,6 +28,11 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     /**
      * @var ConnectorInterface
      */
+    private $backUpConnector;
+
+    /**
+     * @var ConnectorInterface
+     */
     private $connector;
 
     /**
@@ -38,9 +43,12 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     /**
      * {@inheritdoc}
      */
-    public function __construct(ConnectorInterface $connector)
-    {
+    public function __construct(
+        ConnectorInterface $connector,
+        ConnectorInterface $backUpConnector
+    ) {
         $this->connector = $connector;
+        $this->backUpConnector = $backUpConnector;
     }
 
     /**

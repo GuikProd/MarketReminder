@@ -93,7 +93,7 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->acceptedLocales = 'fr|en|it';
+        $this->acceptedLocales = static::$container->getParameter('accepted_locales');
 
         $cloudTranslationBridge = new CloudTranslationBridge(
             static::$kernel->getContainer()->getParameter('cloud.translation_credentials.filename'),

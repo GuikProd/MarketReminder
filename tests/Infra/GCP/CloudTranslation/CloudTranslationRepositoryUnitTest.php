@@ -15,7 +15,6 @@ namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -25,12 +24,17 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationRepositoryUnitTest extends TestCase
+final class CloudTranslationRepositoryUnitTest extends TestCase
 {
     /**
-     * @var RedisConnectorInterface
+     * @var ConnectorInterface
      */
-    private $redisConnector;
+    private $backUpConnector;
+
+    /**
+     * @var ConnectorInterface
+     */
+    private $connector;
 
     /**
      * {@inheritdoc}
@@ -38,14 +42,19 @@ class CloudTranslationRepositoryUnitTest extends TestCase
     protected function setUp()
     {
         $tagAwareAdapter = $this->createMock(TagAwareAdapterInterface::class);
-        $this->redisConnector = $this->createMock(ConnectorInterface::class);
+        $this->backUpConnector = $this->createMock(ConnectorInterface::class);
+        $this->connector = $this->createMock(ConnectorInterface::class);
 
-        $this->redisConnector->method('getAdapter')->willReturn($tagAwareAdapter);
+        $this->backUpConnector->method('getAdapter')->willReturn($tagAwareAdapter);
+        $this->connector->method('getAdapter')->willReturn($tagAwareAdapter);
     }
 
     public function testItImplements()
     {
-        $redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
+        $redisTranslationRepository = new CloudTranslationRepository(
+            $this->backUpConnector,
+            $this->connector
+        );
 
         static::assertInstanceOf(
             CloudTranslationRepositoryInterface::class,
@@ -62,7 +71,10 @@ class CloudTranslationRepositoryUnitTest extends TestCase
      */
     public function testItReturnNullWithRedis(string $fileName)
     {
-        $redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
+        $redisTranslationRepository = new CloudTranslationRepository(
+            $this->backUpConnector,
+            $this->connector
+        );
 
         static::assertNull(
             $redisTranslationRepository->getEntries($fileName)

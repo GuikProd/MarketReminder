@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation;
 
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
@@ -44,12 +45,17 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
     /**
      * @var CloudTranslationRepositoryInterface
      */
-    private $redisTranslationRepository;
+    private $cloudTranslationRepository;
+
+    /**
+     * @var CloudTranslationBackupWriterInterface
+     */
+    private $cloudTranslationBackUpWriter;
 
     /**
      * @var CloudTranslationWriterInterface
      */
-    private $redisTranslationWriter;
+    private $cloudTranslationWriter;
 
     /**
      * @var string
@@ -63,15 +69,17 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
         string $acceptedChannels,
         string $acceptedLocales,
         CloudTranslationHelperInterface $cloudTranslationWarmer,
-        CloudTranslationRepositoryInterface $redisTranslationRepository,
-        CloudTranslationWriterInterface $redisTranslationWriter,
+        CloudTranslationRepositoryInterface $cloudTranslationRepository,
+        CloudTranslationBackupWriterInterface $cloudTranslationBackupWriter,
+        CloudTranslationWriterInterface $cloudTranslationWriter,
         string $translationsFolder
     ) {
         $this->acceptedChannels = $acceptedChannels;
         $this->acceptedLocales = $acceptedLocales;
         $this->cloudTranslationWarmer = $cloudTranslationWarmer;
-        $this->redisTranslationRepository = $redisTranslationRepository;
-        $this->redisTranslationWriter = $redisTranslationWriter;
+        $this->cloudTranslationRepository = $cloudTranslationRepository;
+        $this->cloudTranslationBackUpWriter = $cloudTranslationBackupWriter;
+        $this->cloudTranslationWriter = $cloudTranslationWriter;
         $this->translationsFolder = $translationsFolder;
     }
 
@@ -102,8 +110,11 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
 
         try {
             if (!$this->isCacheValid($channel, 'fr', $defaultContent)) {
-                if (!$this->redisTranslationWriter->write('fr', $channel, $channel.'fr.yaml', $defaultContent)) {
+                if (!$this->cloudTranslationWriter->write('fr', $channel, $channel.'fr.yaml', $defaultContent)) {
                     // If the cache already contain the "fr" entries, the process continue.
+                }
+                if (!$this->cloudTranslationBackUpWriter->warmBackUp($channel, 'fr', $defaultContent)) {
+                    // Same as the default cache.
                 }
             }
 
@@ -111,7 +122,7 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
                 return false;
             }
 
-            if (!$newItem = $this->redisTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
+            if (!$newItem = $this->cloudTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
 
                 $translatedElements = [];
 
@@ -128,10 +139,15 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
                     );
                 }
 
-                $this->redisTranslationWriter->write(
+                $this->cloudTranslationWriter->write(
                     $locale,
                     $channel,
                     $channel.'.'.$locale.'.yaml',
+                    array_combine($toTranslateKeys, $translatedElements)
+                );
+                $this->cloudTranslationBackUpWriter->warmBackUp(
+                    $channel,
+                    $locale,
                     array_combine($toTranslateKeys, $translatedElements)
                 );
             }
@@ -150,7 +166,7 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
     {
         $toCheckContent = [];
 
-        if (!$cacheContent = $this->redisTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
+        if (!$cacheContent = $this->cloudTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
             return false;
         }
 

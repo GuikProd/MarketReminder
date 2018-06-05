@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class FileSystemConnectorSystemTest extends TestCase
+final class FileSystemConnectorSystemTest extends TestCase
 {
     use TestCaseTrait;
 

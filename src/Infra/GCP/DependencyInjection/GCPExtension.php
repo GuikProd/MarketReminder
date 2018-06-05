@@ -29,12 +29,12 @@ use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\BackupConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -57,126 +57,103 @@ final class GCPExtension extends Extension
 
         // Storage
         if ($config['storage']['activated']) {
-            if (!$container->hasDefinition(new Reference(CloudStorageBridge::class))) {
-                $container->register(CloudStorageBridge::class, CloudStorageBridge::class)
+            if (!$container->hasDefinition(new Reference(CloudStorageBridgeInterface::class))) {
+                $container->register(CloudStorageBridgeInterface::class, CloudStorageBridge::class)
                           ->addArgument($container->getParameter('cloud.storage_credentials.filename'))
                           ->addArgument($container->getParameter('cloud.storage_credentials'))
                           ->setPublic(false)
                           ->addTag('gcp.storage_bridge');
-                $container->register(CloudStorageBridgeInterface::class, CloudStorageBridgeInterface::class);
-                $container->setAlias(CloudStorageBridgeInterface::class, CloudStorageBridge::class);
             }
 
-            if (!$container->hasDefinition(CloudStoragePersisterHelper::class)) {
-                $container->register(CloudStoragePersisterHelper::class, CloudStoragePersisterHelper::class)
-                          ->addArgument($container->findTaggedServiceIds('gcp.storage_bridge'))
-                          ->setPublic(false);
-                $container->register(CloudStoragePersisterHelperInterface::class, CloudStoragePersisterHelperInterface::class);
-                $container->setAlias(CloudStoragePersisterHelperInterface::class, CloudStoragePersisterHelper::class);
+            if (!$container->hasDefinition(CloudStoragePersisterHelperInterface::class)) {
+                $container->register(CloudStoragePersisterHelperInterface::class, CloudStoragePersisterHelper::class)
+                          ->addArgument($container->getDefinition(CloudStorageBridgeInterface::class))
+                          ->setPublic(false)
+                          ->addTag('gcp.storage');
             }
 
-            if (!$container->hasDefinition(CloudStorageRetrieverHelper::class)) {
-                $container->register(CloudStorageRetrieverHelper::class, CloudStorageRetrieverHelper::class)
-                          ->addArgument($container->findTaggedServiceIds('gcp.storage_bridge'))
-                          ->setPublic(false);
-                $container->register(CloudStorageRetrieverHelperInterface::class, CloudStorageRetrieverHelperInterface::class);
-                $container->register(CloudStorageRetrieverHelperInterface::class, CloudStorageRetrieverHelper::class);
+            if (!$container->hasDefinition(CloudStorageRetrieverHelperInterface::class)) {
+                $container->register(CloudStorageRetrieverHelperInterface::class, CloudStorageRetrieverHelper::class)
+                          ->addArgument($container->getDefinition(CloudStorageBridgeInterface::class))
+                          ->setPublic(false)
+                          ->addTag('gcp.storage');
             }
 
-            if (!$container->hasDefinition(CloudStorageCleanerHelper::class)) {
-                $container->register(CloudStorageCleanerHelper::class, CloudStorageCleanerHelper::class)
-                          ->addArgument($container->findTaggedServiceIds('gcp.storage_bridge'))
-                          ->setPublic(false);
-                $container->register(CloudStorageCleanerHelperInterface::class, CloudStorageCleanerHelperInterface::class);
-                $container->register(CloudStorageCleanerHelperInterface::class, CloudStorageCleanerHelper::class);
+            if (!$container->hasDefinition(CloudStorageCleanerHelperInterface::class)) {
+                $container->register(CloudStorageCleanerHelperInterface::class, CloudStorageCleanerHelper::class)
+                          ->addArgument($container->getDefinition(CloudStorageBridgeInterface::class))
+                          ->setPublic(false)
+                          ->addTag('gcp.storage');
             }
         }
 
         // Translation
         if ($config['translation']['activated']) {
-            if (!$container->hasDefinition(new Reference(CloudTranslationBridge::class))) {
-                $container->register(CloudTranslationBridge::class, CloudTranslationBridge::class)
+            if (!$container->hasDefinition(new Reference(CloudTranslationBridgeInterface::class))) {
+                $container->register(CloudTranslationBridgeInterface::class, CloudTranslationBridge::class)
                           ->addArgument($container->getParameter('cloud.translation_credentials.filename'))
                           ->addArgument($container->getParameter('cloud.translation_credentials'))
                           ->setPublic(false)
-                          ->addTag('gcp.translation');
-                $container->setAlias(CloudTranslationBridgeInterface::class, CloudTranslationBridge::class);
+                          ->addTag('gcp.translation_bridge');
             }
 
             // Storage engine
             if ('redis' === $config['translation']['storage_engine']) {
-                if (!$container->hasDefinition(RedisConnector::class)) {
-                    $container->register(RedisConnector::class, RedisConnector::class)
+                if (!$container->hasDefinition(RedisConnectorInterface::class)) {
+                    $container->register(RedisConnectorInterface::class, RedisConnector::class)
                               ->addArgument(getenv('REDIS_URL'))
                               ->addArgument(getenv('APP_ENV'))
                               ->addTag('gcp.translation_connector');
-                    $container->setAlias(RedisConnectorInterface::class, RedisConnector::class);
                     $container->register(ConnectorInterface::class, ConnectorInterface::class);
-                    $container->setAlias(ConnectorInterface::class, RedisConnector::class);
+                    $container->setAlias(ConnectorInterface::class, RedisConnectorInterface::class);
                 }
 
-                if (!$container->hasDefinition(CloudTranslationRepository::class)) {
-                    $container->register(CloudTranslationRepository::class, CloudTranslationRepository::class)
-                              ->addArgument($container->getDefinition(RedisConnector::class))
-                              ->setPublic(false)
-                              ->addTag('gcp.translation_connector');
-                }
             } elseif ('filesystem' === $config['translation']['storage_engine']) {
-                if (!$container->hasDefinition(FileSystemConnector::class)) {
-                    $container->register(FileSystemConnector::class, FileSystemConnector::class)
+                if (!$container->hasDefinition(FileSystemConnectorInterface::class)) {
+                    $container->register(FileSystemConnectorInterface::class, FileSystemConnector::class)
                               ->addArgument(getenv('APP_ENV'))
                               ->addTag('gcp.translation_connector');
-                    $container->setAlias(FileSystemConnectorInterface::class, FileSystemConnector::class);
                     $container->register(ConnectorInterface::class, ConnectorInterface::class);
-                    $container->setAlias(ConnectorInterface::class, FileSystemConnector::class);
-                }
-
-                if (!$container->hasDefinition(CloudTranslationRepository::class)) {
-                    $container->register(CloudTranslationRepository::class, CloudTranslationRepository::class)
-                              ->addArgument($container->getDefinition(FileSystemConnector::class))
-                              ->setPublic(false)
-                              ->addTag('gcp.translation_connector');
+                    $container->setAlias(ConnectorInterface::class, FileSystemConnectorInterface::class);
                 }
             }
 
             // Backup engine
             if ('filesystem' === $config['translation']['backup_engine']) {
-                if (!$container->hasDefinition(FileSystemConnector::class)) {
-                    $container->register(FileSystemConnector::class, FileSystemConnector::class)
+                if (!$container->hasDefinition(FileSystemConnectorInterface::class)) {
+                    $container->register(FileSystemConnectorInterface::class, FileSystemConnector::class)
                               ->addArgument(getenv('REDIS_URL'))
                               ->addArgument(getenv('APP_ENV'))
-                              ->addMethodCall('setBackup', [true])
                               ->addTag('gcp.translation_connector.backup');
-                    $container->setAlias(FileSystemConnectorInterface::class, FileSystemConnector::class);
-                    $container->setAlias(BackupConnectorInterface::class, FileSystemConnector::class);
 
-                    if (!$container->hasDefinition(CloudTranslationBackupWriter::class)) {
-                        $container->register(CloudTranslationBackupWriter::class, CloudTranslationBackupWriter::class)
-                                  ->addArgument($container->getDefinition(FileSystemConnector::class))
+                    if (!$container->hasDefinition(CloudTranslationBackupWriterInterface::class)) {
+                        $container->register(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriter::class)
+                                  ->addArgument($container->getDefinition(FileSystemConnectorInterface::class))
                                   ->addTag('gcp.translation_backup');
-                        $container->register(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriterInterface::class);
-                        $container->setAlias(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriter::class);
                     }
                 }
+
+                $container->getDefinition(FileSystemConnectorInterface::class)
+                          ->addTag('gcp.translation_connector.backup');
+
             } elseif ('redis' === $config['translation']['backup_engine']) {
-                if (!$container->hasDefinition(RedisConnector::class)) {
-                    $container->register(RedisConnector::class, RedisConnector::class)
+                if (!$container->hasDefinition(RedisConnectorInterface::class)) {
+                    $container->register(RedisConnectorInterface::class, RedisConnector::class)
                               ->addArgument(getenv('REDIS_URL'))
                               ->addArgument(getenv('APP_ENV'))
-                              ->addMethodCall('setBackup', [true])
                               ->addTag('gcp.translation_connector.backup');
-                    $container->setAlias(FileSystemConnectorInterface::class, RedisConnector::class);
-                    $container->register(BackupConnectorInterface::class, BackupConnectorInterface::class);
-                    $container->setAlias(BackupConnectorInterface::class, RedisConnector::class);
 
                     if (!$container->hasDefinition(CloudTranslationBackupWriter::class)) {
                         $container->register(CloudTranslationBackupWriter::class, CloudTranslationBackupWriter::class)
-                                  ->addArgument($container->getDefinition(RedisConnector::class))
+                                  ->addArgument($container->getDefinition(RedisConnectorInterface::class))
                                   ->addTag('gcp.translation_backup');
                         $container->register(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriterInterface::class);
                         $container->setAlias(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriter::class);
                     }
                 }
+
+                $container->getDefinition(RedisConnectorInterface::class)
+                          ->addTag('gcp.translation_connector.backup');
             }
 
             if (!$container->hasDefinition(CloudTranslationWriter::class)) {
@@ -186,6 +163,14 @@ final class GCPExtension extends Extension
                           ->setPublic(false)
                           ->addTag('gcp.translation');
                 $container->setAlias(CloudTranslationWriterInterface::class, CloudTranslationWriter::class);
+            }
+
+            if (!$container->hasDefinition(CloudTranslationRepositoryInterface::class)) {
+                $container->register(CloudTranslationRepositoryInterface::class, CloudTranslationRepository::class)
+                          ->addArgument($container->findTaggedServiceIds('gcp.translation_connector'))
+                          ->addArgument($container->findTaggedServiceIds('gcp.translation_connector.backup'))
+                          ->setPublic(false)
+                          ->addTag('gcp.translation');
             }
         }
 
