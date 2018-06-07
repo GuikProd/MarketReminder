@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 use App\Tests\TestCase\ConnectorTestCase;
 
 /**
@@ -42,15 +43,11 @@ final class CloudTranslationRepositoryIntegrationTest extends ConnectorTestCase
     ) {
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
+        $repository = $this->createRepository($this->backUpConnector, $this->connector);
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 
-        $cloudTranslationRepository = new CloudTranslationRepository(
-            $this->backUpConnector,
-            $this->connector
-        );
-
-        $entry = $cloudTranslationRepository->getEntries('validators.fr.yaml');
+        $entry = $repository->getEntries('validators.fr.yaml');
 
         static::assertNull($entry);
     }
@@ -73,15 +70,11 @@ final class CloudTranslationRepositoryIntegrationTest extends ConnectorTestCase
     ) {
         $this->createRedisConnector();
         $this->createRedisBackUp();
+        $repository = $this->createRepository($this->backUpConnector, $this->connector);
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 
-        $cloudTranslationRepository = new CloudTranslationRepository(
-            $this->backUpConnector,
-            $this->connector
-        );
-
-        $entry = $cloudTranslationRepository->getEntries('validators.fr.yaml');
+        $entry = $repository->getEntries('validators.fr.yaml');
 
         static::assertNull($entry);
     }
@@ -106,15 +99,13 @@ final class CloudTranslationRepositoryIntegrationTest extends ConnectorTestCase
     ) {
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
+        $repository = $this->createRepository($this->backUpConnector, $this->connector);
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 
-        $cloudTranslationRepository = new CloudTranslationRepository(
-            $this->backUpConnector,
-            $this->connector
-        );
+        $this->createRepository($this->backUpConnector, $this->connector);
 
-        $entry = $cloudTranslationRepository->getEntries($filename);
+        $entry = $repository->getEntries($filename);
 
         static::assertCount(1, $entry);
         static::assertInstanceOf(CloudTranslationItemInterface::class, $entry[0]);
@@ -141,15 +132,11 @@ final class CloudTranslationRepositoryIntegrationTest extends ConnectorTestCase
     ) {
         $this->createRedisConnector();
         $this->createRedisBackUp();
+        $repository = $this->createRepository($this->backUpConnector, $this->connector);
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 
-        $cloudTranslationRepository = new CloudTranslationRepository(
-            $this->backUpConnector,
-            $this->connector
-        );
-
-        $entry = $cloudTranslationRepository->getEntries($filename);
+        $entry = $repository->getEntries($filename);
 
         static::assertCount(1, $entry);
         static::assertInstanceOf(CloudTranslationItemInterface::class, $entry[0]);
@@ -167,7 +154,7 @@ final class CloudTranslationRepositoryIntegrationTest extends ConnectorTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItReturnASingleEntryWithRedis(
+    public function testItReturnASingleEntryWithRedisCacheAndRedisBackUp(
         string $locale,
         string $channel,
         string $filename,
@@ -175,12 +162,12 @@ final class CloudTranslationRepositoryIntegrationTest extends ConnectorTestCase
         string $key
     ) {
         $this->createRedisConnector();
+        $this->createRedisBackUp();
+        $repository = $this->createRepository($this->backUpConnector, $this->connector);
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 
-        $redisTranslationRepository = new CloudTranslationRepository($this->connector);
-
-        $entry = $redisTranslationRepository->getSingleEntry($filename, $locale, $key);
+        $entry = $repository->getSingleEntry($filename, $locale, $key);
 
         static::assertInstanceOf(CloudTranslationItemInterface::class, $entry);
     }
@@ -199,5 +186,16 @@ final class CloudTranslationRepositoryIntegrationTest extends ConnectorTestCase
     public function provideTranslationItems()
     {
         yield array('fr', 'messages', 'messages.fr.yaml', ['home.text' => 'hello !'], 'home.text');
+    }
+
+    /**
+     * @param ConnectorInterface $backup
+     * @param ConnectorInterface $connector
+     *
+     * @return CloudTranslationRepository
+     */
+    private function createRepository(ConnectorInterface $backup, ConnectorInterface $connector)
+    {
+        return new CloudTranslationRepository($backup, $connector);
     }
 }

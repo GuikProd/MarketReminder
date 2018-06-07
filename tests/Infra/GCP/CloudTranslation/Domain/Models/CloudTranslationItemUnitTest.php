@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\Redis\Translation;
+namespace App\Tests\Infra\GCP\CloudTranslation\Domain\Models;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 use PHPUnit\Framework\TestCase;
 
 /**

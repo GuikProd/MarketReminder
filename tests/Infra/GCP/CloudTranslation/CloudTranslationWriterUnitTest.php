@@ -56,9 +56,19 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
 
         $fileSystemWriter = new CloudTranslationWriter($this->connector);
 
-        $fileSystemWriter->write($locale, $channel, $channel.'.'.$locale.'.yaml', $values);
+        $fileSystemWriter->write(
+            $locale,
+            $channel,
+            $channel.'.'.$locale.'.yaml',
+            $values
+        );
 
-        $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
+        $processStatus = $fileSystemWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            $values
+        );
 
         static::assertFalse($processStatus);
     }
@@ -73,7 +83,7 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItWriteInCacheAndCreateABackUpWithFileSystemCache(
+    public function testItWriteInCache(
         string $locale,
         string $channel,
         string $fileName,
@@ -83,7 +93,12 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
 
         $fileSystemWriter = new CloudTranslationWriter($this->connector);
 
-        $processStatus = $fileSystemWriter->write($locale, $channel, $fileName, $values);
+        $processStatus = $fileSystemWriter->write(
+            $locale,
+            $channel,
+            $fileName,
+            $values
+        );
 
         static::assertTrue($processStatus);
     }

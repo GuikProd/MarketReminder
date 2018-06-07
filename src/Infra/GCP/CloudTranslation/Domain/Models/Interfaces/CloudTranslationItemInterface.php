@@ -11,9 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\GCP\CloudTranslation\Interfaces;
-
-use Symfony\Component\OptionsResolver\Options;
+namespace App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces;
 
 /**
  * Interface CloudTranslationItemInterface.
@@ -28,11 +26,6 @@ interface CloudTranslationItemInterface
      * @param array $options
      */
     public function __construct(array $options);
-
-    /**
-     * @param Options $resolver
-     */
-    public function configureOptions(Options $resolver): void;
 
     /**
      * @return string

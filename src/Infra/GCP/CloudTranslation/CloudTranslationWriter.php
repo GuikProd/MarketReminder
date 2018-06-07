@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Infra\GCP\CloudTranslation;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslation;
+use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Psr\Cache\CacheItemInterface;
 use Ramsey\Uuid\Uuid;
@@ -75,7 +77,7 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
             ]);
         }
 
-        $cacheItem->set($this->entries);
+        $cacheItem->set(new CloudTranslation($fileName, $channel, $this->entries));
         $cacheItem->tag($tag);
 
         return $this->connector->getAdapter()->save($cacheItem);
@@ -91,7 +93,7 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
         $toCheckKey = [];
         $toCheckContent = [];
 
-        foreach ($cacheValues->get() as $item => $value) {
+        foreach ($cacheValues->get()->getItems() as $item => $value) {
             $translationKey[] = $value->getKey();
             $translationContent[] = $value->getValue();
         }

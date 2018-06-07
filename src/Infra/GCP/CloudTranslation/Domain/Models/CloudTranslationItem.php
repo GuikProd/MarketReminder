@@ -11,11 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\GCP\CloudTranslation;
+namespace App\Infra\GCP\CloudTranslation\Domain\Models;
 
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 
 /**
  * Class CloudTranslationItem.
@@ -24,40 +22,35 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class CloudTranslationItem implements CloudTranslationItemInterface
 {
+    const AUTHORIZED_OPTIONS = ['_locale', 'channel', 'tag', 'key', 'value'];
+
     /**
      * @var array
      */
-    private $options;
+    private $options = [];
 
     /**
      * {@inheritdoc}
      */
     public function __construct(array $options)
     {
-        $optionsResolver = new OptionsResolver();
-        $this->configureOptions($optionsResolver);
+        foreach (array_values($options) as $value) {
+            if (!\is_string($value)) {
+                throw new \InvalidArgumentException(
+                    sprintf('A Translation should only store strings !')
+                );
+            }
+        }
 
-        $this->options = $optionsResolver->resolve($options);
-    }
+        foreach (array_keys($options) as $key) {
+            if (!in_array($key, self::AUTHORIZED_OPTIONS)) {
+                throw new \InvalidArgumentException(
+                    sprintf('This key must be allowed, please check the default requirements !')
+                );
+            }
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(Options $resolver): void
-    {
-        $resolver->setDefaults([
-            '_locale' => null,
-            'channel' => null,
-            'tag' => null,
-            'key' => null,
-            'value' => null
-        ]);
-
-        $resolver->setAllowedTypes('_locale', 'string');
-        $resolver->setAllowedTypes('channel', 'string');
-        $resolver->setAllowedTypes('tag', 'string');
-        $resolver->setAllowedTypes('key', 'string');
-        $resolver->setAllowedTypes('value', 'string');
+        $this->options = $options;
     }
 
     /**

@@ -36,16 +36,33 @@ final class CloudTranslationBackupWriterSystemTest extends ConnectorTestCase
     public function testItRefuseToBackupSameContentWithFileSystemBackUp()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 50kB', 'CloudTranslationBackUp no store Filesystem memory usage');
-        $configuration->assert('main.network_in == 0B', 'CloudTranslationBackUp no store Filesystem network in');
-        $configuration->assert('main.network_out == 0B', 'CloudTranslationBackUp no store Filesystem network out');
+        $configuration->assert(
+            'main.peak_memory < 50kB',
+            'CloudTranslationBackUp no store Filesystem memory usage'
+        );
+        $configuration->assert(
+            'main.network_in == 0B',
+            'CloudTranslationBackUp no store Filesystem network in'
+        );
+        $configuration->assert(
+            'main.network_out == 0B',
+            'CloudTranslationBackUp no store Filesystem network out'
+        );
 
         $this->createFileSystemBackUp();
 
-        $this->cloudTranslationBackupWriter->warmBackUp('messages', 'fr', ['home.text' => 'Hello World !']);
+        $this->cloudTranslationBackupWriter->warmBackUp(
+            'messages',
+            'fr',
+            ['home.text' => 'Hello World !']
+        );
 
         $this->assertBlackfire($configuration, function () {
-            $this->cloudTranslationBackupWriter->warmBackUp('messages', 'fr', ['home.text' => 'Hello World !']);
+            $this->cloudTranslationBackupWriter->warmBackUp(
+                'messages',
+                'fr',
+                ['home.text' => 'Hello World !']
+            );
         });
     }
 
@@ -59,16 +76,33 @@ final class CloudTranslationBackupWriterSystemTest extends ConnectorTestCase
     public function testItRefuseToBackupSameContentWithRedisBackUp()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 80kB', 'CloudTranslationBackUp no store Redis memory usage');
-        $configuration->assert('main.network_in < 380B', 'CloudTranslationBackUp no store Redis network in');
-        $configuration->assert('main.network_out < 180B', 'CloudTranslationBackUp no store Redis network out');
+        $configuration->assert(
+            'main.peak_memory < 80kB',
+            'CloudTranslationBackUp no store Redis memory usage'
+        );
+        $configuration->assert(
+            'main.network_in < 390B',
+            'CloudTranslationBackUp no store Redis network in'
+        );
+        $configuration->assert(
+            'main.network_out < 180B',
+            'CloudTranslationBackUp no store Redis network out'
+        );
 
         $this->createRedisBackUp();
 
-        $this->cloudTranslationBackupWriter->warmBackUp('messages', 'fr', ['home.text' => 'Hello World !']);
+        $this->cloudTranslationBackupWriter->warmBackUp(
+            'messages',
+            'fr',
+            ['home.text' => 'Hello World !']
+        );
 
         $this->assertBlackfire($configuration, function () {
-            $this->cloudTranslationBackupWriter->warmBackUp('messages', 'fr', ['home.text' => 'Hello World !']);
+            $this->cloudTranslationBackupWriter->warmBackUp(
+                'messages',
+                'fr',
+                ['home.text' => 'Hello World !']
+            );
         });
     }
 }

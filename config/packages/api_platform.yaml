@@ -1,13 +1,7 @@
 api_platform:
-    title: "MarketReminder"
     version: 1.0.0
-    graphql:
-        enabled: true
-        graphiql:
-            enabled: true
-    http_cache:
-        etag: true
-        invalidation:
-            enabled: true
     mapping:
         paths: ['%kernel.project_dir%/config/api_platform']
+    graphql:
+        graphiql:
+            enabled: true

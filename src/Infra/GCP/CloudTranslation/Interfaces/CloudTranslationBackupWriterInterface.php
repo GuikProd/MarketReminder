@@ -41,5 +41,10 @@ interface CloudTranslationBackupWriterInterface
      *
      * @return bool If the back up has succeed or not.
      */
-    public function warmBackUp(string $channel, string $locale, array $newValues, string $format = 'yaml'): bool;
+    public function warmBackUp(
+        string $channel,
+        string $locale,
+        array $newValues,
+        string $format = 'yaml'
+    ): bool;
 }

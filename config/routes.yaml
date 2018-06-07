@@ -8,7 +8,7 @@ controllers:
         _locale: '%accepted_locales%'
 
 api_login:
-    path: /api/login
+    path: /rest/login
     defaults:
         _controller: App\UI\Action\API\LoginAction
 

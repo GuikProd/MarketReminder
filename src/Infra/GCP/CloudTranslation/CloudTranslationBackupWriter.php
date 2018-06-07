@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Infra\GCP\CloudTranslation;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslation;
+use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -44,7 +46,7 @@ final class CloudTranslationBackupWriter implements CloudTranslationBackupWriter
     {
         $backupItem = $this->backupConnector->getAdapter()->getItem($channel.'.'.$locale.'.'.$format);
 
-        if (empty($backupItem->get())) {
+        if (!$backupItem->get()) {
 
             $entries = [];
             $tag = Uuid::uuid4()->toString();
@@ -59,7 +61,11 @@ final class CloudTranslationBackupWriter implements CloudTranslationBackupWriter
                 ]);
             }
 
-            $backupItem->set($entries);
+            $backupItem->set(new CloudTranslation(
+                $channel.'.'.$locale.'.'.$format,
+                $channel,
+                $entries
+            ));
             $backupItem->tag($tag);
 
             return $this->backupConnector->getAdapter()->save($backupItem);
@@ -70,7 +76,7 @@ final class CloudTranslationBackupWriter implements CloudTranslationBackupWriter
         $toCheckKeys = [];
         $toCheckValues = [];
 
-        foreach ($backupItem->get() as $key => $value) {
+        foreach ($backupItem->get()->getItems() as $key => $value) {
             $defaultKeys[] = $value->getKey();
             $defaultValues[] = $value->getValue();
         }

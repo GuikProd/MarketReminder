@@ -92,7 +92,10 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
 
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
-        $this->cloudTranslationRepository = new CloudTranslationRepository($this->connector);
+        $this->cloudTranslationRepository = new CloudTranslationRepository(
+            $this->connector,
+            $this->backUpConnector
+        );
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
@@ -123,7 +126,10 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
 
         $this->createRedisConnector();
         $this->createRedisBackUp();
-        $this->cloudTranslationRepository = new CloudTranslationRepository($this->connector);
+        $this->cloudTranslationRepository = new CloudTranslationRepository(
+            $this->connector,
+            $this->backUpConnector
+        );
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
@@ -153,7 +159,10 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
 
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
-        $this->cloudTranslationRepository = new CloudTranslationRepository($this->connector);
+        $this->cloudTranslationRepository = new CloudTranslationRepository(
+            $this->connector,
+            $this->backUpConnector
+        );
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
@@ -183,7 +192,10 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
 
         $this->createRedisConnector();
         $this->createRedisBackUp();
-        $this->cloudTranslationRepository = new CloudTranslationRepository($this->connector);
+        $this->cloudTranslationRepository = new CloudTranslationRepository(
+            $this->connector,
+            $this->backUpConnector
+        );
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,

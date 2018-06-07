@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;

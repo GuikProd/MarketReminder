@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;

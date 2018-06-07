@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class LoginAction
+final class LoginAction
 {
     public function __invoke(Request $request)
     {

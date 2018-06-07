@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Infra\GCP\CloudTranslation\Interfaces;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 
 /**
  * Interface CloudTranslationRepositoryInterface.

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Infra\GCP\CloudTranslation;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use Psr\Cache\CacheItemInterface;
 
@@ -58,11 +58,19 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     {
         $cacheItem = $this->connector->getAdapter()->getItem($filename);
 
-        if ($cacheItem instanceof CacheItemInterface && $cacheItem->isHit()) {
-            return $cacheItem->get();
+        $toReturn = $cacheItem instanceof CacheItemInterface && $cacheItem->isHit()
+            ? $cacheItem->get()->getItems()
+            : null;
+
+        if (\is_null($toReturn)) {
+            $backUpItem = $this->backUpConnector->getAdapter()->getItem($filename);
+
+            $backUpItem instanceof CacheItemInterface && $backUpItem->isHit()
+                ? $toReturn = $backUpItem->get()->getItems()
+                : null;
         }
 
-        return null;
+        return $toReturn;
     }
 
     /**
@@ -72,16 +80,22 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     {
         $cacheItem = $this->connector->getAdapter()->getItem($filename);
 
-        if ($cacheItem->isHit()) {
-            foreach ($cacheItem->get() as $item => $value) {
-                if ($value->getKey() === $key && $value->getLocale() === $locale) {
-                    $this->cacheEntry = $value;
+        if ($cacheItem->isHit() && \count($cacheItem->get()) > 0) {
+            foreach ($cacheItem->get()->getItems() as $k => $v) {
+                if ($key === $v->getKey() && $locale === $v->getLocale()) {
+                    return $this->cacheEntry = $v;
                 }
             }
-
-            return $this->cacheEntry;
         }
 
-        return null;
+        $backUpItem = $this->backUpConnector->getAdapter()->getItem($filename);
+
+        foreach ($backUpItem->get()->getItems() as $item => $value) {
+            if ($value->getKey() === $key && $value->getLocale() === $locale) {
+                $this->cacheEntry = $value;
+            }
+        }
+
+        return $this->cacheEntry ?? null;
     }
 }
