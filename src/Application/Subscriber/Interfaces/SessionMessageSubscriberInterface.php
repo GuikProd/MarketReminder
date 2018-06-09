@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Subscriber\Interfaces;
 
 use App\Application\Event\Interfaces\SessionMessageEventInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 

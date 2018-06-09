@@ -15,7 +15,7 @@ namespace App\Application\Subscriber;
 
 use App\Application\Event\Interfaces\SessionMessageEventInterface;
 use App\Application\Subscriber\Interfaces\SessionMessageSubscriberInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

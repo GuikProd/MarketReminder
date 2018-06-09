@@ -15,13 +15,13 @@ namespace App\Tests\Application\Command;
 
 use App\Application\Command\TranslationWarmerCommand;
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
-use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
+use App\Infra\GCP\CloudTranslation\CloudTranslationClient;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
@@ -52,7 +52,7 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     private $application;
 
     /**
-     * @var CloudTranslationHelperInterface
+     * @var CloudTranslationClientInterface
      */
     private $cloudTranslationWarmer;
 
@@ -104,7 +104,7 @@ class TranslationWarmerCommandIntegrationTest extends KernelTestCase
             static::$kernel->getContainer()->getParameter('redis.test_dsn'),
             static::$kernel->getContainer()->getParameter('redis.namespace_test')
         );
-        $this->cloudTranslationWarmer = new CloudTranslationHelper($cloudTranslationBridge);
+        $this->cloudTranslationWarmer = new CloudTranslationClient($cloudTranslationBridge);
         $this->redisTranslationRepository = new CloudTranslationRepository($this->redisConnector);
         $this->redisTranslationWriter = new CloudTranslationWriter($this->redisConnector);
 

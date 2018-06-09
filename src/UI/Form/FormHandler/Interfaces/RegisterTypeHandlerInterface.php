@@ -18,7 +18,7 @@ use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -34,7 +34,7 @@ interface RegisterTypeHandlerInterface
     /**
      * RegisterTypeHandlerInterface constructor.
      *
-     * @param CloudStoragePersisterHelperInterface  $cloudStoragePersisterHelper
+     * @param CloudStorageWriterHelperInterface  $cloudStoragePersisterHelper
      * @param EventDispatcherInterface              $eventDispatcher
      * @param EncoderFactoryInterface               $passwordEncoderFactory
      * @param ImageBuilderInterface                 $imageBuilder
@@ -45,7 +45,7 @@ interface RegisterTypeHandlerInterface
      * @param ValidatorInterface                    $validator
      */
     public function __construct(
-        CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper,
+        CloudStorageWriterHelperInterface $cloudStoragePersisterHelper,
         EventDispatcherInterface $eventDispatcher,
         EncoderFactoryInterface $passwordEncoderFactory,
         ImageBuilderInterface $imageBuilder,

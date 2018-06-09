@@ -7,16 +7,16 @@ parameters:
 
     ## Cloud Storage
     cloud.storage.bucket_name: "%env(GOOGLE_BUCKET_NAME)%"
-    cloud.storage_credentials: "%kernel.project_dir%/config/credentials/google/bucket"
+    cloud.storage_credentials: "%kernel.project_dir%/config/credentials/google"
     cloud.storage_credentials.filename: "credentials.json"
     cloud.storage.public_url: "%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%/"
 
     ## Cloud Translation
-    cloud.translation_credentials: "%kernel.project_dir%/config/credentials/google/translation"
+    cloud.translation_credentials: "%kernel.project_dir%/config/credentials/google"
     cloud.translation_credentials.filename: "credentials.json"
 
     ## Cloud Vision
-    cloud.vision_credentials: "%kernel.project_dir%/config/credentials/google/vision"
+    cloud.vision_credentials: "%kernel.project_dir%/config/credentials/google"
     cloud.vision_credentials.filename: "credentials.json"
 
     ## Redis
@@ -52,8 +52,8 @@ services:
             $googleStoragePublicUrl: "%cloud.storage.public_url%"
 
             ## Cloud Translation
-            $translationCredentialsFileName: "%cloud.translation_credentials.filename%"
-            $translationCredentialsFolder: "%cloud.translation_credentials%"
+            $credentialsFileName: "%cloud.translation_credentials.filename%"
+            $credentialsFolder: "%cloud.translation_credentials%"
             $translationsFolder: "%translator.default_path%"
 
             ## Cloud Vision

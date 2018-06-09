@@ -22,7 +22,7 @@ use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItem
  */
 final class CloudTranslationItem implements CloudTranslationItemInterface
 {
-    const AUTHORIZED_OPTIONS = ['_locale', 'channel', 'tag', 'key', 'value'];
+    private const AUTHORIZED_OPTIONS = ['_locale', 'channel', 'tag', 'key', 'value'];
 
     /**
      * @var array

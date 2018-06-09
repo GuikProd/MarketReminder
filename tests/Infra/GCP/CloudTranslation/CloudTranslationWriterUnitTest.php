@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Helper\Factory\Interfaces\CloudTranslationFactoryInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Validator\Interfaces\CloudTranslationValidatorInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use App\Tests\TestCase\ConnectorTestCase;
 
@@ -24,11 +26,52 @@ use App\Tests\TestCase\ConnectorTestCase;
  */
 final class CloudTranslationWriterUnitTest extends ConnectorTestCase
 {
+    /**
+     * @var CloudTranslationFactoryInterface
+     */
+    private $cloudTranslationFactory;
+
+    /**
+     * @var CloudTranslationValidatorInterface
+     */
+    private $cloudTranslationValidator;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->cloudTranslationFactory = $this->createMock(CloudTranslationFactoryInterface::class);
+        $this->cloudTranslationValidator = $this->createMock(CloudTranslationValidatorInterface::class);
+    }
+
     public function testItImplementsWithFileSystemConnector()
     {
         $this->createFileSystemConnector();
 
-        $redisTranslationWriter = new CloudTranslationWriter($this->connector);
+        $redisTranslationWriter = new CloudTranslationWriter(
+            $this->connector,
+            $this->cloudTranslationFactory,
+            $this->cloudTranslationValidator
+        );
+
+        static::assertInstanceOf(
+            CloudTranslationWriterInterface::class,
+            $redisTranslationWriter
+        );
+    }
+
+    public function testItImplementsWithRedisConnector()
+    {
+        $this->createRedisConnector();
+
+        $redisTranslationWriter = new CloudTranslationWriter(
+            $this->connector,
+            $this->cloudTranslationFactory,
+            $this->cloudTranslationValidator
+        );
 
         static::assertInstanceOf(
             CloudTranslationWriterInterface::class,
@@ -54,7 +97,11 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
     ) {
         $this->createFileSystemConnector();
 
-        $fileSystemWriter = new CloudTranslationWriter($this->connector);
+        $fileSystemWriter = new CloudTranslationWriter(
+            $this->connector,
+            $this->cloudTranslationFactory,
+            $this->cloudTranslationValidator
+        );
 
         $fileSystemWriter->write(
             $locale,
@@ -91,7 +138,11 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
     ) {
         $this->createFileSystemConnector();
 
-        $fileSystemWriter = new CloudTranslationWriter($this->connector);
+        $fileSystemWriter = new CloudTranslationWriter(
+            $this->connector,
+            $this->cloudTranslationFactory,
+            $this->cloudTranslationValidator
+        );
 
         $processStatus = $fileSystemWriter->write(
             $locale,

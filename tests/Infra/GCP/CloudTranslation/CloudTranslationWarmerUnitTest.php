@@ -16,7 +16,7 @@ namespace App\Tests\Infra\Redis\Translation;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
@@ -40,7 +40,7 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
     private $acceptedLocales;
 
     /**
-     * @var CloudTranslationHelperInterface
+     * @var CloudTranslationClientInterface
      */
     private $cloudTranslationWarmer;
 
@@ -73,7 +73,7 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
 
         $this->acceptedChannels = 'messages|validators';
         $this->acceptedLocales = 'fr|en';
-        $this->cloudTranslationWarmer = $this->createMock(CloudTranslationHelperInterface::class);
+        $this->cloudTranslationWarmer = $this->createMock(CloudTranslationClientInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
         $this->cloudTranslationBackUpWriter = $this->createMock(CloudTranslationBackupWriterInterface::class);
         $this->cloudTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);

@@ -28,3 +28,6 @@ public/images/profiles/
 
 # Blackfire
 .blackfire
+
+# Tests
+tests/_credentials/*

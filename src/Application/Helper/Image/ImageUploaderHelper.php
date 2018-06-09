@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Helper\Image;
 
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
 
 /**
  * Class ImageUploaderHelper.
@@ -39,7 +39,7 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     private $bucketName;
 
     /**
-     * @var CloudStoragePersisterHelperInterface
+     * @var CloudStorageWriterHelperInterface
      */
     private $cloudStoragePersister;
 
@@ -49,7 +49,7 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     public function __construct(
         string $filePath,
         string $bucketName,
-        CloudStoragePersisterHelperInterface $cloudStoragePersister
+        CloudStorageWriterHelperInterface $cloudStoragePersister
     ) {
         $this->filePath = $filePath;
         $this->bucketName = $bucketName;

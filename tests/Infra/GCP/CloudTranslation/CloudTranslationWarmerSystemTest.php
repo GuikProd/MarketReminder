@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\Bridge\CloudTranslationBridge;
-use App\Infra\GCP\CloudTranslation\CloudTranslationHelper;
+use App\Infra\GCP\CloudTranslation\CloudTranslationClient;
 use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Tests\TestCase\ConnectorTestCase;
@@ -44,7 +44,7 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
     private $acceptedLocales;
 
     /**
-     * @var CloudTranslationHelperInterface
+     * @var CloudTranslationClientInterface
      */
     private $cloudTranslationHelper;
 
@@ -79,7 +79,7 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
             static::$container->getParameter('cloud.translation_credentials')
         );
 
-        $this->cloudTranslationHelper = new CloudTranslationHelper($cloudTranslationBridge);
+        $this->cloudTranslationHelper = new CloudTranslationClient($cloudTranslationBridge);
     }
 
     /**

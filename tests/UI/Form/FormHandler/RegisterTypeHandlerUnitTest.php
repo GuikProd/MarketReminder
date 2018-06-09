@@ -19,7 +19,7 @@ use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Form\FormHandler\RegisterTypeHandler;
 use PHPUnit\Framework\TestCase;
@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class RegisterTypeHandlerUnitTest extends TestCase
 {
     /**
-     * @var CloudStoragePersisterHelperInterface
+     * @var CloudStorageWriterHelperInterface
      */
     private $cloudStoragePersister;
 
@@ -86,7 +86,7 @@ class RegisterTypeHandlerUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->cloudStoragePersister = $this->createMock(CloudStoragePersisterHelperInterface::class);
+        $this->cloudStoragePersister = $this->createMock(CloudStorageWriterHelperInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->passwordEncoderFactory = $this->createMock(EncoderFactoryInterface::class);
         $this->imageBuilder = $this->createMock(ImageBuilderInterface::class);

@@ -42,6 +42,7 @@
         <!-- Google Storage configuration -->
         <env name="GOOGLE_BUCKET_NAME" value="marketreminder-dev" />
         <env name="GOOGLE_STORAGE_URL" value="=https://storage.googleapis.com/" />
+        <env name="GOOGLE_TRANSLATION_ENTRYPOINT" value="https://translation.googleapis.com/language/translate/v2" />
 
         <!-- ###- doctrine/doctrine-bundle ### -->
         <!-- ###+ lexik/jwt-authentication-bundle ### -->

@@ -14,28 +14,28 @@ declare(strict_types=1);
 namespace App\Infra\GCP\DependencyInjection;
 
 use App\Infra\GCP\Bridge\CloudStorageBridge;
-use App\Infra\GCP\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\Bridge\CloudVisionBridge;
 use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
-use App\Infra\GCP\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\CloudStorage\CloudStorageCleanerHelper;
-use App\Infra\GCP\CloudStorage\CloudStoragePersisterHelper;
+use App\Infra\GCP\CloudStorage\CloudStorageWriterHelper;
 use App\Infra\GCP\CloudStorage\CloudStorageRetrieverHelper;
 use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageCleanerHelperInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
 use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageRetrieverHelperInterface;
-use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
-use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
-use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
+use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationBackupWriter;
+use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
@@ -65,8 +65,8 @@ final class GCPExtension extends Extension
                           ->addTag('gcp.storage_bridge');
             }
 
-            if (!$container->hasDefinition(CloudStoragePersisterHelperInterface::class)) {
-                $container->register(CloudStoragePersisterHelperInterface::class, CloudStoragePersisterHelper::class)
+            if (!$container->hasDefinition(CloudStorageWriterHelperInterface::class)) {
+                $container->register(CloudStorageWriterHelperInterface::class, CloudStorageWriterHelper::class)
                           ->addArgument($container->getDefinition(CloudStorageBridgeInterface::class))
                           ->setPublic(false)
                           ->addTag('gcp.storage');
@@ -91,8 +91,8 @@ final class GCPExtension extends Extension
         if ($config['translation']['activated']) {
             if (!$container->hasDefinition(new Reference(CloudTranslationBridgeInterface::class))) {
                 $container->register(CloudTranslationBridgeInterface::class, CloudTranslationBridge::class)
-                          ->addArgument($container->getParameter('cloud.translation_credentials.filename'))
-                          ->addArgument($container->getParameter('cloud.translation_credentials'))
+                          ->addArgument($config['translation']['credentials_folder'])
+                          ->addArgument($config['translation']['credentials_filename'])
                           ->setPublic(false)
                           ->addTag('gcp.translation_bridge');
             }

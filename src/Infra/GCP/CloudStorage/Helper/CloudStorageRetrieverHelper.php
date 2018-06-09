@@ -1,0 +1,75 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of the MarketReminder project.
+ *
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace App\Infra\GCP\CloudStorage\Helper;
+
+use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageRetrieverHelperInterface;
+use Psr\Http\Message\StreamInterface;
+
+/**
+ * Class CloudStorageRetrieverHelper.
+ *
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
+ */
+final class CloudStorageRetrieverHelper implements CloudStorageRetrieverHelperInterface
+{
+    /**
+     * @var CloudStorageBridgeInterface
+     */
+    private $cloudStorageBridge;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(CloudStorageBridgeInterface $cloudStorageBridge)
+    {
+        $this->cloudStorageBridge = $cloudStorageBridge;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function checkFileExistence(string $bucketName, string $fileName): bool
+    {
+        return $this->cloudStorageBridge
+                    ->getStorageClient()
+                    ->bucket($bucketName)
+                    ->object($fileName)
+                    ->exists();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveAsFile(string $bucketName, string $fileName, string $filePath): StreamInterface
+    {
+        return $this->cloudStorageBridge
+                    ->getStorageClient()
+                    ->bucket($bucketName)
+                    ->object($fileName)
+                    ->downloadToFile($filePath);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveAsString(string $bucketName, string $fileName): string
+    {
+        return $this->cloudStorageBridge
+                    ->getStorageClient()
+                    ->bucket($bucketName)
+                    ->object($fileName)
+                    ->downloadAsString();
+    }
+}

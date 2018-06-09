@@ -6,43 +6,39 @@ layers:
   - name: Action
     collectors:
       - type: className
-        regex: .*UI\\Action.*
-  - name: CacheWarmer
-    collectors:
-      - type: className
-        regex: .*\\Application\\CacheWarmer.*
+        regex: .*\\App\\UI\\Action.*
   - name: Form
     collectors:
       - type: className
-        regex: .*UI\\Form\\Type.*
+        regex: .*\\App\\UI\\Form\\Type.*
   - name: FormHandler
     collectors:
       - type: className
-        regex: .*Infra\\Form\\FormHandler.*
+        regex: .*\\App\\Infra\\Form\\FormHandler.*
   - name: GCP
     collectors:
       - type: className
-        regex: .*Infra\\GCP.*
+        regex: .*\\App\\Infra\\GCP.*
   - name: Models
     collectors:
       - type: className
-        regex: .*Domain\\Models.*
+        regex: .*\\App\\Domain\\Models.*
   - name: Helper
     collectors:
       - type: className
-        regex: .*\\Application\\Helper.*
+        regex: .*\\App\\Application\\Helper.*
   - name: Repository
     collectors:
       - type: className
-        regex: .*\\Infra\\Doctrine\\Repository.*
+        regex: .*\\App\\Infra\\Doctrine\\Repository.*
   - name: Responder
     collectors:
       - type: className
-        regex: .*UI\\Responder.*
+        regex: .*\\App\\UI\\Responder.*
   - name: Validator
     collectors:
       - type: className
-        regex: .*\\Application\\Validator.*
+        regex: .*\\App\\Application\\Validator.*
 ruleset:
   Action:
       - Form
@@ -50,9 +46,6 @@ ruleset:
       - Helper
       - Repository
       - Responder
-  CacheWarmer:
-      - Helper
-      - GCP
   Form:
       - Validator
   FormHandler:
@@ -65,6 +58,7 @@ ruleset:
       - Helper
       - Repository
       - Subscriber
+  GCP: ~
   Helper:
       - GCP
   Models: ~

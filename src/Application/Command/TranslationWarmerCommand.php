@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Command;
 
 use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

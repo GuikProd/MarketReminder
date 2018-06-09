@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Helper\Image\Interfaces;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
 
 /**
  * Interface ImageUploaderHelperInterface.
@@ -28,12 +28,12 @@ interface ImageUploaderHelperInterface
      *
      * @param string                                $filePath
      * @param string                                $bucketName
-     * @param CloudStoragePersisterHelperInterface  $cloudStoragePersister
+     * @param CloudStorageWriterHelperInterface  $cloudStoragePersister
      */
     public function __construct(
         string $filePath,
         string $bucketName,
-        CloudStoragePersisterHelperInterface $cloudStoragePersister
+        CloudStorageWriterHelperInterface $cloudStoragePersister
     );
 
     /**

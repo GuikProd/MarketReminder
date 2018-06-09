@@ -15,7 +15,7 @@ namespace App\Tests\Application\Command;
 
 use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Application\Command\TranslationWarmerCommand;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationHelperInterface;
+use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
@@ -35,7 +35,7 @@ class TranslationWarmerCommandUnitTest extends TestCase
     private $acceptedLocales;
 
     /**
-     * @var CloudTranslationHelperInterface
+     * @var CloudTranslationClientInterface
      */
     private $cloudTranslationWarmer;
 
@@ -65,7 +65,7 @@ class TranslationWarmerCommandUnitTest extends TestCase
     protected function setUp()
     {
         $this->acceptedLocales = 'fr|en';
-        $this->cloudTranslationWarmer = $this->createMock(CloudTranslationHelperInterface::class);
+        $this->cloudTranslationWarmer = $this->createMock(CloudTranslationClientInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
         $this->redisTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);
         $this->redisTranslationWarmer = $this->createMock(CloudTranslationWarmerInterface::class);
