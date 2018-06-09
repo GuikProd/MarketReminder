@@ -15,8 +15,10 @@ docker/nginx/logs/
 # Global
 coverage/**/
 report/*
+
 # Google Cloud
 public/images/profiles/
+config/credentials/google/*
 
 # Behat
 .env.behat
