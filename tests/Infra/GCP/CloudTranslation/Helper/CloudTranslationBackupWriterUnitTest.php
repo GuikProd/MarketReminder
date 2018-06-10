@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
+use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationBackupWriter;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  * 
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationBackupWriterUnitTest extends TestCase
+final class CloudTranslationBackupWriterUnitTest extends TestCase
 {
     /**
      * @var ConnectorInterface
@@ -44,9 +44,19 @@ class CloudTranslationBackupWriterUnitTest extends TestCase
         $this->redisBackupConnector = $this->createMock(ConnectorInterface::class);
     }
 
-    public function testItImplements()
+    public function testItImplementsWithFileSystem()
     {
         $cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->fileSystemBackupConnector);
+
+        static::assertInstanceOf(
+            CloudTranslationBackupWriterInterface::class,
+            $cloudTranslationBackupWriter
+        );
+    }
+
+    public function testItImplementsWithRedis()
+    {
+        $cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->redisBackupConnector);
 
         static::assertInstanceOf(
             CloudTranslationBackupWriterInterface::class,

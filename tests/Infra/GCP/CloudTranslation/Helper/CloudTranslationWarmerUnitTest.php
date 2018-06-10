@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationClientInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -157,8 +157,7 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
         $this->redisTranslationRepository->method('getEntries')
                                          ->willReturn($values);
 
-        $this->cloudTranslationWarmer->method('warmArraytranslation')
-                                     ->willReturn([]);
+        $this->cloudTranslationWarmer->method('translateArray')->willReturn([]);
 
         $redisTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,

@@ -13,13 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\TestCase;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
-use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationBackupWriterInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -33,16 +29,6 @@ abstract class ConnectorTestCase extends KernelTestCase
      * @var ConnectorInterface
      */
     protected $backUpConnector;
-
-    /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    protected $cloudTranslationBackupWriter;
-
-    /**
-     * @var CloudTranslationWriterInterface
-     */
-    protected $cloudTranslationWriter;
 
     /**
      * @var ConnectorInterface
@@ -61,8 +47,6 @@ abstract class ConnectorTestCase extends KernelTestCase
     {
         $this->connector = new FileSystemConnector('test');
 
-        $this->cloudTranslationWriter = new CloudTranslationWriter($this->connector);
-
         $this->connector->getAdapter()->clear();
     }
 
@@ -73,16 +57,12 @@ abstract class ConnectorTestCase extends KernelTestCase
             static::$container->getParameter('redis.namespace_test')
         );
 
-        $this->cloudTranslationWriter = new CloudTranslationWriter($this->connector);
-
         $this->connector->getAdapter()->clear();
     }
 
     protected function createFileSystemBackUp()
     {
         $this->backUpConnector = new FileSystemConnector('backup_test');
-
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
 
         $this->backUpConnector->getAdapter()->clear();
     }
@@ -93,8 +73,6 @@ abstract class ConnectorTestCase extends KernelTestCase
             static::$container->getParameter('redis.test_dsn'),
             static::$container->getParameter('redis.namespace_test').'_backup'
         );
-
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backUpConnector);
 
         $this->backUpConnector->getAdapter()->clear();
     }

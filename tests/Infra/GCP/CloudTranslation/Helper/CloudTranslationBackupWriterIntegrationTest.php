@@ -11,16 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\GCP\CloudTranslation;
+namespace App\Tests\Infra\GCP\CloudTranslation\Helper;
 
-use App\Tests\TestCase\ConnectorTestCase;
+use App\Tests\TestCase\CloudTranslationTestCase;
 
 /**
  * Class CloudTranslationBackupWriterIntegrationTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationBackupWriterIntegrationTest extends ConnectorTestCase
+final class CloudTranslationBackupWriterIntegrationTest extends CloudTranslationTestCase
 {
     /**
      * @dataProvider provideRightData
@@ -37,10 +37,11 @@ final class CloudTranslationBackupWriterIntegrationTest extends ConnectorTestCas
         array $values
     ) {
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationBackUpWriter();
 
-        $this->cloudTranslationBackupWriter->warmBackUp($channel, $locale, $values);
+        $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
 
-        $processStatus = $this->cloudTranslationBackupWriter->warmBackUp($channel, $locale, $values);
+        $processStatus = $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
 
         static::assertFalse($processStatus);
     }
@@ -60,10 +61,11 @@ final class CloudTranslationBackupWriterIntegrationTest extends ConnectorTestCas
         array $values
     ) {
         $this->createRedisBackUp();
+        $this->createCloudTranslationBackUpWriter();
 
-        $this->cloudTranslationBackupWriter->warmBackUp($channel, $locale, $values);
+        $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
 
-        $processStatus = $this->cloudTranslationBackupWriter->warmBackUp($channel, $locale, $values);
+        $processStatus = $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
 
         static::assertFalse($processStatus);
     }
@@ -83,8 +85,9 @@ final class CloudTranslationBackupWriterIntegrationTest extends ConnectorTestCas
         array $values
     ) {
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationBackUpWriter();
 
-        $processStatus = $this->cloudTranslationBackupWriter->warmBackUp($channel, $locale, $values);
+        $processStatus = $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
 
         static::assertTrue($processStatus);
     }
@@ -104,8 +107,9 @@ final class CloudTranslationBackupWriterIntegrationTest extends ConnectorTestCas
         array $values
     ) {
         $this->createRedisBackUp();
+        $this->createCloudTranslationBackUpWriter();
 
-        $processStatus = $this->cloudTranslationBackupWriter->warmBackUp($channel, $locale, $values);
+        $processStatus = $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
 
         static::assertTrue($processStatus);
     }

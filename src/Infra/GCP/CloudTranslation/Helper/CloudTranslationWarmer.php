@@ -126,7 +126,7 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
 
                 $translatedElements = [];
 
-                $translatedContent = $this->cloudTranslationWarmer->warmArrayTranslation($toTranslateContent, $locale);
+                $translatedContent = $this->cloudTranslationWarmer->translateArray($toTranslateContent, $locale);
 
                 foreach ($translatedContent as $value) {
                     $translatedElements[] = $value['text'];

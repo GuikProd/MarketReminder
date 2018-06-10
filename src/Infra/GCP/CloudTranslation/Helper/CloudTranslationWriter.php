@@ -17,7 +17,6 @@ use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Factory\Interfaces\CloudTranslationFactoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\Interfaces\CloudTranslationValidatorInterface;
-use Ramsey\Uuid\Uuid;
 
 /**
  * Class CloudTranslationWriter.
@@ -92,7 +91,7 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
         );
 
         $cacheItem->set($cloudTranslationItem);
-        $cacheItem->tag(Uuid::uuid4()->toString());
+        $cacheItem->tag(md5(uniqid(str_rot13((string) time()))));
 
         return $this->connector->getAdapter()->save($cacheItem);
     }

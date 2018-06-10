@@ -40,8 +40,8 @@ final class CloudTranslationBridgeUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->cloudTranslationCredentialsFileName = 'filename';
-        $this->cloudTranslationCredentialsFolder = '/folder/to/credentials/';
+        $this->cloudTranslationCredentialsFileName = 'credentials.json';
+        $this->cloudTranslationCredentialsFolder = __DIR__.'./../../../../_credentials/';
     }
 
     public function testItImplements()

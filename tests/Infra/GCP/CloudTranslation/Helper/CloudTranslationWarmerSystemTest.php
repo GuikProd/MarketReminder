@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\GCP\Bridge\CloudTranslationBridge;
-use App\Infra\GCP\CloudTranslation\CloudTranslationClient;
-use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
-use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationClientInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Tests\TestCase\ConnectorTestCase;
+use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
+use App\Infra\GCP\CloudTranslation\Client\CloudTranslationClient;
+use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
+use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
+use App\Tests\TestCase\CloudTranslationTestCase;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 
@@ -29,7 +28,7 @@ use Blackfire\Profile\Configuration;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
+final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
 {
     use TestCaseTrait;
 
@@ -47,11 +46,6 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
      * @var CloudTranslationClientInterface
      */
     private $cloudTranslationHelper;
-
-    /**
-     * @var CloudTranslationRepositoryInterface
-     */
-    private $cloudTranslationRepository;
 
     /**
      * @var CloudTranslationWarmerInterface
@@ -108,7 +102,7 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -149,7 +143,7 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -189,7 +183,7 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -226,7 +220,7 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -263,7 +257,7 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -301,7 +295,7 @@ final class CloudTranslationWarmerSystemTest extends ConnectorTestCase
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );

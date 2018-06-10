@@ -33,3 +33,4 @@ config/credentials/google/*
 
 # Tests
 tests/_credentials/*
+features/assets/_credentials/*

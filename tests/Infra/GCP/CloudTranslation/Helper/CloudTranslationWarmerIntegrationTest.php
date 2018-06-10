@@ -13,21 +13,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\GCP\Bridge\CloudTranslationBridge;
-use App\Infra\GCP\CloudTranslation\CloudTranslationClient;
-use App\Infra\GCP\CloudTranslation\CloudTranslationRepository;
-use App\Infra\GCP\CloudTranslation\CloudTranslationWarmer;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationClientInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Tests\TestCase\ConnectorTestCase;
+use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
+use App\Infra\GCP\CloudTranslation\Client\CloudTranslationClient;
+use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
+use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWarmer;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
+use App\Tests\TestCase\CloudTranslationTestCase;
 
 /**
  * Class CloudTranslationWarmerIntegrationTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
+final class CloudTranslationWarmerIntegrationTest extends CloudTranslationTestCase
 {
     /**
      * @var string
@@ -43,11 +42,6 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
      * @var CloudTranslationClientInterface
      */
     private $cloudTranslationHelper;
-
-    /**
-     * @var CloudTranslationRepositoryInterface
-     */
-    private $cloudTranslationRepository;
 
     /**
      * @var CloudTranslationWarmerInterface
@@ -96,13 +90,15 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
             $this->connector,
             $this->backUpConnector
         );
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -130,13 +126,15 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
             $this->connector,
             $this->backUpConnector
         );
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -163,13 +161,15 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
             $this->connector,
             $this->backUpConnector
         );
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -196,13 +196,15 @@ final class CloudTranslationWarmerIntegrationTest extends ConnectorTestCase
             $this->connector,
             $this->backUpConnector
         );
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
             $this->acceptedLocales,
             $this->cloudTranslationHelper,
             $this->cloudTranslationRepository,
-            $this->cloudTranslationBackupWriter,
+            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );

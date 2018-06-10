@@ -13,18 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationBackupWriter;
-use App\Infra\GCP\CloudTranslation\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use App\Tests\TestCase\ConnectorTestCase;
+use App\Tests\TestCase\CloudTranslationTestCase;
 
 /**
  * Class CloudTranslationWriterIntegrationTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
+final class CloudTranslationWriterIntegrationTest extends CloudTranslationTestCase
 {
     /**
      * @dataProvider provideRightData
@@ -44,6 +40,7 @@ final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
     ) {
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
@@ -70,6 +67,7 @@ final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
     ) {
         $this->createFileSystemConnector();
         $this->createRedisBackUp();
+        $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
@@ -96,6 +94,7 @@ final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
     ) {
         $this->createRedisConnector();
         $this->createRedisBackUp();
+        $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
@@ -122,6 +121,7 @@ final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
     ) {
         $this->createRedisConnector();
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
@@ -148,6 +148,7 @@ final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
     ) {
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationWriter();
 
         $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
@@ -172,6 +173,7 @@ final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
     ) {
         $this->createRedisConnector();
         $this->createRedisBackUp();
+        $this->createCloudTranslationWriter();
 
         $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
@@ -196,6 +198,7 @@ final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
     ) {
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
@@ -227,6 +230,7 @@ final class CloudTranslationWriterIntegrationTest extends ConnectorTestCase
     ) {
         $this->createRedisConnector();
         $this->createRedisBackUp();
+        $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 

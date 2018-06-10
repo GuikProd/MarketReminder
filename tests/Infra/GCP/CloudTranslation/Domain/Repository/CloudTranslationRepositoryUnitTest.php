@@ -86,5 +86,6 @@ final class CloudTranslationRepositoryUnitTest extends TestCase
     public function provideFilename()
     {
         yield array('messages.fr.yaml');
+        yield array('validators.fr.yaml');
     }
 }

@@ -101,3 +101,10 @@ graphql:
                     sessions:
                         default:
                             symfony2: ~
+
+gcp:
+    suites:
+        core:
+             paths: ['%paths.base%/features/GCP']
+             contexts:
+                 - CloudTranslationBridgeContext
