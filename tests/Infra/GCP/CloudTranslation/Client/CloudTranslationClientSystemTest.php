@@ -57,7 +57,12 @@ final class CloudTranslationClientSystemTest extends KernelTestCase
 
     public function testItTranslateASingleElement()
     {
+        $configuration = new Configuration();
+        $configuration->assert('metrics.http.requests.count <= 2', 'CloudTranslationClient single translation HTTP requests');
 
+        $this->assertBlackfire($configuration, function () {
+            $this->cloudTranslationHelper->translateSingleEntry('Bien le bonjour !', 'en');
+        });
     }
 
     /**

@@ -78,9 +78,9 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
      */
     public function getSingleEntry(string $filename, string $locale, string $key): ?CloudTranslationItemInterface
     {
-        dump($filename);
-
         $cacheItem = $this->connector->getAdapter()->getItem($filename);
+
+        dump($cacheItem);
 
         if ($cacheItem->isHit() && \count($cacheItem->get()->getItems()) > 0) {
             foreach ($cacheItem->get()->getItems() as $k => $v) {
@@ -92,7 +92,7 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
 
         $backUpItem = $this->backUpConnector->getAdapter()->getItem($filename);
 
-        if (($backUpItem->isHit()) && \count($cacheItem->get()->getItems()) > 0) {
+        if ($backUpItem->isHit() && \count($cacheItem->get()->getItems()) > 0) {
             foreach ($backUpItem->get()->getItems() as $item => $value) {
                 if ($value->getKey() === $key && $value->getLocale() === $locale) {
                     $this->cacheEntry = $value;

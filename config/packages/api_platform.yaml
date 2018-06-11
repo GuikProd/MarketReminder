@@ -1,7 +1,0 @@
-api_platform:
-    version: 1.0.0
-    mapping:
-        paths: ['%kernel.project_dir%/config/api_platform']
-    graphql:
-        graphiql:
-            enabled: true

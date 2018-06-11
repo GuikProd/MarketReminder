@@ -4,161 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "40cd1d7bcc627404185c783809813a35",
+    "content-hash": "432571d72536abb13a5ea1fc0419e117",
     "packages": [
-        {
-            "name": "api-platform/api-pack",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/api-platform/api-pack.git",
-                "reference": "33ade8a1dc23868828788fe1bf3e54291ce54843"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/api-platform/api-pack/zipball/33ade8a1dc23868828788fe1bf3e54291ce54843",
-                "reference": "33ade8a1dc23868828788fe1bf3e54291ce54843",
-                "shasum": ""
-            },
-            "require": {
-                "api-platform/core": "^2.1",
-                "doctrine/annotations": "^1.0",
-                "doctrine/doctrine-bundle": "^1.6",
-                "doctrine/orm": "^2.4.5",
-                "nelmio/cors-bundle": "^1.5",
-                "php": "^7.0",
-                "phpdocumentor/reflection-docblock": "^3.0 || ^4.0",
-                "symfony/asset": "^3.0 || ^4.0",
-                "symfony/expression-language": "^3.0 || ^4.0",
-                "symfony/security-bundle": "^3.0 || ^4.0",
-                "symfony/twig-bundle": "^3.0 || ^4.0",
-                "symfony/validator": "^3.0 || ^4.0"
-            },
-            "type": "symfony-pack",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A pack for API Platform",
-            "time": "2018-02-09T13:21:13+00:00"
-        },
-        {
-            "name": "api-platform/core",
-            "version": "v2.2.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/api-platform/core.git",
-                "reference": "9d712177fea904b84cf08f1570584ee03d0b95e1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/api-platform/core/zipball/9d712177fea904b84cf08f1570584ee03d0b95e1",
-                "reference": "9d712177fea904b84cf08f1570584ee03d0b95e1",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/inflector": "^1.0",
-                "php": ">=7.0",
-                "psr/cache": "^1.0",
-                "psr/container": "^1.0",
-                "symfony/http-foundation": "^3.1 || ^4.0",
-                "symfony/http-kernel": "^2.7 || ^3.0 || ^4.0",
-                "symfony/property-access": "^2.7 || ^3.0 || ^4.0",
-                "symfony/property-info": "^3.3.11 || ^4.0",
-                "symfony/serializer": "^3.1 || ^4.0",
-                "willdurand/negotiation": "^2.0.3"
-            },
-            "conflict": {
-                "symfony/dependency-injection": "<3.3"
-            },
-            "require-dev": {
-                "behat/behat": "^3.1",
-                "behat/mink": "^1.7",
-                "behat/mink-browserkit-driver": "^1.3.1",
-                "behat/mink-extension": "^2.2",
-                "behat/symfony2-extension": "^2.1.1",
-                "behatch/contexts": "^3.1",
-                "doctrine/annotations": "^1.2",
-                "doctrine/doctrine-bundle": "^1.6.3",
-                "doctrine/orm": "^2.5.2",
-                "friendsofsymfony/user-bundle": "^2.0",
-                "guzzlehttp/guzzle": "^6.0",
-                "justinrainbow/json-schema": "^5.0",
-                "nelmio/api-doc-bundle": "^2.13.3",
-                "php-mock/php-mock-phpunit": "^2.0",
-                "phpdocumentor/reflection-docblock": "^3.0 || ^4.0",
-                "phpdocumentor/type-resolver": "^0.2.1 || ^0.3 || 0.4",
-                "phpunit/phpunit": "^6.1",
-                "psr/log": "^1.0",
-                "sensio/framework-extra-bundle": "^3.0.11 || ^4.0",
-                "symfony/asset": "^3.3 || ^4.0",
-                "symfony/cache": "^3.3 || ^4.0",
-                "symfony/config": "^3.3 || ^4.0",
-                "symfony/console": "^3.3 || ^4.0",
-                "symfony/debug": "^2.8 || ^3.0 || ^4.0",
-                "symfony/dependency-injection": "^3.3 || ^4.0",
-                "symfony/doctrine-bridge": "^2.8.12 || ^3.0 || ^4.0",
-                "symfony/event-dispatcher": "^3.3 || ^4.0",
-                "symfony/expression-language": "^2.8 || ^3.0 || ^4.0",
-                "symfony/finder": "^3.3 || ^4.0",
-                "symfony/form": "^3.3 || ^4.0",
-                "symfony/framework-bundle": "^3.3 || ^4.0",
-                "symfony/phpunit-bridge": "^3.3 || ^4.0",
-                "symfony/routing": "^3.3 || ^4.0",
-                "symfony/security": "^3.0 || ^4.0",
-                "symfony/security-bundle": "^3.0 || ^4.0",
-                "symfony/twig-bundle": "^3.1 || ^4.0",
-                "symfony/validator": "^3.3 || ^4.0",
-                "symfony/yaml": "^3.3 || ^4.0",
-                "webonyx/graphql-php": "^0.11.5"
-            },
-            "suggest": {
-                "friendsofsymfony/user-bundle": "To use the FOSUserBundle bridge.",
-                "guzzlehttp/guzzle": "To use the HTTP cache invalidation system.",
-                "phpdocumentor/reflection-docblock": "To support extracting metadata from PHPDoc.",
-                "psr/cache-implementation": "To use metadata caching.",
-                "symfony/cache": "To have metadata caching when using Symfony integration.",
-                "symfony/config": "To load XML configuration files.",
-                "symfony/expression-language": "To use authorization features.",
-                "symfony/security": "To use authorization features.",
-                "symfony/twig-bundle": "To use the Swagger UI integration.",
-                "webonyx/graphql-php": "To support GraphQL."
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "ApiPlatform\\Core\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kévin Dunglas",
-                    "email": "dunglas@gmail.com",
-                    "homepage": "https://dunglas.fr"
-                }
-            ],
-            "description": "The ultimate solution to create web APIs.",
-            "homepage": "https://api-platform.com",
-            "keywords": [
-                "Hydra",
-                "JSON-LD",
-                "api",
-                "hal",
-                "json",
-                "rest",
-                "swagger"
-            ],
-            "time": "2018-05-14T13:11:32+00:00"
-        },
         {
             "name": "clue/stream-filter",
             "version": "v1.4.0",
@@ -1035,16 +882,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v1.7.2",
+            "version": "v1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "3e7656c5adfd9b7d0d8757aa1e9e8daf43a6f200"
+                "reference": "215438c0eef3e5f9b7da7d09c6b90756071b43e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/3e7656c5adfd9b7d0d8757aa1e9e8daf43a6f200",
-                "reference": "3e7656c5adfd9b7d0d8757aa1e9e8daf43a6f200",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/215438c0eef3e5f9b7da7d09c6b90756071b43e6",
+                "reference": "215438c0eef3e5f9b7da7d09c6b90756071b43e6",
                 "shasum": ""
             },
             "require": {
@@ -1072,17 +919,18 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "v1.7.x-dev"
+                    "dev-master": "v1.8.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Doctrine\\DBAL\\Migrations\\": "lib/Doctrine/DBAL/Migrations"
+                    "Doctrine\\DBAL\\Migrations\\": "lib/Doctrine/DBAL/Migrations",
+                    "Doctrine\\Migrations\\": "lib/Doctrine/Migrations"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-2.1"
+                "MIT"
             ],
             "authors": [
                 {
@@ -1099,12 +947,12 @@
                 }
             ],
             "description": "Database Schema migrations using Doctrine DBAL",
-            "homepage": "http://www.doctrine-project.org",
+            "homepage": "https://www.doctrine-project.org/projects/migrations.html",
             "keywords": [
                 "database",
                 "migrations"
             ],
-            "time": "2018-05-09T21:04:56+00:00"
+            "time": "2018-06-06T21:00:30+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1545,21 +1393,21 @@
         },
         {
             "name": "google/gax",
-            "version": "0.33.0",
+            "version": "0.33.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "9f975d6ebf2b7c7a064c22e3f7fc6818052fd387"
+                "reference": "9d15f56374ab3940f5f11761cfefc7dfb18ea363"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/9f975d6ebf2b7c7a064c22e3f7fc6818052fd387",
-                "reference": "9f975d6ebf2b7c7a064c22e3f7fc6818052fd387",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/9d15f56374ab3940f5f11761cfefc7dfb18ea363",
+                "reference": "9d15f56374ab3940f5f11761cfefc7dfb18ea363",
                 "shasum": ""
             },
             "require": {
                 "google/auth": "^1.2.0",
-                "google/protobuf": "^3.5.1",
+                "google/protobuf": "3.5.*",
                 "grpc/grpc": "^1.4",
                 "guzzlehttp/promises": "^1.3",
                 "guzzlehttp/psr7": "^1.2",
@@ -1592,7 +1440,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-05-24T17:47:50+00:00"
+            "time": "2018-06-07T17:09:36+00:00"
         },
         {
             "name": "google/proto-client",
@@ -2185,64 +2033,6 @@
             "time": "2016-12-05T07:27:31+00:00"
         },
         {
-            "name": "nelmio/cors-bundle",
-            "version": "1.5.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nelmio/NelmioCorsBundle.git",
-                "reference": "548dc8ebd3984acd2f6d8787ab1dac2e9aa14254"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioCorsBundle/zipball/548dc8ebd3984acd2f6d8787ab1dac2e9aa14254",
-                "reference": "548dc8ebd3984acd2f6d8787ab1dac2e9aa14254",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/framework-bundle": "^2.7 || ^3.0 || ^4.0"
-            },
-            "require-dev": {
-                "matthiasnoback/symfony-dependency-injection-test": "^1.0 || ^2.0",
-                "mockery/mockery": "^0.9 || ^1.0",
-                "symfony/phpunit-bridge": "^2.7 || ^3.0 || ^4.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Nelmio\\CorsBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nelmio",
-                    "homepage": "http://nelm.io"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://github.com/nelmio/NelmioCorsBundle/contributors"
-                }
-            ],
-            "description": "Adds CORS (Cross-Origin Resource Sharing) headers support in your Symfony2 application",
-            "keywords": [
-                "api",
-                "cors",
-                "crossdomain"
-            ],
-            "time": "2017-12-11T18:41:54+00:00"
-        },
-        {
             "name": "ocramius/package-versions",
             "version": "1.3.0",
             "source": {
@@ -2360,74 +2150,6 @@
                 "service proxies"
             ],
             "time": "2017-11-16T23:22:31+00:00"
-        },
-        {
-            "name": "overblog/graphiql-bundle",
-            "version": "v0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/overblog/GraphiQLBundle.git",
-                "reference": "d6e77ce252417faa65f708f901b1e2f12b105ca8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/overblog/GraphiQLBundle/zipball/d6e77ce252417faa65f708f901b1e2f12b105ca8",
-                "reference": "d6e77ce252417faa65f708f901b1e2f12b105ca8",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6 || ^7.0",
-                "symfony/http-foundation": "^3.2.2 || ^4.0",
-                "symfony/routing": "^3.2 || ^4.0",
-                "symfony/twig-bundle": "^3.2.10 || ^4.0"
-            },
-            "require-dev": {
-                "overblog/graphql-bundle": "^0.9.0 || ^0.10.0",
-                "phpunit/phpunit": "^5.7 || ^6.0",
-                "sensio/framework-extra-bundle": "^3.0 || ^4.0",
-                "symfony/browser-kit": "^3.2 || ^4.0",
-                "symfony/config": "^3.2 || ^4.0",
-                "symfony/console": "^3.2 || ^4.0",
-                "symfony/dependency-injection": "^3.2 || ^4.0",
-                "symfony/expression-language": "^3.2 || ^4.0",
-                "symfony/framework-bundle": "^3.2.2 || ^4.0",
-                "symfony/templating": "^3.2 || ^4.0",
-                "symfony/yaml": "^3.2 || ^4.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Overblog\\GraphiQLBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Overblog",
-                    "homepage": "http://www.over-blog.com"
-                },
-                {
-                    "name": "Renato Mefi",
-                    "email": "renato@mefi.in"
-                }
-            ],
-            "description": "Symfony GraphiQLBundle makes possible to render the UI into your symfony project",
-            "keywords": [
-                "graphiql",
-                "graphql"
-            ],
-            "time": "2018-01-24T16:22:34+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -3193,158 +2915,6 @@
             "time": "2017-11-29T19:20:03+00:00"
         },
         {
-            "name": "phpdocumentor/reflection-common",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/ReflectionCommon.git",
-                "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
-                "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.6"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "phpDocumentor\\Reflection\\": [
-                        "src"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jaap van Otterdijk",
-                    "email": "opensource@ijaap.nl"
-                }
-            ],
-            "description": "Common reflection classes used by phpdocumentor to reflect the code structure",
-            "homepage": "http://www.phpdoc.org",
-            "keywords": [
-                "FQSEN",
-                "phpDocumentor",
-                "phpdoc",
-                "reflection",
-                "static analysis"
-            ],
-            "time": "2017-09-11T18:02:19+00:00"
-        },
-        {
-            "name": "phpdocumentor/reflection-docblock",
-            "version": "4.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "94fd0001232e47129dd3504189fa1c7225010d08"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/94fd0001232e47129dd3504189fa1c7225010d08",
-                "reference": "94fd0001232e47129dd3504189fa1c7225010d08",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0",
-                "phpdocumentor/reflection-common": "^1.0.0",
-                "phpdocumentor/type-resolver": "^0.4.0",
-                "webmozart/assert": "^1.0"
-            },
-            "require-dev": {
-                "doctrine/instantiator": "~1.0.5",
-                "mockery/mockery": "^1.0",
-                "phpunit/phpunit": "^6.4"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "phpDocumentor\\Reflection\\": [
-                        "src/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike van Riel",
-                    "email": "me@mikevanriel.com"
-                }
-            ],
-            "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2017-11-30T07:14:17+00:00"
-        },
-        {
-            "name": "phpdocumentor/type-resolver",
-            "version": "0.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/9c977708995954784726e25d0cd1dddf4e65b0f7",
-                "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5 || ^7.0",
-                "phpdocumentor/reflection-common": "^1.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^0.9.4",
-                "phpunit/phpunit": "^5.2||^4.8.24"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "phpDocumentor\\Reflection\\": [
-                        "src/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike van Riel",
-                    "email": "me@mikevanriel.com"
-                }
-            ],
-            "time": "2017-07-14T14:27:02+00:00"
-        },
-        {
             "name": "predis/predis",
             "version": "v1.1.1",
             "source": {
@@ -3929,71 +3499,6 @@
             "time": "2018-02-28T22:10:01+00:00"
         },
         {
-            "name": "snc/redis-bundle",
-            "version": "2.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/snc/SncRedisBundle.git",
-                "reference": "5d8169e961901fdc652e00bcbb1974cc966aef8b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/5d8169e961901fdc652e00bcbb1974cc966aef8b",
-                "reference": "5d8169e961901fdc652e00bcbb1974cc966aef8b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3",
-                "symfony/framework-bundle": "^2.7 || ^3.0 || ^4.0",
-                "symfony/yaml": "^2.7 || ^3.0 || ^4.0"
-            },
-            "require-dev": {
-                "doctrine/cache": "1.*",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5",
-                "predis/predis": "^1.0",
-                "symfony/console": "^2.7 || ^3.0 || ^4.0",
-                "symfony/phpunit-bridge": "^2.7 || ^3.0 || ^4.0"
-            },
-            "suggest": {
-                "monolog/monolog": "If you want to use the monolog redis handler.",
-                "predis/predis": "If you want to use predis.",
-                "symfony/console": "If you want to use commands to interact with the redis database"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Snc\\RedisBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Henrik Westphal",
-                    "email": "henrik.westphal@gmail.com"
-                },
-                {
-                    "name": "Community contributors",
-                    "homepage": "https://github.com/snc/SncRedisBundle/contributors"
-                }
-            ],
-            "description": "A Redis bundle for Symfony",
-            "homepage": "https://github.com/snc/SncRedisBundle",
-            "keywords": [
-                "nosql",
-                "redis",
-                "symfony"
-            ],
-            "time": "2018-05-09T08:08:39+00:00"
-        },
-        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.0.2",
             "source": {
@@ -4573,56 +4078,6 @@
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
             "time": "2018-04-06T07:35:57+00:00"
-        },
-        {
-            "name": "symfony/expression-language",
-            "version": "v4.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/expression-language.git",
-                "reference": "2d0ffaa38ded0d31dd7a599a3b1f87200227a112"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/expression-language/zipball/2d0ffaa38ded0d31dd7a599a3b1f87200227a112",
-                "reference": "2d0ffaa38ded0d31dd7a599a3b1f87200227a112",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "symfony/cache": "~3.4|~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\ExpressionLanguage\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony ExpressionLanguage Component",
-            "homepage": "https://symfony.com",
-            "time": "2018-01-03T07:38:11+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -5950,82 +5405,6 @@
             "time": "2018-05-30T07:26:09+00:00"
         },
         {
-            "name": "symfony/property-info",
-            "version": "v4.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/property-info.git",
-                "reference": "724cca5ae45760156029f14d2e293a281fab89e0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/724cca5ae45760156029f14d2e293a281fab89e0",
-                "reference": "724cca5ae45760156029f14d2e293a281fab89e0",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "symfony/inflector": "~3.4|~4.0"
-            },
-            "conflict": {
-                "phpdocumentor/reflection-docblock": "<3.0||>=3.2.0,<3.2.2",
-                "phpdocumentor/type-resolver": "<0.2.1",
-                "symfony/dependency-injection": "<3.4"
-            },
-            "require-dev": {
-                "doctrine/annotations": "~1.0",
-                "phpdocumentor/reflection-docblock": "^3.0|^4.0",
-                "symfony/cache": "~3.4|~4.0",
-                "symfony/dependency-injection": "~3.4|~4.0",
-                "symfony/serializer": "~3.4|~4.0"
-            },
-            "suggest": {
-                "phpdocumentor/reflection-docblock": "To use the PHPDoc",
-                "psr/cache-implementation": "To cache results",
-                "symfony/doctrine-bridge": "To use Doctrine metadata",
-                "symfony/serializer": "To use Serializer metadata"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\PropertyInfo\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kévin Dunglas",
-                    "email": "dunglas@gmail.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Property Info Component",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "doctrine",
-                "phpdoc",
-                "property",
-                "symfony",
-                "type",
-                "validator"
-            ],
-            "time": "2018-05-16T14:33:22+00:00"
-        },
-        {
             "name": "symfony/routing",
             "version": "v4.1.0",
             "source": {
@@ -7189,152 +6568,6 @@
             "time": "2018-04-02T09:24:19+00:00"
         },
         {
-            "name": "webmozart/assert",
-            "version": "1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
-                "reference": "0df1908962e7a3071564e857d86874dad1ef204a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/0df1908962e7a3071564e857d86874dad1ef204a",
-                "reference": "0df1908962e7a3071564e857d86874dad1ef204a",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3.3 || ^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.6",
-                "sebastian/version": "^1.0.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Webmozart\\Assert\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bernhard Schussek",
-                    "email": "bschussek@gmail.com"
-                }
-            ],
-            "description": "Assertions to validate method input/output with nice error messages.",
-            "keywords": [
-                "assert",
-                "check",
-                "validate"
-            ],
-            "time": "2018-01-29T19:49:41+00:00"
-        },
-        {
-            "name": "webonyx/graphql-php",
-            "version": "v0.12.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "01e084a9eebc94e1ec4c8b6d8d74ea3d0a9026f2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/01e084a9eebc94e1ec4c8b6d8d74ea3d0a9026f2",
-                "reference": "01e084a9eebc94e1ec4c8b6d8d74ea3d0a9026f2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8",
-                "psr/http-message": "^1.0"
-            },
-            "suggest": {
-                "psr/http-message": "To use standard GraphQL server",
-                "react/promise": "To leverage async resolving on React PHP platform"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "GraphQL\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A PHP port of GraphQL reference implementation",
-            "homepage": "https://github.com/webonyx/graphql-php",
-            "keywords": [
-                "api",
-                "graphql"
-            ],
-            "time": "2018-05-27T12:42:05+00:00"
-        },
-        {
-            "name": "willdurand/negotiation",
-            "version": "v2.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/willdurand/Negotiation.git",
-                "reference": "03436ededa67c6e83b9b12defac15384cb399dc9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/03436ededa67c6e83b9b12defac15384cb399dc9",
-                "reference": "03436ededa67c6e83b9b12defac15384cb399dc9",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.5"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Negotiation\\": "src/Negotiation"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "William Durand",
-                    "email": "will+git@drnd.me"
-                }
-            ],
-            "description": "Content Negotiation tools for PHP provided as a standalone library.",
-            "homepage": "http://williamdurand.fr/Negotiation/",
-            "keywords": [
-                "accept",
-                "content",
-                "format",
-                "header",
-                "negotiation"
-            ],
-            "time": "2017-05-14T17:21:12+00:00"
-        },
-        {
             "name": "zendframework/zend-code",
             "version": "3.3.0",
             "source": {
@@ -7876,16 +7109,16 @@
         },
         {
             "name": "behat/symfony2-extension",
-            "version": "2.1.4",
+            "version": "2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Symfony2Extension.git",
-                "reference": "022ece0c1f7e88be720fd94a47e5a512cebdc328"
+                "reference": "d7c834487426a784665f9c1e61132274dbf2ea26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Symfony2Extension/zipball/022ece0c1f7e88be720fd94a47e5a512cebdc328",
-                "reference": "022ece0c1f7e88be720fd94a47e5a512cebdc328",
+                "url": "https://api.github.com/repos/Behat/Symfony2Extension/zipball/d7c834487426a784665f9c1e61132274dbf2ea26",
+                "reference": "d7c834487426a784665f9c1e61132274dbf2ea26",
                 "shasum": ""
             },
             "require": {
@@ -7933,7 +7166,7 @@
                 "framework",
                 "symfony"
             ],
-            "time": "2017-12-13T16:50:51+00:00"
+            "time": "2018-04-20T15:48:23+00:00"
         },
         {
             "name": "behat/transliterator",

@@ -1,16 +1,4 @@
 {
-    "api-platform/api-pack": {
-        "version": "1.1.0"
-    },
-    "api-platform/core": {
-        "version": "2.1",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "2.1",
-            "ref": "18727d8f229306860b46955f438e1897421da689"
-        }
-    },
     "beberlei/assert": {
         "version": "v2.9.3"
     },
@@ -191,15 +179,6 @@
     "namshi/jose": {
         "version": "7.2.3"
     },
-    "nelmio/cors-bundle": {
-        "version": "1.5",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.5",
-            "ref": "7b6cbc842f8cd3d550815247d12294f6f304a8c4"
-        }
-    },
     "nikic/php-parser": {
         "version": "v3.1.4"
     },
@@ -208,15 +187,6 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.1.1"
-    },
-    "overblog/graphiql-bundle": {
-        "version": "0.1",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "0.1",
-            "ref": "fe8d172f2480efc598f5a8be0e732656d3594cec"
-        }
     },
     "paragonie/random_compat": {
         "version": "v2.0.11"
@@ -262,15 +232,6 @@
     },
     "php-http/stopwatch-plugin": {
         "version": "1.1.0"
-    },
-    "phpdocumentor/reflection-common": {
-        "version": "1.0.1"
-    },
-    "phpdocumentor/reflection-docblock": {
-        "version": "4.3.0"
-    },
-    "phpdocumentor/type-resolver": {
-        "version": "0.4.0"
     },
     "phpmetrics/phpmetrics": {
         "version": "v2.3.2"
@@ -329,15 +290,6 @@
             "ref": "e65a105bf4cd5b1b79012ba029954927f05922e8"
         }
     },
-    "snc/redis-bundle": {
-        "version": "2.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "2.0",
-            "ref": "9ef855ff444add54c2d66bdf3f4b7b2b6a120259"
-        }
-    },
     "swiftmailer/swiftmailer": {
         "version": "v6.0.2"
     },
@@ -385,9 +337,6 @@
     },
     "symfony/event-dispatcher": {
         "version": "v4.0.3"
-    },
-    "symfony/expression-language": {
-        "version": "v4.1.0"
     },
     "symfony/filesystem": {
         "version": "v4.0.3"
@@ -487,9 +436,6 @@
     },
     "symfony/property-access": {
         "version": "v3.4.3"
-    },
-    "symfony/property-info": {
-        "version": "v4.1.0"
     },
     "symfony/routing": {
         "version": "3.3",
@@ -598,12 +544,6 @@
     },
     "twig/twig": {
         "version": "v2.4.4"
-    },
-    "webmozart/assert": {
-        "version": "1.3.0"
-    },
-    "willdurand/negotiation": {
-        "version": "v2.3.1"
     },
     "zendframework/zend-code": {
         "version": "3.3.0"
