@@ -30,6 +30,14 @@ interface CloudTranslationClientInterface
     public function __construct(CloudTranslationBridgeInterface $cloudTranslationBridge);
 
     /**
+     * @param string $entry
+     * @param string $targetLocale
+     *
+     * @return string
+     */
+    public function translateSingleEntry(string $entry, string $targetLocale): string;
+
+    /**
      * @param array  $textToTranslate
      * @param string $targetLocale
      *

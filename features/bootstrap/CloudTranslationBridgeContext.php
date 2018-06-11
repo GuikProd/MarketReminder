@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
+use App\Infra\GCP\CloudTranslation\Client\CloudTranslationClient;
+use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
 use Behat\Behat\Context\Context;
 
 /**
@@ -26,6 +28,11 @@ final class CloudTranslationBridgeContext implements Context
      * @var CloudTranslationBridgeInterface
      */
     private $cloudTranslationBridge;
+
+    /**
+     * @var CloudTranslationClientInterface
+     */
+    private $cloudTranslationClient;
 
     /**
      * @var string
@@ -46,14 +53,33 @@ final class CloudTranslationBridgeContext implements Context
     }
 
     /**
-     * @param string $value
+     * @Then I create a new CloudTranslationClient
+     */
+    public function iCreateANewCloudTranslationClient()
+    {
+        $this->cloudTranslationClient = new CloudTranslationClient($this->cloudTranslationBridge);
+    }
+
+    /**
+     * @param string $entry
      * @param string $locale
      *
-     * @Then I want to translate a new entry :value using the following locale :locale
+     * @Then I want to translate a new entry :entry using the following locale :locale
      */
-    public function iWantToTranslateANewEntryUsingTheFollowingLocale(string $value, string $locale)
+    public function iWantToTranslateANewEntryUsingTheFollowingLocale(string $entry, string $locale)
     {
-        $this->translatedContent = $this->cloudTranslationBridge->getTranslateClient()->translate($value, ['target' => $locale])['text'];
+        $this->translatedContent = $this->cloudTranslationClient->translateSingleEntry($entry, $locale);
+    }
+
+    /**
+     * @param array $entries
+     * @param string $locale
+     *
+     * @Then I want to translate a series of entry :entry using the following locale :locale
+     */
+    public function iWantToTranslateASeriesOfEntryUsingTheFollowingLocale(array $entries, string $locale)
+    {
+        $this->translatedContent = $this->cloudTranslationClient->translateArray($entries, $locale)['text'];
     }
 
     /**

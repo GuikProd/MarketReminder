@@ -39,6 +39,16 @@ final class CloudTranslationClient implements CloudTranslationClientInterface
     /**
      * {@inheritdoc}
      */
+    public function translateSingleEntry(string $entry, string $targetLocale): string
+    {
+        return $this->cloudTranslationBridge
+                    ->getTranslateClient()
+                    ->translate($entry, ['target' => $targetLocale])['text'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function translateArray(array $textToTranslate, string $targetLocale): ?array
     {
         return $this->cloudTranslationBridge

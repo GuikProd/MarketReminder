@@ -55,6 +55,11 @@ final class CloudTranslationClientSystemTest extends KernelTestCase
         $this->cloudTranslationHelper = new CloudTranslationClient($this->cloudTranslationBridge);
     }
 
+    public function testItTranslateASingleElement()
+    {
+
+    }
+
     /**
      * @group Blackfire
      *
