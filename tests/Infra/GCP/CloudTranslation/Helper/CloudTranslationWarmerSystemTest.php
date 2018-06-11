@@ -91,6 +91,8 @@ final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
 
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationRepository = new CloudTranslationRepository(
             $this->connector,
@@ -132,6 +134,8 @@ final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
 
         $this->createRedisConnector();
         $this->createRedisBackUp();
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationRepository = new CloudTranslationRepository(
             $this->connector,
@@ -172,6 +176,8 @@ final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
 
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationRepository = new CloudTranslationRepository(
             $this->connector,
@@ -209,6 +215,8 @@ final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
 
         $this->createRedisConnector();
         $this->createRedisBackUp();
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationRepository = new CloudTranslationRepository(
             $this->connector,
@@ -246,6 +254,8 @@ final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
 
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationRepository = new CloudTranslationRepository(
             $this->connector,
@@ -284,6 +294,8 @@ final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
 
         $this->createRedisConnector();
         $this->createRedisBackUp();
+        $this->createCloudTranslationWriter();
+        $this->createCloudTranslationBackUpWriter();
 
         $this->cloudTranslationRepository = new CloudTranslationRepository(
             $this->connector,

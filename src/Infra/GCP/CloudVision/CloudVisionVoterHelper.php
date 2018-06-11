@@ -20,13 +20,26 @@ use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-abstract class CloudVisionVoterHelper implements CloudVisionVoterHelperInterface
+final class CloudVisionVoterHelper implements CloudVisionVoterHelperInterface
 {
+    /**
+     * @var array
+     */
+    private $forbiddenLabels = [];
+
     /**
      * {@inheritdoc}
      */
-    public static function vote(string $label): bool
+    public function __construct(array $forbiddenLabels)
     {
-        return !in_array($label, self::FORBIDDEN_LABELS);
+        $this->forbiddenLabels = $forbiddenLabels;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function vote(string $label): bool
+    {
+        return !in_array($label, $this->forbiddenLabels);
     }
 }

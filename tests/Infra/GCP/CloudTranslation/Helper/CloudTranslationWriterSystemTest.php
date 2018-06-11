@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Tests\TestCase\ConnectorTestCase;
+use App\Tests\TestCase\CloudTranslationTestCase;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 
@@ -22,7 +22,7 @@ use Blackfire\Profile\Configuration;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationWriterSystemTest extends ConnectorTestCase
+class CloudTranslationWriterSystemTest extends CloudTranslationTestCase
 {
     use TestCaseTrait;
 
@@ -58,6 +58,7 @@ class CloudTranslationWriterSystemTest extends ConnectorTestCase
         $configuration->assert('main.network_in == 0B', 'CloudTranslationWriter no write network Filesystem call');
 
         $this->createFileSystemConnector();
+        $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write(
             'fr',
@@ -91,6 +92,7 @@ class CloudTranslationWriterSystemTest extends ConnectorTestCase
         $configuration->assert('main.network_in < 710B', 'CloudTranslationWriter no write network redis call');
 
         $this->createRedisConnector();
+        $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write(
             'fr',
@@ -123,6 +125,7 @@ class CloudTranslationWriterSystemTest extends ConnectorTestCase
         $configuration->assert('main.network_out == 0B', 'CloudTranslationWriter Filesystem usage network out');
 
         $this->createFileSystemConnector();
+        $this->createCloudTranslationWriter();
 
         $this->assertBlackfire($configuration, function () {
             $this->cloudTranslationWriter->write(
@@ -147,6 +150,7 @@ class CloudTranslationWriterSystemTest extends ConnectorTestCase
         $configuration->assert('main.network_out < 1MB', 'CloudTranslationWriter redis usage network out');
 
         $this->createRedisConnector();
+        $this->createCloudTranslationWriter();
 
         $this->assertBlackfire($configuration, function () {
             $this->cloudTranslationWriter->write(

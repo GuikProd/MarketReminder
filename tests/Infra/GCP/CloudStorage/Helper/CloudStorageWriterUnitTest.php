@@ -30,6 +30,9 @@ final class CloudStorageWriterUnitTest extends TestCase
      */
     private $cloudStorageBridge;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->cloudStorageBridge = $this->createMock(CloudStorageBridgeInterface::class);

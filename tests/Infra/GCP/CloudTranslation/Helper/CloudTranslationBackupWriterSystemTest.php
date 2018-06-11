@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation;
 
-use App\Tests\TestCase\ConnectorTestCase;
+use App\Tests\TestCase\CloudTranslationTestCase;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 
@@ -22,7 +22,7 @@ use Blackfire\Profile\Configuration;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationBackupWriterSystemTest extends ConnectorTestCase
+final class CloudTranslationBackupWriterSystemTest extends CloudTranslationTestCase
 {
     use TestCaseTrait;
 
@@ -50,15 +50,16 @@ final class CloudTranslationBackupWriterSystemTest extends ConnectorTestCase
         );
 
         $this->createFileSystemBackUp();
+        $this->createCloudTranslationBackUpWriter();
 
-        $this->cloudTranslationBackupWriter->warmBackUp(
+        $this->cloudTranslationBackUpWriter->warmBackUp(
             'messages',
             'fr',
             ['home.text' => 'Hello World !']
         );
 
         $this->assertBlackfire($configuration, function () {
-            $this->cloudTranslationBackupWriter->warmBackUp(
+            $this->cloudTranslationBackUpWriter->warmBackUp(
                 'messages',
                 'fr',
                 ['home.text' => 'Hello World !']
@@ -90,15 +91,16 @@ final class CloudTranslationBackupWriterSystemTest extends ConnectorTestCase
         );
 
         $this->createRedisBackUp();
+        $this->createCloudTranslationBackUpWriter();
 
-        $this->cloudTranslationBackupWriter->warmBackUp(
+        $this->cloudTranslationBackUpWriter->warmBackUp(
             'messages',
             'fr',
             ['home.text' => 'Hello World !']
         );
 
         $this->assertBlackfire($configuration, function () {
-            $this->cloudTranslationBackupWriter->warmBackUp(
+            $this->cloudTranslationBackUpWriter->warmBackUp(
                 'messages',
                 'fr',
                 ['home.text' => 'Hello World !']

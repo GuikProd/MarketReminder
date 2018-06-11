@@ -3,3 +3,4 @@ global_exclude_dirs:
     - src/DataFixtures
 exclude_patterns:
     - ./.gitlab-ci.yml
+    - ./public/index.php

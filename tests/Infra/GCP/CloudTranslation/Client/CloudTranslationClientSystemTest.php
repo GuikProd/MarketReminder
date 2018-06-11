@@ -19,14 +19,14 @@ use App\Infra\GCP\CloudTranslation\Client\CloudTranslationClient;
 use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CloudTranslationClientSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationClientSystemTest extends KernelTestCase
+final class CloudTranslationClientSystemTest extends TestCase
 {
     use TestCaseTrait;
 
@@ -45,20 +45,30 @@ final class CloudTranslationClientSystemTest extends KernelTestCase
      */
     protected function setUp()
     {
-        static::bootKernel();
-
         $this->cloudTranslationBridge = new CloudTranslationBridge(
-            static::$kernel->getContainer()->getParameter('cloud.translation_credentials.filename'),
-            static::$kernel->getContainer()->getParameter('cloud.translation_credentials')
+            'credentials.json',
+            __DIR__.'./../../../../_credentials'
         );
 
         $this->cloudTranslationHelper = new CloudTranslationClient($this->cloudTranslationBridge);
     }
 
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     */
     public function testItTranslateASingleElement()
     {
         $configuration = new Configuration();
-        $configuration->assert('metrics.http.requests.count <= 2', 'CloudTranslationClient single translation HTTP requests');
+        $configuration->assert(
+            'main.peak_memory < 200kB',
+            'CloudTranslationClient single translation memory usage'
+        );
+        $configuration->assert(
+            'metrics.http.requests.count <= 2',
+            'CloudTranslationClient single translation HTTP requests'
+        );
 
         $this->assertBlackfire($configuration, function () {
             $this->cloudTranslationHelper->translateSingleEntry('Bien le bonjour !', 'en');
@@ -74,7 +84,7 @@ final class CloudTranslationClientSystemTest extends KernelTestCase
     {
         $configuration = new Configuration();
         $configuration->assert(
-            'main.peak_memory < 170kB',
+            'main.peak_memory < 1MB',
             'CloudTranslationClient multiples translations warm memory usage'
         );
         $configuration->assert(
@@ -82,11 +92,11 @@ final class CloudTranslationClientSystemTest extends KernelTestCase
             'CloudTranslationClient multiples translation HTTP requests'
         );
         $configuration->assert(
-            'main.network_in < 1.55kB',
+            'main.network_in < 1.4kB',
             'CloudTranslationClient multiples translation network in'
         );
         $configuration->assert(
-            'main.network_out < 785B',
+            'main.network_out < 820B',
             'CloudTranslationClient multiples translation network out'
         );
 

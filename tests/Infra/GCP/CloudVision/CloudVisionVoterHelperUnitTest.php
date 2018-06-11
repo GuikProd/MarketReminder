@@ -14,26 +14,40 @@ declare(strict_types=1);
 namespace App\Tests\Infra\GCP\CloudVision;
 
 use App\Infra\GCP\CloudVision\CloudVisionVoterHelper;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class CloudVisionVoterHelperTest;.
+ * Class CloudVisionVoterHelperUnitTest;.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudVisionVoterHelperTest extends TestCase
+final class CloudVisionVoterHelperUnitTest extends TestCase
 {
+    /**
+     * @var CloudVisionVoterHelperInterface
+     */
+    private $cloudVisionVoter;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->cloudVisionVoter = new CloudVisionVoterHelper(['sex', 'drugs', 'gun', 'money']);
+    }
+
     public function testWrongLabel()
     {
         static::assertFalse(
-            CloudVisionVoterHelper::vote('sex')
+            $this->cloudVisionVoter->vote('sex')
         );
     }
 
     public function testRightLabel()
     {
         static::assertTrue(
-            CloudVisionVoterHelper::vote('troll')
+            $this->cloudVisionVoter->vote('troll')
         );
     }
 }

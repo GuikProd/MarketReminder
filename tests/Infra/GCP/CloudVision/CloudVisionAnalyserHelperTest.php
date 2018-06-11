@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudVisionAnalyserHelperTest extends TestCase
+final class CloudVisionAnalyserHelperTest extends TestCase
 {
     public function testImplements()
     {

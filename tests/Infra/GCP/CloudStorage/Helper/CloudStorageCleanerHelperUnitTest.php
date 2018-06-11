@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class CloudStorageCleanerHelperUnitTest extends TestCase
 {
-    public function testInterfaceImplementation()
+    public function testItImplements()
     {
         $cloudStorageBridgeMock = $this->createMock(CloudStorageBridgeInterface::class);
 

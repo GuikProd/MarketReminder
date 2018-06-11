@@ -20,7 +20,12 @@ namespace App\Infra\GCP\CloudVision\Interfaces;
  */
 interface CloudVisionVoterHelperInterface
 {
-    const FORBIDDEN_LABELS = ['drugs', 'gun', 'money', 'sex'];
+    /**
+     * CloudVisionVoterHelperInterface constructor.
+     *
+     * @param array $forbiddenLabels
+     */
+    public function __construct(array $forbiddenLabels);
 
     /**
      * Allow to vote about a label and return the decision.
@@ -29,5 +34,5 @@ interface CloudVisionVoterHelperInterface
      *
      * @return bool    Depending on if the label is accepted or not.
      */
-    public static function vote(string $label): bool;
+    public function vote(string $label): bool;
 }

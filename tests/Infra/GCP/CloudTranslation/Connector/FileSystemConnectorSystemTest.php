@@ -49,7 +49,10 @@ final class FileSystemConnectorSystemTest extends TestCase
     public function testAdapterConnexion()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 295kB', 'FileSystem Connector adapter call memory peak');
+        $configuration->assert(
+            'main.peak_memory < 680kB',
+            'FileSystem Connector adapter call memory peak'
+        );
 
         $this->assertBlackfire($configuration, function () {
             $this->fileSystemConnector->getAdapter();
@@ -64,7 +67,10 @@ final class FileSystemConnectorSystemTest extends TestCase
     public function testCacheClear()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory <= 55kB', 'FileSystem Connector cache clear memory peak');
+        $configuration->assert(
+            'main.peak_memory <= 55kB',
+            'FileSystem Connector cache clear memory peak'
+        );
 
         $this->assertBlackfire($configuration, function () {
             $this->fileSystemConnector->getAdapter()->clear();

@@ -11,19 +11,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\GCP\Bridge;
+namespace App\Tests\Infra\GCP\CloudVision\Bridge;
 
 use App\Infra\GCP\Bridge\CloudVisionBridge;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use Google\Cloud\Vision\VisionClient;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CloudVisionBridgeTest.
+ * Class CloudVisionBridgeUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudVisionBridgeTest extends KernelTestCase
+final class CloudVisionBridgeUnitTest extends TestCase
 {
     /**
      * @var string
@@ -40,13 +40,8 @@ class CloudVisionBridgeTest extends KernelTestCase
      */
     public function setUp()
     {
-        static::bootKernel();
-
-        $this->cloudVisionCredentialsFolder = static::$kernel->getContainer()
-                                                        ->getParameter('cloud.vision_credentials');
-
-        $this->cloudVisionCredentialsFileName = static::$kernel->getContainer()
-                                                               ->getParameter('cloud.vision_credentials.filename');
+        $this->cloudVisionCredentialsFolder = __DIR__.'./../../../../_credentials';
+        $this->cloudVisionCredentialsFileName = 'credentials.json';
     }
 
     public function testItImplements()

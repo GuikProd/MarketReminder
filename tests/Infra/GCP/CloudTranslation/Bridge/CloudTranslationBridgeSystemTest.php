@@ -17,21 +17,16 @@ use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CloudStorageBridgeSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationBridgeSystemTest extends KernelTestCase
+final class CloudTranslationBridgeSystemTest extends TestCase
 {
     use TestCaseTrait;
-
-    /**
-     * @var string
-     */
-    private $cloudTranslationAPIEntryPoint;
 
     /**
      * @var CloudTranslationBridgeInterface
@@ -39,30 +34,13 @@ final class CloudTranslationBridgeSystemTest extends KernelTestCase
     private $cloudTranslationBridge;
 
     /**
-     * @var string
-     */
-    private $translationCredentialsFileName;
-
-    /**
-     * @var string
-     */
-    private $translationCredentialsFolder;
-
-    /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        static::bootKernel();
-
-        $this->cloudTranslationAPIEntryPoint = static::$container->getParameter('cloud.translation.api_entrypoint');
-        $this->translationCredentialsFileName = static::$container->getParameter('cloud.translation_credentials.filename');
-        $this->translationCredentialsFolder = static::$container->getParameter('cloud.translation_credentials');
-
         $this->cloudTranslationBridge = new CloudTranslationBridge(
-            $this->cloudTranslationAPIEntryPoint,
-            $this->translationCredentialsFileName,
-            $this->translationCredentialsFolder
+            'credentials.json',
+            __DIR__.'./../../../../_credentials'
         );
     }
 
@@ -94,7 +72,7 @@ final class CloudTranslationBridgeSystemTest extends KernelTestCase
         $configuration->assert('main.network_out == 0B', 'CloudTranslation client creation network out');
 
         $this->assertBlackfire($configuration, function () {
-            $this->cloudTranslationBridge->createConnexion();
+            $this->cloudTranslationBridge->getTranslateClient();
         });
     }
 }

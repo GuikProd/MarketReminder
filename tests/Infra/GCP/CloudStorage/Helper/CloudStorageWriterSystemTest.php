@@ -33,6 +33,9 @@ final class CloudStorageWriterSystemTest extends CloudStorageTestCase
      */
     private $cloudStorageWriter;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->createCloudStorageBridge();
@@ -48,6 +51,10 @@ final class CloudStorageWriterSystemTest extends CloudStorageTestCase
     public function testItStoreObject()
     {
         $configuration = new Configuration();
+        $configuration->assert(
+            'main.peak_memory < 300kB',
+            'CloudStorageWriter object storage memory usage'
+        );
 
         $this->assertBlackfire($configuration, function () {
             $this->cloudStorageWriter->persist('', '');
