@@ -21,11 +21,11 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintValidator;
 
 /**
- * Class UserExistValidatorTest.
+ * Class UserExistValidatorUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserExistValidatorTest extends TestCase
+final class UserExistValidatorUnitTest extends TestCase
 {
     public function testItExtendsAndImplements()
     {

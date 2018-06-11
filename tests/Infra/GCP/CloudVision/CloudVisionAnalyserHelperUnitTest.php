@@ -19,11 +19,11 @@ use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class CloudVisionAnalyserHelperTest.
+ * Class CloudVisionAnalyserHelperUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudVisionAnalyserHelperTest extends TestCase
+final class CloudVisionAnalyserHelperUnitTest extends TestCase
 {
     public function testImplements()
     {

@@ -49,7 +49,10 @@ final class CloudVisionVoterHelperSystemTest extends TestCase
     public function testItRefuseLabel()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 10kB', 'CloudVisionVoter wrong label memory usage');
+        $configuration->assert(
+            'main.peak_memory < 4kB',
+            'CloudVisionVoter wrong label memory usage'
+        );
 
         $this->assertBlackfire($configuration, function () {
             $this->cloudVisionVoter->vote('gun');
@@ -64,7 +67,10 @@ final class CloudVisionVoterHelperSystemTest extends TestCase
     public function testItAcceptLabel()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 5kB', 'CloudVisionVoter wrong label memory usage');
+        $configuration->assert(
+            'main.peak_memory < 4kB',
+            'CloudVisionVoter wrong label memory usage'
+        );
 
         $this->assertBlackfire($configuration, function () {
             $this->cloudVisionVoter->vote('troll');

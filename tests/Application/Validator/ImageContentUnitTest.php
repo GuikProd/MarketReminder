@@ -19,11 +19,11 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class ImageContentTest.
+ * Class ImageContentUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class ImageContentTest extends TestCase
+final class ImageContentUnitTest extends TestCase
 {
     public function testItExtends()
     {

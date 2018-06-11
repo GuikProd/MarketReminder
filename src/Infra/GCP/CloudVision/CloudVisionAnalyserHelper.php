@@ -22,7 +22,7 @@ use Google\Cloud\Vision\Image;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudVisionAnalyserHelper implements CloudVisionAnalyserHelperInterface
+final class CloudVisionAnalyserHelper implements CloudVisionAnalyserHelperInterface
 {
     /**
      * @var CloudVisionBridgeInterface
@@ -44,9 +44,6 @@ class CloudVisionAnalyserHelper implements CloudVisionAnalyserHelperInterface
     {
         return $this->cloudVisionBridgeInterface
                     ->getVisionClient()
-                    ->image(
-                        file_get_contents($imagePath),
-                        [$analyseMode]
-                    );
+                    ->image(file_get_contents($imagePath), [$analyseMode]);
     }
 }

@@ -19,11 +19,11 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class UserExistTest.
+ * Class UserExistUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserExistTest extends TestCase
+final class UserExistUnitTest extends TestCase
 {
     public function testItExtends()
     {
