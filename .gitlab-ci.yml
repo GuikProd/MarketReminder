@@ -36,7 +36,7 @@ deptrac:
 #            - public/build/
 
 phpunit:
-    stage: unit_tests
+    stage: unit
     image: php:fpm-alpine
     services:
         - redis
