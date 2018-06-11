@@ -43,7 +43,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
     ) {
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
-        $repository = $this->createRepository($this->backUpConnector, $this->connector);
+        $repository = $this->createRepository($this->connector, $this->backUpConnector);
         $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
@@ -71,7 +71,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
     ) {
         $this->createRedisConnector();
         $this->createRedisBackUp();
-        $repository = $this->createRepository($this->backUpConnector, $this->connector);
+        $repository = $this->createRepository($this->connector, $this->backUpConnector);
         $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
@@ -101,7 +101,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
     ) {
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
-        $repository = $this->createRepository($this->backUpConnector, $this->connector);
+        $repository = $this->createRepository($this->connector, $this->backUpConnector);
         $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
@@ -135,7 +135,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
     ) {
         $this->createRedisConnector();
         $this->createRedisBackUp();
-        $repository = $this->createRepository($this->backUpConnector, $this->connector);
+        $repository = $this->createRepository($this->connector, $this->backUpConnector);
         $this->createCloudTranslationWriter();
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
@@ -168,7 +168,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
         $this->createRedisConnector();
         $this->createRedisBackUp();
         $this->createCloudTranslationWriter();
-        $repository = $this->createRepository($this->backUpConnector, $this->connector);
+        $repository = $this->createRepository($this->connector, $this->backUpConnector);
 
         $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
 

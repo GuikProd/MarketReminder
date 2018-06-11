@@ -80,8 +80,6 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     {
         $cacheItem = $this->connector->getAdapter()->getItem($filename);
 
-        dump($cacheItem);
-
         if ($cacheItem->isHit() && \count($cacheItem->get()->getItems()) > 0) {
             foreach ($cacheItem->get()->getItems() as $k => $v) {
                 if ($key === $v->getKey() && $locale === $v->getLocale()) {
