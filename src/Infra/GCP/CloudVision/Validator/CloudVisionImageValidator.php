@@ -41,6 +41,11 @@ final class CloudVisionImageValidator implements CloudVisionImageValidatorInterf
     private $cloudVisionVoter;
 
     /**
+     * @var bool
+     */
+    private $violation = false;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
@@ -58,6 +63,10 @@ final class CloudVisionImageValidator implements CloudVisionImageValidatorInterf
      */
     public function validate(\SplFileInfo $image, string $analyseMode): bool
     {
+        if (\is_null($image)) {
+            return false;
+        }
+
         $analyzedImage = $this->cloudAnalyserHelper->analyse($image->getPathname(), $analyseMode);
 
         $labels = $this->cloudVisionDescriber->describe($analyzedImage)->labels();
@@ -66,10 +75,19 @@ final class CloudVisionImageValidator implements CloudVisionImageValidatorInterf
 
         foreach ($this->cloudVisionDescriber->getLabels() as $label) {
             if (!$this->cloudVisionVoter->vote($label)) {
+                $this->violation = true;
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTriggerViolation(): bool
+    {
+        return $this->violation;
     }
 }
