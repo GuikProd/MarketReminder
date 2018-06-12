@@ -5,6 +5,11 @@ stages:
     - functional
     - deployment
 
+cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+        - vendor/
+
 insight:
     stage: quality
     image: php:fpm-alpine
@@ -81,6 +86,7 @@ phpunit:
     script:
         - php composer.phar install -n -a -o
         - php composer.phar dump-autoload -a -o
+        - ./bin/phpunit -v --exclude-groups Blackfire
 
 behat_core:
     stage: functional
