@@ -57,6 +57,7 @@ phpunit:
                  graphviz \
                  make \
                  git \
+                 zlib-dev \
              && docker-php-ext-install \
                  intl \
                  pdo_pgsql \
@@ -101,6 +102,7 @@ behat_core:
                  graphviz \
                  make \
                  git \
+                 zlib-dev \
              && docker-php-ext-install \
                  intl \
                  pdo_pgsql \
@@ -144,6 +146,7 @@ behat_e2e:
                  graphviz \
                  make \
                  git \
+                 zlib-dev \
              && docker-php-ext-install \
                  intl \
                  pdo_pgsql \
