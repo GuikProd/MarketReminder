@@ -9,6 +9,8 @@ cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
         - vendor/
+        - node_modules/
+        - public/build/
 
 insight:
     stage: quality
@@ -36,10 +38,6 @@ deptrac:
 #        - yarn install
 #    script:
 #        - ./node_modules/.bin/encore production
-#    cache:
-#        paths:
-#            - node_modules/
-#            - public/build/
 
 phpunit:
     stage: unit
@@ -62,6 +60,7 @@ phpunit:
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
     script:
+        - php -i
         - php composer.phar install -a -o
         - php composer.phar dump-autoload -a -o
         - php $CI_PROJECT_DIR/bin/phpunit -v --exclude-groups Blackfire
