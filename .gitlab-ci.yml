@@ -56,7 +56,6 @@ phpunit:
                  gnupg \
                  graphviz \
                  make \
-                 autoconf \
                  git \
              && docker-php-ext-install \
                  intl \
@@ -101,7 +100,6 @@ behat_core:
                  gnupg \
                  graphviz \
                  make \
-                 autoconf \
                  git \
              && docker-php-ext-install \
                  intl \
@@ -145,7 +143,6 @@ behat_e2e:
                  gnupg \
                  graphviz \
                  make \
-                 autoconf \
                  git \
              && docker-php-ext-install \
                  intl \
