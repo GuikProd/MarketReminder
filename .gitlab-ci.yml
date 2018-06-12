@@ -12,6 +12,7 @@ insight:
         - curl -o insight.phar -s http://get.insight.sensiolabs.com/insight.phar
     script:
         - php insight.phar analyze --no-interaction --no-ansi $INSIGHT_PROJECT_UUID --reference=$CI_COMMIT_SHA --user-uuid=$INSIGHT_USER_UUID --api-token=$INSIGHT_USER_API_KEY --fail-condition="counts.critical > 0"
+    allow_failure: true
 
 deptrac:
     stage: quality

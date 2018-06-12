@@ -2,5 +2,5 @@ php_version: 7.1
 global_exclude_dirs:
     - src/DataFixtures
 exclude_patterns:
-    - ./.gitlab-ci.yml
-    - ./public/index.php
+    - .gitlab-ci.yml
+    - public/index.php
