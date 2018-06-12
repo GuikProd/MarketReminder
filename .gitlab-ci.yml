@@ -47,7 +47,7 @@ phpunit:
     services:
         - redis
     before_script:
-        - apk add --no-cache --virtual postgresql-dev zlib-dev gnupg graphviz make git
+        - apk add --no-cache --virtual postgresql-dev zlib-dev gnupg graphviz make git libzip-dev
         - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
              && docker-php-ext-install zip
         - pecl install apcu \
