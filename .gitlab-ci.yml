@@ -48,8 +48,10 @@ phpunit:
         - redis
     before_script:
         - apk add --no-cache --virtual postgresql-dev zlib-dev gnupg graphviz make git
-        - docker-php-ext-install zip
+        - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
+             && docker-php-ext-install zip
         - pecl install apcu \
+             && docker-php-ext-configure zlib --with-dir/usr/local/zlib \
              && docker-php-ext-install pdo_mysql opcache json mysqli \
              && docker-php-ext-enable apcu mysqli \
         - cp docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
