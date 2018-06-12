@@ -116,6 +116,8 @@
             "App\\Infra\\GCP\\CloudTranslation\\Interfaces\\": "src/Infra/GCP/CloudTranslation/Interfaces/",
             "App\\Infra\\GCP\\CloudTranslation\\UI\\Interfaces\\": "src/Infra/GCP/CloudTranslation/UI/Interfaces/",
             "App\\Infra\\GCP\\CloudVision\\": "src/Infra/GCP/CloudVision/",
+            "App\\Infra\\GCP\\CloudVision\\Validator\\": "src/Infra/GCP/CloudVision/Validator/",
+            "App\\Infra\\GCP\\CloudVision\\Validator\\Interfaces\\": "src/Infra/GCP/CloudVision/Validator/Interfaces/",
             "App\\Infra\\GCP\\CloudVision\\Interfaces\\": "src/Infra/GCP/CloudVision/Interfaces/",
             "App\\Infra\\Redis\\": "src/Infra/Redis/",
             "App\\Infra\\Redis\\Interfaces\\": "src/Infra/Redis/Interfaces/",
