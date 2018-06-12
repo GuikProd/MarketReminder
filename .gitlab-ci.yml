@@ -63,7 +63,7 @@ phpunit:
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
     script:
         - php composer.phar dump-autoload -a -o
-        - php ./bin/phpunit -v --exclude-groups Blackfire
+        - php $CI_PROJECT_DIR/bin/phpunit -v --exclude-groups Blackfire
 
 behat_core:
     stage: functional
