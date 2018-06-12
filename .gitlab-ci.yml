@@ -45,17 +45,16 @@ phpunit:
     services:
         - redis
     before_script:
-        - apk add --no-cache --virtual postgresql-dev zlib-dev gnupg graphviz make git libzip-dev
-        - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
-             && docker-php-ext-install zip
-        - pecl install apcu \
-             && docker-php-ext-configure zlib --with-dir/usr/local/zlib \
-             && docker-php-ext-install pdo_mysql opcache json mysqli \
-             && docker-php-ext-enable apcu mysqli zlib zip
-        - cp docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
+        - php -vv
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
+        - php composer.phar install -n --optimize-autoloader --apcu-autoloader
+        - php composer.phar dump-autoload --optimize --apcu
+        - apk add --no-cache zlib-dev
+        - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
+             && docker-php-ext-install zip
+        - docker-php-ext-install zip
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
