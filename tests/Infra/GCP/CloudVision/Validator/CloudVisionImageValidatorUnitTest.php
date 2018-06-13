@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudVision\Validator;
 
-use App\Infra\GCP\CloudVision\CloudVisionImageValidator;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
+use App\Infra\GCP\CloudVision\Validator\CloudVisionImageValidator;
 use App\Infra\GCP\CloudVision\Validator\Interfaces\CloudVisionImageValidatorInterface;
 use PHPUnit\Framework\TestCase;
 

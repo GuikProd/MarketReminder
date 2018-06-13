@@ -3,6 +3,7 @@ stages:
     - frontend
     - unit
     - functional
+    - performances
     - deployment
 
 cache:
@@ -27,7 +28,7 @@ deptrac:
     before_script:
         - curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
         - chmod +x deptrac.phar
-        - mv ./deptrac.phar /usr/bin/deptrac
+        - mv ./deptrac.phar /usr/bin/deptracs
     script:
         - deptrac
 
@@ -61,6 +62,11 @@ phpunit:
     script:
         - php composer.phar install -a -o
         - php composer.phar dump-autoload -a -o
+        - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:s:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
         - php $CI_PROJECT_DIR/bin/phpunit -v --exclude-group Blackfire
 
 behat_core:
@@ -85,6 +91,11 @@ behat_core:
     script:
         - php composer.phar install -n -a -o
         - php composer.phar dump-autoload -a -o
+        - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:s:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
 
 behat_e2e:
     stage: functional
@@ -108,3 +119,37 @@ behat_e2e:
     script:
         - php composer.phar install -n -a -o
         - php composer.phar dump-autoload -a -o
+        - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:s:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
+
+blackfire:
+    stage: performances
+    image: php:fpm-alpine
+    services:
+        - redis
+    before_script:
+        - php -vv
+        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        - php composer-setup.php
+        - php -r "unlink('composer-setup.php');"
+        - php composer.phar install -n --optimize-autoloader --apcu-autoloader
+        - php composer.phar dump-autoload --optimize --apcu
+        - apk add --no-cache zlib-dev
+        - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
+             && docker-php-ext-install zip
+        - docker-php-ext-install zip
+        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
+        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
+        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
+    script:
+        - php composer.phar install -a -o
+        - php composer.phar dump-autoload -a -o
+        - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:s:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
+        - php $CI_PROJECT_DIR/bin/phpunit -v --group Blackfire
