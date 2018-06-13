@@ -41,7 +41,14 @@ interface CloudVisionImageValidatorInterface
      * @param \SplFileInfo $image The image to validate.
      * @param string $analyseMode
      *
-     * @return bool If the image is valid or not.
+     * @return void
      */
-    public function validate(\SplFileInfo $image, string $analyseMode): bool;
+    public function validate(\SplFileInfo $image, string $analyseMode): void;
+
+    /**
+     * Return all the violations found using the voters.
+     *
+     * @return array
+     */
+    public function getViolations(): array;
 }

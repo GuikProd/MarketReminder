@@ -30,9 +30,17 @@ interface CloudVisionVoterHelperInterface
     /**
      * Allow to vote about a label and return the decision.
      *
-     * @param string $label  The label which need to receive a vote.
+     * @param string $label The label which need to receive a vote.
+     * @param int $calls    The number of vote needed to validate the label.
      *
-     * @return bool    Depending on if the label is accepted or not.
+     * @return void
      */
-    public function vote(string $label): bool;
+    public function vote(string $label, int $calls = 10): void;
+
+    /**
+     * Return the number of vote.
+     *
+     * @return int
+     */
+    public function getVotes(): int;
 }

@@ -1,5 +1,4 @@
 stages:
-    - ci
     - quality
     - frontend
     - unit
@@ -41,15 +40,6 @@ deptrac:
 #    script:
 #        - ./node_modules/.bin/encore production
 
-docker:
-    stage: ci
-    image: docker
-    before_script:
-        - docker login registry.gitlab.com --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD
-    script:
-        - docker build -t registry.gitlab.com/guikprod-tech/marketreminder .
-        - docker push registry.gitlab.com/guikprod-tech/marketreminder:CI_COMMIT_REF_SLUG
-
 phpunit:
     stage: unit
     image: php:fpm-alpine
@@ -69,6 +59,8 @@ phpunit:
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
         - php composer.phar install -a -o
         - php composer.phar dump-autoload -a -o
+        - cp $CI_PROJECT_DIR/.env.gitlab.dist $CI_PROJECT_DIR/.env
+        - cp $CI_PROJECT_DIR/gitlab_phpunit.xml.dist $CI_PROJECT_DIR/phpunit.xml
     script:
         - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
         - php $CI_PROJECT_DIR/bin/console d:s:c --env=test

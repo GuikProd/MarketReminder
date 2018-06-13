@@ -21,11 +21,19 @@ use App\Infra\GCP\CloudVision\Validator\Interfaces\CloudVisionImageValidatorInte
 /**
  * Class CloudVisionImageValidator.
  *
+ * This class is responsible to validate the content of an image.
+ * The check is done via GCP CloudVision API.
+ * In order to ease the validation process, the labels are passed
+ * to a CloudVisionVoterHelper which should decide if the labels are authorized.
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 final class CloudVisionImageValidator implements CloudVisionImageValidatorInterface
 {
     /**
+     * Used in order to analyse the image using filesystem access
+     * and the analyse mode (defined via configuration or during runtime).
+     *
      * @var CloudVisionAnalyserHelperInterface
      */
     private $cloudAnalyserHelper;
@@ -36,14 +44,18 @@ final class CloudVisionImageValidator implements CloudVisionImageValidatorInterf
     private $cloudVisionDescriber;
 
     /**
+     * Used to decide if the label is authorized or not.
+     * By default, the Voter is called 10 times in order
+     * to optimise the final vote.
+     *
      * @var CloudVisionVoterHelperInterface
      */
     private $cloudVisionVoter;
 
     /**
-     * @var bool
+     * @var array
      */
-    private $violation = false;
+    private $violation = [];
 
     /**
      * {@inheritdoc}
@@ -53,19 +65,17 @@ final class CloudVisionImageValidator implements CloudVisionImageValidatorInterf
         CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper,
         CloudVisionVoterHelperInterface $cloudVisionVoterHelper
     ) {
-        $this->cloudAnalyserHelper = $cloudVisionAnalyserHelper;
+        $this->cloudAnalyserHelper  = $cloudVisionAnalyserHelper;
         $this->cloudVisionDescriber = $cloudVisionDescriberHelper;
-        $this->cloudVisionVoter = $cloudVisionVoterHelper;
+        $this->cloudVisionVoter     = $cloudVisionVoterHelper;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function validate(\SplFileInfo $image, string $analyseMode): bool
+    public function validate(\SplFileInfo $image, string $analyseMode): void
     {
-        if (\is_null($image)) {
-            return false;
-        }
+        if (\is_null($image)) { return; }
 
         $analyzedImage = $this->cloudAnalyserHelper->analyse($image->getPathname(), $analyseMode);
 
@@ -74,19 +84,22 @@ final class CloudVisionImageValidator implements CloudVisionImageValidatorInterf
         $this->cloudVisionDescriber->obtainLabel($labels);
 
         foreach ($this->cloudVisionDescriber->getLabels() as $label) {
-            if (!$this->cloudVisionVoter->vote($label)) {
-                $this->violation = true;
-                return false;
+
+            $this->cloudVisionVoter->vote($label);
+
+            if ($this->cloudVisionVoter->getVotes() > 0) {
+                $this->violation[] = sprintf(
+                    'This label isn\'t authorized, given %s',
+                    $label
+                );
             }
         }
-
-        return true;
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
-    public function hasTriggerViolation(): bool
+    public function getViolations(): array
     {
         return $this->violation;
     }

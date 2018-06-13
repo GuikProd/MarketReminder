@@ -39,15 +39,15 @@ final class CloudVisionVoterHelperUnitTest extends TestCase
 
     public function testWrongLabel()
     {
-        static::assertFalse(
-            $this->cloudVisionVoter->vote('sex')
-        );
+        $this->cloudVisionVoter->vote('sex');
+
+        static::assertGreaterThan(0, $this->cloudVisionVoter->getVotes());
     }
 
     public function testRightLabel()
     {
-        static::assertTrue(
-            $this->cloudVisionVoter->vote('troll')
-        );
+        $this->cloudVisionVoter->vote('troll');
+
+        static::assertEquals(0, $this->cloudVisionVoter->getVotes());
     }
 }
