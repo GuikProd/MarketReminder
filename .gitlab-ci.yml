@@ -28,7 +28,7 @@ deptrac:
     before_script:
         - curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
         - chmod +x deptrac.phar
-        - mv ./deptrac.phar /usr/bin/deptracs
+        - mv ./deptrac.phar /usr/bin/deptrac
     script:
         - deptrac
 
