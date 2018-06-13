@@ -15,10 +15,10 @@ namespace App\Tests\Application\Command;
 
 use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Application\Command\TranslationWarmerCommand;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationClientInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 
