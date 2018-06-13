@@ -28,19 +28,18 @@ interface CloudVisionVoterHelperInterface
     public function __construct(array $forbiddenLabels);
 
     /**
-     * Allow to vote about a label and return the decision.
+     * Allow to vote about a label.
      *
      * @param string $label The label which need to receive a vote.
-     * @param int $calls    The number of vote needed to validate the label.
      *
      * @return void
      */
-    public function vote(string $label, int $calls = 10): void;
+    public function vote(string $label): void;
 
     /**
-     * Return the number of vote.
+     * Return the decision about a label.
      *
-     * @return int
+     * @return bool
      */
-    public function getVotes(): int;
+    public function isLabelAuthorized(): bool;
 }

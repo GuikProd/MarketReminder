@@ -69,7 +69,7 @@ final class CloudVisionVoterHelperSystemTest extends TestCase
         $configuration = new Configuration();
         $configuration->assert(
             'main.peak_memory < 4kB',
-            'CloudVisionVoter wrong label memory usage'
+            'CloudVisionVoter right label memory usage'
         );
 
         $this->assertBlackfire($configuration, function () {

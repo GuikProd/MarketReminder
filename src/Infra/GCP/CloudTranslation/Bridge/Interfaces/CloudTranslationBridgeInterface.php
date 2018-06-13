@@ -18,6 +18,8 @@ use Google\Cloud\Translate\TranslateClient;
 /**
  * Interface CloudTranslationBridgeInterface.
  *
+ * {@internal This interface is linked to the CloudTranslationBridge}
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 interface CloudTranslationBridgeInterface

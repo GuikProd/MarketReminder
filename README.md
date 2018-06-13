@@ -4,9 +4,7 @@ The source code of the web application/API used for MarketReminder mobile applic
 
 ## Build
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/06883408-e402-40da-842e-724eadbde07b/mini.png)](https://insight.sensiolabs.com/projects/06883408-e402-40da-842e-724eadbde07b)
-[![pipeline status](https://gitlab.com/GuikProd/MarketReminder/badges/master/pipeline.svg)](https://gitlab.com/GuikProd/MarketReminder/commits/master)
-[![coverage report](https://gitlab.com/GuikProd/MarketReminder/badges/master/coverage.svg)](https://gitlab.com/GuikProd/MarketReminder/commits/master)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/04824489-3502-4305-8f56-e840f1e03778/mini.png)](https://insight.sensiolabs.com/projects/04824489-3502-4305-8f56-e840f1e03778)
 [![Build Status](https://travis-ci.org/Guikingone/MarketReminder.svg?branch=master)](https://travis-ci.org/Guikingone/MarketReminder)
 [![CircleCI](https://circleci.com/gh/GuikProd/MarketReminder.svg?style=svg)](https://circleci.com/gh/GuikProd/MarketReminder)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0975d1e66031b5235e08/maintainability)](https://codeclimate.com/github/Guikingone/MarketReminder/maintainability)

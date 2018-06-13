@@ -20,19 +20,29 @@ use Google\Cloud\Translate\TranslateClient;
 /**
  * Class CloudTranslationBridge.
  *
+ * This class is responsible to create a new bridge
+ * between the application and Google Cloud Platform Translation API.
+ *
+ * By default, the bridge isn't activated, the configuration can activate it
+ * as soon as it need.
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 final class CloudTranslationBridge implements CloudBridgeInterface, CloudTranslationBridgeInterface
 {
     /**
-     * @var string
+     * The default name of the credentials file.
+     *
+     * @var null|string
      */
-    private $credentialsFileName;
+    private $credentialsFileName = null;
 
     /**
-     * @var string
+     * The default folder where is located the credentials file.
+     *
+     * @var null|string
      */
-    private $credentialsFolder;
+    private $credentialsFolder = null;
 
     /**
      * {@inheritdoc}
@@ -42,7 +52,7 @@ final class CloudTranslationBridge implements CloudBridgeInterface, CloudTransla
         string $credentialsFolder
     ) {
         $this->credentialsFileName = $credentialsFileName;
-        $this->credentialsFolder = $credentialsFolder;
+        $this->credentialsFolder   = $credentialsFolder;
     }
 
     /**
@@ -52,7 +62,8 @@ final class CloudTranslationBridge implements CloudBridgeInterface, CloudTransla
     {
         return new TranslateClient([
             'keyFile' => json_decode(
-                file_get_contents($this->credentialsFolder.'/'.$this->credentialsFileName), true
+                file_get_contents($this->credentialsFolder.'/'.$this->credentialsFileName),
+                true
             )
         ]);
     }

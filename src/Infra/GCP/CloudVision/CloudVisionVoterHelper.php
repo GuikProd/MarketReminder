@@ -18,9 +18,7 @@ use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
 /**
  * Class CloudVisionVoterHelper.
  *
- * This class is used in order to give a vote
- * on a given analyse, the vote is called 10 times (minimal configuration !)
- * in order to ease the decision process.
+ * This class is used in order to give a vote on a given label.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
@@ -29,18 +27,18 @@ final class CloudVisionVoterHelper implements CloudVisionVoterHelperInterface
     /**
      * The labels which are forbidden.
      *
-     * (This array is populated via configuration)
+     * (This array is populated during instantiation)
      *
      * @var array
      */
     private $forbiddenLabels = [];
 
     /**
-     * The number of vote which found a negative label.
+     * Contain the decision about the current label.
      *
-     * @var int
+     * @var bool
      */
-    private $votes = 0;
+    private $decision = true;
 
     /**
      * {@inheritdoc}
@@ -53,24 +51,16 @@ final class CloudVisionVoterHelper implements CloudVisionVoterHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function vote(string $label, int $calls = 10): void
+    public function vote(string $label): void
     {
-        $startingVote = 0;
-
-        while ($startingVote < $calls) {
-            if (in_array($label, $this->forbiddenLabels)) {
-                $this->votes += 1;
-            }
-
-            $startingVote++;
-        }
+        $this->decision = in_array($label, $this->forbiddenLabels);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getVotes(): int
+    public function isLabelAuthorized(): bool
     {
-        return $this->votes;
+        return !$this->decision;
     }
 }

@@ -21,7 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class SessionMessageSubscriberSystemTest extends KernelTestCase
+final class SessionMessageSubscriberSystemTest extends KernelTestCase
 {
     use TestCaseTrait;
 }
