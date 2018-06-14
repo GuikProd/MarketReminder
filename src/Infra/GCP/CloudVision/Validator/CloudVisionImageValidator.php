@@ -87,7 +87,7 @@ final class CloudVisionImageValidator implements CloudVisionImageValidatorInterf
 
             $this->cloudVisionVoter->vote($label);
 
-            if ($this->cloudVisionVoter->getVotes() > 0) {
+            if (!$this->cloudVisionVoter->isLabelAuthorized()) {
                 $this->violation[] = sprintf(
                     'This label isn\'t authorized, given %s',
                     $label

@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace App\Application\Validator;
 
-use App\Infra\GCP\CloudVision\CloudVisionVoterHelper;
-use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
-use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use App\Application\Validator\Interfaces\ImageContentValidatorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudVision\Validator\Interfaces\CloudVisionImageValidatorInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -26,38 +25,40 @@ use Symfony\Component\Validator\ConstraintValidator;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class ImageContentValidator extends ConstraintValidator implements ImageContentValidatorInterface
+final class ImageContentValidator extends ConstraintValidator implements ImageContentValidatorInterface
 {
     /**
-     * @var CloudVisionAnalyserHelperInterface
+     * @var CloudTranslationRepositoryInterface
      */
-    private $cloudVisionAnalyser;
+    private $cloudTranslationRepository;
 
     /**
-     * @var CloudVisionDescriberHelperInterface
+     * @var CloudVisionImageValidatorInterface
      */
-    private $cloudVisionDescriber;
+    private $cloudVisionImageValidator;
 
     /**
-     * @var TranslatorInterface
+     * @var RequestStack
      */
-    private $translator;
+    private $requestStack;
 
     /**
      * {@inheritdoc}
      */
     public function __construct(
-        CloudVisionAnalyserHelperInterface $cloudVisionAnalyserHelper,
-        CloudVisionDescriberHelperInterface $cloudVisionDescriberHelper,
-        TranslatorInterface $translator
+        CloudTranslationRepositoryInterface $cloudTranslationRepository,
+        CloudVisionImageValidatorInterface $cloudVisionImageValidator,
+        RequestStack $requestStack
     ) {
-        $this->cloudVisionAnalyser = $cloudVisionAnalyserHelper;
-        $this->cloudVisionDescriber = $cloudVisionDescriberHelper;
-        $this->translator = $translator;
+        $this->cloudTranslationRepository = $cloudTranslationRepository;
+        $this->cloudVisionImageValidator = $cloudVisionImageValidator;
+        $this->requestStack = $requestStack;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function validate($value, Constraint $constraint)
     {
@@ -65,24 +66,17 @@ class ImageContentValidator extends ConstraintValidator implements ImageContentV
             return;
         }
 
-        $analysedImage = $this->cloudVisionAnalyser
-                              ->analyse(
-                                  $value->getPathname(),
-                                  'LABEL_DETECTION'
-                              );
+        $this->cloudVisionImageValidator->validate($value, 'LABEL_DETECTION');
 
-        $labels = $this->cloudVisionDescriber->describe($analysedImage)->labels();
-
-        $this->cloudVisionDescriber->obtainLabel($labels);
-
-        foreach ($this->cloudVisionDescriber->getLabels() as $label) {
-            if (!CloudVisionVoterHelper::vote($label)) {
-                $this->context
-                     ->buildViolation(
-                         $this->translator
-                              ->trans($constraint->message, [], 'validators')
-                     )->addViolation();
-            }
+        if (\count($this->cloudVisionImageValidator->getViolations()) > 0) {
+            $this->context
+                ->buildViolation(
+                    $this->cloudTranslationRepository->getSingleEntry(
+                        'validators.'.$this->requestStack->getCurrentRequest()->getLocale().'.yaml',
+                        $this->requestStack->getCurrentRequest()->getLocale(),
+                        $constraint->message
+                    )
+                )->addViolation();
         }
     }
 }
