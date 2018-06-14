@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Presenter;
 
-use App\Infra\GCP\CloudTranslation\CloudTranslationItem;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationItemInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationPresenterInterface;
-use App\Infra\GCP\CloudTranslation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
+use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\UI\Interfaces\CloudTranslationPresenterInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;

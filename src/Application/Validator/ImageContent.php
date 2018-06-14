@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraint;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class ImageContent extends Constraint
+final class ImageContent extends Constraint
 {
     /**
      * @var string

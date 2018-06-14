@@ -96,6 +96,11 @@ behat_core:
         - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm messages fr --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm messages en --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm validators fr --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm validators en --env=test
+        - php $CI_PROJECT_DIR/vendor/bin/behat --profile core
 
 behat_e2e:
     stage: functional
@@ -124,6 +129,11 @@ behat_e2e:
         - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm messages fr --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm messages en --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm validators fr --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm validators en --env=test
+        - php $CI_PROJECT_DIR/vendor/bin/behat --profile e2e
 
 blackfire:
     stage: performances
