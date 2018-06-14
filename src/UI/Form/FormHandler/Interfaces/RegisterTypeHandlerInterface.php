@@ -18,7 +18,7 @@ use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;

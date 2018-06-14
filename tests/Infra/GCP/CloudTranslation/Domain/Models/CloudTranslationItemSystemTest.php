@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudTranslationItemSystemTest extends TestCase
+final class CloudTranslationItemSystemTest extends TestCase
 {
     use TestCaseTrait;
 

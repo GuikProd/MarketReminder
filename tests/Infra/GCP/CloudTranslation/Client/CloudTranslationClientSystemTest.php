@@ -100,7 +100,7 @@ final class CloudTranslationClientSystemTest extends TestCase
             'CloudTranslationClient multiples translation network out'
         );
 
-        $this->assertBlackfire($configuration, function() {
+        $this->assertBlackfire($configuration, function () {
             $this->cloudTranslationHelper->translateArray([
                 'Bien le bonjour',
                 'Petit test'

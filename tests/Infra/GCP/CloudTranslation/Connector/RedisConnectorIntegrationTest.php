@@ -47,7 +47,8 @@ class RedisConnectorIntegrationTest extends KernelTestCase
     public function testCacheCanBeCleaned()
     {
         $redisConnector = new RedisConnector(
-            $this->redisDSN, $this->redisNamespace
+            $this->redisDSN,
+            $this->redisNamespace
         );
 
         static::assertTrue($redisConnector->getAdapter()->clear());

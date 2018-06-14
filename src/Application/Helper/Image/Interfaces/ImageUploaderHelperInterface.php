@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Application\Helper\Image\Interfaces;
 
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
 
 /**
  * Interface ImageUploaderHelperInterface.

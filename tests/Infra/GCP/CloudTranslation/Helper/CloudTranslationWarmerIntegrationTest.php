@@ -154,7 +154,6 @@ final class CloudTranslationWarmerIntegrationTest extends CloudTranslationTestCa
         string $channel,
         string $locale
     ) {
-
         $this->createFileSystemConnector();
         $this->createFileSystemBackUp();
         $this->cloudTranslationRepository = new CloudTranslationRepository(
@@ -189,7 +188,6 @@ final class CloudTranslationWarmerIntegrationTest extends CloudTranslationTestCa
         string $channel,
         string $locale
     ) {
-
         $this->createRedisConnector();
         $this->createRedisBackUp();
         $this->cloudTranslationRepository = new CloudTranslationRepository(

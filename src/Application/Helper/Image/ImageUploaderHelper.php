@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Helper\Image;
 
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 
 /**
  * Class ImageUploaderHelper.

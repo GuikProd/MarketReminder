@@ -133,7 +133,7 @@ class UserSubscriberSystemTest extends KernelTestCase
         $configuration->assert('main.network_in < 45B', 'User subscriber user ask reset password network in');
         $configuration->assert('main.network_out < 360B', 'User subscriber user ask reset password network out');
 
-        $this->assertBlackfire($configuration, function() {
+        $this->assertBlackfire($configuration, function () {
             $this->userSubscriber->onUserAskResetPasswordEvent($this->userEvent);
         });
     }

@@ -109,7 +109,7 @@ class ResetPasswordResponderUnitTest extends TestCase
 
         static::assertInstanceOf(
             RedirectResponse::class,
-            $resetPasswordResponder($this->request,true)
+            $resetPasswordResponder($this->request, true)
         );
     }
 
@@ -128,7 +128,7 @@ class ResetPasswordResponderUnitTest extends TestCase
 
         static::assertInstanceOf(
             Response::class,
-            $resetPasswordResponder($this->request,false, $this->form)
+            $resetPasswordResponder($this->request, false, $this->form)
         );
     }
 }

@@ -58,14 +58,18 @@ final class CloudTranslationValidatorSystemTest extends TestCase
 
         $this->assertBlackfire($configuration, function () {
             $this->cloudTranslationValidator->validate(
-                new CloudTranslation('messages.fr.yaml', 'messages', [
+                new CloudTranslation(
+                    'messages.fr.yaml',
+                    'messages',
+                    [
                     new CloudTranslationItem([
                     '_locale' => 'fr',
                     'tag' => 'Hello',
                     'channel' => 'messages',
                     'key' => 'hello.home',
                     'value' => 'Hello !'])]
-                ), ['home.text' => 'Hello World !']
+                ),
+                ['home.text' => 'Hello World !']
             );
         });
     }
@@ -85,14 +89,18 @@ final class CloudTranslationValidatorSystemTest extends TestCase
 
         $this->assertBlackfire($configuration, function () {
             $this->cloudTranslationValidator->validate(
-                new CloudTranslation('messages.fr.yaml', 'messages', [
+                new CloudTranslation(
+                    'messages.fr.yaml',
+                    'messages',
+                    [
                         new CloudTranslationItem([
                             '_locale' => 'fr',
                             'tag' => 'Hello',
                             'channel' => 'messages',
                             'key' => 'home.text',
                             'value' => 'Hello World !'])]
-                ), ['home.text' => 'Hello World !']
+                ),
+                ['home.text' => 'Hello World !']
             );
         });
     }

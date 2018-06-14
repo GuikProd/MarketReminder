@@ -21,7 +21,7 @@ use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;

@@ -25,7 +25,7 @@ interface CloudVisionVoterHelperInterface
      *
      * @param array $forbiddenLabels
      */
-    public function __construct(array $forbiddenLabels);
+    public function __construct(array $forbiddenLabels = []);
 
     /**
      * Allow to vote about a label.

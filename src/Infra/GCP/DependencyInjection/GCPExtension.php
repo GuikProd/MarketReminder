@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\DependencyInjection;
 
-use App\Infra\GCP\Bridge\CloudStorageBridge;
 use App\Infra\GCP\Bridge\CloudVisionBridge;
-use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
-use App\Infra\GCP\CloudStorage\CloudStorageCleanerHelper;
-use App\Infra\GCP\CloudStorage\CloudStorageWriterHelper;
-use App\Infra\GCP\CloudStorage\CloudStorageRetrieverHelper;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageCleanerHelperInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageRetrieverHelperInterface;
+use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
+use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Infra\GCP\CloudStorage\Helper\CloudStorageCleanerHelper;
+use App\Infra\GCP\CloudStorage\Helper\CloudStorageRetrieverHelper;
+use App\Infra\GCP\CloudStorage\Helper\CloudStorageWriterHelper;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageCleanerHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageRetrieverHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
@@ -36,6 +36,12 @@ use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudVision\CloudVisionAnalyserHelper;
+use App\Infra\GCP\CloudVision\CloudVisionDescriberHelper;
+use App\Infra\GCP\CloudVision\CloudVisionVoterHelper;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
+use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
@@ -176,13 +182,33 @@ final class GCPExtension extends Extension
 
         // Vision
         if ($config['vision']['activated']) {
-            if (!$container->hasDefinition(new Reference(CloudVisionBridge::class))) {
-                $container->register(CloudVisionBridge::class, CloudVisionBridge::class)
-                    ->addArgument($container->getParameter('cloud.vision_credentials.filename'))
-                    ->addArgument($container->getParameter('cloud.vision_credentials'))
-                    ->setPublic(false)
-                    ->addTag('gcp.vision');
-                $container->setAlias(CloudVisionBridgeInterface::class, CloudVisionBridge::class);
+            if (!$container->hasDefinition(CloudVisionBridgeInterface::class)) {
+                $container->register(CloudVisionBridgeInterface::class, CloudVisionBridge::class)
+                          ->addArgument($container->getParameter('cloud.vision_credentials.filename'))
+                          ->addArgument($container->getParameter('cloud.vision_credentials'))
+                          ->setPublic(false)
+                          ->addTag('gcp.vision_bridge');
+            }
+
+            if (!$container->hasDefinition(CloudVisionAnalyserHelperInterface::class)) {
+                $container->register(CloudVisionAnalyserHelperInterface::class, CloudVisionAnalyserHelper::class)
+                          ->addArgument($container->getDefinition(CloudVisionBridgeInterface::class))
+                          ->setPublic(false)
+                          ->addTag('gcp.vision_helper');
+            }
+
+            if (!$container->hasDefinition(CloudVisionDescriberHelperInterface::class)) {
+                $container->register(CloudVisionDescriberHelperInterface::class, CloudVisionDescriberHelper::class)
+                          ->addArgument($container->getDefinition(CloudVisionBridgeInterface::class))
+                          ->setPublic(false)
+                          ->addTag('gcp.vision_helper');
+            }
+
+            if (!$container->hasDefinition(CloudVisionVoterHelperInterface::class)) {
+                $container->register(CloudVisionVoterHelperInterface::class, CloudVisionVoterHelper::class)
+                          ->addArgument($config['vision']['forbidden_labels'])
+                          ->setPublic(false)
+                          ->addTag('gcp.vision_helper');
             }
         }
     }

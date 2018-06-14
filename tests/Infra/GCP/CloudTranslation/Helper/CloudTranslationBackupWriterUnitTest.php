@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class CloudTranslationBackupWriterUnitTest.
- * 
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 final class CloudTranslationBackupWriterUnitTest extends TestCase

@@ -68,7 +68,6 @@ class CloudTranslationWriterSystemTest extends CloudTranslationTestCase
         );
 
         $this->assertBlackfire($configuration, function () {
-
             $this->cloudTranslationWriter->write(
                 'fr',
                 'messages',
@@ -102,7 +101,6 @@ class CloudTranslationWriterSystemTest extends CloudTranslationTestCase
         );
 
         $this->assertBlackfire($configuration, function () {
-
             $this->cloudTranslationWriter->write(
                 'fr',
                 'messages',

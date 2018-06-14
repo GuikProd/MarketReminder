@@ -110,10 +110,10 @@ behat: features
 	    make check-schema
 	    make fixtures ENV=test
 	    make doctrine-cache
-	    make translation CHANNEL=messages LOCALE=fr
-	    make translation CHANNEL=messages LOCALE=en
-	    make translation CHANNEL=validators LOCALE=fr
-	    make translation CHANNEL=validators LOCALE=fr
+	    make translation CHANNEL=messages LOCALE=fr ENV=test
+	    make translation CHANNEL=messages LOCALE=en ENV=test
+	    make translation CHANNEL=validators LOCALE=fr ENV=test
+	    make translation CHANNEL=validators LOCALE=fr ENV=test
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands

@@ -28,7 +28,7 @@ use Twig\Environment;
 
 /**
  * Class HomeResponderSystemTest.
- * 
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class HomeResponderSystemTest extends KernelTestCase
@@ -93,9 +93,9 @@ class HomeResponderSystemTest extends KernelTestCase
         $configuration->assert('main.network_out < 90B', 'Home responder return response network out');
 
         $this->assertBlackfire($configuration, function () {
-           $responder = $this->homeResponder;
+            $responder = $this->homeResponder;
 
-           $responder($this->request);
+            $responder($this->request);
         });
     }
 }

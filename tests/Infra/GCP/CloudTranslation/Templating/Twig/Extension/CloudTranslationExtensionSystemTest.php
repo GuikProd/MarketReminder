@@ -11,26 +11,23 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Application\Validator;
+namespace App\Tests\Infra\GCP\CloudTranslation\Templating\Twig\Extension;
 
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Blackfire\Profile\Configuration;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ImageContentValidatorSystemTest.
+ * Class CloudTranslationExtensionSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class ImageContentValidatorSystemTest extends KernelTestCase
+final class CloudTranslationExtensionSystemTest extends TestCase
 {
     use TestCaseTrait;
 
-    /**
-     * @group Blackfire
-     *
-     * @requires extension blackfire
-     */
-    public function testItRefuseLabel()
+    public function testItTranslate()
     {
+        $configuration = new Configuration();
     }
 }

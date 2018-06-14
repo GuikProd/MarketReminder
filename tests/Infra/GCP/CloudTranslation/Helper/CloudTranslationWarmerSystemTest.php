@@ -112,7 +112,6 @@ final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
         $this->cloudTranslationWarmer->warmTranslations('messages', 'fr');
 
         $this->assertBlackfire($configuration, function () {
-
             $this->expectException(\InvalidArgumentException::class);
 
             $this->cloudTranslationWarmer->warmTranslations('toto', 'it');
@@ -155,7 +154,6 @@ final class CloudTranslationWarmerSystemTest extends CloudTranslationTestCase
         $this->cloudTranslationWarmer->warmTranslations('messages', 'fr');
 
         $this->assertBlackfire($configuration, function () {
-
             $this->expectException(\InvalidArgumentException::class);
 
             $this->cloudTranslationWarmer->warmTranslations('messages', 'it');

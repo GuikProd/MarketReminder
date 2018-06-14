@@ -85,7 +85,7 @@ final class CloudStorageBridgeSystemTest extends TestCase
         $configuration->assert('metrics.http.requests.count == 0', 'CloudStorageBridge close connexion HTTP Request');
 
         $this->assertBlackfire($configuration, function () {
-           $this->cloudStorageBridge->closeConnexion();
+            $this->cloudStorageBridge->closeConnexion();
         });
     }
 }

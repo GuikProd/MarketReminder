@@ -33,10 +33,10 @@
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell--span-12">
                     {% for success in app.flashes('success') %}
-                        <div id="snackbar-content">{{ success }}</div>
+                        <div id="snackbar-content">{{ success|cloudTranslate(success, 'session', app.request.locale) }}</div>
                     {% endfor %}
                     {% for failure in app.flashes('failure') %}
-                        <div id="snackbar-content">{{ failure }}</div>
+                        <div id="snackbar-content">{{ failure|cloudTranslate(success, 'session', app.request.locale) }}</div>
                     {% endfor %}
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12 layout">
 

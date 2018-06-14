@@ -43,7 +43,7 @@ final class CloudVisionVoterHelper implements CloudVisionVoterHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $forbiddenLabels)
+    public function __construct(array $forbiddenLabels = [])
     {
         $this->forbiddenLabels = $forbiddenLabels;
     }

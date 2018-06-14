@@ -72,7 +72,7 @@ class RedisConnectorSystemTest extends KernelTestCase
         $configuration->assert('main.network_out == 0', 'Connector adapter call network out');
 
         $this->assertBlackfire($configuration, function () {
-           $this->redisConnector->getAdapter();
+            $this->redisConnector->getAdapter();
         });
     }
 

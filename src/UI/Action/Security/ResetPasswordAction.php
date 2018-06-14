@@ -77,6 +77,8 @@ final class ResetPasswordAction implements ResetPasswordActionInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function __invoke(
         Request $request,
