@@ -67,7 +67,40 @@ phpunit:
         - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
-        - php $CI_PROJECT_DIR/bin/phpunit -v --exclude-group Blackfire
+        - php $CI_PROJECT_DIR/bin/phpunit -v --exclude-group Blackfire,Functional
+
+phpunit_functional:
+    stage: functional
+    image: php:fpm-alpine
+    services:
+        - redis
+    before_script:
+        - php -vv
+        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        - php composer-setup.php
+        - php -r "unlink('composer-setup.php');"
+        - apk add --no-cache zlib-dev
+        - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
+             && docker-php-ext-install zip
+        - docker-php-ext-install zip
+        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
+        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
+        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
+        - php composer.phar install -a -o
+        - php composer.phar dump-autoload -a -o
+        - cp $CI_PROJECT_DIR/.env.gitlab.dist $CI_PROJECT_DIR/.env
+        - cp $CI_PROJECT_DIR/gitlab_phpunit.xml.dist $CI_PROJECT_DIR/phpunit.xml
+    script:
+        - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:s:c --env=test
+        - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
+        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm messages fr --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm messages en --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm validators fr --env=test
+        - php $CI_PROJECT_DIR/bin/console app:translation-warm validators en --env=test
+        - php $CI_PROJECT_DIR/bin/phpunit -v --group Functional
 
 behat_core:
     stage: functional

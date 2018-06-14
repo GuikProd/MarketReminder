@@ -19,7 +19,7 @@ use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageWriterHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Form\FormHandler\RegisterTypeHandler;
 use PHPUnit\Framework\TestCase;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Action\Core;
 
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Action\Core\HomeAction;
 use App\UI\Action\Core\Interfaces\HomeActionInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Security;
 
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;

@@ -27,7 +27,7 @@ interface TranslationWarmerCommandInterface
      *
      * @param CloudTranslationWarmerInterface $redisTranslationWarmer
      *
-     * {@internal} this command SHOULD call the @see Command constructor
+     * {@internal this command SHOULD call the @see Command constructor}
      */
     public function __construct(CloudTranslationWarmerInterface $redisTranslationWarmer);
 }
