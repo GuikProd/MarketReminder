@@ -58,13 +58,11 @@ interface CloudTranslationWarmerInterface
      *
      * @param string $channel
      * @param string $locale
-     *
-     * @throws \InvalidArgumentException  If the channel does not exist.
-     * @throws \Psr\Cache\InvalidArgumentException {@see CacheItemPoolInterface::getItem()}
+     * @param string $defaultLocale
      *
      * @return bool  If the translations has been warmed.
      */
-    public function warmTranslations(string $channel, string $locale): bool;
+    public function warmTranslations(string $channel, string $locale, string $defaultLocale = 'fr'): bool;
 
     /**
      * Allow to check the cache content before any writing process.
@@ -80,12 +78,12 @@ interface CloudTranslationWarmerInterface
     public function isCacheValid(string $channel, string $locale, array $content): bool;
 
     /**
-     * Allow to check the keys of a given file (if it was already translated).
+     * Allow to check if the file to translate isn't already ready.
      *
      * @param string $filename          The filename of the file to check against.
      * @param array $translatedKeys     The translated keys to check against.
      *
-     * @return bool  If the file is valid or not (false if the file does not exist).
+     * @return bool If the file exist and is valid.
      */
-    public function fileExistAndIsValid(string $filename, array $translatedKeys): bool;
+    public function checkNewFileExistenceAndValidity(string $filename, array $translatedKeys): bool;
 }

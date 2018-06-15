@@ -19,8 +19,6 @@ security.registration_email: Email
 security.registration_password: Password
 security.resetPasswordToken_header: 'Request a new password.'
 security.resetPasswordToken: 'To send'
-user.account_created: 'The account has been created, an email to validate this creation has been sent to you.'
-user.invalid_credentials: 'The credentials entered seem invalid, please try again.'
 user.not_found: 'The filled in identifiers do not correspond to an existing user, please repeat your entry.'
 user.reset_password.success: 'The request has been registered, an email has been sent to you.'
 user.notification.wrong_reset_password_token: 'This token does not exist or has already been validated, please try again.'

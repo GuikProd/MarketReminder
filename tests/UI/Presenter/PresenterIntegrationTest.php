@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\UI\Presenter;
 
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
@@ -23,14 +22,14 @@ use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInter
 use App\Infra\GCP\CloudTranslation\Helper\Validator\CloudTranslationValidator;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PresenterIntegrationTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class PresenterIntegrationTest extends KernelTestCase
+class PresenterIntegrationTest extends TestCase
 {
     /**
      * @var PresenterInterface
@@ -57,8 +56,6 @@ class PresenterIntegrationTest extends KernelTestCase
      */
     protected function setUp()
     {
-        static::bootKernel();
-
         $connector = new FileSystemConnector('test');
         $backUpConnector = new FileSystemConnector('backup_test');
 

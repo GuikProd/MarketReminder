@@ -32,11 +32,8 @@ final class CloudTranslationValidator implements CloudTranslationValidatorInterf
     /**
      * {@inheritdoc}
      */
-    public function validate(
-        CloudTranslationInterface $cloudTranslationItem,
-        array $newValues
-    ): array {
-
+    public function validate(CloudTranslationInterface $cloudTranslationItem, array $newValues): array
+    {
         $translationKey = [];
         $translationContent = [];
         $toCheckKey = [];

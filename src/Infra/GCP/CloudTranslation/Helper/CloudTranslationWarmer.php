@@ -18,6 +18,7 @@ use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslation
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -86,7 +87,7 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
     /**
      * {@inheritdoc}
      */
-    public function warmTranslations(string $channel, string $locale): bool
+    public function warmTranslations(string $channel, string $locale, string $defaultLocale = 'fr'): bool
     {
         if (!\in_array($channel, explode('|', $this->acceptedChannels))
             || !\in_array($locale, explode('|', $this->acceptedLocales))
@@ -100,7 +101,7 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
         $toTranslateContent = [];
 
         $defaultContent = Yaml::parse(
-            file_get_contents($this->translationsFolder.'/'.$channel.'.fr.yaml')
+            file_get_contents($this->translationsFolder.'/'.$channel.'.'.$defaultLocale.'.yaml')
         );
 
         foreach ($defaultContent as $item => $value) {
@@ -109,54 +110,54 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
         }
 
         try {
-            if (!$this->isCacheValid($channel, 'fr', $defaultContent)) {
-                if (!$this->cloudTranslationWriter->write('fr', $channel, $channel.'fr.yaml', $defaultContent)) {
-                    // If the cache already contain the "fr" entries, the process continue.
-                }
-                if (!$this->cloudTranslationBackUpWriter->warmBackUp($channel, 'fr', $defaultContent)) {
-                    // Same as the default cache.
-                }
-            }
-
-            if (!$this->fileExistAndIsValid($channel.'.'.$locale.'.yaml', $toTranslateKeys)) {
-                return false;
-            }
-
-            if (!$newItem = $this->cloudTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
-
-                $translatedElements = [];
-
-                $translatedContent = $this->cloudTranslationWarmer->translateArray($toTranslateContent, $locale);
-
-                foreach ($translatedContent as $value) {
-                    $translatedElements[] = $value['text'];
+            if (!$this->isCacheValid($channel, $defaultLocale, $defaultContent)) {
+                if (!$this->cloudTranslationWriter->write($defaultLocale, $channel, $channel . '.' . $defaultLocale . '.yaml', $defaultContent)) {
+                    // If the cache is already in place, no need to stop the process.
                 }
 
-                if ('fr' !== $locale) {
-                    file_put_contents(
-                        $this->translationsFolder.'/'.$channel.'.'.$locale.'.yaml',
-                        Yaml::dump(array_combine($toTranslateKeys, $translatedElements))
+                if (!$this->cloudTranslationBackUpWriter->warmBackUp($channel, $defaultLocale, $defaultContent)) {
+                    // If the back up is already in place, no need to stop the process.
+                }
+
+                if ($this->checkNewFileExistenceAndValidity($channel . '.' . $locale . '.yaml', $toTranslateKeys)) {
+                    return true;
+                }
+
+                if (!$newItem = $this->cloudTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
+
+                    $translatedElements = [];
+
+                    $translatedContent = $this->cloudTranslationWarmer->translateArray($toTranslateContent, $locale);
+
+                    foreach ($translatedContent as $value) {
+                        $translatedElements[] = $value['text'];
+                    }
+
+                    if ('fr' !== $locale) {
+                        file_put_contents(
+                            $this->translationsFolder . '/' . $channel . '.' . $locale . '.yaml',
+                            Yaml::dump(array_combine($toTranslateKeys, $translatedElements))
+                        );
+                    }
+
+                    $this->cloudTranslationWriter->write(
+                        $locale,
+                        $channel,
+                        $channel . '.' . $locale . '.yaml',
+                        array_combine($toTranslateKeys, $translatedElements)
+                    );
+                    $this->cloudTranslationBackUpWriter->warmBackUp(
+                        $channel,
+                        $locale,
+                        array_combine($toTranslateKeys, $translatedElements)
                     );
                 }
-
-                $this->cloudTranslationWriter->write(
-                    $locale,
-                    $channel,
-                    $channel.'.'.$locale.'.yaml',
-                    array_combine($toTranslateKeys, $translatedElements)
-                );
-                $this->cloudTranslationBackUpWriter->warmBackUp(
-                    $channel,
-                    $locale,
-                    array_combine($toTranslateKeys, $translatedElements)
-                );
             }
 
-        } catch (\Psr\Cache\InvalidArgumentException $exception) {
-            sprintf($exception->getMessage());
-        }
+            return true;
+        } catch (InvalidArgumentException $e) {
 
-        return true;
+        }
     }
 
     /**
@@ -174,13 +175,13 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
             $toCheckContent[$value->getKey()] = $value->getValue();
         }
 
-        return \count(array_diff($content, $toCheckContent)) > 0 ? false : true;
+        return \count(array_diff($content, $toCheckContent)) > 0;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function fileExistAndIsValid(string $filename, array $translatedKeys): bool
+    public function checkNewFileExistenceAndValidity(string $filename, array $translatedKeys): bool
     {
         if (file_exists($this->translationsFolder.'/'.$filename)) {
 

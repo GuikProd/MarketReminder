@@ -8,7 +8,7 @@ declare(strict_types=1);
  * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * file that was distributed with this source code.Cloud
  */
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Templating\Twig\Extension;
@@ -26,6 +26,11 @@ final class CloudTranslationExtensionSystemTest extends TestCase
 {
     use TestCaseTrait;
 
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     */
     public function testItTranslate()
     {
         $configuration = new Configuration();
