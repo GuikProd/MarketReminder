@@ -67,6 +67,9 @@ final class PresenterIntegrationTest extends TestCase
         $this->presenter = new Presenter($this->redisTranslationRepository);
 
         $this->testingData = ['channel' => 'messages', 'key' => 'home.text'];
+
+        $connector->getAdapter()->clear();
+        $backUpConnector->getAdapter()->clear();
     }
 
     /**

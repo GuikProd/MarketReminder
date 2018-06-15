@@ -90,6 +90,9 @@ redis-cache: ## Allow to clean the Redis cache
 	    $(ENV_PHP) ./bin/console redis:flushall -n
 
 phpunit: tests
+	    make check-schema
+	    make fixtures ENV=test
+	    make doctrine-cache
 	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
 
 
