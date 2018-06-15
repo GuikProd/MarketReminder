@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class PresenterIntegrationTest extends TestCase
+final class PresenterIntegrationTest extends TestCase
 {
     /**
      * @var PresenterInterface

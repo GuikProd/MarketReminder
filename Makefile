@@ -114,6 +114,8 @@ behat: features
 	    make translation CHANNEL=messages LOCALE=en ENV=test
 	    make translation CHANNEL=validators LOCALE=fr ENV=test
 	    make translation CHANNEL=validators LOCALE=fr ENV=test
+	    make translation CHANNEL=session LOCALE=fr ENV=test
+	    make translation CHANNEL=session LOCALE=fr ENV=test
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands

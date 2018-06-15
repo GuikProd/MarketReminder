@@ -14,14 +14,24 @@ declare(strict_types=1);
 namespace App\Tests\Application\Subscriber;
 
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SessionMessageSubscriberSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class SessionMessageSubscriberSystemTest extends KernelTestCase
+final class SessionMessageSubscriberSystemTest extends TestCase
 {
     use TestCaseTrait;
+
+    /**
+     * @group Blackfire
+     *
+     * @requires extension blackfire
+     */
+    public function testItStoreInSession()
+    {
+
+    }
 }
