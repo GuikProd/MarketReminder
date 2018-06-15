@@ -70,8 +70,8 @@ final class SessionMessageSubscriber implements EventSubscriberInterface, Sessio
      */
     public function onSessionMessage(SessionMessageEventInterface $event): void
     {
-        if ('' === $event->getMessage() || !$event->getFlashBag()) {
-            return;
+        if ('' === $event->getMessage() || '' === $event->getFlashBag()) {
+            throw new \InvalidArgumentException(sprintf('Both message and FlashBah must be defined !'));
         }
 
         $cacheEntry = $this->cloudTranslationRepository->getSingleEntry(

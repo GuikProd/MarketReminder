@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class SessionMessageSubscriberUnitTest extends TestCase
+final class SessionMessageSubscriberUnitTest extends TestCase
 {
     /**
      * @var CloudTranslationRepositoryInterface
@@ -97,13 +97,13 @@ class SessionMessageSubscriberUnitTest extends TestCase
      */
     public function testSessionMessageIsNotDefined()
     {
+        static::expectException(\InvalidArgumentException::class);
+
         $sessionMessageEventMock = $this->createMock(SessionMessageEventInterface::class);
 
         $sessionMessageEventMock->method('getMessage')->willReturn('');
 
-        static::assertNull(
-            $this->sessionMessageSubscriber->onSessionMessage($sessionMessageEventMock)
-        );
+        $this->sessionMessageSubscriber->onSessionMessage($sessionMessageEventMock);
     }
 
     /**
@@ -111,6 +111,8 @@ class SessionMessageSubscriberUnitTest extends TestCase
      */
     public function testSessionKeyIsNotDefined()
     {
+        static::expectException(\InvalidArgumentException::class);
+
         $sessionMessageEventMock = $this->createMock(SessionMessageEventInterface::class);
 
         $sessionMessageEventMock->method('getFlashBag')->willReturn('');
