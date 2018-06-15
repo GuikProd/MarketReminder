@@ -1188,16 +1188,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.20.4",
+            "version": "v1.20.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-core.git",
-                "reference": "19a7298d6253851439206f594a70919ece07602f"
+                "reference": "d0fd6f49c92737746de23ab15e226922dba35110"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/19a7298d6253851439206f594a70919ece07602f",
-                "reference": "19a7298d6253851439206f594a70919ece07602f",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/d0fd6f49c92737746de23ab15e226922dba35110",
+                "reference": "d0fd6f49c92737746de23ab15e226922dba35110",
                 "shasum": ""
             },
             "require": {
@@ -1243,20 +1243,20 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
-            "time": "2018-05-31T17:51:58+00:00"
+            "time": "2018-06-12T16:51:43+00:00"
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.5.1",
+            "version": "v1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-storage.git",
-                "reference": "b9fd76a9cf27b034f7709e9d74dda7be8f08c05e"
+                "reference": "7b53e44593f2d7dfad2778fb265bb085c26f7a9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-storage/zipball/b9fd76a9cf27b034f7709e9d74dda7be8f08c05e",
-                "reference": "b9fd76a9cf27b034f7709e9d74dda7be8f08c05e",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-storage/zipball/7b53e44593f2d7dfad2778fb265bb085c26f7a9c",
+                "reference": "7b53e44593f2d7dfad2778fb265bb085c26f7a9c",
                 "shasum": ""
             },
             "require": {
@@ -1293,20 +1293,20 @@
                 "Apache-2.0"
             ],
             "description": "Cloud Storage Client for PHP",
-            "time": "2018-05-31T17:51:58+00:00"
+            "time": "2018-06-12T16:51:43+00:00"
         },
         {
             "name": "google/cloud-translate",
-            "version": "v1.2.1",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-translate.git",
-                "reference": "e9e97800c2df7d7ca3a412733ff2d31786f85a06"
+                "reference": "2b2bbc4feee7368e8b6668bb38e03082d2b921a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-translate/zipball/e9e97800c2df7d7ca3a412733ff2d31786f85a06",
-                "reference": "e9e97800c2df7d7ca3a412733ff2d31786f85a06",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-translate/zipball/2b2bbc4feee7368e8b6668bb38e03082d2b921a0",
+                "reference": "2b2bbc4feee7368e8b6668bb38e03082d2b921a0",
                 "shasum": ""
             },
             "require": {
@@ -1337,7 +1337,7 @@
                 "Apache-2.0"
             ],
             "description": "Cloud Transation Client for PHP",
-            "time": "2018-05-31T17:51:58+00:00"
+            "time": "2018-06-12T16:51:43+00:00"
         },
         {
             "name": "google/cloud-vision",

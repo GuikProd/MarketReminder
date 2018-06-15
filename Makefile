@@ -100,16 +100,19 @@ phpunit-functional: tests
 	    make check-schema
 	    make fixtures ENV=test
 	    make doctrine-cache
-	    make translation CHANNEL=messages LOCALE=fr
-	    make translation CHANNEL=messages LOCALE=en
-	    make translation CHANNEL=validators LOCALE=fr
-	    make translation CHANNEL=validators LOCALE=fr
-	    $(ENV_PHP) ./bin/phpunit --group Functional tests/$(FOLDER)
+	    make translation CHANNEL=messages LOCALE=fr ENV=test
+	    make translation CHANNEL=messages LOCALE=en ENV=test
+	    make translation CHANNEL=validators LOCALE=fr ENV=test
+	    make translation CHANNEL=validators LOCALE=en ENV=test
+	    make translation CHANNEL=session LOCALE=fr ENV=test
+	    make translation CHANNEL=session LOCALE=en ENV=test
+	    $(ENV_PHP) ./bin/phpunit --group Functional
 
 phpunit-blackfire: tests
 	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)
 
 behat: features
+	    make cache-clear
 	    make check-schema
 	    make fixtures ENV=test
 	    make doctrine-cache
@@ -150,7 +153,23 @@ logs: ## Allow to see the varnish logs
 
 ## Blackfire commands
 profile_php: ## Allow to profile a page using Blackfire and PHP environment
+	    make cache-clear
+	    make doctrine-cache
+	    make translation CHANNEL=messages LOCALE=fr ENV=prod
+	    make translation CHANNEL=messages LOCALE=en ENV=prod
+	    make translation CHANNEL=validators LOCALE=fr ENV=prod
+	    make translation CHANNEL=validators LOCALE=en ENV=prod
+	    make translation CHANNEL=session LOCALE=fr ENV=prod
+	    make translation CHANNEL=session LOCALE=en ENV=prod
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
 
 profile_varnish: ## Allow to profile a page using Blackfire and Varnish environment
+	    make cache-clear
+	    make doctrine-cache
+	    make translation CHANNEL=messages LOCALE=fr ENV=prod
+	    make translation CHANNEL=messages LOCALE=en ENV=prod
+	    make translation CHANNEL=validators LOCALE=fr ENV=prod
+	    make translation CHANNEL=validators LOCALE=en ENV=prod
+	    make translation CHANNEL=session LOCALE=fr ENV=prod
+	    make translation CHANNEL=session LOCALE=en ENV=prod
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)

@@ -13,7 +13,6 @@ services:
             - '${PHP_PORT}:9000'
         volumes:
             - './:${WORKPATH}:rw,cached'
-            - './var/cache:${WORKPATH}/var/cache'
             - './docker/php/conf/php.ini:/usr/local/etc/php/php.ini'
             # - './docker/php/conf/production/php.ini:/usr/local/etc/php/php.ini' -> Used for production.
         restart: always
@@ -27,7 +26,6 @@ services:
             - php-fpm
         volumes:
             - './:${WORKPATH}:rw'
-            - './var/cache:${WORKPATH}/var/cache'
             - './docker/nginx/conf/core/core.conf:/etc/nginx/conf/nginx.conf:ro'
             - './docker/nginx/conf/development:/etc/nginx/conf.d:ro'
             # - './docker/nginx/conf/production:/etc/nginx/conf.d:ro' -> Uncomment this line for production.

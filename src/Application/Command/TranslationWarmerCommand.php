@@ -57,8 +57,6 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
