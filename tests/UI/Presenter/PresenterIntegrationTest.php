@@ -13,11 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Presenter;
 
+use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
+use App\Infra\GCP\CloudTranslation\Helper\Factory\CloudTranslationFactory;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Validator\CloudTranslationValidator;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -56,13 +59,14 @@ class PresenterIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test')
-        );
+        $connector = new FileSystemConnector('test');
+        $backUpConnector = new FileSystemConnector('backup_test');
 
-        $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
-        $this->redisTranslationWriter = new CloudTranslationWriter($redisConnector);
+        $cloudTranslationFactory = new CloudTranslationFactory();
+        $cloudTranslationValidator = new CloudTranslationValidator();
+
+        $this->redisTranslationRepository = new CloudTranslationRepository($connector, $backUpConnector);
+        $this->redisTranslationWriter = new CloudTranslationWriter($connector, $cloudTranslationFactory, $cloudTranslationValidator);
         $this->presenter = new Presenter($this->redisTranslationRepository);
 
         $this->testingData = ['channel' => 'messages', 'key' => 'home.text'];
