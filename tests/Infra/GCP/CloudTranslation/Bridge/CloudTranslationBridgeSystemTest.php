@@ -15,6 +15,8 @@ namespace App\Tests\Infra\GCP\Bridge;
 
 use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
+use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;
@@ -34,29 +36,22 @@ final class CloudTranslationBridgeSystemTest extends TestCase
     private $cloudTranslationBridge;
 
     /**
+     * @var LoaderInterface
+     */
+    private $credentialsLoader;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
+        $this->credentialsLoader = new CredentialsLoader();
+
         $this->cloudTranslationBridge = new CloudTranslationBridge(
             'credentials.json',
-            __DIR__.'./../../../../_credentials'
+            __DIR__.'/../../../../_credentials',
+            $this->credentialsLoader
         );
-    }
-
-    /**
-     * @group Blackfire
-     *
-     * @requires extension blackfire
-     */
-    public function testCredentialsLoading()
-    {
-        $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 5kB', 'CloudTranslation bridge credentials loading memory');
-
-        $this->assertBlackfire($configuration, function () {
-            $this->cloudTranslationBridge->getCredentials();
-        });
     }
 
     /**

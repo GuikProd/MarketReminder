@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Helper\Interfaces;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 
 /**
  * Interface CloudTranslationBackupWriterInterface.
@@ -25,9 +25,9 @@ interface CloudTranslationBackupWriterInterface
     /**
      * CloudTranslationBackupWriterInterface constructor.
      *
-     * @param ConnectorInterface $backupConnector
+     * @param BackUpConnectorInterface $backupConnector
      */
-    public function __construct(ConnectorInterface $backupConnector);
+    public function __construct(BackUpConnectorInterface $backupConnector);
 
     /**
      * Allow to create a backup of the default cache item.
@@ -41,10 +41,5 @@ interface CloudTranslationBackupWriterInterface
      *
      * @return bool If the back up has succeed or not.
      */
-    public function warmBackUp(
-        string $channel,
-        string $locale,
-        array $newValues,
-        string $format = 'yaml'
-    ): bool;
+    public function warmBackUp(string $channel, string $locale, array $newValues, string $format = 'yaml'): bool;
 }

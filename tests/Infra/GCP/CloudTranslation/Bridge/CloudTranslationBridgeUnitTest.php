@@ -15,6 +15,8 @@ namespace App\Tests\Infra\GCP\CloudTranslation\Bridge;
 
 use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
+use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Translate\TranslateClient;
 use PHPUnit\Framework\TestCase;
 
@@ -28,12 +30,17 @@ final class CloudTranslationBridgeUnitTest extends TestCase
     /**
      * @var string
      */
-    private $cloudTranslationCredentialsFileName;
+    private $cloudTranslationCredentialsFileName = null;
 
     /**
      * @var string
      */
-    private $cloudTranslationCredentialsFolder;
+    private $cloudTranslationCredentialsFolder = null;
+
+    /**
+     * @var LoaderInterface
+     */
+    private $credentialsLoader;
 
     /**
      * {@inheritdoc}
@@ -41,14 +48,16 @@ final class CloudTranslationBridgeUnitTest extends TestCase
     protected function setUp()
     {
         $this->cloudTranslationCredentialsFileName = 'credentials.json';
-        $this->cloudTranslationCredentialsFolder = __DIR__.'./../../../../_credentials/';
+        $this->cloudTranslationCredentialsFolder = __DIR__.'/../../../../_credentials/';
+        $this->credentialsLoader = new CredentialsLoader();
     }
 
     public function testItImplements()
     {
         $cloudTranslationBridge = new CloudTranslationBridge(
             $this->cloudTranslationCredentialsFileName,
-            $this->cloudTranslationCredentialsFolder
+            $this->cloudTranslationCredentialsFolder,
+            $this->credentialsLoader
         );
 
         static::assertInstanceOf(
@@ -57,50 +66,17 @@ final class CloudTranslationBridgeUnitTest extends TestCase
         );
     }
 
-    public function testCredentialsAreLoaded()
-    {
-        $cloudTranslationBridge = new CloudTranslationBridge(
-            $this->cloudTranslationCredentialsFileName,
-            $this->cloudTranslationCredentialsFolder
-        );
-
-        static::assertSame(
-            $this->cloudTranslationCredentialsFileName,
-            $cloudTranslationBridge->getCredentials()['keyFile']
-        );
-        static::assertSame(
-            $this->cloudTranslationCredentialsFolder,
-            $cloudTranslationBridge->getCredentials()['keyFilePath']
-        );
-    }
-
     public function testItReturnClient()
     {
         $cloudTranslationBridge = new CloudTranslationBridge(
             $this->cloudTranslationCredentialsFileName,
-            $this->cloudTranslationCredentialsFolder
+            $this->cloudTranslationCredentialsFolder,
+            $this->credentialsLoader
         );
 
         static::assertInstanceOf(
             TranslateClient::class,
             $cloudTranslationBridge->getTranslateClient()
-        );
-    }
-
-    public function testItStopConnexion()
-    {
-        $cloudTranslationBridge = new CloudTranslationBridge(
-            $this->cloudTranslationCredentialsFileName,
-            $this->cloudTranslationCredentialsFolder
-        );
-
-        $cloudTranslationBridge->closeConnexion();
-
-        static::assertNull(
-            $cloudTranslationBridge->getCredentials()['keyFile']
-        );
-        static::assertNull(
-            $cloudTranslationBridge->getCredentials()['keyFilePath']
         );
     }
 }

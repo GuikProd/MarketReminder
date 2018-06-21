@@ -93,7 +93,7 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
             || !\in_array($locale, explode('|', $this->acceptedLocales))
         ) {
             throw new \InvalidArgumentException(
-                sprintf('The submitted locale isn\'t supported or the channel does not exist !')
+                sprintf('The submitted locale is not supported or the channel does not exist, given %s', $locale)
             );
         }
 
@@ -111,52 +111,57 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
 
         try {
             if (!$this->isCacheValid($channel, $defaultLocale, $defaultContent)) {
-                if (!$this->cloudTranslationWriter->write($defaultLocale, $channel, $channel . '.' . $defaultLocale . '.yaml', $defaultContent)) {
+
+                if (!$this->cloudTranslationWriter->write(
+                    $defaultLocale,
+                    $channel,
+                    $channel . '.' . $defaultLocale . '.yaml',
+                    $defaultContent)
+                ) {
                     // If the cache is already in place, no need to stop the process.
                 }
 
                 if (!$this->cloudTranslationBackUpWriter->warmBackUp($channel, $defaultLocale, $defaultContent)) {
                     // If the back up is already in place, no need to stop the process.
                 }
-
-                if ($this->checkNewFileExistenceAndValidity($channel . '.' . $locale . '.yaml', $toTranslateKeys)) {
-                    return true;
-                }
-
-                if (!$newItem = $this->cloudTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
-
-                    $translatedElements = [];
-
-                    $translatedContent = $this->cloudTranslationWarmer->translateArray($toTranslateContent, $locale);
-
-                    foreach ($translatedContent as $value) {
-                        $translatedElements[] = $value['text'];
-                    }
-
-                    if ('fr' !== $locale) {
-                        file_put_contents(
-                            $this->translationsFolder . '/' . $channel . '.' . $locale . '.yaml',
-                            Yaml::dump(array_combine($toTranslateKeys, $translatedElements))
-                        );
-                    }
-
-                    $this->cloudTranslationWriter->write(
-                        $locale,
-                        $channel,
-                        $channel . '.' . $locale . '.yaml',
-                        array_combine($toTranslateKeys, $translatedElements)
-                    );
-                    $this->cloudTranslationBackUpWriter->warmBackUp(
-                        $channel,
-                        $locale,
-                        array_combine($toTranslateKeys, $translatedElements)
-                    );
-                }
             }
 
-            return true;
-        } catch (InvalidArgumentException $e) {
+            if ($this->checkNewFileExistenceAndValidity($channel . '.' . $locale . '.yaml', $toTranslateKeys)) {
+                return true;
+            }
 
+            if (!$newItem = $this->cloudTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
+
+                $translatedElements = [];
+
+                $translatedContent = $this->cloudTranslationWarmer->translateArray($toTranslateContent, $locale);
+
+                foreach ($translatedContent as $value) {
+                    $translatedElements[] = $value['text'];
+                }
+
+                if ('fr' !== $locale) {
+                    file_put_contents(
+                        $this->translationsFolder . '/' . $channel . '.' . $locale . '.yaml',
+                        Yaml::dump(array_combine($toTranslateKeys, $translatedElements))
+                    );
+                }
+
+                $this->cloudTranslationWriter->write(
+                    $locale,
+                    $channel,
+                    $channel . '.' . $locale . '.yaml',
+                    array_combine($toTranslateKeys, $translatedElements)
+                );
+                $this->cloudTranslationBackUpWriter->warmBackUp(
+                    $channel,
+                    $locale,
+                    array_combine($toTranslateKeys, $translatedElements)
+                );
+            }
+
+        } catch (InvalidArgumentException $e) {
+            sprintf($e->getMessage());
         }
     }
 

@@ -98,9 +98,6 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
         );
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testWrongChannelIsUsed()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -120,9 +117,6 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
         static::assertFalse($processStatus);
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testWrongLocaleIsUsed()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -150,7 +144,6 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
      * @param array  $values
      *
      * @throws \InvalidArgumentException  {@see CloudTranslationWarmer::warmTranslations()}
-     * @throws \Psr\Cache\InvalidArgumentException {@see CacheItemPoolInterface::getItem()}
      */
     public function testCacheIsValid(string $channel, string $locale, array $values)
     {

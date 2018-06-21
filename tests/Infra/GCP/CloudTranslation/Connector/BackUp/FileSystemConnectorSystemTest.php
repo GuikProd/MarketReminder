@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\FileSystemConnector;
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +29,7 @@ final class FileSystemConnectorSystemTest extends TestCase
     use TestCaseTrait;
 
     /**
-     * @var ConnectorInterface
+     * @var BackUpConnectorInterface
      */
     private $fileSystemConnector;
 
@@ -39,6 +39,7 @@ final class FileSystemConnectorSystemTest extends TestCase
     protected function setUp()
     {
         $this->fileSystemConnector = new FileSystemConnector('test');
+        $this->fileSystemConnector->activate(true);
     }
 
     /**
@@ -50,12 +51,12 @@ final class FileSystemConnectorSystemTest extends TestCase
     {
         $configuration = new Configuration();
         $configuration->assert(
-            'main.peak_memory < 680kB',
+            'main.peak_memory < 260kB',
             'FileSystem Connector adapter call memory peak'
         );
 
         $this->assertBlackfire($configuration, function () {
-            $this->fileSystemConnector->getAdapter();
+            $this->fileSystemConnector->getBackUpAdapter();
         });
     }
 
@@ -68,12 +69,12 @@ final class FileSystemConnectorSystemTest extends TestCase
     {
         $configuration = new Configuration();
         $configuration->assert(
-            'main.peak_memory <= 55kB',
+            'main.peak_memory <= 15kB',
             'FileSystem Connector cache clear memory peak'
         );
 
         $this->assertBlackfire($configuration, function () {
-            $this->fileSystemConnector->getAdapter()->clear();
+            $this->fileSystemConnector->getBackUpAdapter()->clear();
         });
     }
 

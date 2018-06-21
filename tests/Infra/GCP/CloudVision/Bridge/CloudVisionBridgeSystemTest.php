@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Infra\GCP\CloudStorage\Bridge;
+namespace App\Tests\Infra\GCP\CloudVision\Bridge;
 
-use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
-use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Infra\GCP\Bridge\CloudVisionBridge;
+use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\Loader\CredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -22,28 +22,28 @@ use Blackfire\Profile\Configuration;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class CloudStorageBridgeSystemTest.
+ * Class CloudVisionBridgeSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudStorageBridgeSystemTest extends TestCase
+final class CloudVisionBridgeSystemTest extends TestCase
 {
     use TestCaseTrait;
 
     /**
-     * @var string
+     * @var CloudVisionBridgeInterface
      */
-    private $bucketCredentialsFolder;
+    private $cloudVisionBridge;
 
     /**
      * @var string
      */
-    private $bucketCredentialsFileName;
+    private $cloudVisionCredentialsFileName;
 
     /**
-     * @var CloudStorageBridgeInterface
+     * @var string
      */
-    private $cloudStorageBridge;
+    private $cloudVisionCredentialsFolder;
 
     /**
      * @var LoaderInterface
@@ -55,13 +55,13 @@ final class CloudStorageBridgeSystemTest extends TestCase
      */
     protected function setUp()
     {
-        $this->bucketCredentialsFolder = __DIR__.'/../../../../_credentials';
-        $this->bucketCredentialsFileName = 'credentials.json';
+        $this->cloudVisionCredentialsFolder = __DIR__.'/../../../../_credentials';
+        $this->cloudVisionCredentialsFileName = 'credentials.json';
         $this->credentialsLoader = new CredentialsLoader();
 
-        $this->cloudStorageBridge = new CloudStorageBridge(
-            $this->bucketCredentialsFileName,
-            $this->bucketCredentialsFolder,
+        $this->cloudVisionBridge = new CloudVisionBridge(
+            $this->cloudVisionCredentialsFileName,
+            $this->cloudVisionCredentialsFolder,
             $this->credentialsLoader
         );
     }
@@ -71,14 +71,13 @@ final class CloudStorageBridgeSystemTest extends TestCase
      *
      * @requires extension blackfire
      */
-    public function testItCreateBridge()
+    public function testItReturnVisionClient()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 1.5MB', 'CloudStorageBridge creation memory usage');
-        $configuration->assert('metrics.http.requests.count == 0', 'CloudStorageBridge creation HTTP Request');
+        $configuration->assert('main.peak_memory < 0.9MB', 'CloudVision client memory usage');
 
         $this->assertBlackfire($configuration, function () {
-            $this->cloudStorageBridge->getStorageClient();
+            $this->cloudVisionBridge->getVisionClient();
         });
     }
 }

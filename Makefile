@@ -64,20 +64,22 @@ container: ## Allow to debug the container
 event:
 	    $(ENV_PHP) ./bin/console debug:event-dispatcher
 
-route: ## Allow to debug the router
+router: ## Allow to debug the router
 	    $(ENV_PHP) ./bin/console d:r
 
 create-schema: ## Allow to create the BDD schema
-	    $(ENV_PHP) ./bin/console d:s:v
-	    $(ENV_PHP) ./bin/console d:d:c --env=dev
-	    $(ENV_PHP) ./bin/console d:d:c --env=test
+	    $(ENV_PHP) ./bin/console d:d:d --force --env=$(ENV)
+	    $(ENV_PHP) ./bin/console d:d:c --env=$(ENV)
+	    $(ENV_PHP) ./bin/console d:s:v --env=$(ENV)
 
 check-schema: config/doctrine
-	    $(ENV_PHP) ./bin/console doctrine:schema:validate
+	    $(ENV_PHP) ./bin/console doctrine:schema:validate --env=$(ENV)
 
 update-schema: ## Allow to update the schema
-	    $(ENV_PHP) ./bin/console d:s:u --dump-sql
-	    $(ENV_PHP) ./bin/console d:s:u --force
+		$(ENV_PHP) ./bin/console d:d:d --force --env=$(ENV)
+		$(ENV_PHP) ./bin/console d:d:c --env=$(ENV)
+	    $(ENV_PHP) ./bin/console d:s:u --dump-sql --env=$(ENV)
+	    $(ENV_PHP) ./bin/console d:s:u --force --env=$(ENV)
 
 fixtures: src/DataFixtures
 	    $(ENV_PHP) ./bin/console doctrine:fixtures:load -n --env=${ENV}
@@ -90,14 +92,16 @@ redis-cache: ## Allow to clean the Redis cache
 	    $(ENV_PHP) ./bin/console redis:flushall -n
 
 phpunit: tests
-	    make check-schema
 	    make fixtures ENV=test
 	    make doctrine-cache
 	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
 
+phpunit-blackfire: tests
+	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)
 
-phpunit-functional: tests
-	    make check-schema
+behat: features
+	    make cache-clear
+	    make update-schema ENV=test
 	    make fixtures ENV=test
 	    make doctrine-cache
 	    make translation CHANNEL=messages LOCALE=fr ENV=test
@@ -106,22 +110,6 @@ phpunit-functional: tests
 	    make translation CHANNEL=validators LOCALE=en ENV=test
 	    make translation CHANNEL=session LOCALE=fr ENV=test
 	    make translation CHANNEL=session LOCALE=en ENV=test
-	    $(ENV_PHP) ./bin/phpunit --group Functional
-
-phpunit-blackfire: tests
-	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)
-
-behat: features
-	    make cache-clear
-	    make check-schema
-	    make fixtures ENV=test
-	    make doctrine-cache
-	    make translation CHANNEL=messages LOCALE=fr ENV=test
-	    make translation CHANNEL=messages LOCALE=en ENV=test
-	    make translation CHANNEL=validators LOCALE=fr ENV=test
-	    make translation CHANNEL=validators LOCALE=fr ENV=test
-	    make translation CHANNEL=session LOCALE=fr ENV=test
-	    make translation CHANNEL=session LOCALE=fr ENV=test
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands
@@ -154,7 +142,7 @@ logs: ## Allow to see the varnish logs
 ## Blackfire commands
 profile_php: ## Allow to profile a page using Blackfire and PHP environment
 	    make cache-clear
-	    make doctrine-cache
+	    make doctrine-cache ENV=prod
 	    make translation CHANNEL=messages LOCALE=fr ENV=prod
 	    make translation CHANNEL=messages LOCALE=en ENV=prod
 	    make translation CHANNEL=validators LOCALE=fr ENV=prod

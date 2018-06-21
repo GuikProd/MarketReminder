@@ -22,14 +22,17 @@ use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWrite
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\CloudTranslationValidator;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\Interfaces\CloudTranslationValidatorInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CloudTranslationTestCase.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-abstract class CloudTranslationTestCase extends ConnectorTestCase
+abstract class CloudTranslationTestCase extends TestCase
 {
+    use ConnectorTraitTestCase;
+
     /**
      * @var CloudTranslationFactoryInterface
      */

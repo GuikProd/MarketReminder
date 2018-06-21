@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class RedisConnectorIntegrationTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class RedisConnectorIntegrationTest extends KernelTestCase
+final class RedisConnectorIntegrationTest extends TestCase
 {
     /**
      * @var string
@@ -38,10 +38,8 @@ class RedisConnectorIntegrationTest extends KernelTestCase
      */
     protected function setUp()
     {
-        static::bootKernel();
-
-        $this->redisDSN = static::$kernel->getContainer()->getParameter('redis.test_dsn');
-        $this->redisNamespace = static::$kernel->getContainer()->getParameter('redis.namespace_test');
+        $this->redisDSN = getenv('REDIS_TEST_URL');
+        $this->redisNamespace = 'test';
     }
 
     public function testCacheCanBeCleaned()

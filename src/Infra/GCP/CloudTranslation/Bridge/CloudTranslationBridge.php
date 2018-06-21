@@ -15,6 +15,7 @@ namespace App\Infra\GCP\CloudTranslation\Bridge;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudBridgeInterface;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Translate\TranslateClient;
 
 /**
@@ -45,14 +46,21 @@ final class CloudTranslationBridge implements CloudBridgeInterface, CloudTransla
     private $credentialsFolder = null;
 
     /**
+     * @var LoaderInterface
+     */
+    private $credentialsLoader;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
-        string $credentialsFileName,
-        string $credentialsFolder
+        string $credentialsFilename,
+        string $credentialsFolder,
+        LoaderInterface $loader
     ) {
-        $this->credentialsFileName = $credentialsFileName;
-        $this->credentialsFolder   = $credentialsFolder;
+        $this->credentialsFileName = $credentialsFilename;
+        $this->credentialsFolder = $credentialsFolder;
+        $this->credentialsLoader = $loader;
     }
 
     /**
@@ -60,31 +68,10 @@ final class CloudTranslationBridge implements CloudBridgeInterface, CloudTransla
      */
     public function getTranslateClient(): TranslateClient
     {
+        $this->credentialsLoader->loadJson($this->credentialsFileName, $this->credentialsFolder);
+
         return new TranslateClient([
-            'keyFile' => json_decode(
-                file_get_contents($this->credentialsFolder.'/'.$this->credentialsFileName),
-                true
-            )
+            'keyFile' => $this->credentialsLoader->getCredentials()
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function closeConnexion(): void
-    {
-        $this->credentialsFileName = null;
-        $this->credentialsFolder = null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCredentials(): array
-    {
-        return [
-            'keyFile' => $this->credentialsFileName,
-            'keyFilePath' => $this->credentialsFolder
-        ];
     }
 }

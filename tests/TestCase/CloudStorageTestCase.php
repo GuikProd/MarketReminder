@@ -15,6 +15,8 @@ namespace App\Tests\TestCase;
 
 use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
 use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,11 +31,19 @@ abstract class CloudStorageTestCase extends TestCase
      */
     protected $cloudStorageBridge;
 
+    /**
+     * @var LoaderInterface
+     */
+    private $credentialsLoader;
+
     public function createCloudStorageBridge()
     {
+        $this->credentialsLoader = new CredentialsLoader();
+
         $this->cloudStorageBridge = new CloudStorageBridge(
             'credentials.json',
-            __DIR__.'./../_credentials'
+            __DIR__.'/../_credentials',
+            $this->credentialsLoader
         );
     }
 }

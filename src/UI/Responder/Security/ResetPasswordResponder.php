@@ -15,9 +15,9 @@ namespace App\UI\Responder\Security;
 
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -65,13 +65,13 @@ final class ResetPasswordResponder implements ResetPasswordResponderInterface
      * @throws \Twig_Error_Syntax
      */
     public function __invoke(
-        Request $request,
+        ServerRequestInterface $request,
         $redirect = false,
         FormInterface $form = null
     ): Response {
-
+        
         $this->presenter->prepareOptions([
-            '_locale' => $request->getLocale(),
+            '_locale' => $request->getAttribute('_locale'),
             'form' => $form,
             'page' => [
                 'title' => [

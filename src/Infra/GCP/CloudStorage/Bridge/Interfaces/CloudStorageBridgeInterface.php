@@ -23,17 +23,6 @@ use Google\Cloud\Storage\StorageClient;
 interface CloudStorageBridgeInterface
 {
     /**
-     * CloudStorageBridgeInterface constructor.
-     *
-     * @param string  $storageCredentialsFileName
-     * @param string  $storageCredentialsFolder
-     */
-    public function __construct(
-        string $storageCredentialsFileName,
-        string $storageCredentialsFolder
-    );
-
-    /**
      * @return StorageClient
      */
     public function getStorageClient(): StorageClient;

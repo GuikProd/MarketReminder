@@ -15,6 +15,8 @@ namespace App\Tests\Infra\GCP\CloudVision\Bridge;
 
 use App\Infra\GCP\Bridge\CloudVisionBridge;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
+use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Vision\VisionClient;
 use PHPUnit\Framework\TestCase;
 
@@ -36,19 +38,26 @@ final class CloudVisionBridgeUnitTest extends TestCase
     private $cloudVisionCredentialsFolder;
 
     /**
+     * @var LoaderInterface
+     */
+    private $credentialsLoader;
+
+    /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->cloudVisionCredentialsFolder = __DIR__.'./../../../../_credentials';
+        $this->cloudVisionCredentialsFolder = __DIR__.'/../../../../_credentials';
         $this->cloudVisionCredentialsFileName = 'credentials.json';
+        $this->credentialsLoader = new CredentialsLoader();
     }
 
     public function testItImplements()
     {
         $cloudVisionBridge = new CloudVisionBridge(
             $this->cloudVisionCredentialsFileName,
-            $this->cloudVisionCredentialsFolder
+            $this->cloudVisionCredentialsFolder,
+            $this->credentialsLoader
         );
 
         static::assertInstanceOf(
@@ -57,46 +66,17 @@ final class CloudVisionBridgeUnitTest extends TestCase
         );
     }
 
-    /**
-     * @throws \Google\Cloud\Core\Exception\GoogleException
-     */
     public function testReturnServiceBuilder()
     {
         $cloudVisionBridge = new CloudVisionBridge(
             $this->cloudVisionCredentialsFileName,
-            $this->cloudVisionCredentialsFolder
+            $this->cloudVisionCredentialsFolder,
+            $this->credentialsLoader
         );
 
         static::assertInstanceOf(
             VisionClient::class,
             $cloudVisionBridge->getVisionClient()
-        );
-    }
-
-    public function testCredentialsAreLoaded()
-    {
-        $cloudVisionBridge = new CloudVisionBridge(
-            $this->cloudVisionCredentialsFileName,
-            $this->cloudVisionCredentialsFolder
-        );
-
-        static::assertArrayHasKey(
-            'keyFilePath',
-            $cloudVisionBridge->getCredentials()
-        );
-    }
-
-    public function testConnexionIsDown()
-    {
-        $cloudVisionBridge = new CloudVisionBridge(
-            $this->cloudVisionCredentialsFileName,
-            $this->cloudVisionCredentialsFolder
-        );
-
-        $cloudVisionBridge->closeConnexion();
-
-        static::assertNull(
-            $cloudVisionBridge->getCredentials()['keyFilePath']
         );
     }
 }

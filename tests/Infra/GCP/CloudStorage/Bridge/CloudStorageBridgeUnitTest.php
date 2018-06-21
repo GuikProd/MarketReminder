@@ -15,6 +15,8 @@ namespace App\Tests\Infra\GCP\CloudStorage\Bridge;
 
 use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
 use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Storage\StorageClient;
 use PHPUnit\Framework\TestCase;
 
@@ -36,19 +38,26 @@ final class CloudStorageBridgeUnitTest extends TestCase
     private $bucketCredentialsFileName;
 
     /**
+     * @var LoaderInterface
+     */
+    private $credentialsLoader;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->bucketCredentialsFolder = __DIR__.'./../../../../_credentials';
+        $this->bucketCredentialsFolder = __DIR__.'/../../../../_credentials';
         $this->bucketCredentialsFileName = 'credentials.json';
+        $this->credentialsLoader = new CredentialsLoader();
     }
 
     public function testItImplements()
     {
         $cloudStorage = new CloudStorageBridge(
             $this->bucketCredentialsFileName,
-            $this->bucketCredentialsFolder
+            $this->bucketCredentialsFolder,
+            $this->credentialsLoader
         );
 
         static::assertInstanceOf(
@@ -61,39 +70,13 @@ final class CloudStorageBridgeUnitTest extends TestCase
     {
         $cloudStorage = new CloudStorageBridge(
             $this->bucketCredentialsFileName,
-            $this->bucketCredentialsFolder
+            $this->bucketCredentialsFolder,
+            $this->credentialsLoader
         );
 
         static::assertInstanceOf(
             StorageClient::class,
             $cloudStorage->getStorageClient()
-        );
-    }
-
-    public function testCredentialsAreLoaded()
-    {
-        $cloudStorage = new CloudStorageBridge(
-            $this->bucketCredentialsFileName,
-            $this->bucketCredentialsFolder
-        );
-
-        static::assertSame(
-            $this->bucketCredentialsFolder,
-            $cloudStorage->getCredentials()['keyFilePath']
-        );
-    }
-
-    public function testConnexionIsDown()
-    {
-        $cloudStorage = new CloudStorageBridge(
-            $this->bucketCredentialsFileName,
-            $this->bucketCredentialsFolder
-        );
-
-        $cloudStorage->closeConnexion();
-
-        static::assertNull(
-            $cloudStorage->getCredentials()['keyFilePath']
         );
     }
 }

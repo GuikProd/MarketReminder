@@ -437,6 +437,9 @@
     "symfony/property-access": {
         "version": "v3.4.3"
     },
+    "symfony/psr-http-message-bridge": {
+        "version": "v1.0.2"
+    },
     "symfony/routing": {
         "version": "3.3",
         "recipe": {
@@ -547,6 +550,9 @@
     },
     "zendframework/zend-code": {
         "version": "3.3.0"
+    },
+    "zendframework/zend-diactoros": {
+        "version": "1.7.2"
     },
     "zendframework/zend-eventmanager": {
         "version": "3.2.0"

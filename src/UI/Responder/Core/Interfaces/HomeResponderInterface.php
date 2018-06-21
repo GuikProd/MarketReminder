@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Responder\Core\Interfaces;
 
 use App\UI\Presenter\Interfaces\PresenterInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -37,13 +37,9 @@ interface HomeResponderInterface
     );
 
     /**
-     * @param Request $request
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @param ServerRequestInterface $request
      *
      * @return Response
      */
-    public function __invoke(Request $request);
+    public function __invoke(ServerRequestInterface $request);
 }

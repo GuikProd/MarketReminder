@@ -15,6 +15,7 @@ namespace App\Infra\GCP\CloudStorage\Bridge;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudBridgeInterface;
 use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Storage\StorageClient;
 
 /**
@@ -35,14 +36,21 @@ final class CloudStorageBridge implements CloudBridgeInterface, CloudStorageBrid
     private $storageCredentialsFolder;
 
     /**
+     * @var LoaderInterface
+     */
+    private $credentialsLoader;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
-        string $storageCredentialsFileName,
-        string $storageCredentialsFolder
+        string $credentialsFilename,
+        string $credentialsFolder,
+        LoaderInterface $loader
     ) {
-        $this->storageCredentialsFileName = $storageCredentialsFileName;
-        $this->storageCredentialsFolder = $storageCredentialsFolder;
+        $this->storageCredentialsFileName = $credentialsFilename;
+        $this->storageCredentialsFolder = $credentialsFolder;
+        $this->credentialsLoader = $loader;
     }
 
     /**
@@ -50,32 +58,10 @@ final class CloudStorageBridge implements CloudBridgeInterface, CloudStorageBrid
      */
     public function getStorageClient(): StorageClient
     {
+        $this->credentialsLoader->loadJson($this->storageCredentialsFileName, $this->storageCredentialsFolder);
+
         return new StorageClient([
-            'keyFile' => json_decode(
-                file_get_contents(
-                    $this->storageCredentialsFolder.'/'.$this->storageCredentialsFileName),
-                true
-            )
+            'keyFile' => $this->credentialsLoader->getCredentials()
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function closeConnexion(): void
-    {
-        $this->storageCredentialsFileName = null;
-        $this->storageCredentialsFolder = null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCredentials(): array
-    {
-        return [
-            'keyFileName' => $this->storageCredentialsFileName,
-            'keyFilePath' => $this->storageCredentialsFolder
-        ];
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Action\Core\Interfaces;
 
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -25,13 +25,13 @@ use Symfony\Component\HttpFoundation\Response;
 interface HomeActionInterface
 {
     /**
-     * @param Request                $request
+     * @param ServerRequestInterface $request
      * @param HomeResponderInterface $responder
      *
      * @return Response
      */
     public function __invoke(
-        Request $request,
+        ServerRequestInterface $request,
         HomeResponderInterface $responder
     ): Response;
 }

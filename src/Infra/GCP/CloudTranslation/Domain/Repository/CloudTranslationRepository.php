@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Domain\Repository;
 
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
@@ -26,7 +27,7 @@ use Psr\Cache\CacheItemInterface;
 final class CloudTranslationRepository implements CloudTranslationRepositoryInterface
 {
     /**
-     * @var ConnectorInterface
+     * @var BackUpConnectorInterface
      */
     private $backUpConnector;
 
@@ -45,7 +46,7 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
      */
     public function __construct(
         ConnectorInterface $connector,
-        ConnectorInterface $backUpConnector
+        BackUpConnectorInterface $backUpConnector
     ) {
         $this->connector = $connector;
         $this->backUpConnector = $backUpConnector;
@@ -63,7 +64,9 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
             : null;
 
         if (\is_null($toReturn)) {
-            $backUpItem = $this->backUpConnector->getAdapter()->getItem($filename);
+            $this->backUpConnector->activate(true);
+
+            $backUpItem = $this->backUpConnector->getBackUpAdapter()->getItem($filename);
 
             $backUpItem instanceof CacheItemInterface && $backUpItem->isHit()
                 ? $toReturn = $backUpItem->get()->getItems()
@@ -88,7 +91,9 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
             }
         }
 
-        $backUpItem = $this->backUpConnector->getAdapter()->getItem($filename);
+        $this->backUpConnector->activate(true);
+
+        $backUpItem = $this->backUpConnector->getBackUpAdapter()->getItem($filename);
 
         if ($backUpItem->isHit() && \count($cacheItem->get()->getItems()) > 0) {
             foreach ($backUpItem->get()->getItems() as $item => $value) {

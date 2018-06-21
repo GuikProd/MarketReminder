@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\Bridge\Interfaces;
 
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
+
 /**
  * Interface CloudBridgeInterface.
  *
@@ -21,12 +23,15 @@ namespace App\Infra\GCP\Bridge\Interfaces;
 interface CloudBridgeInterface
 {
     /**
-     * @return array
+     * CloudBridgeInterface constructor.
+     *
+     * @param string $credentialsFilename
+     * @param string $credentialsFolder
+     * @param LoaderInterface $loader
      */
-    public function getCredentials(): array;
-
-    /**
-     * Allow to close the connexion via ths service account.
-     */
-    public function closeConnexion(): void;
+    public function __construct(
+        string $credentialsFilename,
+        string $credentialsFolder,
+        LoaderInterface $loader
+    );
 }

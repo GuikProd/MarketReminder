@@ -223,9 +223,6 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
         );
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testItDoesNotUseCache()
     {
         $this->cloudTranslationWarmer->warmTranslations('messages', 'en');

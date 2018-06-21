@@ -15,7 +15,7 @@ namespace App\UI\Action\Core;
 
 use App\UI\Action\Core\Interfaces\HomeActionInterface;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -39,7 +39,7 @@ final class HomeAction implements HomeActionInterface
      * {@inheritdoc}
      */
     public function __invoke(
-        Request $request,
+        ServerRequestInterface $request,
         HomeResponderInterface $responder
     ): Response {
         return $responder($request);

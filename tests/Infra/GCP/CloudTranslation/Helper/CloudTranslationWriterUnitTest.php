@@ -17,15 +17,18 @@ use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Helper\Factory\Interfaces\CloudTranslationFactoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\Interfaces\CloudTranslationValidatorInterface;
-use App\Tests\TestCase\ConnectorTestCase;
+use App\Tests\TestCase\ConnectorTraitTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CloudTranslationWriterUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationWriterUnitTest extends ConnectorTestCase
+final class CloudTranslationWriterUnitTest extends TestCase
 {
+    use ConnectorTraitTestCase;
+
     /**
      * @var CloudTranslationFactoryInterface
      */
@@ -45,22 +48,6 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
 
         $this->cloudTranslationFactory = $this->createMock(CloudTranslationFactoryInterface::class);
         $this->cloudTranslationValidator = $this->createMock(CloudTranslationValidatorInterface::class);
-    }
-
-    public function testItImplementsWithFileSystemConnector()
-    {
-        $this->createFileSystemConnector();
-
-        $redisTranslationWriter = new CloudTranslationWriter(
-            $this->connector,
-            $this->cloudTranslationFactory,
-            $this->cloudTranslationValidator
-        );
-
-        static::assertInstanceOf(
-            CloudTranslationWriterInterface::class,
-            $redisTranslationWriter
-        );
     }
 
     public function testItImplementsWithRedisConnector()
@@ -89,13 +76,13 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItStopIfTranslationExistAndIsValidWithFileSystemCache(
+    public function testItStopIfTranslationExistAndIsValidWithRedisCache(
         string $locale,
         string $channel,
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemConnector();
+        $this->createRedisConnector();
 
         $fileSystemWriter = new CloudTranslationWriter(
             $this->connector,
@@ -130,13 +117,13 @@ final class CloudTranslationWriterUnitTest extends ConnectorTestCase
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItWriteInCache(
+    public function testItWriteInCacheWithRedisCache(
         string $locale,
         string $channel,
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemConnector();
+        $this->createRedisConnector();
 
         $fileSystemWriter = new CloudTranslationWriter(
             $this->connector,

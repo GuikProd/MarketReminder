@@ -1,5 +1,0 @@
-redis:
-    env: "%env(APP_ENV)%"
-    client: predis
-    dsn: '%env(REDIS_URL)%'
-    namespace: '%env(APP_ENV)%'

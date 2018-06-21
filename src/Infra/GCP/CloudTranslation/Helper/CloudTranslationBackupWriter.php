@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Helper;
 
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslation;
 use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
@@ -27,14 +27,14 @@ use Ramsey\Uuid\Uuid;
 final class CloudTranslationBackupWriter implements CloudTranslationBackupWriterInterface
 {
     /**
-     * @var ConnectorInterface
+     * @var BackUpConnectorInterface
      */
     private $backupConnector;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(ConnectorInterface $backupConnector)
+    public function __construct(BackUpConnectorInterface $backupConnector)
     {
         $this->backupConnector = $backupConnector;
     }
@@ -44,9 +44,11 @@ final class CloudTranslationBackupWriter implements CloudTranslationBackupWriter
      */
     public function warmBackUp(string $channel, string $locale, array $newValues, string $format = 'yaml'): bool
     {
-        $backupItem = $this->backupConnector->getAdapter()->getItem($channel.'.'.$locale.'.'.$format);
+        $this->backupConnector->activate(true);
 
-        if (!$backupItem->get()) {
+        $backupItem = $this->backupConnector->getBackUpAdapter()->getItem($channel.'.'.$locale.'.'.$format);
+
+        if (!$backupItem->isHit() || !$backupItem->get()) {
 
             $entries = [];
             $tag = Uuid::uuid4()->toString();
@@ -66,9 +68,8 @@ final class CloudTranslationBackupWriter implements CloudTranslationBackupWriter
                 $channel,
                 $entries
             ));
-            $backupItem->tag($tag);
 
-            return $this->backupConnector->getAdapter()->save($backupItem);
+            return $this->backupConnector->getBackUpAdapter()->save($backupItem);
         }
 
         $defaultKeys = [];
@@ -90,8 +91,7 @@ final class CloudTranslationBackupWriter implements CloudTranslationBackupWriter
         $newArray = array_combine($toCheckKeys, $toCheckValues);
 
         if (\count(array_diff($toCheckArray, $newArray)) > 0) {
-            $this->backupConnector->getAdapter()->invalidatetags($backupItem->getPreviousTags());
-            $this->backupConnector->getAdapter()->deleteItem($backupItem->getKey());
+            $this->backupConnector->getBackUpAdapter()->deleteItem($backupItem->getKey());
 
             return $this->warmBackUp($channel, $locale, $newValues);
         }

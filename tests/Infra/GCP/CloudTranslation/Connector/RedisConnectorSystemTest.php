@@ -17,41 +17,39 @@ use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class RedisConnectorSystemTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class RedisConnectorSystemTest extends KernelTestCase
+final class RedisConnectorSystemTest extends TestCase
 {
     use TestCaseTrait;
 
     /**
      * @var ConnectorInterface
      */
-    private $redisConnector;
+    private $redisConnector = null;
 
     /**
      * @var string
      */
-    private $redisDSN;
+    private $redisDSN = null;
 
     /**
      * @var string
      */
-    private $redisNamespace;
+    private $redisNamespace = null;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        static::bootKernel();
-
-        $this->redisDSN = static::$kernel->getContainer()->getParameter('redis.test_dsn');
-        $this->redisNamespace = static::$kernel->getContainer()->getParameter('redis.namespace_test');
+        $this->redisDSN = getenv('REDIS_TEST_URL');
+        $this->redisNamespace = 'test';
 
         $this->redisConnector = new RedisConnector(
             $this->redisDSN,
@@ -67,7 +65,7 @@ class RedisConnectorSystemTest extends KernelTestCase
     public function testAdapterInstantiation()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 610kB', 'Connector adapter call memory peak');
+        $configuration->assert('main.peak_memory < 500kB', 'Connector adapter call memory peak');
         $configuration->assert('main.network_in == 0', 'Connector adapter call network in');
         $configuration->assert('main.network_out == 0', 'Connector adapter call network out');
 
@@ -84,9 +82,9 @@ class RedisConnectorSystemTest extends KernelTestCase
     public function testCacheCleaning()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 150kB', 'Connector clear memory peak');
-        $configuration->assert('main.network_in < 550B', 'Connector clean network in');
-        $configuration->assert('main.network_out < 200B', 'Connector clean network out');
+        $configuration->assert('main.peak_memory < 170kB', 'Connector clear memory peak');
+        $configuration->assert('main.network_in < 500B', 'Connector clean network in');
+        $configuration->assert('main.network_out < 100B', 'Connector clean network out');
 
         $this->assertBlackfire($configuration, function () {
             $this->redisConnector->getAdapter()->clear();
@@ -98,8 +96,8 @@ class RedisConnectorSystemTest extends KernelTestCase
      */
     protected function tearDown()
     {
-        parent::tearDown();
-
+        $this->redisDSN = null;
+        $this->redisNamespace = null;
         $this->redisConnector = null;
     }
 }

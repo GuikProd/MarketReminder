@@ -31,7 +31,7 @@ final class CloudTranslationBackupWriterIntegrationTest extends CloudTranslation
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToBackupSameContentWithFileSystemBackUp(
+    public function testItRefuseToBackupSameContent(
         string $channel,
         string $locale,
         array $values
@@ -55,58 +55,12 @@ final class CloudTranslationBackupWriterIntegrationTest extends CloudTranslation
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToBackupSameContentWithRedisBackUp(
-        string $channel,
-        string $locale,
-        array $values
-    ) {
-        $this->createRedisBackUp();
-        $this->createCloudTranslationBackUpWriter();
-
-        $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
-
-        $processStatus = $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
-
-        static::assertFalse($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $channel
-     * @param string $locale
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItAcceptToBackupContentWithFileSystemBackUp(
+    public function testItAcceptToBackupContent(
         string $channel,
         string $locale,
         array $values
     ) {
         $this->createFileSystemBackUp();
-        $this->createCloudTranslationBackUpWriter();
-
-        $processStatus = $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);
-
-        static::assertTrue($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $channel
-     * @param string $locale
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItAcceptToBackupContentWithRedisBackUp(
-        string $channel,
-        string $locale,
-        array $values
-    ) {
-        $this->createRedisBackUp();
         $this->createCloudTranslationBackUpWriter();
 
         $processStatus = $this->cloudTranslationBackUpWriter->warmBackUp($channel, $locale, $values);

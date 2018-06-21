@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Domain\Repository;
 
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
@@ -42,18 +43,18 @@ final class CloudTranslationRepositoryUnitTest extends TestCase
     protected function setUp()
     {
         $tagAwareAdapter = $this->createMock(TagAwareAdapterInterface::class);
-        $this->backUpConnector = $this->createMock(ConnectorInterface::class);
+        $this->backUpConnector = $this->createMock(BackUpConnectorInterface::class);
         $this->connector = $this->createMock(ConnectorInterface::class);
 
-        $this->backUpConnector->method('getAdapter')->willReturn($tagAwareAdapter);
+        $this->backUpConnector->method('getBackUpAdapter')->willReturn($tagAwareAdapter);
         $this->connector->method('getAdapter')->willReturn($tagAwareAdapter);
     }
 
     public function testItImplements()
     {
         $redisTranslationRepository = new CloudTranslationRepository(
-            $this->backUpConnector,
-            $this->connector
+            $this->connector,
+            $this->backUpConnector
         );
 
         static::assertInstanceOf(
@@ -72,8 +73,8 @@ final class CloudTranslationRepositoryUnitTest extends TestCase
     public function testItReturnNullWithRedis(string $fileName)
     {
         $redisTranslationRepository = new CloudTranslationRepository(
-            $this->backUpConnector,
-            $this->connector
+            $this->connector,
+            $this->backUpConnector
         );
 
         static::assertNull(

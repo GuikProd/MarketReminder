@@ -1,4 +1,3 @@
 gcp:
     translation:
         storage_engine: 'filesystem'
-        backup_engine: 'filesystem'

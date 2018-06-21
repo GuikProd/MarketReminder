@@ -13,25 +13,25 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\FileSystemConnector;
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\FileSystemConnectorInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * Class FileSystemConnectorUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class FileSystemConnectorUnitTest extends TestCase
+final class FileSystemConnectorUnitTest extends TestCase
 {
     public function testItImplementsAndExtends()
     {
         $fileSystemConnector = new FileSystemConnector('test');
 
         static::assertInstanceOf(
-            ConnectorInterface::class,
+            BackUpConnectorInterface::class,
             $fileSystemConnector
         );
         static::assertInstanceOf(
@@ -43,10 +43,11 @@ class FileSystemConnectorUnitTest extends TestCase
     public function testItReturnAdapter()
     {
         $fileSystemConnector = new FileSystemConnector('test');
+        $fileSystemConnector->activate(true);
 
         static::assertInstanceOf(
-            TagAwareAdapterInterface::class,
-            $fileSystemConnector->getAdapter()
+            CacheItemPoolInterface::class,
+            $fileSystemConnector->getBackUpAdapter()
         );
     }
 }

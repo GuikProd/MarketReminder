@@ -11,21 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\GCP\CloudTranslation\Bridge\Interfaces;
+namespace App\Tests\TestCase;
 
-use Google\Cloud\Translate\TranslateClient;
+use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 
 /**
- * Interface CloudTranslationBridgeInterface.
- *
- * {@internal This interface is linked to the CloudTranslationBridge}
+ * Trait CredentialsLoaderTrait.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-interface CloudTranslationBridgeInterface
+trait CredentialsLoaderTrait
 {
     /**
-     * @return TranslateClient
+     * @var LoaderInterface
      */
-    public function getTranslateClient(): TranslateClient;
+    protected $loader;
+
+    public function createCredentialsLoader()
+    {
+        $this->loader = new CredentialsLoader();
+    }
 }

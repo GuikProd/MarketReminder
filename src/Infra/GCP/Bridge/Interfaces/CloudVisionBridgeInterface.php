@@ -23,17 +23,6 @@ use Google\Cloud\Vision\VisionClient;
 interface CloudVisionBridgeInterface
 {
     /**
-     * CloudVisionBridgeInterface constructor.
-     *
-     * @param string  $visionCredentialsFileName
-     * @param string  $visionCredentialsFolder
-     */
-    public function __construct(
-        string $visionCredentialsFileName,
-        string $visionCredentialsFolder
-    );
-
-    /**
      * @return VisionClient
      */
     public function getVisionClient(): VisionClient;

@@ -58,11 +58,8 @@ final class AskResetPasswordAction implements AskResetPasswordActionInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(
-        Request $request,
-        AskResetPasswordResponderInterface $responder
-    ): Response {
-
+    public function __invoke(Request $request, AskResetPasswordResponderInterface $responder): Response
+    {
         $askResetPasswordForm = $this->formFactory
                                      ->create(AskResetPasswordType::class)
                                      ->handleRequest($request);

@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\FileSystemConnector;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Class FileSystemConnectorIntegrationTest.
@@ -24,20 +23,11 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  */
 final class FileSystemConnectorIntegrationTest extends TestCase
 {
-    public function testItReturnAdapter()
-    {
-        $fileSystemConnector = new FileSystemConnector('test');
-
-        static::assertInstanceOf(
-            TagAwareAdapterInterface::class,
-            $fileSystemConnector->getAdapter()
-        );
-    }
-
     public function testItCanClearTheCache()
     {
         $fileSystemConnector = new FileSystemConnector('test');
+        $fileSystemConnector->activate(true);
 
-        static::assertTrue($fileSystemConnector->getAdapter()->clear());
+        static::assertTrue($fileSystemConnector->getBackUpAdapter()->clear());
     }
 }

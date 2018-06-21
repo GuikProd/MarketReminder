@@ -42,6 +42,7 @@ use App\Infra\GCP\CloudVision\CloudVisionVoterHelper;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
+use App\Infra\GCP\DependencyInjection\Interfaces\GCPExtensionInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
@@ -51,7 +52,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class GCPExtension extends Extension
+final class GCPExtension extends Extension implements GCPExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -211,5 +212,13 @@ final class GCPExtension extends Extension
                           ->addTag('gcp.vision_helper');
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processGlobalConfiguration(array $configuration, ContainerBuilder $containerBuilder): void
+    {
+
     }
 }

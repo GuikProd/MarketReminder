@@ -33,11 +33,11 @@ final class GCPConfiguration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('credentials_filename')->end()
+                ->scalarNode('credentials_folder')->end()
                 ->arrayNode('storage')
                     ->children()
                         ->scalarNode('activated')->isRequired()->end()
-                        ->scalarNode('credentials_filename')->isRequired()->end()
-                        ->scalarNode('credentials_folder')->isRequired()->end()
                         ->scalarNode('bucket_name')->end()
                         ->scalarNode('bucket_public_url')->end()
                     ->end()
@@ -45,18 +45,10 @@ final class GCPConfiguration implements ConfigurationInterface
                 ->arrayNode('translation')
                     ->children()
                         ->scalarNode('activated')->isRequired()->end()
-                        ->scalarNode('credentials_filename')->isRequired()->end()
-                        ->scalarNode('credentials_folder')->isRequired()->end()
                         ->enumNode('storage_engine')
                             ->values([
                                 'redis',
                                 'filesystem'
-                            ])
-                        ->end()
-                        ->enumNode('backup_engine')
-                            ->values([
-                                'filesystem',
-                                'redis'
                             ])
                         ->end()
                     ->end()
@@ -64,8 +56,6 @@ final class GCPConfiguration implements ConfigurationInterface
                 ->arrayNode('vision')
                     ->children()
                         ->scalarNode('activated')->isRequired()->end()
-                        ->scalarNode('credentials_filename')->isRequired()->end()
-                        ->scalarNode('credentials_folder')->isRequired()->end()
                         ->arrayNode('forbidden_labels')
                             ->scalarPrototype()->end()
                         ->end()

@@ -15,7 +15,7 @@ namespace App\Infra\GCP\Bridge;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudBridgeInterface;
 use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
-use Google\Cloud\Core\Exception\GoogleException;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Vision\VisionClient;
 
 /**
@@ -26,55 +26,46 @@ use Google\Cloud\Vision\VisionClient;
 class CloudVisionBridge implements CloudBridgeInterface, CloudVisionBridgeInterface
 {
     /**
-     * @var string
+     * The default name of the credentials file.
+     *
+     * @var null|string
      */
-    private $visionCredentialsFileName;
+    private $credentialsFileName = null;
 
     /**
-     * @var string
+     * The default folder where is located the credentials file.
+     *
+     * @var null|string
      */
-    private $visionCredentialsFolder;
+    private $credentialsFolder = null;
+
+    /**
+     * @var LoaderInterface
+     */
+    private $credentialsLoader;
 
     /**
      * {@inheritdoc}
      */
     public function __construct(
-        string $visionCredentialsFileName,
-        string $visionCredentialsFolder
+        string $credentialsFilename,
+        string $credentialsFolder,
+        LoaderInterface $loader
     ) {
-        $this->visionCredentialsFileName = $visionCredentialsFileName;
-        $this->visionCredentialsFolder = $visionCredentialsFolder;
+        $this->credentialsFileName = $credentialsFilename;
+        $this->credentialsFolder = $credentialsFolder;
+        $this->credentialsLoader = $loader;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @throws GoogleException
      */
     public function getVisionClient(): VisionClient
     {
+        $this->credentialsLoader->loadJson($this->credentialsFileName, $this->credentialsFolder);
+
         return new VisionClient([
-            'keyFile' => json_decode(file_get_contents($this->visionCredentialsFolder.'/'.$this->visionCredentialsFileName), true)
+            'keyFile' => $this->credentialsLoader->getCredentials()
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function closeConnexion(): void
-    {
-        $this->visionCredentialsFileName = null;
-        $this->visionCredentialsFolder = null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCredentials(): array
-    {
-        return [
-            'keyFileName' => $this->visionCredentialsFileName,
-            'keyFilePath' => $this->visionCredentialsFolder
-        ];
     }
 }

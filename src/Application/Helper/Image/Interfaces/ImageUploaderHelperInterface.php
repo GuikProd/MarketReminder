@@ -26,14 +26,14 @@ interface ImageUploaderHelperInterface
     /**
      * ImageUploaderHelperInterface constructor.
      *
-     * @param string                                $filePath
-     * @param string                                $bucketName
-     * @param CloudStorageWriterHelperInterface  $cloudStoragePersister
+     * @param string                             $filePath
+     * @param string                             $bucketName
+     * @param CloudStorageWriterHelperInterface  $cloudStorageWriter
      */
     public function __construct(
         string $filePath,
         string $bucketName,
-        CloudStorageWriterHelperInterface $cloudStoragePersister
+        CloudStorageWriterHelperInterface $cloudStorageWriter
     );
 
     /**

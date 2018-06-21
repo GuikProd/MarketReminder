@@ -24,17 +24,17 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class RedisConnectorUnitTest extends TestCase
+final class RedisConnectorUnitTest extends TestCase
 {
     /**
      * @var string
      */
-    private $redisDSN;
+    private $redisDSN = null;
 
     /**
      * @var string
      */
-    private $redisNamespace;
+    private $redisNamespace = null;
 
     /**
      * {@inheritdoc}
@@ -73,5 +73,14 @@ class RedisConnectorUnitTest extends TestCase
             TagAwareAdapterInterface::class,
             $redisConnector->getAdapter()
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        $this->redisDSN = null;
+        $this->redisNamespace = null;
     }
 }

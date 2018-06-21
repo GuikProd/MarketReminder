@@ -11,19 +11,24 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\GCP\CloudTranslation\Connector\Interfaces;
+namespace App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces;
 
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
- * Interface ConnectorInterface.
+ * Interface BackUpConnectorInterface.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-interface ConnectorInterface
+interface BackUpConnectorInterface
 {
     /**
      * @return CacheItemPoolInterface
      */
-    public function getAdapter(): CacheItemPoolInterface;
+    public function getBackUpAdapter(): CacheItemPoolInterface;
+
+    /**
+     * @param bool $isActivated
+     */
+    public function activate(bool $isActivated): void;
 }

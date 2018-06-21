@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Domain\Repository;
 
+use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
@@ -35,42 +36,14 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItReturnNullWithFileSystemCacheAndFileSystemBackUp(
-        string $locale,
-        string $channel,
-        string $filename,
-        array $values
-    ) {
-        $this->createFileSystemConnector();
-        $this->createFileSystemBackUp();
-        $repository = $this->createRepository($this->connector, $this->backUpConnector);
-        $this->createCloudTranslationWriter();
-
-        $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
-
-        $entry = $repository->getEntries('validators.fr.yaml');
-
-        static::assertNull($entry);
-    }
-
-    /**
-     * @dataProvider provideTranslationItem()
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $filename
-     * @param array  $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItReturnNullWithRedisCacheAndRedisBackUp(
+    public function testItReturnNullWithRedisCacheAndFileSystemBackUp(
         string $locale,
         string $channel,
         string $filename,
         array $values
     ) {
         $this->createRedisConnector();
-        $this->createRedisBackUp();
+        $this->createFileSystemBackUp();
         $repository = $this->createRepository($this->connector, $this->backUpConnector);
         $this->createCloudTranslationWriter();
 
@@ -92,41 +65,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItReturnAnEntryWithFileSystemCacheAndFileSystemBackup(
-        string $locale,
-        string $channel,
-        string $filename,
-        array $values,
-        string $key
-    ) {
-        $this->createFileSystemConnector();
-        $this->createFileSystemBackUp();
-        $repository = $this->createRepository($this->connector, $this->backUpConnector);
-        $this->createCloudTranslationWriter();
-
-        $this->cloudTranslationWriter->write($locale, $channel, $filename, $values);
-
-        $this->createRepository($this->backUpConnector, $this->connector);
-
-        $entry = $repository->getEntries($filename);
-
-        static::assertCount(1, $entry);
-        static::assertInstanceOf(CloudTranslationItemInterface::class, $entry[0]);
-        static::assertSame($key, $entry[0]->getKey());
-    }
-
-    /**
-     * @dataProvider provideTranslationItems
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $filename
-     * @param array  $values
-     * @param string $key
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItReturnAnEntryWithRedisCacheAndRedisBackup(
+    public function testItReturnAnEntryWithRedisCacheAndFileSystemBackup(
         string $locale,
         string $channel,
         string $filename,
@@ -134,7 +73,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
         string $key
     ) {
         $this->createRedisConnector();
-        $this->createRedisBackUp();
+        $this->createFileSystemBackUp();
         $repository = $this->createRepository($this->connector, $this->backUpConnector);
         $this->createCloudTranslationWriter();
 
@@ -158,7 +97,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItReturnASingleEntryWithRedisCacheAndRedisBackUp(
+    public function testItReturnASingleEntryWithRedisCacheAndFileSystemBackUp(
         string $locale,
         string $channel,
         string $filename,
@@ -166,7 +105,7 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
         string $key
     ) {
         $this->createRedisConnector();
-        $this->createRedisBackUp();
+        $this->createFileSystemBackUp();
         $this->createCloudTranslationWriter();
         $repository = $this->createRepository($this->connector, $this->backUpConnector);
 
@@ -194,13 +133,13 @@ final class CloudTranslationRepositoryIntegrationTest extends CloudTranslationTe
     }
 
     /**
-     * @param ConnectorInterface $backup
      * @param ConnectorInterface $connector
+     * @param BackUpConnectorInterface $backUpConnector
      *
      * @return CloudTranslationRepository
      */
-    private function createRepository(ConnectorInterface $backup, ConnectorInterface $connector)
+    private function createRepository(ConnectorInterface $connector, BackUpConnectorInterface $backUpConnector)
     {
-        return new CloudTranslationRepository($backup, $connector);
+        return new CloudTranslationRepository($connector, $backUpConnector);
     }
 }
