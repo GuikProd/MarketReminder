@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Domain\Repository;
 
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
@@ -30,11 +29,6 @@ final class CloudTranslationRepositoryUnitTest extends TestCase
     /**
      * @var ConnectorInterface
      */
-    private $backUpConnector;
-
-    /**
-     * @var ConnectorInterface
-     */
     private $connector;
 
     /**
@@ -43,19 +37,14 @@ final class CloudTranslationRepositoryUnitTest extends TestCase
     protected function setUp()
     {
         $tagAwareAdapter = $this->createMock(TagAwareAdapterInterface::class);
-        $this->backUpConnector = $this->createMock(BackUpConnectorInterface::class);
         $this->connector = $this->createMock(ConnectorInterface::class);
 
-        $this->backUpConnector->method('getBackUpAdapter')->willReturn($tagAwareAdapter);
         $this->connector->method('getAdapter')->willReturn($tagAwareAdapter);
     }
 
     public function testItImplements()
     {
-        $redisTranslationRepository = new CloudTranslationRepository(
-            $this->connector,
-            $this->backUpConnector
-        );
+        $redisTranslationRepository = new CloudTranslationRepository($this->connector);
 
         static::assertInstanceOf(
             CloudTranslationRepositoryInterface::class,
@@ -72,10 +61,7 @@ final class CloudTranslationRepositoryUnitTest extends TestCase
      */
     public function testItReturnNullWithRedis(string $fileName)
     {
-        $redisTranslationRepository = new CloudTranslationRepository(
-            $this->connector,
-            $this->backUpConnector
-        );
+        $redisTranslationRepository = new CloudTranslationRepository($this->connector);
 
         static::assertNull(
             $redisTranslationRepository->getEntries($fileName)

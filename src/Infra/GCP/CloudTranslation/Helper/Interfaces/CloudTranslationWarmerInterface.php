@@ -15,6 +15,7 @@ namespace App\Infra\GCP\CloudTranslation\Helper\Interfaces;
 
 use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Parser\Interfaces\CloudTranslationYamlParserInterface;
 
 /**
  * Interface CloudTranslationWarmerInterface.
@@ -26,21 +27,21 @@ interface CloudTranslationWarmerInterface
     /**
      * CloudTranslationWarmerInterface constructor.
      *
-     * @param string                                $acceptedChannels
-     * @param string                                $acceptedLocales
-     * @param CloudTranslationClientInterface       $cloudTranslationWarmer
-     * @param CloudTranslationRepositoryInterface   $cloudTranslationRepository
-     * @param CloudTranslationBackupWriterInterface $cloudTranslationBackupWriter
-     * @param CloudTranslationWriterInterface       $cloudTranslationWriter
-     * @param string                                $translationsFolder
+     * @param string $acceptedChannels
+     * @param string $acceptedLocales
+     * @param CloudTranslationClientInterface $cloudTranslationWarmer
+     * @param CloudTranslationRepositoryInterface $cloudTranslationRepository
+     * @param CloudTranslationWriterInterface $cloudTranslationWriter
+     * @param CloudTranslationYamlParserInterface $cloudTranslationYamlParser
+     * @param string $translationsFolder
      */
     public function __construct(
         string $acceptedChannels,
         string $acceptedLocales,
         CloudTranslationClientInterface $cloudTranslationWarmer,
         CloudTranslationRepositoryInterface $cloudTranslationRepository,
-        CloudTranslationBackupWriterInterface $cloudTranslationBackupWriter,
         CloudTranslationWriterInterface $cloudTranslationWriter,
+        CloudTranslationYamlParserInterface $cloudTranslationYamlParser,
         string $translationsFolder
     );
 

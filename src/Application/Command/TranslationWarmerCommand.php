@@ -30,14 +30,14 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     /**
      * @var CloudTranslationWarmerInterface
      */
-    private $redisTranslationWarmer;
+    private $cloudTranslationWarmer;
 
     /**
      * {@inheritdoc}
      */
     public function __construct(CloudTranslationWarmerInterface $redisTranslationWarmer)
     {
-        $this->redisTranslationWarmer = $redisTranslationWarmer;
+        $this->cloudTranslationWarmer = $redisTranslationWarmer;
 
         parent::__construct();
     }
@@ -62,9 +62,10 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     {
         $output->write('<info>The warm process is about to begin.</info>');
 
-        if (!$this->redisTranslationWarmer->warmTranslations(
+        if (!$this->cloudTranslationWarmer->warmTranslations(
             $input->getArgument('channel'),
-            $input->getArgument('locale'))
+            $input->getArgument('locale')
+        )
         ) {
             $output->write('<error>The translations can\'t be warmed or are already proceed, please retry.</error>');
 

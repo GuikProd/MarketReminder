@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudVision;
 
+use App\Infra\GCP\CloudVision\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\CloudVision\CloudVisionAnalyserHelper;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
-use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\TestCase;
 
-use App\Infra\GCP\Bridge\CloudVisionBridge;
-use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
 use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
+use App\Infra\GCP\CloudVision\Bridge\CloudVisionBridge;
+use App\Infra\GCP\CloudVision\Bridge\Interfaces\CloudVisionBridgeInterface;
 
 /**
  * Trait CloudBridgeTrait.
@@ -46,6 +46,8 @@ trait CloudBridgeTrait
 
     public function createStorageBridge(string $filename)
     {
+        $this->createCredentialsLoader();
+
         $this->storageBridge = new CloudStorageBridge(
             $filename,
             __DIR__.'/../_credentials',
@@ -55,6 +57,8 @@ trait CloudBridgeTrait
 
     public function createTranslationBridge(string $filename)
     {
+        $this->createCredentialsLoader();
+
         $this->translationBridge = new CloudTranslationBridge(
             $filename,
             __DIR__.'/../_credentials',
@@ -64,6 +68,8 @@ trait CloudBridgeTrait
 
     public function createVisionBridge(string $filename)
     {
+        $this->createCredentialsLoader();
+
         $this->visionBridge = new CloudVisionBridge(
             $filename,
             __DIR__.'/../_credentials',

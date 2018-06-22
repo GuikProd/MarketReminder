@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudVision\Bridge;
 
-use App\Infra\GCP\Bridge\CloudVisionBridge;
-use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
+use App\Infra\GCP\CloudVision\Bridge\CloudVisionBridge;
+use App\Infra\GCP\CloudVision\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\Loader\CredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Vision\VisionClient;

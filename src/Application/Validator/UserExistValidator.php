@@ -21,7 +21,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 /**
  * Class UserExistValidator.
- * 
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class UserExistValidator extends ConstraintValidator implements UserExistValidatorInterface

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Domain\Repository;
 
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
@@ -27,11 +26,6 @@ use Psr\Cache\CacheItemInterface;
 final class CloudTranslationRepository implements CloudTranslationRepositoryInterface
 {
     /**
-     * @var BackUpConnectorInterface
-     */
-    private $backUpConnector;
-
-    /**
      * @var ConnectorInterface
      */
     private $connector;
@@ -44,12 +38,9 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        ConnectorInterface $connector,
-        BackUpConnectorInterface $backUpConnector
-    ) {
+    public function __construct(ConnectorInterface $connector)
+    {
         $this->connector = $connector;
-        $this->backUpConnector = $backUpConnector;
     }
 
     /**
@@ -59,21 +50,9 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
     {
         $cacheItem = $this->connector->getAdapter()->getItem($filename);
 
-        $toReturn = $cacheItem instanceof CacheItemInterface && $cacheItem->isHit()
+        return $cacheItem instanceof CacheItemInterface && $cacheItem->isHit()
             ? $cacheItem->get()->getItems()
             : null;
-
-        if (\is_null($toReturn)) {
-            $this->backUpConnector->activate(true);
-
-            $backUpItem = $this->backUpConnector->getBackUpAdapter()->getItem($filename);
-
-            $backUpItem instanceof CacheItemInterface && $backUpItem->isHit()
-                ? $toReturn = $backUpItem->get()->getItems()
-                : null;
-        }
-
-        return $toReturn;
     }
 
     /**
@@ -86,19 +65,7 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
         if ($cacheItem->isHit() && \count($cacheItem->get()->getItems()) > 0) {
             foreach ($cacheItem->get()->getItems() as $k => $v) {
                 if ($key === $v->getKey() && $locale === $v->getLocale()) {
-                    return $this->cacheEntry = $v;
-                }
-            }
-        }
-
-        $this->backUpConnector->activate(true);
-
-        $backUpItem = $this->backUpConnector->getBackUpAdapter()->getItem($filename);
-
-        if ($backUpItem->isHit() && \count($cacheItem->get()->getItems()) > 0) {
-            foreach ($backUpItem->get()->getItems() as $item => $value) {
-                if ($value->getKey() === $key && $value->getLocale() === $locale) {
-                    $this->cacheEntry = $value;
+                    $this->cacheEntry = $v;
                 }
             }
         }

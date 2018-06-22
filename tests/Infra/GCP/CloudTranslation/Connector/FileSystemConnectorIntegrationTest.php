@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\FileSystemConnector;
+use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,8 +26,7 @@ final class FileSystemConnectorIntegrationTest extends TestCase
     public function testItCanClearTheCache()
     {
         $fileSystemConnector = new FileSystemConnector('test');
-        $fileSystemConnector->activate(true);
 
-        static::assertTrue($fileSystemConnector->getBackUpAdapter()->clear());
+        static::assertTrue($fileSystemConnector->getAdapter()->clear());
     }
 }

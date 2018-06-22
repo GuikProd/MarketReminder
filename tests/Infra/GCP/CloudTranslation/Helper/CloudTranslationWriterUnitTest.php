@@ -17,7 +17,7 @@ use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Helper\Factory\Interfaces\CloudTranslationFactoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\Interfaces\CloudTranslationValidatorInterface;
-use App\Tests\TestCase\ConnectorTraitTestCase;
+use App\Tests\TestCase\ConnectorTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class CloudTranslationWriterUnitTest extends TestCase
 {
-    use ConnectorTraitTestCase;
+    use ConnectorTrait;
 
     /**
      * @var CloudTranslationFactoryInterface

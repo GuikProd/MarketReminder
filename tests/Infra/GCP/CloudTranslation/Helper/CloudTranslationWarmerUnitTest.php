@@ -17,17 +17,16 @@ use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInter
 use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWarmer;
-use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CloudTranslationWarmerUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationWarmerUnitTest extends KernelTestCase
+final class CloudTranslationWarmerUnitTest extends TestCase
 {
     /**
      * @var string
@@ -50,11 +49,6 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
     private $redisTranslationRepository;
 
     /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    private $cloudTranslationBackUpWriter;
-
-    /**
      * @var CloudTranslationWriterInterface
      */
     private $cloudTranslationWriter;
@@ -69,15 +63,12 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
      */
     protected function setUp()
     {
-        static::bootKernel();
-
-        $this->acceptedChannels = 'messages|validators';
+        $this->acceptedChannels = 'messages|validators|session';
         $this->acceptedLocales = 'fr|en';
         $this->cloudTranslationWarmer = $this->createMock(CloudTranslationClientInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
-        $this->cloudTranslationBackUpWriter = $this->createMock(CloudTranslationBackupWriterInterface::class);
         $this->cloudTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);
-        $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
+        $this->translationsFolder = getenv('TRANSLATION_FOLDER');
     }
 
     public function testItImplements()
@@ -87,7 +78,6 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
-            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -107,7 +97,6 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
-            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -126,7 +115,6 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
-            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );
@@ -157,7 +145,6 @@ final class CloudTranslationWarmerUnitTest extends KernelTestCase
             $this->acceptedLocales,
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
-            $this->cloudTranslationBackUpWriter,
             $this->cloudTranslationWriter,
             $this->translationsFolder
         );

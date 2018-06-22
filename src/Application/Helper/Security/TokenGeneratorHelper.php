@@ -28,7 +28,9 @@ class TokenGeneratorHelper implements TokenGeneratorHelperInterface
     public static function generateResetPasswordToken(string $username, string $email): string
     {
         return substr(
-            crypt(md5(str_rot13($username)), $email), 0, 10
+            crypt(md5(str_rot13($username)), $email),
+            0,
+            10
         );
     }
 }

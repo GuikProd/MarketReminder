@@ -13,23 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\TestCase;
 
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 
 /**
- * Class ConnectorTraitTestCase.
+ * Class ConnectorTrait.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-trait ConnectorTraitTestCase
+trait ConnectorTrait
 {
-    /**
-     * @var BackUpConnectorInterface
-     */
-    protected $backUpConnector;
-
     /**
      * @var ConnectorInterface
      */
@@ -45,11 +39,10 @@ trait ConnectorTraitTestCase
         $this->connector->getAdapter()->clear();
     }
 
-    protected function createFileSystemBackUp()
+    protected function createFileSystemConnector()
     {
-        $this->backUpConnector = new FileSystemConnector('backup_test');
-        $this->backUpConnector->activate(true);
+        $this->connector = new FileSystemConnector('backup_test');
 
-        $this->backUpConnector->getBackUpAdapter()->clear();
+        $this->connector->getAdapter()->clear();
     }
 }

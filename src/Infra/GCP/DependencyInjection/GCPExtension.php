@@ -32,9 +32,7 @@ use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\GCP\CloudVision\CloudVisionAnalyserHelper;
 use App\Infra\GCP\CloudVision\CloudVisionDescriberHelper;
@@ -43,6 +41,8 @@ use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
 use App\Infra\GCP\DependencyInjection\Interfaces\GCPExtensionInterface;
+use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
@@ -62,156 +62,10 @@ final class GCPExtension extends Extension implements GCPExtensionInterface
         $configuration = new GCPConfiguration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        // Storage
-        if ($config['storage']['activated']) {
-            if (!$container->hasDefinition(new Reference(CloudStorageBridgeInterface::class))) {
-                $container->register(CloudStorageBridgeInterface::class, CloudStorageBridge::class)
-                          ->addArgument($container->getParameter('cloud.storage_credentials.filename'))
-                          ->addArgument($container->getParameter('cloud.storage_credentials'))
-                          ->setPublic(false)
-                          ->addTag('gcp.storage_bridge');
-            }
-
-            if (!$container->hasDefinition(CloudStorageWriterHelperInterface::class)) {
-                $container->register(CloudStorageWriterHelperInterface::class, CloudStorageWriterHelper::class)
-                          ->addArgument($container->getDefinition(CloudStorageBridgeInterface::class))
-                          ->setPublic(false)
-                          ->addTag('gcp.storage');
-            }
-
-            if (!$container->hasDefinition(CloudStorageRetrieverHelperInterface::class)) {
-                $container->register(CloudStorageRetrieverHelperInterface::class, CloudStorageRetrieverHelper::class)
-                          ->addArgument($container->getDefinition(CloudStorageBridgeInterface::class))
-                          ->setPublic(false)
-                          ->addTag('gcp.storage');
-            }
-
-            if (!$container->hasDefinition(CloudStorageCleanerHelperInterface::class)) {
-                $container->register(CloudStorageCleanerHelperInterface::class, CloudStorageCleanerHelper::class)
-                          ->addArgument($container->getDefinition(CloudStorageBridgeInterface::class))
-                          ->setPublic(false)
-                          ->addTag('gcp.storage');
-            }
-        }
-
-        // Translation
-        if ($config['translation']['activated']) {
-            if (!$container->hasDefinition(new Reference(CloudTranslationBridgeInterface::class))) {
-                $container->register(CloudTranslationBridgeInterface::class, CloudTranslationBridge::class)
-                          ->addArgument($config['translation']['credentials_folder'])
-                          ->addArgument($config['translation']['credentials_filename'])
-                          ->setPublic(false)
-                          ->addTag('gcp.translation_bridge');
-            }
-
-            // Storage engine
-            if ('redis' === $config['translation']['storage_engine']) {
-                if (!$container->hasDefinition(RedisConnectorInterface::class)) {
-                    $container->register(RedisConnectorInterface::class, RedisConnector::class)
-                              ->addArgument(getenv('REDIS_URL'))
-                              ->addArgument(getenv('APP_ENV'))
-                              ->addTag('gcp.translation_connector');
-                    $container->register(ConnectorInterface::class, ConnectorInterface::class);
-                    $container->setAlias(ConnectorInterface::class, RedisConnectorInterface::class);
-                }
-
-            } elseif ('filesystem' === $config['translation']['storage_engine']) {
-                if (!$container->hasDefinition(FileSystemConnectorInterface::class)) {
-                    $container->register(FileSystemConnectorInterface::class, FileSystemConnector::class)
-                              ->addArgument(getenv('APP_ENV'))
-                              ->addTag('gcp.translation_connector');
-                    $container->register(ConnectorInterface::class, ConnectorInterface::class);
-                    $container->setAlias(ConnectorInterface::class, FileSystemConnectorInterface::class);
-                }
-            }
-
-            // Backup engine
-            if ('filesystem' === $config['translation']['backup_engine']) {
-                if (!$container->hasDefinition(FileSystemConnectorInterface::class)) {
-                    $container->register(FileSystemConnectorInterface::class, FileSystemConnector::class)
-                              ->addArgument(getenv('REDIS_URL'))
-                              ->addArgument(getenv('APP_ENV'))
-                              ->addTag('gcp.translation_connector.backup');
-
-                    if (!$container->hasDefinition(CloudTranslationBackupWriterInterface::class)) {
-                        $container->register(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriter::class)
-                                  ->addArgument($container->getDefinition(FileSystemConnectorInterface::class))
-                                  ->addTag('gcp.translation_backup');
-                    }
-                }
-
-                $container->getDefinition(FileSystemConnectorInterface::class)
-                          ->addTag('gcp.translation_connector.backup');
-
-            } elseif ('redis' === $config['translation']['backup_engine']) {
-                if (!$container->hasDefinition(RedisConnectorInterface::class)) {
-                    $container->register(RedisConnectorInterface::class, RedisConnector::class)
-                              ->addArgument(getenv('REDIS_URL'))
-                              ->addArgument(getenv('APP_ENV'))
-                              ->addTag('gcp.translation_connector.backup');
-
-                    if (!$container->hasDefinition(CloudTranslationBackupWriter::class)) {
-                        $container->register(CloudTranslationBackupWriter::class, CloudTranslationBackupWriter::class)
-                                  ->addArgument($container->getDefinition(RedisConnectorInterface::class))
-                                  ->addTag('gcp.translation_backup');
-                        $container->register(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriterInterface::class);
-                        $container->setAlias(CloudTranslationBackupWriterInterface::class, CloudTranslationBackupWriter::class);
-                    }
-                }
-
-                $container->getDefinition(RedisConnectorInterface::class)
-                          ->addTag('gcp.translation_connector.backup');
-            }
-
-            if (!$container->hasDefinition(CloudTranslationWriter::class)) {
-                $container->register(CloudTranslationWriter::class, CloudTranslationWriter::class)
-                          ->addArgument($container->findTaggedServiceIds('gcp.translation_backup'))
-                          ->addArgument($container->findTaggedServiceIds('gcp.translation_connector'))
-                          ->setPublic(false)
-                          ->addTag('gcp.translation');
-                $container->setAlias(CloudTranslationWriterInterface::class, CloudTranslationWriter::class);
-            }
-
-            if (!$container->hasDefinition(CloudTranslationRepositoryInterface::class)) {
-                $container->register(CloudTranslationRepositoryInterface::class, CloudTranslationRepository::class)
-                          ->addArgument($container->findTaggedServiceIds('gcp.translation_connector'))
-                          ->addArgument($container->findTaggedServiceIds('gcp.translation_connector.backup'))
-                          ->setPublic(false)
-                          ->addTag('gcp.translation');
-            }
-        }
-
-        // Vision
-        if ($config['vision']['activated']) {
-            if (!$container->hasDefinition(CloudVisionBridgeInterface::class)) {
-                $container->register(CloudVisionBridgeInterface::class, CloudVisionBridge::class)
-                          ->addArgument($container->getParameter('cloud.vision_credentials.filename'))
-                          ->addArgument($container->getParameter('cloud.vision_credentials'))
-                          ->setPublic(false)
-                          ->addTag('gcp.vision_bridge');
-            }
-
-            if (!$container->hasDefinition(CloudVisionAnalyserHelperInterface::class)) {
-                $container->register(CloudVisionAnalyserHelperInterface::class, CloudVisionAnalyserHelper::class)
-                          ->addArgument($container->getDefinition(CloudVisionBridgeInterface::class))
-                          ->setPublic(false)
-                          ->addTag('gcp.vision_helper');
-            }
-
-            if (!$container->hasDefinition(CloudVisionDescriberHelperInterface::class)) {
-                $container->register(CloudVisionDescriberHelperInterface::class, CloudVisionDescriberHelper::class)
-                          ->addArgument($container->getDefinition(CloudVisionBridgeInterface::class))
-                          ->setPublic(false)
-                          ->addTag('gcp.vision_helper');
-            }
-
-            if (!$container->hasDefinition(CloudVisionVoterHelperInterface::class)) {
-                $container->register(CloudVisionVoterHelperInterface::class, CloudVisionVoterHelper::class)
-                          ->addArgument($config['vision']['forbidden_labels'])
-                          ->setPublic(false)
-                          ->addTag('gcp.vision_helper');
-            }
-        }
+        $this->processGlobalConfiguration($config, $container);
+        $this->processStorageConfiguration($config, $container);
+        $this->processTranslationConfiguration($config, $container);
+        $this->processVisionConfiguration($config, $container);
     }
 
     /**
@@ -219,6 +73,140 @@ final class GCPExtension extends Extension implements GCPExtensionInterface
      */
     public function processGlobalConfiguration(array $configuration, ContainerBuilder $containerBuilder): void
     {
+        $containerBuilder->setParameter('credentials_filename', $configuration['credentials_filename']);
+        $containerBuilder->setParameter('credentials_folder', $configuration['credentials_folder']);
 
+        if (!$containerBuilder->hasDefinition(LoaderInterface::class)) {
+            $containerBuilder->register(LoaderInterface::class, CredentialsLoader::class)
+                             ->setPublic(false)
+                             ->addTag('gcp.loader');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processStorageConfiguration(array $configuration, ContainerBuilder $containerBuilder): void
+    {
+        if ($configuration['storage']['activated']) {
+            if (!$containerBuilder->hasDefinition(new Reference(CloudStorageBridgeInterface::class))) {
+                $containerBuilder->register(CloudStorageBridgeInterface::class, CloudStorageBridge::class)
+                                 ->addArgument($configuration['credentials_filename'])
+                                 ->addArgument($configuration['credentials_folder'])
+                                 ->addArgument($containerBuilder->getDefinition(LoaderInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.storage_bridge');
+            }
+
+            if (!$containerBuilder->hasDefinition(CloudStorageWriterHelperInterface::class)) {
+                $containerBuilder->register(CloudStorageWriterHelperInterface::class, CloudStorageWriterHelper::class)
+                                 ->addArgument($containerBuilder->getDefinition(CloudStorageBridgeInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.storage');
+            }
+
+            if (!$containerBuilder->hasDefinition(CloudStorageRetrieverHelperInterface::class)) {
+                $containerBuilder->register(CloudStorageRetrieverHelperInterface::class, CloudStorageRetrieverHelper::class)
+                                 ->addArgument($containerBuilder->getDefinition(CloudStorageBridgeInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.storage');
+            }
+
+            if (!$containerBuilder->hasDefinition(CloudStorageCleanerHelperInterface::class)) {
+                $containerBuilder->register(CloudStorageCleanerHelperInterface::class, CloudStorageCleanerHelper::class)
+                                 ->addArgument($containerBuilder->getDefinition(CloudStorageBridgeInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.storage');
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processTranslationConfiguration(array $configuration, ContainerBuilder $containerBuilder): void
+    {
+        if ($configuration['translation']['activated']) {
+            if (!$containerBuilder->hasDefinition(new Reference(CloudTranslationBridgeInterface::class))) {
+                $containerBuilder->register(CloudTranslationBridgeInterface::class, CloudTranslationBridge::class)
+                                 ->addArgument($configuration['credentials_folder'])
+                                 ->addArgument($configuration['credentials_filename'])
+                                 ->setPublic(false)
+                                 ->addTag('gcp.translation_bridge');
+            }
+
+            if ('redis' === $configuration['translation']['storage_engine']) {
+                if (!$containerBuilder->hasDefinition(RedisConnectorInterface::class)) {
+                    $containerBuilder->register(RedisConnectorInterface::class, RedisConnector::class)
+                                     ->addArgument(getenv('REDIS_URL'))
+                                     ->addArgument(getenv('APP_ENV'))
+                                     ->addTag('gcp.translation_connector');
+                    $containerBuilder->register(ConnectorInterface::class, ConnectorInterface::class);
+                    $containerBuilder->setAlias(ConnectorInterface::class, RedisConnectorInterface::class);
+                }
+
+            } elseif ('filesystem' === $configuration['translation']['storage_engine']) {
+                if (!$containerBuilder->hasDefinition(FileSystemConnectorInterface::class)) {
+                    $containerBuilder->register(FileSystemConnectorInterface::class, FileSystemConnector::class)
+                                     ->addArgument(getenv('APP_ENV'))
+                                     ->addTag('gcp.translation_connector');
+                    $containerBuilder->register(ConnectorInterface::class, ConnectorInterface::class);
+                    $containerBuilder->setAlias(ConnectorInterface::class, FileSystemConnectorInterface::class);
+                }
+            }
+
+            if (!$containerBuilder->hasDefinition(CloudTranslationWriter::class)) {
+                $containerBuilder->register(CloudTranslationWriter::class, CloudTranslationWriter::class)
+                                 ->addArgument($containerBuilder->findDefinition(ConnectorInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.translation');
+                $containerBuilder->setAlias(CloudTranslationWriterInterface::class, CloudTranslationWriter::class);
+            }
+
+            if (!$containerBuilder->hasDefinition(CloudTranslationRepositoryInterface::class)) {
+                $containerBuilder->register(CloudTranslationRepositoryInterface::class, CloudTranslationRepository::class)
+                                 ->addArgument($containerBuilder->findDefinition(ConnectorInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.translation');
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processVisionConfiguration(array $configuration, ContainerBuilder $containerBuilder): void
+    {
+        if ($configuration['vision']['activated']) {
+            if (!$containerBuilder->hasDefinition(CloudVisionBridgeInterface::class)) {
+                $containerBuilder->register(CloudVisionBridgeInterface::class, CloudVisionBridge::class)
+                                 ->addArgument($configuration['credentials_filename'])
+                                 ->addArgument($configuration['credentials_folder'])
+                                 ->addArgument($containerBuilder->getDefinition(LoaderInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.vision_bridge');
+            }
+
+            if (!$containerBuilder->hasDefinition(CloudVisionAnalyserHelperInterface::class)) {
+                $containerBuilder->register(CloudVisionAnalyserHelperInterface::class, CloudVisionAnalyserHelper::class)
+                                 ->addArgument($containerBuilder->getDefinition(CloudVisionBridgeInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.vision_helper');
+            }
+
+            if (!$containerBuilder->hasDefinition(CloudVisionDescriberHelperInterface::class)) {
+                $containerBuilder->register(CloudVisionDescriberHelperInterface::class, CloudVisionDescriberHelper::class)
+                                 ->addArgument($containerBuilder->getDefinition(CloudVisionBridgeInterface::class))
+                                 ->setPublic(false)
+                                 ->addTag('gcp.vision_helper');
+            }
+
+            if (!$containerBuilder->hasDefinition(CloudVisionVoterHelperInterface::class)) {
+                $containerBuilder->register(CloudVisionVoterHelperInterface::class, CloudVisionVoterHelper::class)
+                                 ->addArgument($configuration['vision']['forbidden_labels'])
+                                 ->setPublic(false)
+                                 ->addTag('gcp.vision_helper');
+            }
+        }
     }
 }

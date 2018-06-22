@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\GCP\Bridge;
+namespace App\Infra\GCP\CloudVision\Bridge;
 
 use App\Infra\GCP\Bridge\Interfaces\CloudBridgeInterface;
-use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
+use App\Infra\GCP\CloudVision\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Vision\VisionClient;
 
@@ -23,7 +23,7 @@ use Google\Cloud\Vision\VisionClient;
  * 
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class CloudVisionBridge implements CloudBridgeInterface, CloudVisionBridgeInterface
+final class CloudVisionBridge implements CloudBridgeInterface, CloudVisionBridgeInterface
 {
     /**
      * The default name of the credentials file.

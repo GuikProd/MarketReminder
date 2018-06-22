@@ -15,9 +15,9 @@ namespace App\Infra\GCP\CloudTranslation\Helper;
 
 use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Parser\Interfaces\CloudTranslationYamlParserInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -49,14 +49,14 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
     private $cloudTranslationRepository;
 
     /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    private $cloudTranslationBackUpWriter;
-
-    /**
      * @var CloudTranslationWriterInterface
      */
     private $cloudTranslationWriter;
+
+    /**
+     * @var CloudTranslationYamlParserInterface
+     */
+    private $cloudTranslationYamlParser;
 
     /**
      * @var string
@@ -71,16 +71,16 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
         string $acceptedLocales,
         CloudTranslationClientInterface $cloudTranslationWarmer,
         CloudTranslationRepositoryInterface $cloudTranslationRepository,
-        CloudTranslationBackupWriterInterface $cloudTranslationBackupWriter,
         CloudTranslationWriterInterface $cloudTranslationWriter,
+        CloudTranslationYamlParserInterface $cloudTranslationYamlParser,
         string $translationsFolder
     ) {
         $this->acceptedChannels = $acceptedChannels;
         $this->acceptedLocales = $acceptedLocales;
         $this->cloudTranslationWarmer = $cloudTranslationWarmer;
         $this->cloudTranslationRepository = $cloudTranslationRepository;
-        $this->cloudTranslationBackUpWriter = $cloudTranslationBackupWriter;
         $this->cloudTranslationWriter = $cloudTranslationWriter;
+        $this->cloudTranslationYamlParser = $cloudTranslationYamlParser;
         $this->translationsFolder = $translationsFolder;
     }
 
@@ -120,14 +120,21 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
                 ) {
                     // If the cache is already in place, no need to stop the process.
                 }
-
-                if (!$this->cloudTranslationBackUpWriter->warmBackUp($channel, $defaultLocale, $defaultContent)) {
-                    // If the back up is already in place, no need to stop the process.
-                }
             }
 
             if ($this->checkNewFileExistenceAndValidity($channel . '.' . $locale . '.yaml', $toTranslateKeys)) {
-                return true;
+                if ($this->isCacheValid($channel, $locale, $toTranslateContent)) {
+                    return true;
+                }
+
+                $this->cloudTranslationYamlParser->parseYaml($this->translationsFolder, $channel.'.'.$locale);
+
+                return $this->cloudTranslationWriter->write(
+                    $locale,
+                    $channel,
+                    $channel . '.' . $locale . '.yaml',
+                    array_combine($this->cloudTranslationYamlParser->getKeys(), $this->cloudTranslationYamlParser->getValues())
+                );
             }
 
             if (!$newItem = $this->cloudTranslationRepository->getEntries($channel.'.'.$locale.'.yaml')) {
@@ -147,18 +154,15 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
                     );
                 }
 
-                $this->cloudTranslationWriter->write(
+                return $this->cloudTranslationWriter->write(
                     $locale,
                     $channel,
                     $channel . '.' . $locale . '.yaml',
                     array_combine($toTranslateKeys, $translatedElements)
                 );
-                $this->cloudTranslationBackUpWriter->warmBackUp(
-                    $channel,
-                    $locale,
-                    array_combine($toTranslateKeys, $translatedElements)
-                );
             }
+
+            return false;
 
         } catch (InvalidArgumentException $e) {
             sprintf($e->getMessage());

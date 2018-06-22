@@ -15,7 +15,7 @@ namespace App\Application\Helper\Image\Interfaces;
 
 /**
  * Interface ImageTypeCheckerHelperInterface.
- * 
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 interface ImageTypeCheckerHelperInterface

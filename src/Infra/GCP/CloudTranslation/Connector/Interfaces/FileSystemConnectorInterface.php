@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces;
+namespace App\Infra\GCP\CloudTranslation\Connector\Interfaces;
 
 /**
  * Interface FileSystemConnectorInterface.

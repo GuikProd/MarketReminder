@@ -43,5 +43,4 @@ class ImageUpdatedEvent implements ImageUpdatedEventInterface
     {
         return $this->image;
     }
-
 }

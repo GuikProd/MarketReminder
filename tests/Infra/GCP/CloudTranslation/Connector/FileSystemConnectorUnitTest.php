@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\CloudTranslation\Connector;
 
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\FileSystemConnector;
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\FileSystemConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\FileSystemConnectorInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -31,7 +31,7 @@ final class FileSystemConnectorUnitTest extends TestCase
         $fileSystemConnector = new FileSystemConnector('test');
 
         static::assertInstanceOf(
-            BackUpConnectorInterface::class,
+            ConnectorInterface::class,
             $fileSystemConnector
         );
         static::assertInstanceOf(
@@ -43,11 +43,10 @@ final class FileSystemConnectorUnitTest extends TestCase
     public function testItReturnAdapter()
     {
         $fileSystemConnector = new FileSystemConnector('test');
-        $fileSystemConnector->activate(true);
 
         static::assertInstanceOf(
             CacheItemPoolInterface::class,
-            $fileSystemConnector->getBackUpAdapter()
+            $fileSystemConnector->getAdapter()
         );
     }
 }

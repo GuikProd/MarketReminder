@@ -14,11 +14,9 @@ declare(strict_types=1);
 namespace App\Tests\TestCase;
 
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Helper\Factory\CloudTranslationFactory;
 use App\Infra\GCP\CloudTranslation\Helper\Factory\Interfaces\CloudTranslationFactoryInterface;
-use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\CloudTranslationValidator;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\Interfaces\CloudTranslationValidatorInterface;
@@ -31,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class CloudTranslationTestCase extends TestCase
 {
-    use ConnectorTraitTestCase;
+    use ConnectorTrait;
 
     /**
      * @var CloudTranslationFactoryInterface
@@ -49,11 +47,6 @@ abstract class CloudTranslationTestCase extends TestCase
     protected $cloudTranslationValidator;
 
     /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    protected $cloudTranslationBackUpWriter;
-
-    /**
      * @var CloudTranslationWriterInterface
      */
     protected $cloudTranslationWriter;
@@ -67,16 +60,6 @@ abstract class CloudTranslationTestCase extends TestCase
             $this->connector,
             $this->cloudTranslationFactory,
             $this->cloudTranslationValidator
-        );
-    }
-
-    public function createCloudTranslationBackUpWriter()
-    {
-        $this->createCloudTranslationFactory();
-        $this->createCloudTranslationValidator();
-
-        $this->cloudTranslationBackUpWriter = new CloudTranslationBackupWriter(
-            $this->backUpConnector
         );
     }
 

@@ -31,7 +31,7 @@ final class CredentialsLoaderSystemTest extends TestCase
     /**
      * @var LoaderInterface
      */
-    private $loader;
+    private $loader = null;
 
     /**
      * {@inheritdoc}
@@ -73,5 +73,13 @@ final class CredentialsLoaderSystemTest extends TestCase
         $this->assertBlackfire($configuration, function () {
             $this->loader->loadJson('credentials.json', __DIR__.'/../../../_credentials');
         });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        $this->loader = null;
     }
 }

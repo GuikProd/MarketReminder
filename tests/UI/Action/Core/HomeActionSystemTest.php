@@ -15,8 +15,8 @@ namespace App\Tests\UI\Action\Core;
 
 use App\UI\Action\Core\HomeAction;
 use App\UI\Action\Core\Interfaces\HomeActionInterface;
-use App\UI\Presenter\Core\HomePresenter;
-use App\UI\Presenter\Core\Interfaces\HomePresenterInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
+use App\UI\Presenter\Presenter;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -40,9 +40,9 @@ class HomeActionSystemTest extends KernelTestCase
     private $homeAction;
 
     /**
-     * @var HomePresenterInterface
+     * @var PresenterInterface
      */
-    private $homePresenter;
+    private $presenter;
 
     /**
      * @var HomeResponderInterface
@@ -71,8 +71,8 @@ class HomeActionSystemTest extends KernelTestCase
         $this->twig = static::$kernel->getContainer()->get('twig');
 
         $this->homeAction = new HomeAction();
-        $this->homePresenter = new HomePresenter();
-        $this->homeResponder = new HomeResponder($this->twig, $this->homePresenter);
+        $this->presenter = new Presenter();
+        $this->homeResponder = new HomeResponder($this->twig, $this->presenter);
     }
 
     /**
@@ -83,7 +83,7 @@ class HomeActionSystemTest extends KernelTestCase
     public function testBlackfireProfilingWithTemplateReturn()
     {
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 1.5mb', 'HomeAction memory usage for template return');
+        $configuration->assert('main.peak_memory < 1.5MB', 'HomeAction memory usage for template return');
         $configuration->assert('main.network_in == 0', 'HomeAction network call for template return');
         $configuration->assert('main.network_out == 0', 'HomeAction network callees for template return');
 

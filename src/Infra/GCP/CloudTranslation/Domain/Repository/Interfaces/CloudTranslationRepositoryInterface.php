@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces;
 
-use App\Infra\GCP\CloudTranslation\Connector\BackUp\Interfaces\BackUpConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 
@@ -28,12 +27,8 @@ interface CloudTranslationRepositoryInterface
      * CloudTranslationRepositoryInterface constructor.
      *
      * @param ConnectorInterface $connector
-     * @param BackUpConnectorInterface $backUpConnector
      */
-    public function __construct(
-        ConnectorInterface $connector,
-        BackUpConnectorInterface $backUpConnector
-    );
+    public function __construct(ConnectorInterface $connector);
 
     /**
      * Allow to retrieve an array of CloudTranslationItem using the default filename.

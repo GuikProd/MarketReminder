@@ -70,7 +70,7 @@ router: ## Allow to debug the router
 create-schema: ## Allow to create the BDD schema
 	    $(ENV_PHP) ./bin/console d:d:d --force --env=$(ENV)
 	    $(ENV_PHP) ./bin/console d:d:c --env=$(ENV)
-	    $(ENV_PHP) ./bin/console d:s:v --env=$(ENV)
+	    $(ENV_PHP) ./bin/console d:s:c --env=$(ENV)
 
 check-schema: config/doctrine
 	    $(ENV_PHP) ./bin/console doctrine:schema:validate --env=$(ENV)
@@ -94,7 +94,18 @@ redis-cache: ## Allow to clean the Redis cache
 phpunit: tests
 	    make fixtures ENV=test
 	    make doctrine-cache
-	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire tests/$(FOLDER)
+	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire,e2e tests/$(FOLDER)
+
+phpunit-e2e: tests
+	    make fixtures ENV=test
+	    make doctrine-cache
+	    make translation CHANNEL=messages LOCALE=fr ENV=test
+	    make translation CHANNEL=messages LOCALE=en ENV=test
+	    make translation CHANNEL=validators LOCALE=fr ENV=test
+	    make translation CHANNEL=validators LOCALE=en ENV=test
+	    make translation CHANNEL=session LOCALE=fr ENV=test
+	    make translation CHANNEL=session LOCALE=en ENV=test
+	    $(ENV_PHP) ./bin/phpunit --group e2e
 
 phpunit-blackfire: tests
 	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)

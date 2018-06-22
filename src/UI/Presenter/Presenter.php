@@ -75,9 +75,7 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
                 $value['key']
             )) {
                 $value['value'] = $value['key'];
-            }
-
-            if (!array_key_exists('value', $value) && $redisTranslation->getKey() == $value['key']) {
+            } elseif ($redisTranslation->getKey() == $value['key']) {
                 $value['value'] = $redisTranslation->getValue();
             }
 

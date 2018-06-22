@@ -121,7 +121,8 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
             ->setBody(
                 $this->twig->render('emails/security/user_ask_reset_password.html.twig', [
                     'presenter' => $this->presenter
-                ]), 'text/html'
+                ]),
+                'text/html'
             );
 
         $this->swiftMailer->send($askResetPasswordMail);
@@ -170,7 +171,8 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
             ->setBody(
                 $this->twig->render('emails/security/registration_mail.html.twig', [
                     'presenter' => $this->presenter
-                ]), 'text/html'
+                ]),
+                'text/html'
             );
 
         $this->swiftMailer->send($registrationMail);
@@ -215,7 +217,8 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
             ->setBody(
                 $this->twig->render('emails/security/user_reset_password.html.twig', [
                     'presenter' => $this->presenter
-                ]), 'text/html'
+                ]),
+                'text/html'
             );
 
         $this->swiftMailer->send($resetPasswordMessage);
@@ -256,7 +259,8 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
             ->setBody(
                 $this->twig->render('emails/security/validation_mail.html.twig', [
                     'presenter' => $this->presenter
-                ]), 'text/html'
+                ]),
+                'text/html'
             );
 
         $this->swiftMailer->send($validationMail);

@@ -26,7 +26,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class HomeResponderUnitTest extends TestCase
+final class HomeResponderUnitTest extends TestCase
 {
     /**
      * @var PresenterInterface
