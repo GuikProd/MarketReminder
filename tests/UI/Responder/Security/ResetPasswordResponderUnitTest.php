@@ -19,9 +19,9 @@ use App\UI\Presenter\Presenter;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -49,7 +49,7 @@ class ResetPasswordResponderUnitTest extends TestCase
     private $redisTranslationRepository;
 
     /**
-     * @var Request
+     * @var ServerRequestInterface
      */
     private $request;
 
@@ -70,11 +70,11 @@ class ResetPasswordResponderUnitTest extends TestCase
     {
         $this->form = $this->createMock(FormInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
-        $this->request = $this->createMock(Request::class);
+        $this->request = $this->createMock(ServerRequestInterface::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
-        $this->request->method('getLocale')->willReturn('fr');
+        $this->request->method('getAttribute')->willReturn('fr');
         $this->urlGenerator->method('generate')->willReturn('/fr/');
 
         $this->presenter = new Presenter($this->redisTranslationRepository);

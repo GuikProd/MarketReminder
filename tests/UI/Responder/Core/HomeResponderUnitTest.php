@@ -17,7 +17,7 @@ use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -34,7 +34,7 @@ final class HomeResponderUnitTest extends TestCase
     private $presenter;
 
     /**
-     * @var Request
+     * @var ServerRequestInterface
      */
     private $request;
 
@@ -50,9 +50,9 @@ final class HomeResponderUnitTest extends TestCase
     {
         $this->twig = $this->createMock(Environment::class);
         $this->presenter = $this->createMock(PresenterInterface::class);
-        $this->request = $this->createMock(Request::class);
+        $this->request = $this->createMock(ServerRequestInterface::class);
 
-        $this->request->method('getLocale')->willReturn('fr');
+        $this->request->method('getAttribute')->willReturn('fr');
         $this->twig->method('getCharset')->willReturn('utf-8');
     }
 
