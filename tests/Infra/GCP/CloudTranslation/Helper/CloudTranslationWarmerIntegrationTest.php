@@ -44,7 +44,7 @@ final class CloudTranslationWarmerIntegrationTest extends KernelTestCase
      * @param string $channel
      * @param string $locale
      */
-    public function testWrongChannelWithFileSystemCache(
+    public function testWrongChannel(
         string $channel,
         string $locale
     ) {
@@ -61,7 +61,7 @@ final class CloudTranslationWarmerIntegrationTest extends KernelTestCase
      * @param string $channel
      * @param string $locale
      */
-    public function testCacheIsValidWithFileSystem(
+    public function testCacheIsValid(
         string $channel,
         string $locale
     ) {
