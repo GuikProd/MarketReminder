@@ -14,23 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Application\Command;
 
 use App\Application\Command\TranslationWarmerCommand;
-use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
-use App\Infra\GCP\CloudTranslation\Client\CloudTranslationClient;
-use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
-use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
-use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWarmer;
-use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
-use App\Infra\GCP\CloudTranslation\Helper\Factory\CloudTranslationFactory;
-use App\Infra\GCP\CloudTranslation\Helper\Factory\Interfaces\CloudTranslationFactoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
-use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
-use App\Infra\GCP\CloudTranslation\Helper\Parser\CloudTranslationYamlParser;
-use App\Infra\GCP\CloudTranslation\Helper\Validator\CloudTranslationValidator;
-use App\Infra\GCP\CloudTranslation\Helper\Validator\Interfaces\CloudTranslationValidatorInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -43,16 +28,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
 {
     /**
-     * @var string
-     */
-    private $acceptedChannels;
-
-    /**
-     * @var string
-     */
-    private $acceptedLocales;
-
-    /**
      * @var Application
      */
     private $application;
@@ -63,44 +38,14 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     private $connector;
 
     /**
-     * @var CloudTranslationClientInterface
-     */
-    private $cloudTranslationClient;
-
-    /**
-     * @var CloudTranslationFactoryInterface
-     */
-    private $cloudTranslationFactory;
-
-    /**
-     * @var CloudTranslationValidatorInterface
-     */
-    private $cloudTranslationValidator;
-
-    /**
      * @var CommandTester
      */
     private $commandTester;
 
     /**
-     * @var CloudTranslationRepositoryInterface
-     */
-    private $redisTranslationRepository;
-
-    /**
      * @var CloudTranslationWarmerInterface
      */
     private $cloudTranslationWarmer;
-
-    /**
-     * @var CloudTranslationWriterInterface
-     */
-    private $cloudTranslationWriter;
-
-    /**
-     * @var string
-     */
-    private $translationsFolder;
 
     /**
      * {@inheritdoc}
@@ -109,40 +54,8 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->acceptedLocales = static::$container->getParameter('accepted_locales');
-        $this->acceptedChannels = static::$container->getParameter('accepted_channels');
-        $this->translationsFolder = static::$container->getParameter('translator.default_path');
-
-        $loader = new CredentialsLoader();
-        $parser = new CloudTranslationYamlParser();
-
-        $cloudTranslationBridge = new CloudTranslationBridge(
-            'credentials.json',
-            __DIR__.'./../../_credentials',
-            $loader
-        );
-
-        $this->connector = new FileSystemConnector('test');
-
-        $this->cloudTranslationClient = new CloudTranslationClient($cloudTranslationBridge);
-        $this->cloudTranslationFactory = new CloudTranslationFactory();
-        $this->redisTranslationRepository = new CloudTranslationRepository($this->connector);
-        $this->cloudTranslationValidator = new CloudTranslationValidator();
-        $this->cloudTranslationWriter = new CloudTranslationWriter(
-            $this->connector,
-            $this->cloudTranslationFactory,
-            $this->cloudTranslationValidator
-        );
-
-        $this->cloudTranslationWarmer = new CloudTranslationWarmer(
-            $this->acceptedChannels,
-            $this->acceptedLocales,
-            $this->cloudTranslationClient,
-            $this->redisTranslationRepository,
-            $this->cloudTranslationWriter,
-            $parser,
-            $this->translationsFolder
-        );
+        $this->connector = static::$container->get(ConnectorInterface::class);
+        $this->cloudTranslationWarmer = static::$container->get(CloudTranslationWarmerInterface::class);
 
         $this->application = new Application(static::$kernel);
         $this->application->add(new TranslationWarmerCommand($this->cloudTranslationWarmer));
@@ -154,7 +67,7 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
 
     public function testItPreventWrongChannel()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        static::expectException(\InvalidArgumentException::class);
 
         $this->commandTester->execute([
             'channel' => 'toto',
@@ -171,7 +84,7 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
 
     public function testItPreventWrongLocale()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        static::expectException(\InvalidArgumentException::class);
 
         $this->commandTester->execute([
             'channel' => 'messages',

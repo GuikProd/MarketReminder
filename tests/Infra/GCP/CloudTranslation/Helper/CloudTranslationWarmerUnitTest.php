@@ -19,6 +19,7 @@ use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslation
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Parser\Interfaces\CloudTranslationYamlParserInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,6 +55,11 @@ final class CloudTranslationWarmerUnitTest extends TestCase
     private $cloudTranslationWriter;
 
     /**
+     * @var CloudTranslationYamlParserInterface
+     */
+    private $cloudTranslationYamlParser;
+
+    /**
      * @var string
      */
     private $translationsFolder;
@@ -68,6 +74,7 @@ final class CloudTranslationWarmerUnitTest extends TestCase
         $this->cloudTranslationWarmer = $this->createMock(CloudTranslationClientInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
         $this->cloudTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);
+        $this->cloudTranslationYamlParser = $this->createMock(CloudTranslationYamlParserInterface::class);
         $this->translationsFolder = getenv('TRANSLATION_FOLDER');
     }
 
@@ -79,6 +86,7 @@ final class CloudTranslationWarmerUnitTest extends TestCase
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
             $this->cloudTranslationWriter,
+            $this->cloudTranslationYamlParser,
             $this->translationsFolder
         );
 
@@ -98,6 +106,7 @@ final class CloudTranslationWarmerUnitTest extends TestCase
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
             $this->cloudTranslationWriter,
+            $this->cloudTranslationYamlParser,
             $this->translationsFolder
         );
 
@@ -116,6 +125,7 @@ final class CloudTranslationWarmerUnitTest extends TestCase
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
             $this->cloudTranslationWriter,
+            $this->cloudTranslationYamlParser,
             $this->translationsFolder
         );
 
@@ -146,6 +156,7 @@ final class CloudTranslationWarmerUnitTest extends TestCase
             $this->cloudTranslationWarmer,
             $this->redisTranslationRepository,
             $this->cloudTranslationWriter,
+            $this->cloudTranslationYamlParser,
             $this->translationsFolder
         );
 

@@ -1,3 +1,6 @@
+parameters:
+    cloud.credentials_folder: '%kernel.project_dir%/tests/_credentials'
+
 services:
     _defaults:
         public: true
