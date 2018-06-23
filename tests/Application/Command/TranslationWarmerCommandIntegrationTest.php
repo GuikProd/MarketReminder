@@ -109,9 +109,9 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->acceptedLocales = getenv('ACCEPTED_LOCALES');
-        $this->acceptedChannels = getenv('ACCEPTED_CHANNELS');
-        $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
+        $this->acceptedLocales = static::$container->getParameter('accepted_locales');
+        $this->acceptedChannels = static::$container->getParameter('accepted_channels');
+        $this->translationsFolder = static::$container->getParameter('translator.default_path');
 
         $loader = new CredentialsLoader();
         $parser = new CloudTranslationYamlParser();
