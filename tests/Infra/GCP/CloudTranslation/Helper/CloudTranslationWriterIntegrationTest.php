@@ -13,16 +13,37 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
-use App\Tests\TestCase\CloudTranslationTestCase;
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Class CloudTranslationWriterIntegrationTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class CloudTranslationWriterIntegrationTest extends CloudTranslationTestCase
+final class CloudTranslationWriterIntegrationTest extends KernelTestCase
 {
     /**
+     * @var CloudTranslationWriterInterface
+     */
+    private $cloudTranslationWriter;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        static::bootKernel();
+
+        $this->cloudTranslationWriter = static::$container->get(CloudTranslationWriterInterface::class);
+
+        $connector = static::$container->get(ConnectorInterface::class);
+
+        $connector->getAdapter()->clear();
+    }
+
+    /**
      * @dataProvider provideRightData
      *
      * @param string $locale
@@ -32,16 +53,12 @@ final class CloudTranslationWriterIntegrationTest extends CloudTranslationTestCa
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToStoreSameContentWithFileSystemCacheAndFileSystemBackup(
+    public function testItRefuseToStoreSameContent(
         string $locale,
         string $channel,
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemConnector();
-        $this->createFileSystemBackUp();
-        $this->createCloudTranslationWriter();
-
         $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
@@ -59,97 +76,12 @@ final class CloudTranslationWriterIntegrationTest extends CloudTranslationTestCa
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItRefuseToStoreSameContentWithFileSystemCacheAndRedisBackup(
+    public function testItSaveEntries(
         string $locale,
         string $channel,
         string $fileName,
         array $values
     ) {
-        $this->createFileSystemConnector();
-        $this->createRedisBackUp();
-        $this->createCloudTranslationWriter();
-
-        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        static::assertFalse($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $fileName
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItRefuseToStoreSameContentWithRedisCacheAndRedisBackup(
-        string $locale,
-        string $channel,
-        string $fileName,
-        array $values
-    ) {
-        $this->createRedisConnector();
-        $this->createRedisBackUp();
-        $this->createCloudTranslationWriter();
-
-        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        static::assertFalse($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $fileName
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItRefuseToStoreSameContentWithRedisCacheAndFileSystemBackup(
-        string $locale,
-        string $channel,
-        string $fileName,
-        array $values
-    ) {
-        $this->createRedisConnector();
-        $this->createFileSystemBackUp();
-        $this->createCloudTranslationWriter();
-
-        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        static::assertFalse($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $fileName
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItSaveEntriesWithFileSystemCacheAndFileSystemBackup(
-        string $locale,
-        string $channel,
-        string $fileName,
-        array $values
-    ) {
-        $this->createFileSystemConnector();
-        $this->createFileSystemBackUp();
-        $this->createCloudTranslationWriter();
-
         $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         static::assertTrue($processStatus);
@@ -165,41 +97,12 @@ final class CloudTranslationWriterIntegrationTest extends CloudTranslationTestCa
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function testItSaveEntriesWithRedisCacheAndRedisBackup(
+    public function testItUpdateAndSaveItem(
         string $locale,
         string $channel,
         string $fileName,
         array $values
     ) {
-        $this->createRedisConnector();
-        $this->createRedisBackUp();
-        $this->createCloudTranslationWriter();
-
-        $processStatus = $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        static::assertTrue($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightData
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $fileName
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function testItUpdateAndSaveItemWithFileSystemCacheAndFileSystemBackup(
-        string $locale,
-        string $channel,
-        string $fileName,
-        array $values
-    ) {
-        $this->createFileSystemConnector();
-        $this->createFileSystemBackUp();
-        $this->createCloudTranslationWriter();
-
         $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
 
         $processStatus = $this->cloudTranslationWriter->write(
@@ -213,35 +116,13 @@ final class CloudTranslationWriterIntegrationTest extends CloudTranslationTestCa
     }
 
     /**
-     * @dataProvider provideRightData
-     *
-     * @param string $locale
-     * @param string $channel
-     * @param string $fileName
-     * @param array $values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
+     * {@inheritdoc}
      */
-    public function testItUpdateAndSaveItemWithRedisCacheAndRedisBackup(
-        string $locale,
-        string $channel,
-        string $fileName,
-        array $values
-    ) {
-        $this->createRedisConnector();
-        $this->createRedisBackUp();
-        $this->createCloudTranslationWriter();
+    protected function tearDown()
+    {
+        parent::tearDown();
 
-        $this->cloudTranslationWriter->write($locale, $channel, $fileName, $values);
-
-        $processStatus = $this->cloudTranslationWriter->write(
-            $locale,
-            $channel,
-            $fileName,
-            ['user.creation_success' => 'Hello user !']
-        );
-
-        static::assertTrue($processStatus);
+        $this->cloudTranslationWriter = null;
     }
 
     /**

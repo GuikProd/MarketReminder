@@ -39,6 +39,21 @@ final class CloudTranslationWarmerIntegrationTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider provideWrongLocale
+     *
+     * @param string $channel
+     * @param string $locale
+     */
+    public function testWrongLocale(string $channel, string $locale)
+    {
+        static::expectException(\InvalidArgumentException::class);
+
+        $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
+
+        static::assertFalse($processStatus);
+    }
+
+    /**
      * @dataProvider provideWrongChannel
      *
      * @param string $channel

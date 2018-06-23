@@ -75,7 +75,7 @@ final class CloudTranslationWarmerUnitTest extends TestCase
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
         $this->cloudTranslationWriter = $this->createMock(CloudTranslationWriterInterface::class);
         $this->cloudTranslationYamlParser = $this->createMock(CloudTranslationYamlParserInterface::class);
-        $this->translationsFolder = __DIR__.'./../../../../_translations';
+        $this->translationsFolder = __DIR__.'/../../../../_translations';
     }
 
     public function testItImplements()

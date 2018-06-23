@@ -3,7 +3,7 @@ parameters:
     cloud.credentials_folder: '%kernel.project_dir%/tests/_credentials'
     redis.test_dsn: '%env(REDIS_TEST_URL)%'
     redis.namespace_test: "test"
-    translator.default_path: '%kernel.test_dir%/_translations'
+    translator.test_path: '%kernel.test_dir%/_translations'
 
 services:
     _defaults:
@@ -14,4 +14,4 @@ services:
             $namespace: '%env(APP_ENV)%'
 
             # CloudTranslation
-            $translationsFolder: "%translator.default_path%"
+            $translationsFolder: "%translator.test_path%"
