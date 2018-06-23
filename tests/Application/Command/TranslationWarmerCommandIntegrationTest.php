@@ -19,19 +19,18 @@ use App\Infra\GCP\CloudTranslation\Client\CloudTranslationClient;
 use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Connector\FileSystemConnector;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationBackupWriter;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWarmer;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Helper\Factory\CloudTranslationFactory;
 use App\Infra\GCP\CloudTranslation\Helper\Factory\Interfaces\CloudTranslationFactoryInterface;
-use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationBackupWriterInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudTranslation\Helper\Parser\CloudTranslationYamlParser;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\CloudTranslationValidator;
 use App\Infra\GCP\CloudTranslation\Helper\Validator\Interfaces\CloudTranslationValidatorInterface;
+use App\Infra\GCP\Loader\CredentialsLoader;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -57,11 +56,6 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
      * @var Application
      */
     private $application;
-
-    /**
-     * @var ConnectorInterface
-     */
-    private $backupConnector;
 
     /**
      * @var ConnectorInterface
@@ -99,11 +93,6 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     private $cloudTranslationWarmer;
 
     /**
-     * @var CloudTranslationBackupWriterInterface
-     */
-    private $cloudTranslationBackupWriter;
-
-    /**
      * @var CloudTranslationWriterInterface
      */
     private $cloudTranslationWriter;
@@ -120,43 +109,38 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->acceptedLocales = static::$container->getParameter('accepted_locales');
+        $this->acceptedLocales = getenv('ACCEPTED_LOCALES');
+        $this->acceptedChannels = getenv('ACCEPTED_CHANNELS');
+        $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
+
+        $loader = new CredentialsLoader();
+        $parser = new CloudTranslationYamlParser();
 
         $cloudTranslationBridge = new CloudTranslationBridge(
             'credentials.json',
-            __DIR__.'./../../_credentials'
+            __DIR__.'./../../_credentials',
+            $loader
         );
 
-        $this->backupConnector = new FileSystemConnector('test');
+        $this->connector = new FileSystemConnector('test');
 
-        $this->connector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test')
-        );
         $this->cloudTranslationClient = new CloudTranslationClient($cloudTranslationBridge);
         $this->cloudTranslationFactory = new CloudTranslationFactory();
-        $this->redisTranslationRepository = new CloudTranslationRepository(
-            $this->connector,
-            $this->backupConnector
-        );
+        $this->redisTranslationRepository = new CloudTranslationRepository($this->connector);
         $this->cloudTranslationValidator = new CloudTranslationValidator();
-        $this->cloudTranslationBackupWriter = new CloudTranslationBackupWriter($this->backupConnector);
         $this->cloudTranslationWriter = new CloudTranslationWriter(
             $this->connector,
             $this->cloudTranslationFactory,
             $this->cloudTranslationValidator
         );
 
-        $this->acceptedChannels = static::$kernel->getContainer()->getParameter('accepted_channels');
-        $this->translationsFolder = static::$kernel->getContainer()->getParameter('translator.default_path');
-
         $this->cloudTranslationWarmer = new CloudTranslationWarmer(
             $this->acceptedChannels,
             $this->acceptedLocales,
             $this->cloudTranslationClient,
             $this->redisTranslationRepository,
-            $this->cloudTranslationBackupWriter,
             $this->cloudTranslationWriter,
+            $parser,
             $this->translationsFolder
         );
 
