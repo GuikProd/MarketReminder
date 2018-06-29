@@ -15,7 +15,7 @@ namespace App\UI\Action\Core\Interfaces;
 
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Zend\Diactoros\Response;
 
 /**
  * Interface HomeActionInterface.

@@ -109,6 +109,10 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
             $toTranslateContent[] = $value;
         }
 
+        // TODO: The default file content should be compared to the desired content.
+        // If the desired content is up to date with the default content, the desired content could be cached, if not,
+        // The desired content should be completed/translated then cached.
+
         try {
             if (!$this->isCacheValid($channel, $defaultLocale, $defaultContent)) {
 
@@ -184,7 +188,7 @@ final class CloudTranslationWarmer implements CloudTranslationWarmerInterface
             $toCheckContent[$value->getKey()] = $value->getValue();
         }
 
-        return \count(array_diff($content, $toCheckContent)) > 0;
+        return \count(array_diff($content, $toCheckContent)) > 0 ? false : true;
     }
 
     /**

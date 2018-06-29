@@ -56,7 +56,7 @@ cache-warm: ## Allow to warm the cache
 	    $(ENV_PHP) ./bin/console cache:warmup
 
 translation: ## Allow to warm the translation
-	    $(ENV_PHP) ./bin/console app:translation-warm $(CHANNEL) $(LOCALE) --env=$(ENV)
+	    $(ENV_PHP) ./bin/console app:translation-warm $(CHANNEL) $(LOCALE)
 
 container: ## Allow to debug the container
 	    $(ENV_PHP) ./bin/console debug:container --show-private
@@ -88,26 +88,26 @@ doctrine-cache: ## Allow to clean the Doctrine cache
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-query
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-metadata
 
-redis-cache: ## Allow to clean the Redis cache
-	    $(ENV_PHP) ./bin/console redis:flushall -n
-
 phpunit: tests
 	    make fixtures ENV=test
 	    make doctrine-cache
+	    $(ENV_PHP) ./bin/console cache:pool:prune
 	    $(ENV_PHP) ./bin/phpunit --exclude-group Blackfire,e2e tests/$(FOLDER)
 
 phpunit-e2e: tests
 	    make fixtures ENV=test
 	    make doctrine-cache
-	    make translation CHANNEL=messages LOCALE=fr ENV=test
-	    make translation CHANNEL=messages LOCALE=en ENV=test
-	    make translation CHANNEL=validators LOCALE=fr ENV=test
-	    make translation CHANNEL=validators LOCALE=en ENV=test
-	    make translation CHANNEL=session LOCALE=fr ENV=test
-	    make translation CHANNEL=session LOCALE=en ENV=test
+	    $(ENV_PHP) ./bin/console cache:pool:prune
+	    $(ENV_PHP) ./bin/console app:translation-warm messages fr
+	    $(ENV_PHP) ./bin/console app:translation-warm messages en
+	    $(ENV_PHP) ./bin/console app:translation-warm validators fr
+	    $(ENV_PHP) ./bin/console app:translation-warm validators en
+	    $(ENV_PHP) ./bin/console app:translation-warm session fr
+	    $(ENV_PHP) ./bin/console app:translation-warm session en
 	    $(ENV_PHP) ./bin/phpunit --group e2e
 
 phpunit-blackfire: tests
+	    $(ENV_PHP) ./bin/console cache:pool:prune
 	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)
 
 behat: features
@@ -115,12 +115,13 @@ behat: features
 	    make update-schema ENV=test
 	    make fixtures ENV=test
 	    make doctrine-cache
-	    make translation CHANNEL=messages LOCALE=fr ENV=test
-	    make translation CHANNEL=messages LOCALE=en ENV=test
-	    make translation CHANNEL=validators LOCALE=fr ENV=test
-	    make translation CHANNEL=validators LOCALE=en ENV=test
-	    make translation CHANNEL=session LOCALE=fr ENV=test
-	    make translation CHANNEL=session LOCALE=en ENV=test
+	    $(ENV_PHP) ./bin/console cache:pool:prune
+	    $(ENV_PHP) ./bin/console app:translation-warm messages fr
+	    $(ENV_PHP) ./bin/console app:translation-warm messages en
+	    $(ENV_PHP) ./bin/console app:translation-warm validators fr
+	    $(ENV_PHP) ./bin/console app:translation-warm validators en
+	    $(ENV_PHP) ./bin/console app:translation-warm session fr
+	    $(ENV_PHP) ./bin/console app:translation-warm session en
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands
@@ -147,28 +148,30 @@ yarn_add_dev: ## Allow to add a new package in the "dev" env
 	    $(ENV_NODE) yarn add --dev $(PACKAGE)
 
 ## Varnish commands
-logs: ## Allow to see the varnish logs
+varnish_logs: ## Allow to see the varnish logs
 	    $(ENV_VARNISH) varnishlog -b
 
 ## Blackfire commands
 profile_php: ## Allow to profile a page using Blackfire and PHP environment
 	    make cache-clear
 	    make doctrine-cache ENV=prod
-	    make translation CHANNEL=messages LOCALE=fr ENV=prod
-	    make translation CHANNEL=messages LOCALE=en ENV=prod
-	    make translation CHANNEL=validators LOCALE=fr ENV=prod
-	    make translation CHANNEL=validators LOCALE=en ENV=prod
-	    make translation CHANNEL=session LOCALE=fr ENV=prod
-	    make translation CHANNEL=session LOCALE=en ENV=prod
+	    $(ENV_PHP) ./bin/console cache:pool:prune
+	    $(ENV_PHP) ./bin/console app:translation-warm messages fr
+	    $(ENV_PHP) ./bin/console app:translation-warm messages en
+	    $(ENV_PHP) ./bin/console app:translation-warm validators fr
+	    $(ENV_PHP) ./bin/console app:translation-warm validators en
+	    $(ENV_PHP) ./bin/console app:translation-warm session fr
+	    $(ENV_PHP) ./bin/console app:translation-warm session en
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
 
 profile_varnish: ## Allow to profile a page using Blackfire and Varnish environment
 	    make cache-clear
-	    make doctrine-cache
-	    make translation CHANNEL=messages LOCALE=fr ENV=prod
-	    make translation CHANNEL=messages LOCALE=en ENV=prod
-	    make translation CHANNEL=validators LOCALE=fr ENV=prod
-	    make translation CHANNEL=validators LOCALE=en ENV=prod
-	    make translation CHANNEL=session LOCALE=fr ENV=prod
-	    make translation CHANNEL=session LOCALE=en ENV=prod
+	    make doctrine-cache ENV=prod
+	    $(ENV_PHP) ./bin/console cache:pool:prune
+	    $(ENV_PHP) ./bin/console app:translation-warm messages fr
+	    $(ENV_PHP) ./bin/console app:translation-warm messages en
+	    $(ENV_PHP) ./bin/console app:translation-warm validators fr
+	    $(ENV_PHP) ./bin/console app:translation-warm validators en
+	    $(ENV_PHP) ./bin/console app:translation-warm session fr
+	    $(ENV_PHP) ./bin/console app:translation-warm session en
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)

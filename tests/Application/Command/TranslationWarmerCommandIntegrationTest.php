@@ -98,48 +98,4 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
             $display
         );
     }
-
-    public function testItWriteTheContentInCache()
-    {
-        $this->commandTester->execute([
-            'channel' => 'messages',
-            'locale' => 'fr',
-        ]);
-
-        static::assertContains(
-            'The warm process is about to begin.',
-            $this->commandTester->getDisplay()
-        );
-        static::assertContains(
-            'The warm process is finished.',
-            $this->commandTester->getDisplay()
-        );
-        static::assertNotContains(
-            'The translations can\'t be warmed or are already proceed, please retry.',
-            $this->commandTester->getDisplay()
-        );
-    }
-
-    public function testItDoesNotUseCache()
-    {
-        $this->cloudTranslationWarmer->warmTranslations('messages', 'en');
-
-        $this->commandTester->execute([
-            'channel' => 'messages',
-            'locale' => 'en',
-        ]);
-
-        static::assertContains(
-            'The warm process is about to begin.',
-            $this->commandTester->getDisplay()
-        );
-        static::assertContains(
-            'The warm process is finished.',
-            $this->commandTester->getDisplay()
-        );
-        static::assertNotContains(
-            'The translations can\'t be warmed or are already proceed, please retry.',
-            $this->commandTester->getDisplay()
-        );
-    }
 }

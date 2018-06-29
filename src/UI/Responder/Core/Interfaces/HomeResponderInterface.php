@@ -15,8 +15,8 @@ namespace App\UI\Responder\Core\Interfaces;
 
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Zend\Diactoros\Response;
 
 /**
  * Interface HomeResponderInterface.
@@ -41,5 +41,5 @@ interface HomeResponderInterface
      *
      * @return Response
      */
-    public function __invoke(ServerRequestInterface $request);
+    public function __invoke(ServerRequestInterface $request): Response;
 }

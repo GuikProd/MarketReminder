@@ -1,3 +1,4 @@
 user.account_created: Le compte a bien été créé, un email permettant de valider cette création vous a été envoyé.
 user.invalid_credentials: Les identifiants renseignés semblent invalides, veuillez réessayer.
 user.notification.password_reset_success: Votre mot de passe a été modifié, vous pouvez dès à présent vous connecter.
+user.reset_password.success: La demande a bien été enregistrée, un email vous a été envoyé.

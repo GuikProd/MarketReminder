@@ -35,9 +35,9 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     /**
      * {@inheritdoc}
      */
-    public function __construct(CloudTranslationWarmerInterface $redisTranslationWarmer)
+    public function __construct(CloudTranslationWarmerInterface $cloudTranslationWarmer)
     {
-        $this->cloudTranslationWarmer = $redisTranslationWarmer;
+        $this->cloudTranslationWarmer = $cloudTranslationWarmer;
 
         parent::__construct();
     }
@@ -51,8 +51,8 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
             ->setName('app:translation-warm')
             ->setDescription('Allow to warm the translation for a given channel and locale.')
             ->setHelp('This command call the GCP Translation API and translate (using the locale passed) the whole channel passed.')
-            ->addArgument('channel', InputArgument::REQUIRED, 'The channel of the file to translate.')
-            ->addArgument('locale', InputArgument::REQUIRED, 'The locale used to translate.');
+            ->addArgument('channel', InputArgument::REQUIRED, 'The channel used by the translation file')
+            ->addArgument('locale', InputArgument::REQUIRED, 'The locale used by the translation file');
     }
 
     /**
@@ -60,18 +60,16 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->write('<info>The warm process is about to begin.</info>');
+        $output->writeln('</info>The warm process is about to begin</info>');
 
-        if (!$this->cloudTranslationWarmer->warmTranslations(
-            $input->getArgument('channel'),
-            $input->getArgument('locale')
-        )
-        ) {
-            $output->write('<error>The translations can\'t be warmed or are already proceed, please retry.</error>');
+        if (!$this->cloudTranslationWarmer->warmTranslations($input->getArgument('channel'), $input->getArgument('locale'))) {
+            $output->writeln('<comment>The translations can\'t be warmed or are already processed ! </comment>');
 
             return;
         }
 
-        $output->write('<info>The warm process is finished.</info>');
+        $output->writeln('<info>The warm process has succeed</info>');
+
+        $output->writeln('</info>The warm process is finished</info>');
     }
 }

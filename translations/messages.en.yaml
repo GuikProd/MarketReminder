@@ -20,7 +20,6 @@ security.registration_password: Password
 security.resetPasswordToken_header: 'Request a new password.'
 security.resetPasswordToken: 'To send'
 user.not_found: 'The filled in identifiers do not correspond to an existing user, please repeat your entry.'
-user.reset_password.success: 'The request has been registered, an email has been sent to you.'
 user.notification.wrong_reset_password_token: 'This token does not exist or has already been validated, please try again.'
 user.notification.password_reset_success: 'Your password has been changed, you can now login.'
 user.notification.password_reset.header: 'Reset the password successfully.'

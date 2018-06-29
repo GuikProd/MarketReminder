@@ -21,6 +21,7 @@ use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -52,7 +53,7 @@ class ResetPasswordActionUnitTest extends TestCase
     private $formInterface;
 
     /**
-     * @var Request
+     * @var ServerRequestInterface
      */
     private $request;
 

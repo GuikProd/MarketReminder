@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\Redis\Translation;
 
+use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -36,6 +37,8 @@ final class CloudTranslationWarmerIntegrationTest extends KernelTestCase
         static::bootKernel();
 
         $this->cloudTranslationWarmer = static::$container->get(CloudTranslationWarmerInterface::class);
+
+        static::$container->get(ConnectorInterface::class)->getAdapter()->clear();
     }
 
     /**

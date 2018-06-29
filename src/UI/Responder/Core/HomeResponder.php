@@ -16,8 +16,8 @@ namespace App\UI\Responder\Core;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Zend\Diactoros\Response;
 
 /**
  * Class HomeResponder.
@@ -62,10 +62,11 @@ final class HomeResponder implements HomeResponderInterface
             ]
         ]);
 
-        return new Response(
-            $this->twig->render('core/index.html.twig', [
-                'presenter' => $this->presenter
-            ])
-        );
+        $response = new Response();
+        $response->getBody()->write($this->twig->render('core/index.html.twig', [
+            'presenter' => $this->presenter
+        ]));
+
+        return $response;
     }
 }

@@ -29,7 +29,6 @@ security.resetPasswordToken: Envoyer
 
 # User
 user.not_found: Les identifiants renseignés ne correspondent pas à un utilisateur existant, veuillez recommencer votre saisie.
-user.reset_password.success: La demande a bien été enregistrée, un email vous a été envoyé.
 
 # User Notifications
 user.notification.wrong_reset_password_token: Ce token n'existe pas ou a déjà été validé, veuillez réessayer.

@@ -18,8 +18,8 @@ use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Zend\Diactoros\Response;
 
 /**
  * Class HomeResponderUnitTest.
@@ -66,11 +66,6 @@ final class HomeResponderUnitTest extends TestCase
         );
     }
 
-    /**
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
     public function testResponseIsReturned()
     {
         $homeResponder = new HomeResponder($this->twig, $this->presenter);
