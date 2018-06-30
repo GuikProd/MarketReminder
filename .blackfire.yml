@@ -41,3 +41,22 @@ tests:
             assertions:
                 - { label: null, expression: 'runtime.configuration.max_input_time >= 0 and runtime.configuration.max_input_time <= 60' }
             exclude: {  }
+    'The realpath cache ttl should be more than one hour in production':
+            path:
+                - '/.*'
+            methods:
+                - ANY
+            command: '.*'
+            assertions:
+                - { label: null, expression: 'runtime.configuration.realpath_cache_ttl >= 3600' }
+            exclude: {  }
+    'A Redis connection should be opened only when queries are made':
+            path:
+                - '/.*'
+            methods:
+                - ANY
+            command: '.*'
+            assertions:
+                - { label: null, expression: 'metrics.redis.queries.count > 0' }
+            when: 'metrics.redis.connections.count > 0'
+            exclude: {  }

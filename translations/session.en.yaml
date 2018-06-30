@@ -1,3 +1,4 @@
+security.validation_success: 'Validated account, you can start your management!'
 user.account_created: 'The account has been created, an email to validate this creation has been sent to you.'
 user.invalid_credentials: 'The credentials entered seem invalid, please try again.'
 user.notification.password_reset_success: 'Your password has been changed, you can now login.'

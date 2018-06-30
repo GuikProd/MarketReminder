@@ -12,7 +12,7 @@ services:
         ports:
             - '${PHP_PORT}:9000'
         volumes:
-            - './:${WORKPATH}:rw,cached'
+            - './:${WORKPATH}:rw,delegated'
             - './docker/php/conf/php.ini:/usr/local/etc/php/php.ini'
             # - './docker/php/conf/production/php.ini:/usr/local/etc/php/php.ini' -> Used for production.
         restart: always
@@ -39,7 +39,7 @@ services:
         ports:
             - 3000:3000
         volumes:
-            - './:/usr/src/app:rw,cached'
+            - './:/usr/src/app:rw,delegated'
         entrypoint: "yarn watch"
         restart: always
 
@@ -74,6 +74,20 @@ services:
         restart: always
 
     # DB configuration
+    mysql:
+        container_name: ${CONTAINER_NAME}_mysql
+        image: mysql:5.7
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_DATABASE: '${MYSQL_DBNAME}'
+            MYSQL_USER: '${MYSQL_USER}'
+            MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
+            MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+        volumes:
+            - 'mysql:/var/lib/mysql'
+        restart: always
+
     postgresql:
         container_name: ${CONTAINER_NAME}_postgresql
         image: postgres:9.6-alpine
@@ -105,3 +119,4 @@ services:
 
 volumes:
     db-data: {}
+    mysql:

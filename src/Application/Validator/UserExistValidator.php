@@ -52,7 +52,7 @@ class UserExistValidator extends ConstraintValidator implements UserExistValidat
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$user = $this->userRepository->getUserByUsernameAndEmail($value->username, $value->email)) {
+        if (!$this->userRepository->getUserByUsernameAndEmail($value->username, $value->email)) {
             $this->context->buildViolation(
                 $this->translator->trans($constraint->message, [], 'validators')
             )->addViolation();

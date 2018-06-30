@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterface
+final class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerInterface
 {
     /**
      * @var EventDispatcherInterface

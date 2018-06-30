@@ -60,7 +60,6 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
                     ->where('user.username = :username AND user.email = :email')
                     ->setParameter('username', $username)
                     ->setParameter('email', $email)
-                    ->setCacheable(true)
                     ->getQuery()
                     ->getOneOrNullResult();
     }

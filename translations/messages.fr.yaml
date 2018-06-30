@@ -15,7 +15,6 @@ reset_password.button.text: Réinitialiser
 
 # Security | Account validation
 security.acount_creation: Votre profil a été créé ! Veuillez vérifier votre boîte mail afin de valider ce dernier.
-security.validation_success: Compte validé, vous pouvez vous commencer votre gestion !
 security.validation_failure.notFound_token: Ce token n'existe pas ou a déjà été validé, veuillez réssayer !
 security.login: Se connecter
 security.login_failure: Les identifiants soumis semblent invalides, veuillez vérifier votre saisie.

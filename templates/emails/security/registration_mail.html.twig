@@ -14,7 +14,7 @@
                 </p>
                 <p>
                     {{ presenter.page.content_second.value }}
-                    <a href="{{ url('web_validation', {'token': presenter.page.user.validationToken}) }}">
+                    <a href="{{ url('web_validation', {'token': presenter.viewOptions.user.validationToken}) }}">
                         {{ presenter.page.link.value }}
                     </a>
                 </p>

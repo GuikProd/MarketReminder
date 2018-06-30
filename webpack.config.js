@@ -65,7 +65,7 @@ Encore
     .addEntry('sw', './assets/javascript/pwa/sw.js')
 
     // Polymer
-    .addEntry('home', './assets/javascript/polymer/home.js')
+    .addEntry('snackbar_polymer', './assets/javascript/polymer/components/UI/snackbar.js')
 ;
 
 module.exports = Encore.getWebpackConfig();

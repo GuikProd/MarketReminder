@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Action\Security;
 
 use App\Application\Event\SessionMessageEvent;
-use App\Application\Event\User\UserValidatedEvent;
+use App\Application\Event\UserEvent;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ValidationTokenActionInterface;
 use App\UI\Responder\Security\Interfaces\ValidationTokenResponderInterface;
@@ -101,8 +101,8 @@ class ValidationTokenAction implements ValidationTokenActionInterface
         $this->userRepository->flush();
 
         $this->eventDispatcher->dispatch(
-            UserValidatedEvent::NAME,
-            new UserValidatedEvent($user)
+            UserEvent::USER_VALIDATED,
+            new UserEvent($user)
         );
 
         $this->eventDispatcher->dispatch(

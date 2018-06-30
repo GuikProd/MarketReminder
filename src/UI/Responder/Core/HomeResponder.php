@@ -15,9 +15,9 @@ namespace App\UI\Responder\Core;
 
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
-use Zend\Diactoros\Response;
 
 /**
  * Class HomeResponder.
@@ -50,10 +50,10 @@ final class HomeResponder implements HomeResponderInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(ServerRequestInterface $request): Response
+    public function __invoke(Request $request): Response
     {
         $this->presenter->prepareOptions([
-            '_locale' => $request->getAttribute('_locale'),
+            '_locale' => $request->attributes->get('_locale'),
             'page' => [
                 'content' => [
                     'key' => 'home.text',
@@ -62,11 +62,8 @@ final class HomeResponder implements HomeResponderInterface
             ]
         ]);
 
-        $response = new Response();
-        $response->getBody()->write($this->twig->render('core/index.html.twig', [
+        return new Response($this->twig->render('core/index.html.twig', [
             'presenter' => $this->presenter
         ]));
-
-        return $response;
     }
 }

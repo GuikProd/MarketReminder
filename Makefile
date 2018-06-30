@@ -25,7 +25,7 @@ stop: ## Allow to stop the containers
 	    $(DOCKER_COMPOSE) stop
 
 clean: ## Allow to delete the generated files and clean the project folder
-	    rm -rf .env ./node_modules ./vendor
+	    $(ENV_PHP) rm -rf .env ./node_modules ./vendor
 
 ## PHP commands
 install: composer.json
@@ -50,7 +50,7 @@ autoload: ## Allow to dump the autoload
 
 ## Symfony commands
 cache-clear: ## Allow to clear the cache
-	    rm -rf ./var/cache/*
+	     $(ENV_PHP) rm -rf ./var/cache/*
 
 cache-warm: ## Allow to warm the cache
 	    $(ENV_PHP) ./bin/console cache:warmup

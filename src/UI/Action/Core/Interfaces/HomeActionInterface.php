@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\UI\Action\Core\Interfaces;
 
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Interface HomeActionInterface.
@@ -25,13 +25,13 @@ use Zend\Diactoros\Response;
 interface HomeActionInterface
 {
     /**
-     * @param ServerRequestInterface $request
+     * @param Request $request
      * @param HomeResponderInterface $responder
      *
      * @return Response
      */
     public function __invoke(
-        ServerRequestInterface $request,
+        Request $request,
         HomeResponderInterface $responder
     ): Response;
 }

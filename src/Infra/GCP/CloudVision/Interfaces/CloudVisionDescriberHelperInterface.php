@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudVision\Interfaces;
 
-use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
+use App\Infra\GCP\CloudVision\Bridge\Interfaces\CloudVisionBridgeInterface;
 use Google\Cloud\Vision\Image;
 use Google\Cloud\Vision\Annotation;
 
