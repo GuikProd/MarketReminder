@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -51,9 +53,7 @@ final class CloudTranslationWarmerIntegrationTest extends KernelTestCase
     {
         static::expectException(\InvalidArgumentException::class);
 
-        $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
-
-        static::assertFalse($processStatus);
+        $this->cloudTranslationWarmer->warmTranslationsCache($channel, $locale);
     }
 
     /**
@@ -68,9 +68,7 @@ final class CloudTranslationWarmerIntegrationTest extends KernelTestCase
     ) {
         static::expectException(\InvalidArgumentException::class);
 
-        $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
-
-        static::assertFalse($processStatus);
+        $this->cloudTranslationWarmer->warmTranslationsCache($channel, $locale);
     }
 
     /**
@@ -78,14 +76,18 @@ final class CloudTranslationWarmerIntegrationTest extends KernelTestCase
      *
      * @param string $channel
      * @param string $locale
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testCacheIsValid(
         string $channel,
         string $locale
     ) {
-        $processStatus = $this->cloudTranslationWarmer->warmTranslations($channel, $locale);
+        $this->cloudTranslationWarmer->warmTranslationsCache($channel, $locale);
 
-        static::assertTrue($processStatus);
+        $cacheEntry = static::$container->get(CloudTranslationRepositoryInterface::class)->getEntries($channel.'.'.$locale.'.yaml');
+
+        static::assertNotNull($cacheEntry);
     }
 
     /**
