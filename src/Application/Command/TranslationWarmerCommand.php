@@ -15,7 +15,6 @@ namespace App\Application\Command;
 
 use App\Application\Command\Interfaces\TranslationWarmerCommandInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,8 +24,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class TranslationWarmerCommand extends Command implements TranslationWarmerCommandInterface
+final class TranslationWarmerCommand extends AbstractTranslationCommand implements TranslationWarmerCommandInterface
 {
+    /**
+     * @var string
+     */
+    private $acceptedChannels;
+
+    /**
+     * @var string
+     */
+    private $acceptedLocales;
+
     /**
      * @var CloudTranslationWarmerInterface
      */
@@ -35,11 +44,16 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     /**
      * {@inheritdoc}
      */
-    public function __construct(CloudTranslationWarmerInterface $cloudTranslationWarmer)
-    {
+    public function __construct(
+        string $acceptedChannels,
+        string $acceptedLocales,
+        CloudTranslationWarmerInterface $cloudTranslationWarmer
+    ) {
+        $this->acceptedChannels = $acceptedChannels;
+        $this->acceptedLocales = $acceptedLocales;
         $this->cloudTranslationWarmer = $cloudTranslationWarmer;
 
-        parent::__construct();
+        parent::__construct($this->acceptedChannels, $this->acceptedLocales);
     }
 
     /**
@@ -60,6 +74,8 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->checkChannelsAndLocales($input->getArgument('channel'), $input->getArgument('locale'));
+
         $output->writeln('</info>The warm process is about to begin</info>');
 
         $this->cloudTranslationWarmer->warmTranslationsCache(

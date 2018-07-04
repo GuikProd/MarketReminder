@@ -58,7 +58,11 @@ final class TranslationWarmerCommandIntegrationTest extends KernelTestCase
         $this->cloudTranslationWarmer = static::$container->get(CloudTranslationWarmerInterface::class);
 
         $this->application = new Application(static::$kernel);
-        $this->application->add(new TranslationWarmerCommand($this->cloudTranslationWarmer));
+        $this->application->add(new TranslationWarmerCommand(
+            static::$container->getParameter('accepted_channels'),
+            static::$container->getParameter('accepted_locales'),
+            $this->cloudTranslationWarmer
+        ));
         $command = $this->application->find('app:translation:warm');
         $this->commandTester = new CommandTester($command);
 

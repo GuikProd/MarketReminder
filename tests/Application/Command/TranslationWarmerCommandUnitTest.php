@@ -32,6 +32,11 @@ class TranslationWarmerCommandUnitTest extends TestCase
     /**
      * @var string
      */
+    private $acceptedChannels;
+
+    /**
+     * @var string
+     */
     private $acceptedLocales;
 
     /**
@@ -64,6 +69,7 @@ class TranslationWarmerCommandUnitTest extends TestCase
      */
     protected function setUp()
     {
+        $this->acceptedChannels = 'messages|validators|session|form';
         $this->acceptedLocales = 'fr|en';
         $this->cloudTranslationWarmer = $this->createMock(CloudTranslationClientInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
@@ -74,7 +80,11 @@ class TranslationWarmerCommandUnitTest extends TestCase
 
     public function testItImplements()
     {
-        $translationWarmerCommand = new TranslationWarmerCommand($this->redisTranslationWarmer);
+        $translationWarmerCommand = new TranslationWarmerCommand(
+            $this->acceptedChannels,
+            $this->acceptedLocales,
+            $this->redisTranslationWarmer
+        );
 
         static::assertInstanceOf(Command::class, $translationWarmerCommand);
         static::assertInstanceOf(

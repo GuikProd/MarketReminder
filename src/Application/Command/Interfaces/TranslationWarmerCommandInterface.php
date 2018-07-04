@@ -25,9 +25,15 @@ interface TranslationWarmerCommandInterface
     /**
      * TranslationWarmerCommandInterface constructor.
      *
+     * @param string $acceptedChannels
+     * @param string $acceptedLocales
      * @param CloudTranslationWarmerInterface $cloudTranslationWarmer
      *
      * {@internal this command SHOULD call the @see Command constructor}
      */
-    public function __construct(CloudTranslationWarmerInterface $cloudTranslationWarmer);
+    public function __construct(
+        string $acceptedChannels,
+        string $acceptedLocales,
+        CloudTranslationWarmerInterface $cloudTranslationWarmer
+    );
 }
