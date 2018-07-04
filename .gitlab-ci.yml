@@ -58,7 +58,7 @@ phpunit:
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
         - php composer.phar install -a -o
         - php composer.phar dump-autoload -a -o
-        - cp $CI_PROJECT_DIR/.env.behat.gitlab.dist $CI_PROJECT_DIR/.env.behat
+        - cp $CI_PROJECT_DIR/.env.gitlab.dist $CI_PROJECT_DIR/.env.behat
         - cp $CI_PROJECT_DIR/gitlab_phpunit.xml.dist $CI_PROJECT_DIR/phpunit.xml
     script:
         - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
