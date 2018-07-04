@@ -51,7 +51,7 @@ interface PresenterInterface
      * is used in order to retrieve the translated text.
      *
      * @internal The default structure is free as long as the
-     *           channel and key keys are defined.
+     *           channel and key keys are defined inside the page array.
      *
      * @param Options $resolver @see OptionsResolver
      *

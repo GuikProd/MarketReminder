@@ -14,8 +14,8 @@ before_install:
     - echo $GCP_VISION_KEY > $TRAVIS_BUILD_DIR/config/credentials/google/vision/credentials.json
 before_script:
     - composer install --no-scripts -n
-    - cp .env.dist .env
     - cp .env.behat.dist .env.behat
+    - cp .env.behat.behat.dist .env.behat.behat
     - cp phpunit.xml.dist phpunit.xml
 script:
     - ./bin/console d:d:c --env=test

@@ -28,5 +28,5 @@ interface CloudTranslationValidatorInterface
      *
      * @return array
      */
-    public function validate(CloudTranslationInterface $cloudTranslationItem, array $newValues): array ;
+    public function validate(CloudTranslationInterface $cloudTranslationItem, array $newValues): array;
 }

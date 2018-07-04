@@ -35,4 +35,9 @@ interface CloudTranslationYamlParserInterface
      * @return array
      */
     public function getValues(): array;
+
+    /**
+     * @return array
+     */
+    public function getFinalArray(): array;
 }

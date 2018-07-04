@@ -88,7 +88,10 @@ final class AskResetPasswordTypeHandler implements AskResetPasswordTypeHandlerIn
 
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
-                new SessionMessageEvent('success', 'user.reset_password.success')
+                new SessionMessageEvent(
+                    'success',
+                    'user.reset_password.success'
+                )
             );
 
             return true;

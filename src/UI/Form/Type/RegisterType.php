@@ -40,23 +40,27 @@ class RegisterType extends AbstractType
             ->add('username', TextType::class, [
                 'attr' => [
                     'placeholder' => 'security.registration_username',
-                    'aria-label' => 'security.registration_username'
-                ]
+                    'aria-label' => 'security.registration_username',
+                ],
+                'help' => 'register.username_help'
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
                     'placeholder' => 'security.registration_email',
                     'aria-label' => 'security.registration_email'
-                ]
+                ],
+                'help' => 'register.email_help'
             ])
             ->add('password', PasswordType::class, [
                 'attr' => [
                     'placeholder' => 'security.registration_password',
                     'aria-label' => 'security.registration_password'
-                ]
+                ],
+                'help' => 'register.password_help'
             ])
             ->add('profileImage', FileType::class, [
-                'required' => false
+                'required' => false,
+                'help' => 'register.profileImage_help'
             ])
         ;
     }

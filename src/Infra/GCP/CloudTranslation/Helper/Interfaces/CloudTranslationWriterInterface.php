@@ -27,13 +27,13 @@ interface CloudTranslationWriterInterface
     /**
      * CloudTranslationWriterInterface constructor.
      *
-     * @param ConnectorInterface $connector
-     * @param CloudTranslationFactoryInterface $cloudTranslationFactory
+     * @param ConnectorInterface                 $connector
+     * @param CloudTranslationFactoryInterface   $cloudTranslationFactory
      * @param CloudTranslationValidatorInterface $cloudTranslationValidator
      */
     public function __construct(
-        ConnectorInterface $connector,
-        CloudTranslationFactoryInterface $cloudTranslationFactory,
+        ConnectorInterface                 $connector,
+        CloudTranslationFactoryInterface   $cloudTranslationFactory,
         CloudTranslationValidatorInterface $cloudTranslationValidator
     );
 

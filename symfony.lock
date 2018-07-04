@@ -119,6 +119,9 @@
     "fabpot/goutte": {
         "version": "v3.2.2"
     },
+    "facebook/webdriver": {
+        "version": "1.6.0"
+    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
@@ -178,6 +181,9 @@
     },
     "monolog/monolog": {
         "version": "1.23.0"
+    },
+    "namshi/jose": {
+        "version": "7.2.3"
     },
     "nikic/php-parser": {
         "version": "v3.1.4"
@@ -395,6 +401,9 @@
     "symfony/orm-pack": {
         "version": "v1.0.5"
     },
+    "symfony/panthere": {
+        "version": "1.0.x-dev"
+    },
     "symfony/phpunit-bridge": {
         "version": "3.3",
         "recipe": {
@@ -416,11 +425,17 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.6.0"
     },
+    "symfony/polyfill-php56": {
+        "version": "v1.8.0"
+    },
     "symfony/polyfill-php70": {
         "version": "v1.6.0"
     },
     "symfony/polyfill-php72": {
         "version": "v1.7.0"
+    },
+    "symfony/polyfill-util": {
+        "version": "v1.8.0"
     },
     "symfony/process": {
         "version": "v4.0.11"

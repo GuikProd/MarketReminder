@@ -1,7 +1,7 @@
 parameters:
     locale: 'fr'
     accepted_locales: 'fr|en'
-    accepted_channels: 'messages|validators|session'
+    accepted_channels: 'messages|validators|session|form'
     kernel.docker_dir: "%kernel.project_dir%/docker/config"
     kernel.images_dir: "%kernel.project_dir%/public/images/profiles"
 
@@ -50,6 +50,9 @@ services:
             $credentialsFilename: "%cloud.credentials_filename%"
             $credentialsFolder: "%cloud.credentials_folder%"
             $translationsFolder: "%translator.default_path%"
+
+            # Cloud Vision
+            $forbiddenLabels: '%forbidden_labels%'
 
     App\:
         resource: '../src/*'

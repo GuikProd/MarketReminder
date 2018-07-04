@@ -9,3 +9,4 @@ image.invalid_format: 'This image format is prohibited, please repeat your entry
 user.exist: 'Submitted IDs can not find a user, please try again!'
 email.wrong_format: 'The submitted email must be valid!'
 password.not_match: 'Passwords do not match, please try again.'
+validation.file_upload_size: 'This file exceeds the authorized weight limit, please try again.'

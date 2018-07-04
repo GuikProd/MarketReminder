@@ -52,7 +52,7 @@ final class CloudTranslationValidator implements CloudTranslationValidatorInterf
         $finalArray = array_combine($translationKey, $translationContent);
         $finalCheckArray = array_combine($toCheckKey, $toCheckContent);
 
-        $differences = array_diff($finalArray, $finalCheckArray);
+        $differences = array_diff($finalCheckArray, $finalArray);
 
         if (\count($differences) > 0) {
             foreach ($differences as $difference) {

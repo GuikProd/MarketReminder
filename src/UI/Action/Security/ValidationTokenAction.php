@@ -81,10 +81,7 @@ class ValidationTokenAction implements ValidationTokenActionInterface
             return $responder();
         }
 
-        $user = $this->userRepository->getUserByToken($request->attributes->get('token'));
-
-        if (!$user) {
-
+        if (!$user = $this->userRepository->getUserByToken($request->attributes->get('token'))) {
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
                 new SessionMessageEvent(
@@ -94,7 +91,7 @@ class ValidationTokenAction implements ValidationTokenActionInterface
             );
 
             return $responder();
-        };
+        }
 
         $user->validate();
 

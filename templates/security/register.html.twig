@@ -29,5 +29,29 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('build/form.js') }}"></script>
+    <script src="{{ asset('build/file_check.js') }}"></script>
     <script src="{{ asset('build/snackbar.js') }}"></script>
+    <script type="text/javascript">
+        form = document.getElementById("{{ registerForm.children.profileImage.vars.id|e('js') }}");
+        formBtn = document.getElementById('register_button');
+        profileImageHelper = document.getElementById('profileImage-help');
+        let help = document.createElement('p');
+        help.textContent = 'Cette image dépasse la limite autorisé (2mo).';
+        form.addEventListener('change', handleFiles, false);
+
+        function handleFiles() {
+            console.log(this.files);
+            for (var i = 0, numFiles = this.files.length; i < numFiles; i++) {
+                let file = this.files[i];
+
+                if (file.size > 2000000) {
+                    formBtn.disabled = true;
+                    profileImageHelper.appendChild(help);
+                } else {
+                    formBtn.disabled = false;
+                    profileImageHelper.removeChild(help);
+                }
+            }
+        }
+    </script>
 {% endblock %}

@@ -75,7 +75,7 @@ final class ImageContentValidator extends ConstraintValidator implements ImageCo
                         'validators.'.$this->requestStack->getCurrentRequest()->getLocale().'.yaml',
                         $this->requestStack->getCurrentRequest()->getLocale(),
                         $constraint->message
-                    )
+                    )->getValue()
                 )->addViolation();
         }
     }

@@ -85,10 +85,20 @@ Feature: As a normal user, I want to be able to register myself and create a new
     Then I fill in "register_username" with "Toto"
     And I fill in "register_email" with "toto@gmail.com"
     And I fill in "register_password" with "Ie1FDLDLMR"
-    And I attach the file "test_money.jpg" to "register_profileImage"
+    And I attach the file "test_money_II.jpg" to "register_profileImage"
     And I press "Create an account"
     Then I should be on "/en/register"
     And I should see "Submitted image contains inappropriate content, please try again!"
+    And the response status code should be 200
+
+  Scenario: I want to register myself using a wrong image which is too heavy.
+    Then I fill in "register_username" with "Toto"
+    And I fill in "register_email" with "toto@gmail.com"
+    And I fill in "register_password" with "Ie1FDLDLMR"
+    And I attach the file "test_money.jpg" to "register_profileImage"
+    And I press "Create an account"
+    Then I should be on "/en/register"
+    And I should see "This file exceeds the authorized weight limit, please try again."
     And the response status code should be 200
 
   Scenario: I want to register myself with an account that already exist.

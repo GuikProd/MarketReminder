@@ -13,31 +13,34 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Helper\Interfaces;
 
+use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Parser\Interfaces\CloudTranslationYamlParserInterface;
 
 /**
- * Interface CloudTranslationWarmerInterface.
- * 
+ * Interface CloudTranslationTranslatorInterface.
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-interface CloudTranslationWarmerInterface
+interface CloudTranslationTranslatorInterface
 {
     /**
-     * CloudTranslationWarmerInterface constructor.
+     * CloudTranslationTranslatorInterface constructor.
      *
      * @param string $translationsFolder
-     * @param CloudTranslationWriterInterface $cloudTranslationWriter
+     * @param CloudTranslationClientInterface $cloudTranslationClient
      * @param CloudTranslationYamlParserInterface $cloudTranslationYamlParser
      */
     public function __construct(
         string $translationsFolder,
-        CloudTranslationWriterInterface $cloudTranslationWriter,
+        CloudTranslationClientInterface $cloudTranslationClient,
         CloudTranslationYamlParserInterface $cloudTranslationYamlParser
     );
 
     /**
-     * @param string $channel
      * @param string $locale
+     * @param string $channel
+     *
+     * @return void
      */
-    public function warmTranslationsCache(string $channel, string $locale): void;
+    public function warmTranslations(string $locale, string $channel): void;
 }

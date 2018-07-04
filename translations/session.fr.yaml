@@ -3,3 +3,5 @@ user.account_created: Le compte a bien été créé, un email permettant de vali
 user.invalid_credentials: Les identifiants renseignés semblent invalides, veuillez réessayer.
 user.notification.password_reset_success: Votre mot de passe a été modifié, vous pouvez dès à présent vous connecter.
 user.reset_password.success: La demande a bien été enregistrée, un email vous a été envoyé.
+user.notification.wrong_reset_password_token: Ce token n'existe pas ou a déjà été validé, veuillez réessayer.
+security.validation_failure.notFound_token: Ce token n'existe pas ou a déjà été validé, veuillez réssayer !

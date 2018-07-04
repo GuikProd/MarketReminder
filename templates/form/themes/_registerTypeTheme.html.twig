@@ -20,11 +20,12 @@
                     <input class="mdc-text-field__input" placeholder="{{ "image.text"|trans }}" type="text" id="uploadFile" readonly/>
                     <div class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
                         <i class="material-icons">attach_file</i>
-                        {{- form_row(form.profileImage) -}}
+                        {{ form_row(form.profileImage) }}
                     </div>
+                    <div id="profileImage-help"></div>
                 </div>
                 <div>
-                    <button class="mdc-button mdc-button--raised mdc-elevation--z4">
+                    <button class="mdc-button mdc-button--raised mdc-elevation--z4" id="register_button">
                         {{ "account.creation"|trans }}
                     </button>
                 </div>
@@ -39,7 +40,16 @@
 
 {% block form_row %}
     <div class="mdc-text-field mdc-text-field--fullwidth">
-        {{ form_widget(form, {'attr': {'class': 'mdc-text-field__input'}}) }}
-        {{ form_errors(form, {'attr': {'class': 'mdl-textfield__error'}}) }}
+        {{ form_widget(form, {'attr': {'class': 'mdc-text-field__input', 'aria-describedby': form.vars.id ~'-helper-text', 'aria-controls': form.vars.id ~'-helper-text', 'placeholder': ''}}) }}
+        {{ form_label(form, '', {'label_attr': {'class': 'mdc-floating-label', 'for': form}}) }}
+        <div class="mdc-line-ripple"></div>
+        {{ form_errors(form) }}
     </div>
+    {{ form_help(form) }}
+{% endblock %}
+
+{% block form_help %}
+    <p id="{{ id }}-helper-text" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent" aria-hidden="true">
+        {{- help|cloudTranslate('form', app.request.locale) -}}
+    </p>
 {% endblock %}

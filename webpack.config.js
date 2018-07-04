@@ -58,6 +58,7 @@ Encore
 
     // Javascript
     .addEntry('form', './assets/javascript/components/form.js')
+    .addEntry('file_check', './assets/javascript/components/form/file_check.js')
     .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')
 
     // PWA

@@ -9,7 +9,7 @@ Feature: As a registered user, I should be able to reset my password with a rese
   Scenario: I want to reset my password using a wrong token
     Given I am on "/en/reset-password/RPFDNANRnudr2"
     Then I should be on "/en/"
-    And I should see "MarketReminder - Inventory Management"
+    And I should see "MarketReminder - Home"
 
   Scenario: I want to reset my password using a good token and a wrong password
     Given I am on "/en/reset-password/EdFEDNRanuLs5"
@@ -27,5 +27,5 @@ Feature: As a registered user, I should be able to reset my password with a rese
     And I fill in "reset_password_password_second" with "Ie1FDLHW"
     Then I press "reset"
     And I should be on "/en/"
-    Then I should see "MarketReminder - Inventory Management"
+    Then I should see "MarketReminder - Home"
     And I should see "Your password has been changed, you can now login."

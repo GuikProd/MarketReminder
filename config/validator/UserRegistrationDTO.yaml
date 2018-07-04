@@ -39,6 +39,8 @@ App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO:
                      - 'image/png'
                      - 'image/jpg'
                  mimeTypesMessage: 'image.invalid_format'
+                 maxSize: '2M'
+                 maxSizeMessage: 'validation.file_upload_size'
                  groups: ['registration']
              - App\Application\Validator\ImageContent:
                  groups: ['registration']

@@ -63,4 +63,12 @@ final class CloudTranslationYamlParser implements CloudTranslationYamlParserInte
     {
         return $this->values;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFinalArray(): array
+    {
+        return array_combine($this->keys, $this->values);
+    }
 }

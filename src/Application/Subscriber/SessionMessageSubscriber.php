@@ -77,7 +77,7 @@ final class SessionMessageSubscriber implements EventSubscriberInterface, Sessio
         }
 
         $cacheEntry = $this->cloudTranslationRepository->getSingleEntry(
-            'session'.'.'.$this->requestStack->getCurrentRequest()->getLocale().'.yaml',
+            'session.'.$this->requestStack->getCurrentRequest()->getLocale().'.yaml',
             $this->requestStack->getCurrentRequest()->getLocale(),
             $event->getMessage()
         );

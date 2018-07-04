@@ -11,3 +11,5 @@ image.invalid_format: Ce format d'image est interdit, veuillez recommencer votre
 user.exist: Les identifiants soumis ne permettent pas de trouver un utilisateur, veuillez réessayer !
 email.wrong_format: L'email soumis doit être valide !
 password.not_match: Les mots de passes ne correspondent pas, veuillez recommencez votre saisie.
+
+validation.file_upload_size: Ce fichier dépasse la limite de poids autorisée, veuillez recommencer.

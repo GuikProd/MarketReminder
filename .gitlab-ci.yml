@@ -58,7 +58,7 @@ phpunit:
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
         - php composer.phar install -a -o
         - php composer.phar dump-autoload -a -o
-        - cp $CI_PROJECT_DIR/.env.gitlab.dist $CI_PROJECT_DIR/.env
+        - cp $CI_PROJECT_DIR/.env.behat.gitlab.dist $CI_PROJECT_DIR/.env.behat
         - cp $CI_PROJECT_DIR/gitlab_phpunit.xml.dist $CI_PROJECT_DIR/phpunit.xml
     script:
         - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
@@ -121,6 +121,7 @@ behat_core:
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
+        - cp $CI_PROJECT_DIR/.env.gitlab.dist $CI_PROJECT_DIR/.env
     script:
         - php composer.phar install -n -a -o
         - php composer.phar dump-autoload -a -o
@@ -156,6 +157,7 @@ behat_e2e:
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
+        - cp $CI_PROJECT_DIR/.env.gitlab.dist $CI_PROJECT_DIR/.env
     script:
         - php composer.phar install -n -a -o
         - php composer.phar dump-autoload -a -o

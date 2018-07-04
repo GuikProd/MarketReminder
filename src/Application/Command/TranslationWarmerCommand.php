@@ -48,9 +48,9 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     protected function configure()
     {
         $this
-            ->setName('app:translation-warm')
-            ->setDescription('Allow to warm the translation for a given channel and locale.')
-            ->setHelp('This command call the GCP Translation API and translate (using the locale passed) the whole channel passed.')
+            ->setName('app:translation:warm')
+            ->setDescription('Allow to store in cache the translations for a given channel and locale.')
+            ->setHelp('This command allow to cache every translation which been dumped.')
             ->addArgument('channel', InputArgument::REQUIRED, 'The channel used by the translation file')
             ->addArgument('locale', InputArgument::REQUIRED, 'The locale used by the translation file');
     }
@@ -62,13 +62,10 @@ final class TranslationWarmerCommand extends Command implements TranslationWarme
     {
         $output->writeln('</info>The warm process is about to begin</info>');
 
-        if (!$this->cloudTranslationWarmer->warmTranslations($input->getArgument('channel'), $input->getArgument('locale'))) {
-            $output->writeln('<comment>The translations can\'t be warmed or are already processed ! </comment>');
-
-            return;
-        }
-
-        $output->writeln('<info>The warm process has succeed</info>');
+        $this->cloudTranslationWarmer->warmTranslationsCache(
+            $input->getArgument('channel'),
+            $input->getArgument('locale')
+        );
 
         $output->writeln('</info>The warm process is finished</info>');
     }

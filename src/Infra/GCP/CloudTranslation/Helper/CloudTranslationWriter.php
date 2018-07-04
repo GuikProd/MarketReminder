@@ -44,8 +44,8 @@ final class CloudTranslationWriter implements CloudTranslationWriterInterface
      * {@inheritdoc}
      */
     public function __construct(
-        ConnectorInterface $connector,
-        CloudTranslationFactoryInterface $cloudTranslationFactory,
+        ConnectorInterface                 $connector,
+        CloudTranslationFactoryInterface   $cloudTranslationFactory,
         CloudTranslationValidatorInterface $cloudTranslationValidator
     ) {
         $this->connector = $connector;
