@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -70,12 +71,12 @@ class ResetPasswordResponderUnitTest extends TestCase
     {
         $this->form = $this->createMock(FormInterface::class);
         $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
-        $this->request = $this->createMock(ServerRequestInterface::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-
-        $this->request->method('getAttribute')->willReturn('fr');
         $this->urlGenerator->method('generate')->willReturn('/fr/');
+
+        $this->request = Request::create('/fr/reset-password', 'GET');
+        $this->request->attributes->set('_locale', 'fr');
 
         $this->presenter = new Presenter($this->redisTranslationRepository);
     }
