@@ -17,6 +17,8 @@ insight:
     image: php:fpm-alpine
     before_script:
         - curl -o insight.phar -s http://get.insight.sensiolabs.com/insight.phar
+        - cp $CI_PROJECT_DIR/.env.gitlab.dist $CI_PROJECT_DIR/.env.behat
+        - cp $CI_PROJECT_DIR/gitlab_phpunit.xml.dist $CI_PROJECT_DIR/phpunit.xml
     script:
         - php insight.phar analyze --no-interaction --no-ansi $INSIGHT_PROJECT_UUID --reference=$CI_COMMIT_SHA --user-uuid=$INSIGHT_USER_UUID --api-token=$INSIGHT_USER_API_KEY --fail-condition="counts.critical > 0"
 
