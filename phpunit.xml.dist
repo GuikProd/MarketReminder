@@ -49,13 +49,6 @@
         <env name="GOOGLE_TRANSLATION_ENTRYPOINT" value="https://translation.googleapis.com/language/translate/v2" />
 
         <!-- ###- doctrine/doctrine-bundle ### -->
-        <!-- ###+ lexik/jwt-authentication-bundle ### -->
-        <!-- Key paths should be relative to the project directory -->
-        <env name="JWT_PRIVATE_KEY_PATH" value="config/jwt/private.pem" />
-        <env name="JWT_PUBLIC_KEY_PATH" value="config/jwt/public.pem" />
-        <env name="JWT_PASSPHRASE" value="f7ece5879922f89abaf6e0a3ade8f3de" />
-        <!-- ###- lexik/jwt-authentication-bundle ### -->
-
         <!-- Mailer configuration -->
         <env name="SENDER_EMAIL_ADDRESS" value="security@marketReminder.com" />
         <env name="SENGRID_PORT" value="25" />

@@ -67,7 +67,6 @@ phpunit:
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
         - php $CI_PROJECT_DIR/bin/phpunit -v --exclude-group Blackfire,e2e
-    allow_failure: true
 
 behat_core:
     stage: functional
