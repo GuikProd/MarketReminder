@@ -38,7 +38,7 @@ final class CloudTranslationYamlParserUnitTest extends TestCase
     {
         $parser = new CloudTranslationYamlParser();
 
-        $parser->parseYaml(__DIR__.'./../../../../../_assets', 'test');
+        $parser->parseYaml(__DIR__.'/../../../../../_assets', 'test');
 
         static::assertNotNull($parser->getKeys());
         static::assertNotNull($parser->getValues());

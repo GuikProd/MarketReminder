@@ -38,6 +38,12 @@ final class CloudTranslationYamlParser implements CloudTranslationYamlParserInte
      */
     public function parseYaml(string $folder, string $filename): void
     {
+        if (!file_exists($folder.'/'.$filename.'.yaml')) {
+            throw new \InvalidArgumentException(
+                sprintf('The file should exist in order to be parsed ! Given %s', $folder.'/'.$filename.'.yaml')
+            );
+        }
+
         $content = Yaml::parse(
             file_get_contents($folder.'/'.$filename.'.yaml')
         );

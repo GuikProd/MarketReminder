@@ -95,6 +95,8 @@ final class CloudTranslationWarmerUnitTest extends TestCase
     public function testWrongChannelIsUsed()
     {
         $this->expectException(\InvalidArgumentException::class);
+        $this->cloudTranslationYamlParser->method('parseYaml')
+                                         ->willThrowException(new \InvalidArgumentException());
 
         $redisTranslationWarmer = new CloudTranslationWarmer(
             $this->translationsFolder,
@@ -102,40 +104,14 @@ final class CloudTranslationWarmerUnitTest extends TestCase
             $this->cloudTranslationYamlParser
         );
 
-        $processStatus = $redisTranslationWarmer->warmTranslationsCache('toto', 'en');
-
-        static::assertFalse($processStatus);
+        $redisTranslationWarmer->warmTranslationsCache('toto', 'en');
     }
 
     public function testWrongLocaleIsUsed()
     {
         $this->expectException(\InvalidArgumentException::class);
-
-        $redisTranslationWarmer = new CloudTranslationWarmer(
-            $this->translationsFolder,
-            $this->cloudTranslationWriter,
-            $this->cloudTranslationYamlParser
-        );
-        $processStatus = $redisTranslationWarmer->warmTranslationsCache('messages', 'it');
-
-        static::assertFalse($processStatus);
-    }
-
-    /**
-     * @dataProvider provideRightChannelsAndLocalesToCheck
-     *
-     * @param string $channel
-     * @param string $locale
-     * @param array  $values
-     *
-     * @throws \InvalidArgumentException  {@see CloudTranslationWarmer::warmTranslations()}
-     */
-    public function testCacheIsValid(string $channel, string $locale, array $values)
-    {
-        $this->redisTranslationRepository->method('getEntries')
-                                         ->willReturn($values);
-
-        $this->cloudTranslationWarmer->method('translateArray')->willReturn([]);
+        $this->cloudTranslationYamlParser->method('parseYaml')
+                                         ->willThrowException(new \InvalidArgumentException());
 
         $redisTranslationWarmer = new CloudTranslationWarmer(
             $this->translationsFolder,
@@ -143,9 +119,7 @@ final class CloudTranslationWarmerUnitTest extends TestCase
             $this->cloudTranslationYamlParser
         );
 
-        $processStatus = $redisTranslationWarmer->warmTranslationsCache($channel, $locale);
-
-        static::assertTrue($processStatus);
+        $redisTranslationWarmer->warmTranslationsCache('messages', 'it');
     }
 
     /**

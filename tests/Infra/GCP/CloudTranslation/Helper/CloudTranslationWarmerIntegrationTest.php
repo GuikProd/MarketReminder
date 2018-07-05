@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Infra\Redis\Translation;
 
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
-use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWarmerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
