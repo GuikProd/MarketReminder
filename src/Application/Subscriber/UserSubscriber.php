@@ -195,7 +195,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
                     'channel' => 'mail'
                 ],
                 'link' => [
-                    'key' => 'security.login',
+                    'key' => 'user.reset_password.link',
                     'channel' => 'mail'
                 ],
                 'header' => [

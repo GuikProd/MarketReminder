@@ -35,8 +35,12 @@ class AskResetPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class)
-            ->add('email', EmailType::class)
+            ->add('username', TextType::class, [
+                'help' => 'register.username_help'
+            ])
+            ->add('email', EmailType::class, [
+                'help' => 'register.email_help'
+            ])
         ;
     }
 

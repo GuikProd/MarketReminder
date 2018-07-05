@@ -31,3 +31,4 @@ user.not_found: Les identifiants renseignés ne correspondent pas à un utilisat
 # User Notifications
 user.notification.password_reset_success: Votre mot de passe a été modifié, vous pouvez dès à présent vous connecter.
 user.notification.password_reset.header: Réinitialisation du mot de passe réussie.
+
