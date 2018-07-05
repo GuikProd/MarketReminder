@@ -152,6 +152,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     {
         $this->password = $newPassword;
         $this->resetPasswordDate = time();
+        $this->resetPasswordToken = null;
     }
 
     /**

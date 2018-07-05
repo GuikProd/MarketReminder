@@ -7,4 +7,3 @@ exclude_patterns:
 rules:
     composer.dependencies_not_installable:
         enabled: false
-        

@@ -141,8 +141,8 @@ behat: features
 	    $(ENV_PHP) ./bin/console app:translation:warm validators en
 	    $(ENV_PHP) ./bin/console app:translation:warm session fr
 	    $(ENV_PHP) ./bin/console app:translation:warm session en
-	    $(ENV_PHP) ./bin/console app:translation:warm form fr --env=test
-	    $(ENV_PHP) ./bin/console app:translation:warm form en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm form fr
+	    $(ENV_PHP) ./bin/console app:translation:warm form en
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands
