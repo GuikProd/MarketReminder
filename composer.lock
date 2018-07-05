@@ -8345,12 +8345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/panthere.git",
-                "reference": "2652f2a8b0d7dcc07f5c6dac11548794a8399c29"
+                "reference": "c80278e4702dd6d9cd4502d6dbba7af3593296f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/panthere/zipball/2652f2a8b0d7dcc07f5c6dac11548794a8399c29",
-                "reference": "2652f2a8b0d7dcc07f5c6dac11548794a8399c29",
+                "url": "https://api.github.com/repos/symfony/panthere/zipball/c80278e4702dd6d9cd4502d6dbba7af3593296f9",
+                "reference": "c80278e4702dd6d9cd4502d6dbba7af3593296f9",
                 "shasum": ""
             },
             "require": {
@@ -8403,7 +8403,7 @@
                 "testing",
                 "webdriver"
             ],
-            "time": "2018-07-02T16:11:24+00:00"
+            "time": "2018-07-04T15:00:35+00:00"
         }
     ],
     "aliases": [],
