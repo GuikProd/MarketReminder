@@ -3,7 +3,6 @@ stages:
     - frontend
     - unit
     - functional
-    - performances
     - deployment
 
 cache:
@@ -147,45 +146,6 @@ behat_e2e:
         - php $CI_PROJECT_DIR/bin/console app:translation:warm form fr
         - php $CI_PROJECT_DIR/bin/console app:translation:warm form en
         - php $CI_PROJECT_DIR/vendor/bin/behat --profile e2e
-
-blackfire:
-    stage: performances
-    image: php:fpm-alpine
-    services:
-        - redis
-    before_script:
-        - php -vv
-        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        - php composer-setup.php
-        - php -r "unlink('composer-setup.php');"
-        - apk add --no-cache zlib-dev
-        - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
-             && docker-php-ext-install zip
-        - docker-php-ext-install zip
-        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
-        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
-        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
-        - php composer.phar install -a -o
-        - php composer.phar dump-autoload -a -o
-        - cp $CI_PROJECT_DIR/.env.gitlab.dist $CI_PROJECT_DIR/.env
-        - cp $CI_PROJECT_DIR/gitlab_phpunit.xml.dist $CI_PROJECT_DIR/phpunit.xml
-    script:
-        - php composer.phar install -a -o
-        - php composer.phar dump-autoload -a -o
-        - php $CI_PROJECT_DIR/bin/console d:d:c --env=test
-        - php $CI_PROJECT_DIR/bin/console d:s:c --env=test
-        - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
-        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
-        - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
-        - php $CI_PROJECT_DIR/bin/console app:translation:warm messages fr
-        - php $CI_PROJECT_DIR/bin/console app:translation:warm messages en
-        - php $CI_PROJECT_DIR/bin/console app:translation:warm validators fr
-        - php $CI_PROJECT_DIR/bin/console app:translation:warm validators en
-        - php $CI_PROJECT_DIR/bin/console app:translation:warm session fr
-        - php $CI_PROJECT_DIR/bin/console app:translation:warm session en
-        - php $CI_PROJECT_DIR/bin/console app:translation:warm form fr
-        - php $CI_PROJECT_DIR/bin/console app:translation:warm form en
-        - php $CI_PROJECT_DIR/bin/phpunit -v --group Blackfire
 
 docker_images:
     stage: deployment
