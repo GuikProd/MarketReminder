@@ -16,4 +16,6 @@ framework:
 
 sensio_framework_extra:
     psr_message:
-        enabled: true
+        enabled: false
+    router:
+        annotations: false
