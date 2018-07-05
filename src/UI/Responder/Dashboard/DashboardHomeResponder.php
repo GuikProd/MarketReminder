@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Dashboard;
 
+use App\UI\Responder\Dashboard\Interfaces\DashboardHomeResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -21,7 +22,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class DashboardHomeResponder
+class DashboardHomeResponder implements DashboardHomeResponderInterface
 {
     /**
      * @var Environment
@@ -45,15 +46,10 @@ class DashboardHomeResponder
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function __invoke()
+    public function __invoke(): Response
     {
-        $response = new Response(
+        return new Response(
             $this->twig->render('dashboard/dashboard_home.html.twig')
         );
-
-        return $response->setCache([
-            's_maxage' => 2000,
-            'public' => true
-        ]);
     }
 }

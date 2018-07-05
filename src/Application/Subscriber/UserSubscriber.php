@@ -96,19 +96,19 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
             'page' => [
                 'content' => [
                     'key' => 'user.ask_reset_password.content',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'link' => [
                     'key' => 'user.ask_reset_password.link.text',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'header' => [
                     'key' => 'user.ask_reset_password.header',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'subject' => [
                     'key' => 'user.ask_reset_password.header',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ]
             ],
             'user' => $event->getUser(),
@@ -142,23 +142,23 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
             'page' => [
                 'content_first' => [
                     'key' => 'user.registration.welcome.content_first_part',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'content_second' => [
                     'key' => 'user.registration.welcome.content_second_part',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'link' => [
                     'key' => 'user.registration.welcome.content.link.text',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'header' => [
                     'key' => 'user.registration.welcome.header',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'subject' => [
                     'key' => 'user.registration.welcome.header',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ]
             ],
             'user' => $event->getUser(),
@@ -192,19 +192,19 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
             'page' => [
                 'body' => [
                     'key' => 'user.reset_password.content',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'link' => [
                     'key' => 'security.login',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ],
                 'header' => [
                     'key' => 'user.reset_password.header',
-                    'channel' => 'messages',
+                    'channel' => 'mail',
                 ],
                 'subject' => [
                     'key' => 'user.reset_password.header',
-                    'channel' => 'messages'
+                    'channel' => 'mail'
                 ]
             ],
             'user' => $event->getUser(),
@@ -236,17 +236,25 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
         $this->presenter->prepareOptions([
             '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
             'page' => [
-                'content' => [
-                    'key' => '',
-                    'channel' => 'messages'
-                ],
-                'header' => [
-                    'key' => '',
-                    'channel' => 'messages'
-                ],
                 'subject' => [
-                    'key' => '',
-                    'channel' => 'messages'
+                    'key' => 'user.validation.subject',
+                    'channel' => 'mail'
+                ],
+                'content' => [
+                    'key' => 'user.validation.header',
+                    'channel' => 'mail'
+                ],
+                'footer' => [
+                    'key' => 'user.validation.footer',
+                    'channel' => 'mail'
+                ],
+                'dashboard' => [
+                    'key' => 'user.validation.content.link',
+                    'channel' => 'mail'
+                ],
+                'contact' => [
+                    'key' => 'user.validation.content.contact',
+                    'channel' => 'mail'
                 ]
             ],
             'user' => $event->getUser(),

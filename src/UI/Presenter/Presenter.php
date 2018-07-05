@@ -17,6 +17,7 @@ use App\Domain\Models\Interfaces\UserInterface;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\UI\Interfaces\CloudTranslationPresenterInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -56,7 +57,7 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
 
         try {
             $translatedViewOptions = $this->prepareTranslations($viewOptions);
-        } catch (\Psr\Cache\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             sprintf($exception->getMessage());
         }
 

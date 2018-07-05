@@ -31,14 +31,3 @@ user.not_found: Les identifiants renseignés ne correspondent pas à un utilisat
 # User Notifications
 user.notification.password_reset_success: Votre mot de passe a été modifié, vous pouvez dès à présent vous connecter.
 user.notification.password_reset.header: Réinitialisation du mot de passe réussie.
-
-# Emails
-user.registration.welcome.header: Bienvenue sur MarketReminder
-user.registration.welcome.content_first_part: Comme nous sommes très heureux de vous voir à bord, nous vous avons envoyer cet email, ce dernier vous permettra de bien démarrer votre aventure.
-user.registration.welcome.content_second_part: Dans un second temps, nous vous demandons de valider votre compte afin de vous donner les accès sur la plateforme, pour ce faire, veuillez cliquer sur le lien ci-dessous.
-user.registration.welcome.content.link.text: Validez votre compte
-user.ask_reset_password.header: Demande de réinitialisation du mot de passe.
-user.ask_reset_password.content: Comme demandé, voici un lien vous permettant de réinitialiser votre mot de passe, ce lien est actif durant 24H.
-user.ask_reset_password.link.text: Réinitialiser le mot de passe
-user.reset_password.header: Réinitialisation du mot de passe réussie
-user.reset_password.content: Votre mot de passe a bien été réinitialisé, vous pouvez dès à présent vous connecter, profitez-en pour gérer vos stocks !

@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Dashboard;
 
-use App\UI\Responder\Dashboard\DashboardHomeResponder;
+use App\UI\Action\Dashboard\Interfaces\DashboardHomeActionInterface;
+use App\UI\Responder\Dashboard\Interfaces\DashboardHomeResponderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,10 +29,15 @@ use Symfony\Component\Routing\Annotation\Route;
  *     name="dashboard_home",
  *     methods={"GET"}
  * )
+ *
+ * @Security("has_role('ROLE_USER')")
  */
-class DashboardHomeAction
+final class DashboardHomeAction implements DashboardHomeActionInterface
 {
-    public function __invoke(DashboardHomeResponder $responder)
+    /**
+     * {@inheritdoc}
+     */
+    public function __invoke(DashboardHomeResponderInterface $responder): Response
     {
         return $responder();
     }

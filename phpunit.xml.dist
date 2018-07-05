@@ -16,7 +16,7 @@
 
         <!-- Core Configuration -->
         <env name="ACCEPTED_LOCALES" value="fr|en" />
-        <env name="ACCEPTED_CHANNELS" value="messages|validators|session" />
+        <env name="ACCEPTED_CHANNELS" value="messages|validators|session|form|mail" />
 
         <!-- DB Configuration -->
         <env name="POSTGRES_DB" value="marketReminder" />

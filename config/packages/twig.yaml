@@ -1,6 +1,6 @@
 twig:
     debug: '%kernel.debug%'
-    form_themes:
-        - 'form/themes/main_theme.html.twig'
     paths: ['%kernel.project_dir%/templates']
     strict_variables: '%kernel.debug%'
+    form_themes:
+        - 'form/themes/_main.html.twig'
