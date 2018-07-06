@@ -1,5 +1,6 @@
 let cacheName = 'app-shell';
 let filesToCache = [
+    '/build/theme.css',
     '/build/core.css',
     '/build/registration.css',
     '/build/form.js',

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace tests\Domain\Models;
+namespace App\Tests\Domain\Models;
 
 use App\Domain\Models\Image;
 use App\Domain\Models\Interfaces\ImageInterface;
@@ -23,7 +23,7 @@ use Ramsey\Uuid\UuidInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class ImageTest extends TestCase
+final class ImageTest extends TestCase
 {
     public function testItImplements()
     {

@@ -53,6 +53,7 @@ Encore
     ]))
 
     // Style
+    .addStyleEntry('theme', './assets/css/theme.css')
     .addStyleEntry('core', './assets/scss/public/core.scss')
     .addStyleEntry('registration', './assets/scss/public/registration.scss')
 

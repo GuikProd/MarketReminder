@@ -24,7 +24,7 @@ use Ramsey\Uuid\UuidInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserTest extends TestCase
+final class UserTest extends TestCase
 {
     public function testItImplementsAndReturnData()
     {
