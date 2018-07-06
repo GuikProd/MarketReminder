@@ -1,0 +1,17 @@
+gcp:
+    credentials_filename: 'credentials.json'
+    credentials_folder: '%kernel.project_dir%/config/credentials/google'
+    storage:
+        activated: true
+        bucket_name: '%env(GOOGLE_BUCKET_NAME)%'
+        bucket_public_url: '%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%'
+    translation:
+        activated: true
+        storage_engine: 'redis'
+    vision:
+        activated: true
+        forbidden_labels:
+            - 'drugs'
+            - 'gun'
+            - 'sex'
+            - 'money'

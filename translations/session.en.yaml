@@ -1,0 +1,7 @@
+security.validation_success: 'Validated account, you can start your management!'
+user.account_created: 'The account has been created, an email to validate this creation has been sent to you.'
+user.invalid_credentials: 'The credentials entered seem invalid, please try again.'
+user.notification.password_reset_success: 'Your password has been changed, you can now login.'
+user.reset_password.success: 'The request has been registered, an email has been sent to you.'
+user.notification.wrong_reset_password_token: 'This token does not exist or has already been validated, please try again.'
+security.validation_failure.notFound_token: 'This token does not exist or has already been validated, please resubmit!'

@@ -7,14 +7,18 @@ security:
         db_provider:
             entity:
                 class: App\Domain\Models\User
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
             anonymous: ~
             provider: db_provider
-            logout_on_user_change: true
             form_login:
                 login_path: web_login
                 check_path: web_login

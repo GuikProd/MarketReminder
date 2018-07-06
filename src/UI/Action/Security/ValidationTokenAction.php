@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Action\Security;
 
 use App\Application\Event\SessionMessageEvent;
-use App\Application\Event\User\UserValidatedEvent;
+use App\Application\Event\UserEvent;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ValidationTokenActionInterface;
 use App\UI\Responder\Security\Interfaces\ValidationTokenResponderInterface;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ValidationTokenAction;
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * @Route(
  *     name="web_validation",
@@ -81,10 +81,7 @@ class ValidationTokenAction implements ValidationTokenActionInterface
             return $responder();
         }
 
-        $user = $this->userRepository->getUserByToken($request->attributes->get('token'));
-
-        if (!$user) {
-
+        if (!$user = $this->userRepository->getUserByToken($request->attributes->get('token'))) {
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
                 new SessionMessageEvent(
@@ -94,15 +91,15 @@ class ValidationTokenAction implements ValidationTokenActionInterface
             );
 
             return $responder();
-        };
+        }
 
         $user->validate();
 
         $this->userRepository->flush();
 
         $this->eventDispatcher->dispatch(
-            UserValidatedEvent::NAME,
-            new UserValidatedEvent($user)
+            UserEvent::USER_VALIDATED,
+            new UserEvent($user)
         );
 
         $this->eventDispatcher->dispatch(

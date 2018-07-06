@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace App\Application\Helper\Image;
 
 use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStorageRetrieverHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageRetrieverHelperInterface;
 
 /**
  * Class ImageRetrieverHelper
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class ImageRetrieverHelper implements ImageRetrieverHelperInterface
 {

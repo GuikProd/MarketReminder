@@ -6,43 +6,39 @@ layers:
   - name: Action
     collectors:
       - type: className
-        regex: .*UI\\Action.*
+        regex: .*\\App\\UI\\Action.*
   - name: Form
     collectors:
       - type: className
-        regex: .*UI\\Form.*
+        regex: .*\\App\\UI\\Form\\Type.*
   - name: FormHandler
     collectors:
       - type: className
-        regex: .*Infra\\Form\\FormHandler.*
-  - name: FormSubscriber
-    collectors:
-      - type: className
-        regex: .*Infra\\Form\\FormSubscriber.*
+        regex: .*\\App\\Infra\\Form\\FormHandler.*
   - name: GCP
     collectors:
       - type: className
-        regex: .*Infra\\GCP.*
+        regex: .*\\App\\Infra\\GCP.*
   - name: Models
     collectors:
       - type: className
-        regex: .*Domain\\Models.*
+        regex: .*\\App\\Domain\\Models.*
   - name: Helper
     collectors:
       - type: className
-        regex: .*Helper.*
+        regex: .*\\App\\Application\\Helper.*
   - name: Repository
     collectors:
       - type: className
-        regex: .*Repository.*
+        regex: .*\\App\\Infra\\Doctrine\\Repository.*
   - name: Responder
     collectors:
       - type: className
-        regex: .*UI\\Responder.*
-  - name: Subscriber
+        regex: .*\\App\\UI\\Responder.*
+  - name: Validator
     collectors:
       - type: className
-        regex: .*Subscriber.*
+        regex: .*\\App\\Application\\Validator.*
 ruleset:
   Action:
       - Form
@@ -51,8 +47,7 @@ ruleset:
       - Repository
       - Responder
   Form:
-      - FormSubscriber
-      - Subscriber
+      - Validator
   FormHandler:
       - Helper
       - Models
@@ -63,6 +58,9 @@ ruleset:
       - Helper
       - Repository
       - Subscriber
+  GCP: ~
+  Helper:
+      - GCP
   Models: ~
   Repository:
       - Models
@@ -73,3 +71,6 @@ ruleset:
       - Helper
       - Models
       - Repository
+  Validator:
+      - Helper
+      - GCP

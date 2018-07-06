@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security;
 
-use Symfony\Component\Form\FormView;
+use App\UI\Presenter\Interfaces\PresenterInterface;
+use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -22,10 +25,15 @@ use Twig\Environment;
 /**
  * Class AskResetPasswordResponder
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class AskResetPasswordResponder
+final class AskResetPasswordResponder implements AskResetPasswordResponderInterface
 {
+    /**
+     * @var PresenterInterface
+     */
+    private $presenter;
+
     /**
      * @var Environment
      */
@@ -37,50 +45,54 @@ class AskResetPasswordResponder
     private $urlGenerator;
 
     /**
-     * AskResetPasswordResponder constructor.
-     *
-     * @param Environment $twig
-     * @param UrlGeneratorInterface $urlGenerator
+     * {@inheritdoc}
      */
     public function __construct(
         Environment $twig,
+        PresenterInterface $presenter,
         UrlGeneratorInterface $urlGenerator
     ) {
+        $this->presenter = $presenter;
         $this->twig = $twig;
         $this->urlGenerator = $urlGenerator;
     }
 
     /**
-     * @param FormView $askResetPasswordTokenFormView
-     * @param bool $isRedirect
-     * @param string $urlToRedirect
-     * @param string $templateName
-     *
-     * @return Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function __invoke(
-        FormView $askResetPasswordTokenFormView = null,
         $isRedirect = false,
-        $urlToRedirect = 'index',
-        string $templateName = 'security/askResetPasswordToken.html.twig'
-    ) {
+        Request $request,
+        FormInterface $askResetPasswordForm = null
+    ): Response {
+
+        $this->presenter->prepareOptions([
+            '_locale' => $request->getLocale(),
+            'form' => $askResetPasswordForm,
+            'page' => [
+                'card_button' => [
+                    'key' => 'security.resetPasswordToken',
+                    'channel' => 'messages'
+                ],
+                'card_header' => [
+                    'key' => 'security.resetPasswordToken_header',
+                    'channel' => 'messages'
+                ],
+                'title' => [
+                    'key' => 'reset_password.title',
+                    'channel' => 'messages'
+                ]
+            ]
+        ]);
 
         $isRedirect
-            ? $response = new RedirectResponse($this->urlGenerator->generate($urlToRedirect))
+            ? $response = new RedirectResponse($this->urlGenerator->generate('index'))
             : $response = new Response(
-                $this->twig->render($templateName, [
-                    'askResetPasswordTokenForm' => $askResetPasswordTokenFormView
+                $this->twig->render('security/ask_reset_password_token.html.twig', [
+                    'presenter' => $this->presenter
                 ])
             );
 
-        return $response->setCache([
-            'public' => true,
-            's_maxage' => 3600,
-            'max_age' => 600
-        ]);
+        return $response;
     }
 }

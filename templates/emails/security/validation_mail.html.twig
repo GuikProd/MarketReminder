@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ 'account.welcome'|trans }}</title>
+        <title>{{ presenter.page.subject.value }}</title>
     </head>
     <body>
         <section>
-            <h2>{{ 'account.greeting'|trans }}</h2>
+            <h2>{{ presenter.page.subject.value }}</h2>
             <p>
-                Well, your account is now validated, time to start your journey,
-                first, you can try to create a new stock using your <a href="{{ url('dashboard_home') }}">dashboard</a> ,
-                once it's done, time to add some products and manage the whole thing.
+                {{ presenter.page.content.value }} <a href="{{ url('dashboard_home') }}">{{ presenter.page.dashboard.value }}</a>.
             </p>
             <p>
-                Remember, if you need some help or have any question, please join us <a href="{{ url('contact') }}">here</a>.
+                {{ presenter.page.footer.value }} <a href="{{ url('contact') }}">{{ presenter.page.contact.value }}</a>.
             </p>
         </section>
     </body>

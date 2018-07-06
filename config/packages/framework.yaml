@@ -12,4 +12,10 @@ framework:
     cache:
         # Redis
         app: cache.adapter.redis
-        default_redis_provider: "%env(REDIS_URL)%"
+        default_redis_provider: "%env(REDIS_TEST_URL)%"
+
+sensio_framework_extra:
+    psr_message:
+        enabled: false
+    router:
+        annotations: false

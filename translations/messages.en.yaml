@@ -1,28 +1,22 @@
-# Pages title
-Home: Home
-account.welcome: Welcome to MarketReminder !
-account.greeting: nice to see you here !
-resetPassword.title: Ask for password reset
-registration.title: Registration
-Profile image: Profile image
-account.creation: Create an account
-account.already_exist: Already have an account ?
-
-# Security | Account validation
-security.validation_success: Account validated ! Time to start your stock management !
-security.validation_failure.notFound_token: Oops, looks like the validation token isn't valid or has already been validated, please retry !
-security.login: Login
-security.login_failure: The submitted credentials seems invalid, please verify and retry.
-
-# Forms
+home.text: Home
+home.title: 'Inventory management'
+account.welcome: 'Welcome to MarketReminder'
+account.greeting: 'Glad to see you on board!'
+reset_password.title: 'Reset password'
+registration.title: 'Create an account'
+password.raw: Password
+image.text: 'Profile Image'
+account.creation: 'Create an account'
+account.already_exist: 'Account already created?'
+reset_password.button.text: reset
+security.acount_creation: 'Your profile has been created! Please check your mailbox to validate it.'
+security.login: 'To log in'
+security.login_failure: 'Submitted credentials appear invalid, please check your entry.'
 security.registration_username: Username
 security.registration_email: Email
 security.registration_password: Password
-security.resetPasswordToken_header: Ask a new password
-security.resetPasswordToken: Send
-
-# User
-user.account_created: The account has been created, a emain has been send in order to validate the creation process.
-user.invalid_credentials: The submitted credentials seems invalid, please retry.
-user.not_found: The submitted credentials doesn't seems to be linked to an existing user, please retry.
-user.reset_password.success: The demand has been saved, please check your emails.
+security.resetPasswordToken_header: 'Request a new password.'
+security.resetPasswordToken: 'To send'
+user.not_found: 'The filled in identifiers do not correspond to an existing user, please repeat your entry.'
+user.notification.password_reset_success: 'Your password has been changed, you can now login.'
+user.notification.password_reset.header: 'Reset the password successfully.'

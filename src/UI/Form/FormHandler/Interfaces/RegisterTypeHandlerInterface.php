@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -27,14 +27,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Interface RegisterTypeHandlerInterface.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 interface RegisterTypeHandlerInterface
 {
     /**
      * RegisterTypeHandlerInterface constructor.
      *
-     * @param CloudStoragePersisterHelperInterface  $cloudStoragePersisterHelper
+     * @param CloudStorageWriterHelperInterface  $cloudStoragePersisterHelper
      * @param EventDispatcherInterface              $eventDispatcher
      * @param EncoderFactoryInterface               $passwordEncoderFactory
      * @param ImageBuilderInterface                 $imageBuilder
@@ -45,7 +45,7 @@ interface RegisterTypeHandlerInterface
      * @param ValidatorInterface                    $validator
      */
     public function __construct(
-        CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper,
+        CloudStorageWriterHelperInterface $cloudStoragePersisterHelper,
         EventDispatcherInterface $eventDispatcher,
         EncoderFactoryInterface $passwordEncoderFactory,
         ImageBuilderInterface $imageBuilder,

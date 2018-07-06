@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Core;
 
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,10 +22,15 @@ use Twig\Environment;
 /**
  * Class HomeResponder.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class HomeResponder implements HomeResponderInterface
+final class HomeResponder implements HomeResponderInterface
 {
+    /**
+     * @var PresenterInterface
+     */
+    private $presenter;
+
     /**
      * @var Environment
      */
@@ -33,9 +39,12 @@ class HomeResponder implements HomeResponderInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(Environment $twig)
-    {
+    public function __construct(
+        Environment $twig,
+        PresenterInterface $presenter
+    ) {
         $this->twig = $twig;
+        $this->presenter = $presenter;
     }
 
     /**
@@ -43,8 +52,18 @@ class HomeResponder implements HomeResponderInterface
      */
     public function __invoke(Request $request): Response
     {
-        return new Response(
-            $this->twig->render('core/index.html.twig')
-        );
+        $this->presenter->prepareOptions([
+            '_locale' => $request->attributes->get('_locale'),
+            'page' => [
+                'content' => [
+                    'key' => 'home.text',
+                    'channel' => 'messages'
+                ]
+            ]
+        ]);
+
+        return new Response($this->twig->render('core/index.html.twig', [
+            'presenter' => $this->presenter
+        ]));
     }
 }

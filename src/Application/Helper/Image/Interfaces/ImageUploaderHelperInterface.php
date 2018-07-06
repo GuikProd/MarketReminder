@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,27 +13,27 @@ declare(strict_types=1);
 
 namespace App\Application\Helper\Image\Interfaces;
 
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
 
 /**
  * Interface ImageUploaderHelperInterface.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 interface ImageUploaderHelperInterface
 {
     /**
      * ImageUploaderHelperInterface constructor.
      *
-     * @param string                                $filePath
-     * @param string                                $bucketName
-     * @param CloudStoragePersisterHelperInterface  $cloudStoragePersister
+     * @param string                             $filePath
+     * @param string                             $bucketName
+     * @param CloudStorageWriterHelperInterface  $cloudStorageWriter
      */
     public function __construct(
         string $filePath,
         string $bucketName,
-        CloudStoragePersisterHelperInterface $cloudStoragePersister
+        CloudStorageWriterHelperInterface $cloudStorageWriter
     );
 
     /**

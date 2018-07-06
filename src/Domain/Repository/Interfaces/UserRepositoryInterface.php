@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,17 +14,20 @@ declare(strict_types=1);
 namespace App\Domain\Repository\Interfaces;
 
 use App\Domain\Models\Interfaces\UserInterface;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * Interface UserRepositoryInterface.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 interface UserRepositoryInterface
 {
     /**
      * @param string $username
      * @param string $email
+     *
+     * @throws NonUniqueResultException
      *
      * @return UserInterface|null
      */
@@ -33,12 +36,16 @@ interface UserRepositoryInterface
     /**
      * @param string $username
      *
+     * @throws NonUniqueResultException
+     *
      * @return UserInterface|null
      */
     public function getUserByUsername(string $username):? UserInterface;
 
     /**
      * @param string $email
+     *
+     * @throws NonUniqueResultException
      *
      * @return UserInterface|null
      */
@@ -47,23 +54,28 @@ interface UserRepositoryInterface
     /**
      * @param string $token
      *
-     * @return UserInterface|null
+     * @throws NonUniqueResultException
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return UserInterface|null
      */
     public function getUserByToken(string $token):? UserInterface;
 
     /**
-     * @param UserInterface $user
+     * @param string $token
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws NonUniqueResultException
+     *
+     * @return UserInterface|null
+     */
+    public function getUserByResetPasswordToken(string $token):? UserInterface;
+
+    /**
+     * @param UserInterface $user
      */
     public function save(UserInterface $user): void;
 
     /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * Allow to flush the last operations.
      */
     public function flush(): void;
 }

@@ -6,47 +6,40 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
-            - run: sudo yarn install
-            - restore_cache:
-                keys:
-                    - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                    - yarn-packages-{{ .Branch }}
-                    - yarn-packages-master
-                    - yarn-packages-
-            - save_cache:
-                key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                paths:
-                    - node_modules/
-            - run: ./node_modules/.bin/encore production
+            - run: yarn install
+            - run: yarn build
     deptrac:
         docker:
-            - image: circleci/php:7.2.4-apache-node-browsers
+            - image: circleci/php:7.2.5-apache-node-browsers
         steps:
             - checkout
-            - setup_remote_docker
             - run: curl -LS http://get.sensiolabs.de/deptrac.phar -o deptrac.phar
             - run: chmod +x deptrac.phar
-            - run: mv deptrac.phar /usr/local/bin/deptrac
-            - run: deptrac
+            - run: mv deptrac.phar ${HOME}/project/deptrac
+            - run: ${HOME}/project/deptrac
     phpunit:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
             - image: redis
         steps:
             - checkout
-            - setup_remote_docker
+            - run: mkdir -p /tmp/phpunit-coverage
+            - run: sudo apt install -y libsqlite3-dev zlib1g-dev
+            - run: sudo docker-php-ext-install zip
             - run: sudo composer self-update
             - restore_cache:
                 keys:
                     - composer-v1-{{ checksum "composer.json" }}
                     - composer-v1-
             - run: rm -rf var/cache/*
-            - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
+            - run: cp .env.behat.behat.dist .env.behat.behat
             - run: cp phpunit.xml.dist phpunit.xml
             - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
+            - run: mkdir -p ${HOME}/project/config/credentials/google/translation
             - run: mkdir -p ${HOME}/project/config/credentials/google/vision
             - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_TRANSLATION_CREDENTIALS > ${HOME}/project/config/credentials/google/translation/credentials.json
             - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
@@ -55,13 +48,20 @@ jobs:
                 paths:
                     - vendor
             - run: rm -rf var/cache/*
+            - run: ./bin/console cache:warmup
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
-            - run: vendor/bin/phpunit -v
+            - run: ./bin/phpunit -v --exclude-group Blackfire --coverage-html /tmp/phpunit-coverage
             - run: rm -rf var/data.db
+            - store_artifacts:
+                path: /tmp/phpunit-coverage
     behat_core_fr:
         docker:
             - image: circleci/php:7.2.3-apache-node-browsers
@@ -69,16 +69,19 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
+            - run: sudo apt install -y libsqlite3-dev zlib1g-dev
+            - run: sudo docker-php-ext-install zip
             - run: sudo composer self-update
             - restore_cache:
                 keys:
                     - composer-v1-{{ checksum "composer.json" }}
                     - composer-v1-
-            - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
+            - run: cp .env.behat.behat.dist .env.behat.behat
             - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
             - run: mkdir -p ${HOME}/project/config/credentials/google/vision
             - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_TRANSLATION_CREDENTIALS > ${HOME}/project/config/credentials/google/translation/credentials.json
             - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
@@ -87,11 +90,20 @@ jobs:
                 paths:
                     - vendor
             - run: rm -rf var/cache/*
+            - run: ./bin/console cache:warmup
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: vendor/bin/behat --profile fr
             - run: rm -rf var/data.db
     behat_core_en:
@@ -101,16 +113,19 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
+            - run: sudo apt install -y libsqlite3-dev zlib1g-dev
+            - run: sudo docker-php-ext-install zip
             - run: sudo composer self-update
             - restore_cache:
                 keys:
                     - composer-v1-{{ checksum "composer.json" }}
                     - composer-v1-
-            - run: cp .env.dist .env
             - run: cp .env.behat.dist .env.behat
+            - run: cp .env.behat.behat.dist .env.behat.behat
             - run: mkdir -p ${HOME}/project/config/credentials/google/bucket
             - run: mkdir -p ${HOME}/project/config/credentials/google/vision
             - run: echo $GCP_BUCKET_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/bucket/credentials.json
+            - run: echo $GCP_TRANSLATION_CREDENTIALS > ${HOME}/project/config/credentials/google/translation/credentials.json
             - run: echo $GCP_VISION_CREDENTIALS | base64 --decode --ignore-garbage > ${HOME}/project/config/credentials/google/vision/credentials.json
             - run: composer install -n --optimize-autoloader --classmap-authoritative
             - run: composer dump-autoload --optimize --classmap-authoritative
@@ -119,11 +134,20 @@ jobs:
                 paths:
                     - vendor
             - run: rm -rf var/cache/*
+            - run: ./bin/console cache:warmup
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: ./bin/console d:d:c --env=test
             - run: ./bin/console d:s:c --env=test
             - run: ./bin/console d:f:l -n --env=test
             - run: ./bin/console doctrine:cache:clear-query
             - run: ./bin/console doctrine:cache:clear-metadata
+            - run: ./bin/console app:translation-warm messages fr
+            - run: ./bin/console app:translation-warm messages en
+            - run: ./bin/console app:translation-warm validators fr
+            - run: ./bin/console app:translation-warm validators en
             - run: vendor/bin/behat --profile en
             - run: rm -rf var/data.db
     gcloud_docker_build:
@@ -131,11 +155,11 @@ jobs:
             - image: google/cloud-sdk
         steps:
             - checkout
+            - setup_remote_docker
             - run: echo $GCP_SERVICE_CREDENTIALS > /tmp/gcp_key.json
             - run: gcloud config set project $GCP_PROJECT_NAME
             - run: gcloud auth activate-service-account --key-file /tmp/gcp_key.json
-            - run: gcloud auth configure-docker
-            - run: gcloud container builds submit --tag gcr.io/$GCP_PROJECT_NAME/$GCP_MAIN_IMAGE_NAME .
+            - run: docker build -t $GCP_MAIN_IMAGE_NAME ./Dockerfile.production
             - run: docker push gcr.io/$GCP_PROJECT_NAME/$GCP_MAIN_IMAGE_NAME:latest
     gcloud_kubernetes_check:
         docker:
@@ -164,12 +188,14 @@ workflows:
     staging:
         jobs:
             - gcloud_docker_build:
-                requires:
-                    - encore
-                    - deptrac
-                    - phpunit
-                    - behat_core_fr
-                    - behat_core_en
+                filters:
+                    branches:
+                        only:
+                            - master
+                            - develop
             - gcloud_kubernetes_check:
-                requires:
-                    - gcloud_docker_build
+                filters:
+                    branches:
+                        only:
+                            - master
+                            - develop

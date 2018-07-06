@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,26 +13,36 @@ declare(strict_types=1);
 
 namespace App\Domain\Models\Interfaces;
 
+use Ramsey\Uuid\UuidInterface;
+
 /**
  * Interface ImageInterface.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 interface ImageInterface
 {
     /**
      * ImageInterface constructor.
      *
-     * @param string $alt
-     * @param string $filename
-     * @param string $publicUrl
+     * @param string  $alt        The alt of the image (by default, the filename).
+     * @param string  $filename   The name of the Image once stored.
+     * @param string  $publicUrl  The public URL (using GCP) of the file.
+     *
+     * @internal The constructor should define an UUID along with a creationDate using time().
      */
-    public function __construct(string $alt, string $filename, string $publicUrl);
+    public function __construct(
+        string $alt,
+        string $filename,
+        string $publicUrl
+    );
 
     /**
-     * @return int
+     * The UUID generated during object construction.
+     *
+     * @return UuidInterface
      */
-    public function getId(): int;
+    public function getId(): UuidInterface;
 
     /**
      * @return \DateTime

@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,36 +15,44 @@ namespace App\Application\Subscriber;
 
 use App\Application\Event\Interfaces\SessionMessageEventInterface;
 use App\Application\Subscriber\Interfaces\SessionMessageSubscriberInterface;
+use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class SessionMessageSubscriber
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class SessionMessageSubscriber implements EventSubscriberInterface, SessionMessageSubscriberInterface
+final class SessionMessageSubscriber implements EventSubscriberInterface, SessionMessageSubscriberInterface
 {
+    /**
+     * @var CloudTranslationRepositoryInterface
+     */
+    private $cloudTranslationRepository;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
     /**
      * @var SessionInterface
      */
     private $session;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(
-        SessionInterface $session,
-        TranslatorInterface $translator
+        CloudTranslationRepositoryInterface $repository,
+        RequestStack $requestStack,
+        SessionInterface $session
     ) {
+        $this->cloudTranslationRepository = $repository;
+        $this->requestStack = $requestStack;
         $this->session = $session;
-        $this->translator = $translator;
     }
 
     /**
@@ -62,15 +70,18 @@ class SessionMessageSubscriber implements EventSubscriberInterface, SessionMessa
      */
     public function onSessionMessage(SessionMessageEventInterface $event): void
     {
-        if ($event->getMessage() === '' || !$event->getFlashBag()) {
-            return;
+        if ('' === $event->getMessage() || '' === $event->getFlashBag()) {
+            throw new \InvalidArgumentException(
+                sprintf('Both message and flashBag must be defined !')
+            );
         }
 
-        $this->session->getFlashBag()
-                      ->add(
-                          $event->getFlashBag(),
-                          $this->translator
-                               ->trans($event->getMessage(), [], 'messages')
-                      );
+        $cacheEntry = $this->cloudTranslationRepository->getSingleEntry(
+            'session.'.$this->requestStack->getCurrentRequest()->getLocale().'.yaml',
+            $this->requestStack->getCurrentRequest()->getLocale(),
+            $event->getMessage()
+        );
+
+        $this->session->getFlashBag()->add($event->getFlashBag(), $cacheEntry->getValue());
     }
 }

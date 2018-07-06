@@ -6,22 +6,17 @@
     <body>
         <section>
             <h2>
-                {{ "account.welcome"|trans }}
+                {{ presenter.page.header.value }}
             </h2>
             <div>
                 <p>
-                    {{ "account.welcome"|trans }}
+                    {{ presenter.page.content_first.value }}
                 </p>
                 <p>
-                    As we're extremely happy to see on board, we've sent your this email, this way, we can start
-                    the adventure in the right conditions.
-                    First, thanks again for your interest in the platform !
-                </p>
-                <p>
-                    In a second time, we need you to validate your account in order to access the full platform.
-                    For this, here's a <a href="{{ url('web_validation', {'token': user.validationToken}) }}">link</a> ,
-                    once you've activate your account,
-                    you're gonna be able to log and create your first stock and manage it.
+                    {{ presenter.page.content_second.value }}
+                    <a href="{{ url('web_validation', {'token': presenter.viewOptions.user.validationToken}) }}">
+                        {{ presenter.page.link.value }}
+                    </a>
                 </p>
             </div>
         </section>

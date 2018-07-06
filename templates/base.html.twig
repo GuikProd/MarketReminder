@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html amp lang="en">
     <head>
-        <meta charset="UTF-8">
-        <title>MarketReminder - {% block title %}{% endblock %}</title>
-        <link rel="canonical" href="http://example.ampproject.org/article-metadata.html">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <title>MarketReminder - {% block title %}{% endblock %}</title>
+        <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('icons/apple-icon-57x57.png') }}" />
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('icons/apple-icon-60x60.png') }}" />
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('icons/apple-icon-72x72.png') }}" />
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('icons/apple-icon-76x76.png') }}" />
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('icons/apple-icon-114x114.png') }}" />
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('icons/apple-icon-120x120.png') }}" />
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('icons/apple-icon-144x144.png') }}" />
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('icons/apple-icon-152x152.png') }}" />
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-icon-180x180.png') }}" />
+        <link rel="icon" type="image/png" sizes="192x192"  href="{{ asset('icons/android-icon-192x192.png') }}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('icons/favicon-32x32.png') }}" />
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('icons/favicon-96x96.png') }}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('icons/favicon-16x16.png') }}" />
+        <link rel="icon" href="{{ asset('icons/favicon.ico') }}" />
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="{{ asset('icons/ms-icon-144x144.png') }}">
+        <meta name="theme-color" content="#ffffff">
         {% block stylesheets %}
             <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css" />
             <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-orange.min.css" />
@@ -14,51 +31,62 @@
         <link rel="manifest" href="{{ asset('manifest.json') }}" />
     </head>
     <body>
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-            <header class="mdl-layout__header">
-                <div class="mdl-layout__header-row">
-                    <span class="mdl-layout-title">MarketReminder</span>
-                    <div class="mdl-layout-spacer"></div>
-                    <nav class="mdl-navigation mdl-layout--large-screen-only">
-                        <a class="mdl-navigation__link" href="{{ path('index') }}">{{ "Home"|trans }}</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                    </nav>
-                </div>
-            </header>
-            <div class="mdl-layout__drawer">
-                <span class="mdl-layout-title">MarketReminder</span>
-                <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link" href="{{ path('index') }}">{{ "Home"|trans }}</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                </nav>
+        <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    <a href="#" class="material-icons mdc-top-app-bar__navigation-icon">menu</a>
+                    <span class="mdc-top-app-bar__title">MarketReminder</span>
+                </section>
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                    <a href="{{ path('index') }}" class="mdc-top-app-bar__action-item">{{ 'home.text'|trans }}</a>
+                    <a href="#" class="mdc-top-app-bar__action-item">{{ 'home.text'|trans }}</a>
+                    <a href="#" class="mdc-top-app-bar__action-item">{{ 'home.text'|trans }}</a>
+                </section>
             </div>
-            <main class="mdl-layout__content">
-                <div class="page-content">
-                    <div class="mdc-layout-grid">
-                        <div class="mdc-layout-grid__inner">
-                            <div class="mdc-layout-grid__cell--span-12">
-                                {% for success in app.flashes('success') %}
-                                    <div id="snackbar-content">{{ success }}</div>
-                                {% endfor %}
-                                {% for failure in app.flashes('failure') %}
-                                    <div id="snackbar-content">{{ failure }}</div>
-                                {% endfor %}
-                                {% block body %}{% endblock %}
+        </header>
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell--span-12">
+                    {% for success in app.flashes('success') %}
+                        <div id="snackbar-content">
+                            <p>{{ success }}</p>
+                        </div>
+                    {% endfor %}
+                    {% for failure in app.flashes('failure') %}
+                        <div id="snackbar-content">
+                            <p>{{ failure }}</p>
+                        </div>
+                    {% endfor %}
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12 layout">
+
+                        <!-- Main body -->
+                        {% block body %}{% endblock %}
+
+                        <!-- User notification -->
+                        <div class="mdc-snackbar mdc-snackbar--align-start"
+                             aria-live="assertive"
+                             aria-atomic="true"
+                             aria-hidden="true">
+                            <div class="mdc-snackbar__text"></div>
+                            <div class="mdc-snackbar__action-wrapper">
+                                <button type="button" class="mdc-snackbar__action-button"></button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
         {% block javascripts %}
+            <script src="{{ asset('build/webcomponents/custom-elements-es5-adapter.js') }}"></script>
+            <script src="{{ asset('build/webcomponents/webcomponents-bundle.js') }}"></script>
+            <script src="{{ asset('build/webcomponents/webcomponents-loader.js') }}"></script>
+            <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
+            <script src="{{ asset('build/snackbar.js') }}"></script>
+            <script src="{{ asset('build/serviceWorker.js') }}"></script>
             <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
             <script defer src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
-            <script src="{{ asset('build/vue.js') }}"></script>
             <script src="{{ asset('build/snackbar.js') }}"></script>
+            <script src="{{ asset('build/snackbar_polymer.js') }}"></script>
         {% endblock %}
     </body>
 </html>

@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace App\Domain\Models\Interfaces;
 
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Interface UserInterface.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 interface UserInterface
 {
@@ -28,7 +29,6 @@ interface UserInterface
      * @param string              $email            The email linked to this user.
      * @param string              $username         The username used by the User.
      * @param string              $password         The encrypted version of the password.
-     * @param callable            $passwordEncoder  The encoder used to crypt the password, the salt isn't passed.
      * @param string              $validationToken  The validation token used for validate the user.
      * @param ImageInterface|null $profileImage     If the user define it, the profile image.
      *
@@ -39,7 +39,6 @@ interface UserInterface
         string $email,
         string $username,
         string $password,
-        callable $passwordEncoder,
         string $validationToken,
         ImageInterface $profileImage = null
     );
@@ -52,14 +51,21 @@ interface UserInterface
     public function askForPasswordReset(UserResetPasswordToken $userPasswordReset): void;
 
     /**
-     * Allow to validate the user once he has validate his account.
+     * Allow to update the password, for simplicity, a "resetDate" is define in order to help the user.
+     *
+     * @param string $newPassword
+     */
+    public function updatePassword(string $newPassword): void;
+
+    /**
+     * Allow to mark the user as validated once he has validate his account via a token.
      */
     public function validate(): void;
 
     /**
-     * @return int|null
+     * @return UuidInterface
      */
-    public function getId(): ? string;
+    public function getId(): UuidInterface;
 
     /**
      * @return null|string
@@ -87,19 +93,9 @@ interface UserInterface
     public function getActive(): ? bool;
 
     /**
-     * @return string
+     * @return \DateTime
      */
-    public function getCreationDate(): ? string;
-
-    /**
-     * @param \DateTime $validationDate
-     */
-    public function setValidationDate(\DateTime $validationDate): void;
-
-    /**
-     * @return null|string
-     */
-    public function getValidationDate(): ? string;
+    public function getCreationDate(): ? \DateTime;
 
     /**
      * @return array
@@ -112,19 +108,29 @@ interface UserInterface
     public function getValidated(): ? bool;
 
     /**
-     * @param string $validationToken
-     */
-    public function setValidationToken(string $validationToken): void;
-
-    /**
      * @return null|string
      */
     public function getValidationToken(): ? string;
 
     /**
+     * @return int|null
+     */
+    public function getValidationDate(): ?int;
+
+    /**
      * @return null|string
      */
     public function getResetPasswordToken():? string;
+
+    /**
+     * @return null|int
+     */
+    public function getAskResetPasswordDate():? int;
+
+    /**
+     * @return int|null
+     */
+    public function getResetPasswordDate():? int;
 
     /**
      * @param ImageInterface $profileImage

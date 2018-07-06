@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,15 +18,13 @@ use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Form\Type\RegisterType;
 use App\UI\Responder\Security\Interfaces\RegisterResponderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class RegisterAction.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * @Route(
  *     name="web_registration",
@@ -42,29 +40,18 @@ class RegisterAction implements RegisterActionInterface
     private $formFactory;
 
     /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
      * @var RegisterTypeHandlerInterface
      */
     private $registerTypeHandler;
 
     /**
-     * RegisterAction constructor.
-     *
-     * @param FormFactoryInterface         $formFactory
-     * @param UrlGeneratorInterface        $urlGenerator
-     * @param RegisterTypeHandlerInterface $registerTypeHandler
+     * {@inheritdoc}
      */
     public function __construct(
         FormFactoryInterface $formFactory,
-        UrlGeneratorInterface $urlGenerator,
         RegisterTypeHandlerInterface $registerTypeHandler
     ) {
         $this->formFactory = $formFactory;
-        $this->urlGenerator = $urlGenerator;
         $this->registerTypeHandler = $registerTypeHandler;
     }
 
@@ -75,16 +62,13 @@ class RegisterAction implements RegisterActionInterface
         Request $request,
         RegisterResponderInterface $responder
     ) {
-        $registerType = $this->formFactory
-                             ->create(RegisterType::class)
-                             ->handleRequest($request);
+        $registerType = $this->formFactory->create(RegisterType::class)
+                                          ->handleRequest($request);
 
         if ($this->registerTypeHandler->handle($registerType)) {
-            return new RedirectResponse(
-                $this->urlGenerator->generate('index')
-            );
+            return $responder(true);
         }
 
-        return $responder($registerType);
+        return $responder(false, $registerType);
     }
 }
