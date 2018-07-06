@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Form\FormHandler\Interfaces;
 
-use Doctrine\ORM\EntityManagerInterface;
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -21,21 +21,21 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * Interface AskResetPasswordTypeHandlerInterface
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 interface AskResetPasswordTypeHandlerInterface
 {
     /**
      * AskResetPasswordTypeHandlerInterface constructor.
      *
-     * @param SessionInterface          $session
-     * @param EntityManagerInterface    $entityManager
-     * @param EventDispatcherInterface  $eventDispatcher
+     * @param EventDispatcherInterface    $eventDispatcher
+     * @param SessionInterface            $session
+     * @param UserRepositoryInterface     $userRepository
      */
     public function __construct(
+        EventDispatcherInterface $eventDispatcher,
         SessionInterface $session,
-        EntityManagerInterface $entityManager,
-        EventDispatcherInterface $eventDispatcher
+        UserRepositoryInterface $userRepository
     );
 
     /**

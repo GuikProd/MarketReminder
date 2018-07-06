@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use App\Domain\UseCase\UserResetPassword\DTO\Interfaces\UserResetPasswordDTOInte
 /**
  * Class UserResetPasswordDTO
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class UserResetPasswordDTO implements UserResetPasswordDTOInterface
 {
@@ -35,8 +35,8 @@ class UserResetPasswordDTO implements UserResetPasswordDTOInterface
     /**
      * UserResetPasswordDTO constructor.
      *
-     * @param string $email     The email of the User who reset his password.
-     * @param string $username  The username of the User who reset his password.
+     * @param string $email    The email of the User who reset his password.
+     * @param string $username The username of the User who reset his password.
      */
     public function __construct(
         string $email,

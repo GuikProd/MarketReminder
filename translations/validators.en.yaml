@@ -1,11 +1,12 @@
-validation.length_short: This value is too short !
-validation.length_long: This value is too long !
-validation.filled: This field is required, please add an entry.
-credentials.already_exist: This credentials already exist !
-Your account was created ! Please check your mail to validate it.: Your account was created ! Please check your mail to validate it.
-
-## Form validations
-form.format_error: This format is invalid ! Please retry using a valid one !
-form.credentials_error: The submitted credentials already exist, please retry !
-image.forbidden_content: The submitted image contains explicit or forbidden content, please retry !
-image.invalid_format: The submitted format isn't allowed, please retry !
+validation.length_short: 'This value is too short!'
+validation.length_long: 'This value is too long!'
+validation.filled: 'This field is required, please enter a value.'
+credentials.already_exist: 'These identifiers already exist!'
+form.format_error: 'The format is invalid! Please try again with a new valid format!'
+form.credentials_error: 'Submitted credentials already exist, please try again!'
+image.forbidden_content: 'Submitted image contains inappropriate content, please try again!'
+image.invalid_format: 'This image format is prohibited, please repeat your entry.'
+user.exist: 'Submitted IDs can not find a user, please try again!'
+email.wrong_format: 'The submitted email must be valid!'
+password.not_match: 'Passwords do not match, please try again.'
+validation.file_upload_size: 'This file exceeds the authorized weight limit, please try again.'

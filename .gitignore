@@ -15,12 +15,22 @@ docker/nginx/logs/
 # Global
 coverage/**/
 report/*
-###> phpunit/phpunit ###
-/phpunit.xml
-###< phpunit/phpunit ###
 
 # Google Cloud
 public/images/profiles/
+config/credentials/google/credentials.json
 
 # Behat
 .env.behat
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+# Blackfire
+.blackfire
+
+# Tests
+tests/_credentials/credentials.json
+features/assets/_credentials/credentials.json

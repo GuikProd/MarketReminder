@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace App\Application\Helper\Image;
 
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 
 /**
  * Class ImageUploaderHelper.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class ImageUploaderHelper implements ImageUploaderHelperInterface
 {
@@ -39,7 +39,7 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     private $bucketName;
 
     /**
-     * @var CloudStoragePersisterHelperInterface
+     * @var CloudStorageWriterHelperInterface
      */
     private $cloudStoragePersister;
 
@@ -49,7 +49,7 @@ class ImageUploaderHelper implements ImageUploaderHelperInterface
     public function __construct(
         string $filePath,
         string $bucketName,
-        CloudStoragePersisterHelperInterface $cloudStoragePersister
+        CloudStorageWriterHelperInterface $cloudStoragePersister
     ) {
         $this->filePath = $filePath;
         $this->bucketName = $bucketName;

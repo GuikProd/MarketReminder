@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inventory Management{% endblock %}
+{% block title %}
+    {{ presenter.page.content.value }}
+{% endblock %}
 
 {% block body %}
+    <p>Hello from home !</p>
 {% endblock %}
+
+

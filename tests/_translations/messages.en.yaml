@@ -1,0 +1,35 @@
+home.text: Home
+home.title: 'Inventory management'
+account.welcome: 'Welcome to MarketReminder'
+account.greeting: 'Glad to see you on board!'
+reset_password.title: 'Reset password'
+registration.title: 'Create an account'
+password.raw: Password
+image.text: 'Profile Image'
+account.creation: 'Create an account'
+account.already_exist: 'Account already created?'
+reset_password.button.text: reset
+security.acount_creation: 'Your profile has been created! Please check your mailbox to validate it.'
+security.validation_success: 'Validated account, you can start your management!'
+security.validation_failure.notFound_token: 'This token does not exist or has already been validated, please resubmit!'
+security.login: 'To log in'
+security.login_failure: 'Submitted credentials appear invalid, please check your entry.'
+security.registration_username: Username
+security.registration_email: Email
+security.registration_password: Password
+security.resetPasswordToken_header: 'Request a new password.'
+security.resetPasswordToken: 'To send'
+user.not_found: 'The filled in identifiers do not correspond to an existing user, please repeat your entry.'
+user.reset_password.success: 'The request has been registered, an email has been sent to you.'
+user.notification.wrong_reset_password_token: 'This token does not exist or has already been validated, please try again.'
+user.notification.password_reset_success: 'Your password has been changed, you can now login.'
+user.notification.password_reset.header: 'Reset the password successfully.'
+user.registration.welcome.header: 'Welcome to MarketReminder'
+user.registration.welcome.content_first_part: 'As we are very happy to see you on board, we have sent you this email, the latter will allow you to start your adventure.'
+user.registration.welcome.content_second_part: 'In a second time, we ask you to validate your account in order to give you access on the platform, to do this, please click on the link below.'
+user.registration.welcome.content.link.text: 'Confirm your account'
+user.ask_reset_password.header: 'Request to reset the password.'
+user.ask_reset_password.content: 'As requested, here is a link to reset your password, this link is active for 24 hours.'
+user.ask_reset_password.link.text: 'Reset password'
+user.reset_password.header: 'Resetting the password successfully'
+user.reset_password.content: 'Your password has been reset, you can now log in, take the opportunity to manage your stocks!'

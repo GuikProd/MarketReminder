@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class UserResetPasswordDTOTest.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class UserResetPasswordDTOTest extends TestCase
 {
@@ -31,19 +31,8 @@ class UserResetPasswordDTOTest extends TestCase
                                                  'Toto'
                                              );
 
-        static::assertInstanceOf(
-            UserResetPasswordDTOInterface::class,
-            $userPasswordResetDTO
-        );
-
-        static::assertSame(
-            'Toto',
-            $userPasswordResetDTO->username
-        );
-
-        static::assertSame(
-            'toto@gmail.com',
-            $userPasswordResetDTO->email
-        );
+        static::assertInstanceOf(UserResetPasswordDTOInterface::class, $userPasswordResetDTO);
+        static::assertSame('Toto', $userPasswordResetDTO->username);
+        static::assertSame('toto@gmail.com', $userPasswordResetDTO->email);
     }
 }

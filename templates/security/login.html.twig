@@ -18,7 +18,9 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="_password" />
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-                <button type="submit">{{ "security.login"|trans }}</button>
+                <button class="mdc-button mdc-button--raised">
+                    {{ 'security.login'|trans }}
+                </button>
             </form>
         </div>
     </section>

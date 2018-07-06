@@ -2,10 +2,14 @@ validation.length_short: Cette valeur est trop courte !
 validation.length_long: Cette valeur est trop longue !
 validation.filled: Ce champs est requis, veuillez saisir une valeur.
 credentials.already_exist: Ces identifiants existent déjà !
-Your account was created ! Please check your mail to validate it.: Votre profil a été créé ! Veuillez vérifier votre boîte mail afin de valider ce dernier.
 
 # Form validations
 form.format_error: Le format est invalide ! Veuillez réessayer avec un nouveau format valide !
 form.credentials_error: Les identifiants soumis existent déjà, veuillez recommencer votre saisie !
 image.forbidden_content: L'image soumise contient du contenu inadapté, veuillez recommencer !
 image.invalid_format: Ce format d'image est interdit, veuillez recommencer votre saisie.
+user.exist: Les identifiants soumis ne permettent pas de trouver un utilisateur, veuillez réessayer !
+email.wrong_format: L'email soumis doit être valide !
+password.not_match: Les mots de passes ne correspondent pas, veuillez recommencez votre saisie.
+
+validation.file_upload_size: Ce fichier dépasse la limite de poids autorisée, veuillez recommencer.

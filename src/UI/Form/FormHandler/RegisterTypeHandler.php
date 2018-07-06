@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace App\UI\Form\FormHandler;
 
-use App\Application\Event\User\UserCreatedEvent;
 use App\Application\Event\SessionMessageEvent;
+use App\Application\Event\UserEvent;
 use App\Application\Helper\Image\Interfaces\ImageRetrieverHelperInterface;
 use App\Application\Helper\Image\Interfaces\ImageUploaderHelperInterface;
 use App\Domain\Builder\Interfaces\ImageBuilderInterface;
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Models\User;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use App\Infra\GCP\CloudStorage\Interfaces\CloudStoragePersisterHelperInterface;
+use App\Infra\GCP\CloudStorage\Helper\Interfaces\CloudStorageWriterHelperInterface;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -31,12 +31,12 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Class RegisterTypeHandler.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class RegisterTypeHandler implements RegisterTypeHandlerInterface
 {
     /**
-     * @var CloudStoragePersisterHelperInterface
+     * @var CloudStorageWriterHelperInterface
      */
     private $cloudStoragePersisterHelper;
 
@@ -84,7 +84,7 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
      * {@inheritdoc}
      */
     public function __construct(
-        CloudStoragePersisterHelperInterface $cloudStoragePersisterHelper,
+        CloudStorageWriterHelperInterface $cloudStoragePersisterHelper,
         EventDispatcherInterface $eventDispatcher,
         EncoderFactoryInterface $passwordEncoderFactory,
         ImageBuilderInterface $imageBuilder,
@@ -121,7 +121,8 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $this->imageBuilder->build(
                     $this->imageUploaderHelper->getFileName(),
                     $this->imageUploaderHelper->getFileName(),
-                    $this->imageRetrieverHelper->getGoogleStoragePublicUrl().$this->imageUploaderHelper->getFileName()
+                    $this->imageRetrieverHelper
+                                 ->getGoogleStoragePublicUrl().$this->imageUploaderHelper->getFileName()
                 );
             }
 
@@ -134,15 +135,16 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $this->imageBuilder->getImage() ?: null
             );
 
-            $errors = $this->validator->validate($this->userBuilder->getUser(), null, ['User', 'registration']);
+            $errors = $this->validator->validate(
+                $this->userBuilder->getUser(),
+                null,
+                ['User', 'registration']
+            );
 
             if (count($errors) > 0) {
                 $this->eventDispatcher->dispatch(
                     SessionMessageEvent::NAME,
-                    new SessionMessageEvent(
-                        'failure',
-                        'user.invalid_credentials'
-                    )
+                    new SessionMessageEvent('failure', 'user.invalid_credentials')
                 );
 
                 return false;
@@ -151,16 +153,13 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
             $this->userRepository->save($this->userBuilder->getUser());
 
             $this->eventDispatcher->dispatch(
-                UserCreatedEvent::NAME,
-                new UserCreatedEvent($this->userBuilder->getUser())
+                UserEvent::USER_CREATED,
+                new UserEvent($this->userBuilder->getUser())
             );
 
             $this->eventDispatcher->dispatch(
                 SessionMessageEvent::NAME,
-                new SessionMessageEvent(
-                    'success',
-                    'user.account_created'
-                )
+                new SessionMessageEvent('success', 'user.account_created')
             );
 
             return true;

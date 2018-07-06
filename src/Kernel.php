@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Infra\GCP\DependencyInjection\Compiler\GCPCompilerPass;
+use App\Infra\GCP\DependencyInjection\GCPExtension;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,7 +24,7 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
 /**
  * Class Kernel
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class Kernel extends BaseKernel
 {
@@ -68,6 +70,9 @@ class Kernel extends BaseKernel
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
     {
         $confDir = dirname(__DIR__).'/config';
+
+        $container->registerExtension(new GCPExtension());
+
         $loader->load($confDir.'/packages/*'.self::CONFIG_EXTS, 'glob');
         if (is_dir($confDir.'/packages/'.$this->environment)) {
             $loader->load($confDir.'/packages/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
@@ -91,5 +96,13 @@ class Kernel extends BaseKernel
             $routes->import($confDir.'/routes/'.$this->environment.'/**/*'.self::CONFIG_EXTS, '/', 'glob');
         }
         $routes->import($confDir.'/routes'.self::CONFIG_EXTS, '/', 'glob');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new GCPCompilerPass());
     }
 }

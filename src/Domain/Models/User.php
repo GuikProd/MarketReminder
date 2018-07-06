@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,17 +17,18 @@ use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 
 /**
  * Class User.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class User implements SecurityUserInterface, UserInterface, \Serializable
 {
     /**
-     * @var int
+     * @var string
      */
     private $id;
 
@@ -67,7 +68,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $creationDate;
 
     /**
-     * @var \DateTime
+     * @var int
      */
     private $validationDate;
 
@@ -87,6 +88,16 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $resetPasswordToken;
 
     /**
+     * @var int
+     */
+    private $askResetPasswordDate;
+
+    /**
+     * @var int
+     */
+    private $resetPasswordDate;
+
+    /**
      * @var ImageInterface
      */
     private $profileImage;
@@ -98,21 +109,20 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
         string $email,
         string $username,
         string $password,
-        callable $passwordEncoder,
         string $validationToken,
         ImageInterface $profileImage = null
     ) {
+        $this->active = false;
+        $this->currentState = ['toValidate'];
         $this->id = Uuid::uuid4();
         $this->creationDate = time();
-        $this->active = false;
-        $this->validated = false;
-        $this->roles[] = 'ROLE_USER';
         $this->email = $email;
-        $this->username = $username;
-        $this->password = $passwordEncoder($password, null);
-        $this->currentState = ['toValidate'];
-        $this->validationToken = $validationToken;
+        $this->password = $password;
         $this->profileImage = $profileImage;
+        $this->roles[] = 'ROLE_USER';
+        $this->username = $username;
+        $this->validated = false;
+        $this->validationToken = $validationToken;
     }
 
     /**
@@ -122,7 +132,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     {
         $this->active = true;
         $this->validated = true;
-        $this->validationToken = '';
+        $this->validationToken = null;
         $this->validationDate = time();
     }
 
@@ -132,12 +142,23 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function askForPasswordReset(UserResetPasswordToken $resetPasswordToken): void
     {
         $this->resetPasswordToken = $resetPasswordToken->getResetPasswordToken();
+        $this->askResetPasswordDate = time();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId(): ? string
+    public function updatePassword(string $newPassword): void
+    {
+        $this->password = $newPassword;
+        $this->resetPasswordDate = time();
+        $this->resetPasswordToken = null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -193,25 +214,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getCreationDate(): ? string
+    public function getCreationDate(): ? \DateTime
     {
-        return $this->creationDate->format('D d-m-Y h:i:s');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getValidationDate(): ? string
-    {
-        return $this->validationDate->format('D d-m-Y h:i:s');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setValidationDate(\DateTime $validationDate): void
-    {
-        $this->validationDate = $validationDate;
+        return \DateTime::createFromFormat('U', (string) $this->creationDate);
     }
 
     /**
@@ -225,22 +230,6 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function setValidated(bool $validated): void
-    {
-        $this->validated = $validated;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setValidationToken(string $validationToken): void
-    {
-        $this->validationToken = $validationToken;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getValidationToken(): ? string
     {
         return $this->validationToken;
@@ -249,9 +238,33 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
+    public function getValidationDate(): ?int
+    {
+        return $this->validationDate;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getResetPasswordToken(): ? string
     {
         return $this->resetPasswordToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAskResetPasswordDate(): ? int
+    {
+        return $this->askResetPasswordDate;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResetPasswordDate():? int
+    {
+        return $this->resetPasswordDate;
     }
 
     /**

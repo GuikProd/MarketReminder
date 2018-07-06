@@ -1,12 +1,29 @@
 parameters:
     locale: 'fr'
-    accepted_locales: 'fr|en'
+    accepted_locales: '%env(ACCEPTED_LOCALES)%'
+    accepted_channels: '%env(ACCEPTED_CHANNELS)%'
     kernel.docker_dir: "%kernel.project_dir%/docker/config"
     kernel.images_dir: "%kernel.project_dir%/public/images/profiles"
-    cloud.storage_credentials: "%kernel.project_dir%/config/credentials/google/bucket"
-    cloud.vision_credentials: "%kernel.project_dir%/config/credentials/google/vision"
-    cloud.storage.bucket_name: "%env(GOOGLE_BUCKET_NAME)%"
+
+    ## Cloud Storage
+    cloud.credentials_filename: "credentials.json"
+    cloud.credentials_folder: '%kernel.project_dir%/config/credentials/google'
     cloud.storage.public_url: "%env(GOOGLE_STORAGE_URL)%%env(GOOGLE_BUCKET_NAME)%/"
+    cloud.storage.bucket_name: "%env(GOOGLE_BUCKET_NAME)%"
+
+    ## Cloud Vision
+    forbidden_labels:
+        - 'drugs'
+        - 'gun'
+        - 'sex'
+        - 'money'
+
+    ## Redis
+    redis.dsn: '%env(REDIS_URL)%'
+    redis.namespace_dev: "dev"
+    redis.namespace_prod: "prod"
+
+    ## SendGrid
     email.sender_address: "%env(SENDER_EMAIL_ADDRESS)%"
 
 services:
@@ -15,64 +32,32 @@ services:
         autoconfigure: true
         public: false
         bind:
+            $acceptedChannels: "%accepted_channels%"
+            $acceptedLocales: "%accepted_locales%"
             $defaultLocale: "%locale%"
-            $bucketCredentialsFolder: "%cloud.storage_credentials%"
-            $visionCredentialsFolder: "%cloud.vision_credentials%"
             $filePath: "%kernel.images_dir%"
+            $emailSender: "%email.sender_address%"
+
+            ## Redis
+            $redisDSN: '%redis.dsn%'
+            $namespace: '%env(APP_ENV)%'
+
+            ## Cloud Storage
             $bucketName: "%cloud.storage.bucket_name%"
             $googleStoragePublicUrl: "%cloud.storage.public_url%"
-            $emailSender: "%email.sender_address%"
+
+            ## Cloud Translation
+            $credentialsFilename: "%cloud.credentials_filename%"
+            $credentialsFolder: "%cloud.credentials_folder%"
+            $translationsFolder: "%translator.default_path%"
+
+            # Cloud Vision
+            $forbiddenLabels: '%forbidden_labels%'
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Domain/Models,Domain/UseCase,Migrations,Repository,Kernel.php}'
+        exclude: '../src/{Domain/Models,Domain/UseCase,Infra/GCPMigrations,Repository,Kernel.php}'
 
     App\UI\Action\:
         resource: '../src/UI/Action'
         tags: ['controller.service_arguments']
-#
-#    graphql.image_resolver:
-#        class: App\Resolvers\ImageResolver
-#        arguments:
-#            - '@doctrine.orm.entity_manager'
-#        tags:
-#            - { name: overblog_graphql.resolver, alias: 'image_resolver', method: getImage }
-#
-#    graphql.user_resolver:
-#        class: App\Resolvers\UserResolver
-#        arguments:
-#            - '@doctrine.orm.entity_manager'
-#        tags:
-#            - { name: overblog_graphql.resolver, alias: 'user_resolver', method: getUser }
-#
-#    graphql.stock_resolver:
-#        class: App\Resolvers\StockResolver
-#        arguments:
-#            - '@doctrine.orm.entity_manager'
-#        tags:
-#            - { name: overblog_graphql.resolver, alias: 'stock_resolver', method: getStock }
-#
-#    graphql.products_resolver:
-#        class: App\Resolvers\ProductsResolver
-#        arguments:
-#            - '@doctrine.orm.entity_manager'
-#        tags:
-#            - { name: overblog_graphql.resolver, alias: 'products_resolver', method: getProduct }
-#
-#    graphql.user_mutator:
-#        class: App\Mutators\UserMutator
-#        tags:
-#            - { name: overblog_graphql.mutation, method: register }
-#            - { name: overblog_graphql.mutation, method: login }
-#            - { name: overblog_graphql.mutation, method: forgotPassword }
-#            - { name: overblog_graphql.mutation, method: dropUser }
-#
-#    graphql.image_mutator:
-#        class: App\Mutators\ImageMutator
-#        tags:
-#            - { name: overblog_graphql.mutation, alias: 'image_creation', method: createImage }
-#
-#    graphql.stock_mutator:
-#        class: App\Mutators\StockMutator
-#        tags:
-#            - { name: overblog_graphql.mutation, alias: 'stock_creation', method: createStock }

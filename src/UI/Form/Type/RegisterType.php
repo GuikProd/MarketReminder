@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,7 +27,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class RegisterType.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class RegisterType extends AbstractType
 {
@@ -40,23 +40,27 @@ class RegisterType extends AbstractType
             ->add('username', TextType::class, [
                 'attr' => [
                     'placeholder' => 'security.registration_username',
-                    'aria-label' => 'security.registration_username'
-                ]
+                    'aria-label' => 'security.registration_username',
+                ],
+                'help' => 'register.username_help'
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
                     'placeholder' => 'security.registration_email',
                     'aria-label' => 'security.registration_email'
-                ]
+                ],
+                'help' => 'register.email_help'
             ])
             ->add('password', PasswordType::class, [
                 'attr' => [
                     'placeholder' => 'security.registration_password',
                     'aria-label' => 'security.registration_password'
-                ]
+                ],
+                'help' => 'register.password_help'
             ])
             ->add('profileImage', FileType::class, [
-                'required' => false
+                'required' => false,
+                'help' => 'register.profileImage_help'
             ])
         ;
     }

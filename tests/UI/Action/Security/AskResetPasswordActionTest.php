@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace App\Tests\UI\Action\Security;
 
 use App\UI\Action\Security\AskResetPasswordAction;
+use App\UI\Action\Security\Interfaces\AskResetPasswordActionInterface;
 use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\AskResetPasswordResponder;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -30,35 +31,87 @@ use Twig\Environment;
 /**
  * Class AskResetPasswordActionTest.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class AskResetPasswordActionTest extends TestCase
 {
+    /**
+     * @var AskResetPasswordTypeHandlerInterface
+     */
+    private $askResetPasswordTypeHandler;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
+     * @var FormView
+     */
+    private $formView;
+
+    /**
+     * @var PresenterInterface
+     */
+    private $presenter;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->presenter = $this->createMock(PresenterInterface::class);
+
+        $this->askResetPasswordTypeHandler = $this->createMock(AskResetPasswordTypeHandlerInterface::class);
+        $this->formFactory = $this->createMock(FormFactoryInterface::class);
+        $this->formView = $this->createMock(FormView::class);
+    }
+
+    public function testItImplements()
+    {
+        $formInterfaceMock = $this->createMock(FormInterface::class);
+
+        $this->formFactory->method('create')->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('handleRequest')->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('createView')->willReturn($this->formView);
+
+        $askResetPasswordAction = new AskResetPasswordAction(
+            $this->formFactory,
+            $this->askResetPasswordTypeHandler
+        );
+
+        static::assertInstanceOf(
+            AskResetPasswordActionInterface::class,
+            $askResetPasswordAction
+        );
+    }
+
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function testWrongDataProcess()
     {
-        $askResetPasswordTypeHandlerMock = $this->createMock(AskResetPasswordTypeHandlerInterface::class);
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $formViewMock = $this->createMock(FormView::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
-        $formFactoryMock = $this->createMock(FormFactoryInterface::class);
         $requestMock = $this->createMock(Request::class);
         $twigMock = $this->createMock(Environment::class);
         $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
-        $formFactoryMock->method('create')
-                        ->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('handleRequest')
-                          ->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('createView')
-                          ->willReturn($formViewMock);
+        $this->formFactory->method('create')->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('handleRequest')->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('createView')->willReturn($this->formView);
 
         $askResetPasswordAction = new AskResetPasswordAction(
-            $formFactoryMock,
-            $entityManagerMock,
-            $askResetPasswordTypeHandlerMock
+            $this->formFactory,
+            $this->askResetPasswordTypeHandler
         );
 
-        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
+        $askResetPasswordResponder = new AskResetPasswordResponder(
+            $twigMock,
+            $this->presenter,
+            $urlGeneratorMock
+        );
 
         static::assertInstanceOf(
             Response::class,
@@ -66,33 +119,34 @@ class AskResetPasswordActionTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function testRightProcess()
     {
-        $askResetPasswordTypeHandlerMock = $this->createMock(AskResetPasswordTypeHandlerInterface::class);
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $formViewMock = $this->createMock(FormView::class);
         $formInterfaceMock = $this->createMock(FormInterface::class);
-        $formFactoryMock = $this->createMock(FormFactoryInterface::class);
         $requestMock = $this->createMock(Request::class);
         $twigMock = $this->createMock(Environment::class);
         $urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
-        $askResetPasswordTypeHandlerMock->method('handle')->willReturn(true);
-        $formFactoryMock->method('create')
-                        ->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('handleRequest')
-                          ->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('createView')
-                          ->willReturn($formViewMock);
+        $this->askResetPasswordTypeHandler->method('handle')->willReturn(true);
+        $this->formFactory->method('create')->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('handleRequest')->willReturn($formInterfaceMock);
+        $formInterfaceMock->method('createView')->willReturn($this->formView);
         $urlGeneratorMock->method('generate')->willReturn('/fr/');
 
         $askResetPasswordAction = new AskResetPasswordAction(
-            $formFactoryMock,
-            $entityManagerMock,
-            $askResetPasswordTypeHandlerMock
+            $this->formFactory,
+            $this->askResetPasswordTypeHandler
         );
 
-        $askResetPasswordResponder = new AskResetPasswordResponder($twigMock, $urlGeneratorMock);
+        $askResetPasswordResponder = new AskResetPasswordResponder(
+            $twigMock,
+            $this->presenter,
+            $urlGeneratorMock
+        );
 
         static::assertInstanceOf(
             RedirectResponse::class,

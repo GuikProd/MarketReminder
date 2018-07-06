@@ -1,6 +1,38 @@
 {
   "name": "MarketReminder - Inventory Manager",
-  "short_name": "MarketReminder",
+  "short_name": "MKReminder",
+  "icons": [
+    {
+      "src": "/pwa/_icons/48.png",
+      "types": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/pwa/_icons/72.png",
+      "types": "image/png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/pwa/_icons/96.png",
+      "types": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/pwa/_icons/144.png",
+      "types": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/pwa/_icons/168.png",
+      "types": "image/png",
+      "sizes": "168x168"
+    },
+    {
+      "src": "/pwa/_icons/192.png",
+      "types": "image/png",
+      "sizes": "192x192"
+    }
+  ],
   "start_url": "/",
   "scope": ".",
   "display": "standalone",

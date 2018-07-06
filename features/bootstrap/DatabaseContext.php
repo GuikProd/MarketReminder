@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use App\Domain\Models\User;
 use App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO;
+use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -23,7 +24,7 @@ use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 /**
  * Class DatabaseContext.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class DatabaseContext implements Context
 {
@@ -80,6 +81,7 @@ class DatabaseContext implements Context
     public function iLoadFollowingUsers(TableNode $users)
     {
         $encoder = new BCryptPasswordEncoder(13);
+        $callable = Closure::fromCallable([$encoder, 'encodePassword']);
 
         foreach ($users->getHash() as $hash) {
             $userDTO = new UserRegistrationDTO(
@@ -92,13 +94,20 @@ class DatabaseContext implements Context
             $user = new User(
                 $userDTO->email,
                 $userDTO->username,
-                $hash['plainPassword'],
-                Closure::fromCallable([$encoder, 'encodePassword']),
+                $callable($hash['plainPassword'], null),
                 $userDTO->validationToken
             );
 
             if ($hash['validated']) {
                 $user->validate();
+            }
+
+            if ($hash['resetPasswordToken']) {
+                $userResetPasswordToken = new UserResetPasswordToken(
+                    $hash['resetPasswordToken']
+                );
+
+                $user->askForPasswordReset($userResetPasswordToken);
             }
 
             $this->doctrine->getManager()->persist($user);

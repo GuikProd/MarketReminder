@@ -42,10 +42,10 @@ blackfire:
             sessions:
                 default:
                     symfony2: ~
-fr:
+e2e:
     suites:
         core:
-            paths: ['%paths.base%/features/fr']
+            paths: ['%paths.base%/features/e2e']
             contexts:
                 - DatabaseContext:
                     doctrine: '@doctrine'
@@ -64,24 +64,9 @@ fr:
                 default:
                     symfony2: ~
 
-en:
+core:
     suites:
         core:
-            paths: ['%paths.base%/features/en']
-            contexts:
-                - DatabaseContext:
-                    doctrine: '@doctrine'
-                    kernel: '@kernel'
-                - FeatureContext:
-                    kernel: '@kernel'
-    extensions:
-        Behat\Symfony2Extension:
-            kernel:
-                bootstrap: features/bootstrap/bootstrap.php
-                class: App\Kernel
-        Behat\MinkExtension:
-            files_path: '%paths.base%/features/assets'
-            goutte: ~
-            sessions:
-                default:
-                    symfony2: ~
+             paths: ['%paths.base%/features/core']
+             contexts:
+                 - CloudTranslationBridgeContext

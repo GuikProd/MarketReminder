@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the MarketReminder project.
  *
- * (c) Guillaume Loulier <contact@guillaumeloulier.fr>
+ * (c) Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,16 +15,17 @@ namespace App\Domain\Models;
 
 use App\Domain\Models\Interfaces\ImageInterface;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class Interfaces.
  *
- * @author Guillaume Loulier <contact@guillaumeloulier.fr>
+ * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class Image implements ImageInterface
 {
     /**
-     * @var int
+     * @var UuidInterface
      */
     private $id;
 
@@ -71,7 +72,7 @@ class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function getId(): int
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -81,7 +82,7 @@ class Image implements ImageInterface
      */
     public function getCreationDate(): \DateTime
     {
-        return \DateTime::createFromFormat('U', $this->creationDate);
+        return \DateTime::createFromFormat('U', (string) $this->creationDate);
     }
 
     /**
@@ -89,7 +90,7 @@ class Image implements ImageInterface
      */
     public function getModificationDate():? \DateTime
     {
-        return \DateTime::createFromFormat('U', $this->modificationDate);
+        return \DateTime::createFromFormat('U', (string) $this->modificationDate) ?: null;
     }
 
     /**
