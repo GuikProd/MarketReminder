@@ -108,6 +108,8 @@ behat_core:
         - php $CI_PROJECT_DIR/bin/console app:translation:warm session en
         - php $CI_PROJECT_DIR/bin/console app:translation:warm form fr
         - php $CI_PROJECT_DIR/bin/console app:translation:warm form en
+        - php $CI_PROJECT_DIR/bin/console app:translation:warm mail fr
+        - php $CI_PROJECT_DIR/bin/console app:translation:warm mail en
         - php $CI_PROJECT_DIR/vendor/bin/behat --profile core
 
 behat_e2e:
@@ -148,6 +150,8 @@ behat_e2e:
         - php $CI_PROJECT_DIR/bin/console app:translation:warm session en
         - php $CI_PROJECT_DIR/bin/console app:translation:warm form fr
         - php $CI_PROJECT_DIR/bin/console app:translation:warm form en
+        - php $CI_PROJECT_DIR/bin/console app:translation:warm mail fr
+        - php $CI_PROJECT_DIR/bin/console app:translation:warm mail en
         - php $CI_PROJECT_DIR/vendor/bin/behat --profile e2e
 
 docker_images:

@@ -109,6 +109,10 @@ phpunit-e2e: tests
 	    $(ENV_PHP) ./bin/console app:translation:dump validators en --env=test
 	    $(ENV_PHP) ./bin/console app:translation:dump session fr --env=test
 	    $(ENV_PHP) ./bin/console app:translation:dump session en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm form fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm form en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en --env=test
 	    $(ENV_PHP) ./bin/console app:translation:warm messages fr --env=test
 	    $(ENV_PHP) ./bin/console app:translation:warm messages en --env=test
 	    $(ENV_PHP) ./bin/console app:translation:warm validators fr --env=test
@@ -117,6 +121,8 @@ phpunit-e2e: tests
 	    $(ENV_PHP) ./bin/console app:translation:warm session en --env=test
 	    $(ENV_PHP) ./bin/console app:translation:warm form fr --env=test
 	    $(ENV_PHP) ./bin/console app:translation:warm form en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en --env=test
 	    $(ENV_PHP) ./bin/phpunit --group e2e
 
 phpunit-blackfire: tests
@@ -135,6 +141,8 @@ behat: features
 	    $(ENV_PHP) ./bin/console app:translation:dump validators en
 	    $(ENV_PHP) ./bin/console app:translation:dump session fr
 	    $(ENV_PHP) ./bin/console app:translation:dump session en
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en
 	    $(ENV_PHP) ./bin/console app:translation:warm messages fr
 	    $(ENV_PHP) ./bin/console app:translation:warm messages en
 	    $(ENV_PHP) ./bin/console app:translation:warm validators fr
@@ -143,6 +151,8 @@ behat: features
 	    $(ENV_PHP) ./bin/console app:translation:warm session en
 	    $(ENV_PHP) ./bin/console app:translation:warm form fr
 	    $(ENV_PHP) ./bin/console app:translation:warm form en
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands
@@ -183,8 +193,8 @@ profile_php: ## Allow to profile a page using Blackfire and PHP environment
 	    $(ENV_PHP) ./bin/console app:translation:dump validators en
 	    $(ENV_PHP) ./bin/console app:translation:dump session fr
 	    $(ENV_PHP) ./bin/console app:translation:dump session en
-	    $(ENV_PHP) ./bin/console app:translation:dump form fr
-	    $(ENV_PHP) ./bin/console app:translation:dump form en
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en
 	    $(ENV_PHP) ./bin/console app:translation:warm messages fr
 	    $(ENV_PHP) ./bin/console app:translation:warm messages en
 	    $(ENV_PHP) ./bin/console app:translation:warm validators fr
@@ -193,6 +203,8 @@ profile_php: ## Allow to profile a page using Blackfire and PHP environment
 	    $(ENV_PHP) ./bin/console app:translation:warm session en
 	    $(ENV_PHP) ./bin/console app:translation:warm form fr
 	    $(ENV_PHP) ./bin/console app:translation:warm form en
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
 
 profile_varnish: ## Allow to profile a page using Blackfire and Varnish environment
@@ -205,14 +217,16 @@ profile_varnish: ## Allow to profile a page using Blackfire and Varnish environm
 	    $(ENV_PHP) ./bin/console app:translation:dump validators en
 	    $(ENV_PHP) ./bin/console app:translation:dump session fr
 	    $(ENV_PHP) ./bin/console app:translation:dump session en
-	    $(ENV_PHP) ./bin/console app:translation:dump form fr
-	    $(ENV_PHP) ./bin/console app:translation:dump form en
-	    $(ENV_PHP) ./bin/console app:translation-warm messages fr
-	    $(ENV_PHP) ./bin/console app:translation-warm messages en
-	    $(ENV_PHP) ./bin/console app:translation-warm validators fr
-	    $(ENV_PHP) ./bin/console app:translation-warm validators en
-	    $(ENV_PHP) ./bin/console app:translation-warm session fr
-	    $(ENV_PHP) ./bin/console app:translation-warm session en
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en
+	    $(ENV_PHP) ./bin/console app:translation:warm messages fr
+	    $(ENV_PHP) ./bin/console app:translation:warm messages en
+	    $(ENV_PHP) ./bin/console app:translation:warm validators fr
+	    $(ENV_PHP) ./bin/console app:translation:warm validators en
+	    $(ENV_PHP) ./bin/console app:translation:warm session fr
+	    $(ENV_PHP) ./bin/console app:translation:warm session en
 	    $(ENV_PHP) ./bin/console app:translation:warm form fr
 	    $(ENV_PHP) ./bin/console app:translation:warm form en
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)
