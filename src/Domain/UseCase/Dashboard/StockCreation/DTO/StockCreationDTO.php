@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Domain\UseCase\Dashboard\StockCreation\DTO;
 
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
+use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockItemCreationDTOInterface;
 
 /**
  * Class StockCreationDTO.
@@ -38,15 +39,22 @@ final class StockCreationDTO implements StockCreationDTOInterface
     public $tags = [];
 
     /**
+     * @var StockItemCreationDTOInterface[]
+     */
+    public $stockItems = [];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
         string $title,
         string $status,
-        array $tags = []
+        array $tags = [],
+        array $stockItems = []
     ) {
         $this->title = $title;
         $this->status = $status;
         $this->tags = $tags;
+        $this->stockItems = $stockItems;
     }
 }

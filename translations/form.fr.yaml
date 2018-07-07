@@ -2,3 +2,4 @@ register.username_help: "Le pseudonyme doit être compris entre 3 et 25 caractè
 register.email_help: "L'email doit être compris entre 10 et 50 caractères et ne peut être vide !"
 register.password_help: "Le mot de passe doit être compris entre 5 et 25 caractères et ne peut être vide !"
 register.profileImage_help: "L'image de profil ne doit pas peser plus de 2Mo, seuls les formats suivants sont acceptés: jpeg/png/jpg "
+stock.creation.item_type: "Nourriture"

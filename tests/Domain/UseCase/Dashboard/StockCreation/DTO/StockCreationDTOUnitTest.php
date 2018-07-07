@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Domain\UseCase\Dashboard\StockCreation\DTO;
 
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
+use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockItemCreationDTOInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockCreationDTO;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +27,7 @@ final class StockCreationDTOUnitTest extends TestCase
 {
     public function testItImplements()
     {
-        $dto = new StockCreationDTO('', '', []);
+        $dto = new StockCreationDTO('', '', [], []);
 
         static::assertInstanceOf(
             StockCreationDTOInterface::class,
@@ -36,9 +37,12 @@ final class StockCreationDTOUnitTest extends TestCase
 
     public function testItReceiveData()
     {
-        $dto = new StockCreationDTO('', '', []);
+        $stockItems[] = $this->createMock(StockItemCreationDTOInterface::class);
+
+        $dto = new StockCreationDTO('', '', [], $stockItems);
 
         static::assertSame('', $dto->title);
         static::assertSame('', $dto->status);
+        static::assertCount(1, \count($dto->stockItems));
     }
 }

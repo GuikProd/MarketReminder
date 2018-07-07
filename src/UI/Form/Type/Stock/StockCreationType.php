@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace App\UI\Form\Type\Stock;
 
+use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockCreationDTO;
 use App\UI\Form\DataTransformer\Interfaces\StockCreationTagsTransformerInterface;
 use App\UI\Form\Type\Stock\Interfaces\StockCreationTypeInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -62,6 +64,11 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
             ->add('tags', TextType::class, [
                 'help' => 'stock.creation.tags'
             ])
+            ->add('stockItems', CollectionType::class, [
+                'entry_type' => StockItemCreationType::class,
+                'allow_add' => true,
+                'allow_delete' => true
+            ])
         ;
 
         $builder->get('tags')->addViewTransformer($this->tagsTransformer);
@@ -73,11 +80,13 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'data_class' => StockCreationDTOInterface::class,
             'empty_data' => function (FormInterface $form) {
                 return new StockCreationDTO(
-                    $form->get('title')->getData() ?? '',
-                    $form->get('status')->getData() ?? '',
-                    $form->get('tags')->getData()
+                    $form->get('title')->getData(),
+                    $form->get('status')->getData(),
+                    $form->get('tags')->getData(),
+                    $form->get('stockItems')->getData()
                 );
             }
         ]);
