@@ -43,6 +43,6 @@ final class StockCreationDTOUnitTest extends TestCase
 
         static::assertSame('', $dto->title);
         static::assertSame('', $dto->status);
-        static::assertCount(1, \count($dto->stockItems));
+        static::assertCount(1, $dto->stockItems);
     }
 }
