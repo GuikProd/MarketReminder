@@ -62,7 +62,7 @@ translation-dump: translations
 	    $(ENV_PHP) ./bin/console app:translation:dump $(CHANNEL) $(LOCALE) --env=$(ENV)
 
 container: ## Allow to debug the container
-	    $(ENV_PHP) ./bin/console debug:container --show-private
+	    $(ENV_PHP) ./bin/console debug:container --show-private $(SERVICE)
 
 event:
 	    $(ENV_PHP) ./bin/console debug:event-dispatcher

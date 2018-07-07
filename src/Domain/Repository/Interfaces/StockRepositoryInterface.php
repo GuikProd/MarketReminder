@@ -11,13 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\UI\Form\Type\Stock\Interfaces;
+namespace App\Domain\Repository\Interfaces;
 
 /**
- * Interface StockCreationTypeInterface.
+ * Interface StockRepositoryInterface.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-interface StockCreationTypeInterface
+interface StockRepositoryInterface
 {
+
 }

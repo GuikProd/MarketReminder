@@ -13,11 +13,19 @@ declare(strict_types=1);
 
 namespace App\UI\Form\Type\Stock\Interfaces;
 
+use App\UI\Form\DataTransformer\Interfaces\StockCreationTagsTransformerInterface;
+
 /**
- * Interface StockCreationTypeInterface.
+ * Interface StockTagsTypeInterface.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-interface StockCreationTypeInterface
+interface StockTagsTypeInterface
 {
+    /**
+     * StockTagsTypeInterface constructor.
+     *
+     * @param StockCreationTagsTransformerInterface $tagsTransformer
+     */
+    public function __construct(StockCreationTagsTransformerInterface $tagsTransformer);
 }

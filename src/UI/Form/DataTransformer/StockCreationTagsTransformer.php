@@ -29,7 +29,7 @@ final class StockCreationTagsTransformer implements StockCreationTagsTransformer
      */
     public function transform($value)
     {
-        if (\is_array($value) && \count(array_values($value)) < 1) {
+        if (\is_array($value) && \count(array_values($value)) > 1) {
             return implode(", ", $value);
         }
 

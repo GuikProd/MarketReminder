@@ -11,13 +11,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\UI\Form\Type\Stock\Interfaces;
+namespace App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces;
 
 /**
- * Interface StockCreationTypeInterface.
+ * Interface StockTagsDTOInterface.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-interface StockCreationTypeInterface
+interface StockTagsDTOInterface
 {
+    /**
+     * StockTagsDTOInterface constructor.
+     *
+     * @param array $tags
+     */
+    public function __construct(array $tags = []);
 }

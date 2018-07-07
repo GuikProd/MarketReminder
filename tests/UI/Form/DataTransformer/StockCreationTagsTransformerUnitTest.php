@@ -38,4 +38,24 @@ final class StockCreationTagsTransformerUnitTest extends TestCase
             $dataTransformer
         );
     }
+
+    public function testItTransformData()
+    {
+        $dataTransformer = new StockCreationTagsTransformer();
+
+        static::assertSame(
+            'test, toto, content',
+            $dataTransformer->transform(['test', 'toto', 'content'])
+        );
+    }
+
+    public function testItReverseTransformData()
+    {
+        $dataTransformer = new StockCreationTagsTransformer();
+
+        static::assertSame(
+            ['test', 'toto', 'content'],
+            $dataTransformer->reverseTransform('test, toto, content')
+        );
+    }
 }

@@ -20,5 +20,4 @@ namespace App\UI\Form\DataTransformer\Interfaces;
  */
 interface StockCreationTagsTransformerInterface
 {
-
 }

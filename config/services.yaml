@@ -61,3 +61,7 @@ services:
     App\UI\Action\:
         resource: '../src/UI/Action'
         tags: ['controller.service_arguments']
+
+    App\UI\Form\Extension\StockTagsTypeExtension:
+        tags:
+            - { name: form.type_extension, extended_type: App\UI\Form\Type\StockTagsType }
