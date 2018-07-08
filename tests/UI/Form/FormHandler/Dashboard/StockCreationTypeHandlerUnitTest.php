@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Workflow\Registry;
 
 /**
  * Class StockCreationTypeHandlerUnitTest.
@@ -32,6 +33,11 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
      * @var FormInterface
      */
     private $formInterface = null;
+
+    /**
+     * @var Registry|null
+     */
+    private $workflowRegistry = null;
 
     /**
      * @var StockRepositoryInterface|null
@@ -54,6 +60,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
     protected function setUp()
     {
         $this->formInterface = $this->createMock(FormInterface::class);
+        $this->workflowRegistry = $this->createMock(Registry::class);
         $this->stockRepository = $this->createMock(StockRepositoryInterface::class);
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->validator = $this->createMock(ValidatorInterface::class);
@@ -62,6 +69,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
     public function testItImplements()
     {
         $handler = new StockCreationTypeHandler(
+            $this->workflowRegistry,
             $this->stockRepository,
             $this->tokenStorage,
             $this->validator
@@ -76,6 +84,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
     public function testItRefuseToHandle()
     {
         $handler = new StockCreationTypeHandler(
+            $this->workflowRegistry,
             $this->stockRepository,
             $this->tokenStorage,
             $this->validator
@@ -90,6 +99,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
     public function testItHandle()
     {
         $handler = new StockCreationTypeHandler(
+            $this->workflowRegistry,
             $this->stockRepository,
             $this->tokenStorage,
             $this->validator

@@ -17,6 +17,7 @@ use App\Domain\Repository\Interfaces\StockRepositoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Workflow\Registry;
 
 /**
  * Interface StockCreationTypeHandlerInterface.
@@ -28,11 +29,13 @@ interface StockCreationTypeHandlerInterface
     /**
      * StockCreationTypeHandlerInterface constructor.
      *
+     * @param Registry $workflowRegistry
      * @param StockRepositoryInterface $stockRepository
      * @param TokenStorageInterface $tokenStorage
      * @param ValidatorInterface $validator
      */
     public function __construct(
+        Registry $workflowRegistry,
         StockRepositoryInterface $stockRepository,
         TokenStorageInterface $tokenStorage,
         ValidatorInterface $validator

@@ -23,3 +23,26 @@ framework:
                 active:
                     from: validated
                     to:   active
+        stock_status:
+            type: "workflow"
+            marking_store:
+                type: "multiple_state"
+                arguments:
+                    - 'status'
+            supports:
+                - App\Domain\Models\Stock
+            places:
+                - created
+                - used
+                - paused
+                - archived
+            transitions:
+                used:
+                    from: created
+                    to: used
+                paused:
+                    from: used
+                    to: paused
+                archived:
+                    from: paused
+                    to: archived
