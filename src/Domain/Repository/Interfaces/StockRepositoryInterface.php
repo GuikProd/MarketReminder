@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Repository\Interfaces;
 
+use App\Domain\Models\Interfaces\StockInterface;
+
 /**
  * Interface StockRepositoryInterface.
  *
@@ -20,5 +22,8 @@ namespace App\Domain\Repository\Interfaces;
  */
 interface StockRepositoryInterface
 {
-
+    /**
+     * @param StockInterface $stock
+     */
+    public function save(StockInterface $stock): void;
 }

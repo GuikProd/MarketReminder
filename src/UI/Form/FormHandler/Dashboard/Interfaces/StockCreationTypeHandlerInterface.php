@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\UI\Form\FormHandler\Dashboard\Interfaces;
 
+use App\Domain\Builder\Interfaces\StockBuilderInterface;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -29,13 +31,17 @@ interface StockCreationTypeHandlerInterface
     /**
      * StockCreationTypeHandlerInterface constructor.
      *
+     * @param EventDispatcherInterface $eventDispatcher
      * @param Registry $workflowRegistry
+     * @param StockBuilderInterface $stockBuilder
      * @param StockRepositoryInterface $stockRepository
      * @param TokenStorageInterface $tokenStorage
      * @param ValidatorInterface $validator
      */
     public function __construct(
+        EventDispatcherInterface $eventDispatcher,
         Registry $workflowRegistry,
+        StockBuilderInterface $stockBuilder,
         StockRepositoryInterface $stockRepository,
         TokenStorageInterface $tokenStorage,
         ValidatorInterface $validator

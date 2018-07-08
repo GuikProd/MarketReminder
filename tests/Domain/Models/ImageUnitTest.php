@@ -19,11 +19,11 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\UuidInterface;
 
 /**
- * Class ImageTest.
+ * Class ImageUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class ImageTest extends TestCase
+final class ImageUnitTest extends TestCase
 {
     public function testItImplements()
     {

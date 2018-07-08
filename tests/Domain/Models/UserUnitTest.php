@@ -20,11 +20,11 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\UuidInterface;
 
 /**
- * Class UserTest.
+ * Class UserUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class UserTest extends TestCase
+final class UserUnitTest extends TestCase
 {
     public function testItImplementsAndReturnData()
     {

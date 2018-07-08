@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Models;
 
+use App\Domain\Models\Interfaces\StockInterface;
+use App\Domain\Models\Interfaces\UserInterface;
+use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -21,7 +24,7 @@ use Doctrine\Common\Collections\Collection;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class Stock
+class Stock implements StockInterface
 {
     /**
      * @var int
@@ -54,10 +57,12 @@ class Stock
     private $products;
 
     /**
-     * Stock constructor.
+     * {@inheritdoc}
      */
-    public function __construct()
-    {
+    public function __construct(
+        StockCreationDTOInterface $stockCreationDTO,
+        UserInterface $owner
+    ) {
         $this->creationDate = new \DateTime();
         $this->products = new ArrayCollection();
     }

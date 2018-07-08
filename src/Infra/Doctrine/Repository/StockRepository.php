@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infra\Doctrine\Repository;
 
+use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Stock;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -31,5 +32,14 @@ final class StockRepository extends ServiceEntityRepository implements StockRepo
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Stock::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(StockInterface $stock): void
+    {
+        $this->_em->persist($stock);
+        $this->_em->flush();
     }
 }
