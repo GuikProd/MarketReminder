@@ -13,49 +13,39 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\Models;
 
-use App\Domain\Models\Interfaces\StockInterface;
-use App\Domain\Models\Interfaces\UserInterface;
-use App\Domain\Models\Stock;
+use App\Domain\Models\Interfaces\StockItemsInterface;
+use App\Domain\Models\StockItems;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
-use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockCreationDTO;
+use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockItemCreationDTOInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class StockUnitTest.
+ * Class StockItemsUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class StockUnitTest extends TestCase
+final class StockItemsUnitTest extends TestCase
 {
     /**
      * @var StockCreationDTOInterface|null
      */
-    private $stockCreationDTO = null;
-
-    /**
-     * @var UserInterface|null
-     */
-    private $stockOwner = null;
+    private $stockItemDTO = null;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->stockCreationDTO = new StockCreationDTO('', '', [], []);
-        $this->stockOwner = $this->createMock(UserInterface::class);
+        $this->stockItemDTO = $this->createMock(StockItemCreationDTOInterface::class);
     }
 
     public function testItImplements()
     {
-        $stock = new Stock(
-            $this->stockCreationDTO,
-            $this->stockOwner
-        );
+        $items = new StockItems($this->stockItemDTO);
 
         static::assertInstanceOf(
-            StockInterface::class,
-            $stock
+            StockItemsInterface::class,
+            $items
         );
     }
 }

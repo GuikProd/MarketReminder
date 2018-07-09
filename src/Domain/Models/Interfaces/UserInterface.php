@@ -44,6 +44,11 @@ interface UserInterface
     );
 
     /**
+     * Allow to mark the user as validated once he has validate his account via a token.
+     */
+    public function validate(): void;
+
+    /**
      * Allow to store the reset password token once it's generated.
      *
      * @param UserResetPasswordToken $userPasswordReset
@@ -58,9 +63,18 @@ interface UserInterface
     public function updatePassword(string $newPassword): void;
 
     /**
-     * Allow to mark the user as validated once he has validate his account via a token.
+     * Allow the user to change his main profile image.
+     *
+     * {@internal The old one is deleted from the bucket}
+     *
+     * @param ImageInterface $profileImage
      */
-    public function validate(): void;
+    public function changeProfileImage(ImageInterface $profileImage): void;
+
+    /**
+     * @param StockInterface $stock
+     */
+    public function addStock(StockInterface $stock): void;
 
     /**
      * @return UuidInterface
@@ -133,12 +147,12 @@ interface UserInterface
     public function getResetPasswordDate():? int;
 
     /**
-     * @param ImageInterface $profileImage
-     */
-    public function setProfileImage(ImageInterface $profileImage): void;
-
-    /**
      * @return null|ImageInterface
      */
-    public function getProfileImage():? ImageInterface;
+    public function getProfileImage(): ?ImageInterface;
+
+    /**
+     * @return array
+     */
+    public function getStocks(): array;
 }

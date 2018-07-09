@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Domain\Models\Interfaces;
 
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Interface StockInterface.
@@ -32,4 +33,24 @@ interface StockInterface
         StockCreationDTOInterface $stockCreationDTO,
         UserInterface $owner
     );
+
+    /**
+     * @return UuidInterface
+     */
+    public function getId(): UuidInterface;
+
+    /**
+     * @return array
+     */
+    public function getStatus(): array;
+
+    /**
+     * @param array $items
+     */
+    public function addItems(array $items): void;
+
+    /**
+     * @return array
+     */
+    public function getItems(): array;
 }

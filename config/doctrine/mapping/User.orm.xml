@@ -25,6 +25,8 @@
             </cascade>
         </one-to-one>
 
+        <one-to-many field="stocks" target-entity="App\Domain\Models\Stock" mapped-by="owner" />
+
         <indexes>
             <index columns="username" name="user_username" />
             <index columns="email" name="user_email" />

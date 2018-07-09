@@ -26,6 +26,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Workflow\Registry;
+use Symfony\Component\Workflow\Workflow;
 
 /**
  * Class StockCreationTypeHandlerUnitTest.
@@ -122,11 +123,13 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
         $tokenMock = $this->createMock(TokenInterface::class);
         $userMock = $this->createMock(UserInterface::class);
         $dtoMock = $this->createMock(StockCreationDTOInterface::class);
+        $workflowMock = $this->createMock(Workflow::class);
 
         $this->formInterface->method('getData')->willReturn($dtoMock);
         $this->tokenStorage->method('getToken')->willReturn($tokenMock);
         $tokenMock->method('getUser')->willReturn($userMock);
         $this->validator->method('validate')->willReturn([]);
+        $this->workflowRegistry->method('get')->willReturn($workflowMock);
 
         $handler = new StockCreationTypeHandler(
             $this->eventDispatcher,

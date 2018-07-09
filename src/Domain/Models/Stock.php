@@ -17,7 +17,8 @@ use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class Stock.
@@ -27,9 +28,24 @@ use Doctrine\Common\Collections\Collection;
 class Stock implements StockInterface
 {
     /**
-     * @var int
+     * @var UuidInterface
      */
     private $id;
+
+    /**
+     * @var array
+     */
+    public $status;
+
+    /**
+     * @var array
+     */
+    private $tags = [];
+
+    /**
+     * @var array
+     */
+    private $stockItems = [];
 
     /**
      * @var \DateTime
@@ -42,19 +58,9 @@ class Stock implements StockInterface
     private $modificationDate;
 
     /**
-     * @var string
+     * @var UserInterface
      */
-    private $status;
-
-    /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var ArrayCollection
-     */
-    private $products;
+    private $owner;
 
     /**
      * {@inheritdoc}
@@ -63,14 +69,20 @@ class Stock implements StockInterface
         StockCreationDTOInterface $stockCreationDTO,
         UserInterface $owner
     ) {
-        $this->creationDate = new \DateTime();
-        $this->products = new ArrayCollection();
+        $this->id = Uuid::uuid4();
+        $this->status = $stockCreationDTO->status;
+        $this->tags = $stockCreationDTO->tags;
+        $this->stockItems = new ArrayCollection();
+        $this->creationDate = time();
+        $this->owner = $owner;
+
+        $this->addItems($stockCreationDTO->stockItems);
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
-    public function getId(): ? int
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -84,14 +96,6 @@ class Stock implements StockInterface
     }
 
     /**
-     * @param \DateTime $creationDate
-     */
-    public function setCreationDate(\DateTime $creationDate)
-    {
-        $this->creationDate = $creationDate;
-    }
-
-    /**
      * @return string
      */
     public function getModificationDate(): ? string
@@ -100,59 +104,35 @@ class Stock implements StockInterface
     }
 
     /**
-     * @param \DateTime $modificationDate
+     * {@inheritdoc}
      */
-    public function setModificationDate(\DateTime $modificationDate)
-    {
-        $this->modificationDate = $modificationDate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatus(): string
+    public function getStatus(): array
     {
         return $this->status;
     }
 
     /**
-     * @param string $status
+     * {@inheritdoc}
      */
-    public function setStatus(string $status)
+    public function addItems(array $items): void
     {
-        $this->status = $status;
+        if (\is_array($items) && \count($items) == 0) {
+            return;
+        }
+
+        foreach ($items as $item) {
+            $this->stockItems[] = $item;
+
+            $item->setStock($this);
+        }
     }
 
     /**
-     * @return User
+     * {@inheritdoc}
      */
-    public function getUser(): User
+    public function getItems(): array
     {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    /**
-     * @param Products $products
-     */
-    public function addProduct(Products $products)
-    {
-        $this->products[] = $products;
+        return $this->stockItems;
     }
 
     /**

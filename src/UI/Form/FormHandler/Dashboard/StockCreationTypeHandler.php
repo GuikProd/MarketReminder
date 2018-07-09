@@ -100,6 +100,9 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
                 return false;
             }
 
+            $workflow = $this->workflowRegistry->get($this->stockBuilder->getStock());
+            $workflow->apply($this->stockBuilder->getStock(), 'used');
+
             $this->stockRepository->save($this->stockBuilder->getStock());
 
             return true;

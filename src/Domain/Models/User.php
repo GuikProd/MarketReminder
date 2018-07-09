@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Domain\Models;
 
 use App\Domain\Models\Interfaces\ImageInterface;
+use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\UseCase\UserResetPassword\Model\UserResetPasswordToken;
 use Ramsey\Uuid\Uuid;
@@ -103,6 +104,11 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $profileImage;
 
     /**
+     * @var array
+     */
+    private $stocks = [];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
@@ -158,6 +164,22 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
+    public function changeProfileImage(ImageInterface $profileImage): void
+    {
+        $this->profileImage = $profileImage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addStock(StockInterface $stock): void
+    {
+        $this->stocks[] = $stock;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getId(): UuidInterface
     {
         return $this->id;
@@ -166,7 +188,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getUsername(): ? string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -174,7 +196,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getEmail(): ? string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -182,7 +204,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getPassword(): ? string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -278,9 +300,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function setProfileImage(ImageInterface $profileImage): void
+    public function getStocks(): array
     {
-        $this->profileImage = $profileImage;
+        return $this->stocks;
     }
 
     /**
