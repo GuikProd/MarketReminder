@@ -11,23 +11,23 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Domain\Models;
+namespace App\Tests\Domain\Builder;
 
-use App\Domain\Models\Interfaces\StockItemsInterface;
-use App\Domain\Models\StockItems;
-use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
+use App\Domain\Builder\Interfaces\StockItemsBuilderInterface;
+use App\Domain\Builder\StockItemsBuilder;
+use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockItemCreationDTOInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockItemCreationDTO;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class StockItemsUnitTest.
+ * Class StockItemsBuilderUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class StockItemsUnitTest extends TestCase
+final class StockItemsBuilderUnitTest extends TestCase
 {
     /**
-     * @var StockCreationDTOInterface|null
+     * @var StockItemCreationDTOInterface|null
      */
     private $stockItemDTO = null;
 
@@ -41,11 +41,20 @@ final class StockItemsUnitTest extends TestCase
 
     public function testItImplements()
     {
-        $items = new StockItems($this->stockItemDTO);
+        $builder = new StockItemsBuilder();
 
         static::assertInstanceOf(
-            StockItemsInterface::class,
-            $items
+            StockItemsBuilderInterface::class,
+            $builder
         );
+    }
+
+    public function testItBuild()
+    {
+        $builder = new StockItemsBuilder();
+
+        $builder->createFromUI($this->stockItemDTO);
+
+        static::assertCount(1, $builder->getStockItems());
     }
 }

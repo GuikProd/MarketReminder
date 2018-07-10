@@ -17,8 +17,10 @@ use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Dashboard\Stock\Interfaces\StockCreationResponderInterface;
 use App\UI\Responder\Dashboard\Stock\StockCreationResponder;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
@@ -44,21 +46,29 @@ final class StockCreationResponderUnitTest extends TestCase
     private $twig;
 
     /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
         $this->presenter = $this->createMock(PresenterInterface::class);
         $this->twig = $this->createMock(Environment::class);
+        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
         $this->request = Request::create('/fr/dashboard/stock/creation', 'GET');
+        $this->urlGenerator->method('generate')->willReturn('/fr/');
     }
 
     public function testItImplements()
     {
         $responder = new StockCreationResponder(
             $this->presenter,
-            $this->twig
+            $this->twig,
+            $this->urlGenerator
         );
 
         static::assertInstanceOf(
@@ -67,16 +77,33 @@ final class StockCreationResponderUnitTest extends TestCase
         );
     }
 
-    public function testItReturn()
+    public function testItReturnAResponse()
     {
+        $formMock = $this->createMock(FormInterface::class);
+
         $responder = new StockCreationResponder(
             $this->presenter,
-            $this->twig
+            $this->twig,
+            $this->urlGenerator
         );
 
         static::assertInstanceOf(
             Response::class,
-            $responder($this->request)
+            $responder($this->request, $formMock)
+        );
+    }
+
+    public function testItReturnARedirectResponse()
+    {
+        $responder = new StockCreationResponder(
+            $this->presenter,
+            $this->twig,
+            $this->urlGenerator
+        );
+
+        static::assertInstanceOf(
+            Response::class,
+            $responder($this->request, null, true)
         );
     }
 }

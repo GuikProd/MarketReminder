@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Models;
 
-use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Interfaces\StockItemsInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockItemCreationDTOInterface;
 use Ramsey\Uuid\Uuid;
@@ -32,9 +31,49 @@ final class StockItems implements StockItemsInterface
     private $id;
 
     /**
-     * @var StockInterface
+     * @var string
      */
-    private $stock;
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $status;
+
+    /**
+     * @var
+     */
+    private $quantity;
+
+    /**
+     * @var float
+     */
+    private $withoutTaxesPrice = 0.0;
+
+    /**
+     * @var float
+     */
+    private $withTaxesPrice = 0.0;
+
+    /**
+     * @var string
+     */
+    private $type;
+
+    /**
+     * @var int|null
+     */
+    private $limitUsageDate = null;
+
+    /**
+     * @var int|null
+     */
+    private $limitConsumptionDate = null;
+
+    /**
+     * @var null
+     */
+    private $limitOptimalUsageDate = null;
 
     /**
      * {@inheritdoc}
@@ -42,13 +81,14 @@ final class StockItems implements StockItemsInterface
     public function __construct(StockItemCreationDTOInterface $itemCreationDTO)
     {
         $this->id = Uuid::uuid4();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setStock(StockInterface $stock): void
-    {
-        $this->stock = $stock;
+        $this->name = $itemCreationDTO->name;
+        $this->status = $itemCreationDTO->status;
+        $this->quantity = $itemCreationDTO->quantity;
+        $this->withoutTaxesPrice = $itemCreationDTO->withoutTaxesPrice;
+        $this->withTaxesPrice = $itemCreationDTO->withTaxesPrice;
+        $this->type = $itemCreationDTO->type;
+        $this->limitUsageDate = $itemCreationDTO->limitUsageDate;
+        $this->limitConsumptionDate = $itemCreationDTO->limitConsumptionDate;
+        $this->limitOptimalUsageDate = $itemCreationDTO->limitOptimalUsageDate;
     }
 }

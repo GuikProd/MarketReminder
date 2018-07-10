@@ -15,6 +15,7 @@ namespace App\UI\Form\FormHandler\Dashboard;
 
 use App\Application\Event\SessionMessageEvent;
 use App\Domain\Builder\Interfaces\StockBuilderInterface;
+use App\Domain\Builder\Interfaces\StockItemsBuilderInterface;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
 use App\UI\Form\FormHandler\Dashboard\Interfaces\StockCreationTypeHandlerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -46,6 +47,11 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
     private $stockBuilder;
 
     /**
+     * @var StockItemsBuilderInterface
+     */
+    private $stockItemsBuilder;
+
+    /**
      * @var StockRepositoryInterface
      */
     private $stockRepository;
@@ -67,6 +73,7 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
         EventDispatcherInterface $eventDispatcher,
         Registry $workflowRegistry,
         StockBuilderInterface $stockBuilder,
+        StockItemsBuilderInterface $stockItemsBuilder,
         StockRepositoryInterface $stockRepository,
         TokenStorageInterface $tokenStorage,
         ValidatorInterface $validator
@@ -74,6 +81,7 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
         $this->eventDispatcher = $eventDispatcher;
         $this->workflowRegistry = $workflowRegistry;
         $this->stockBuilder = $stockBuilder;
+        $this->stockItemsBuilder = $stockItemsBuilder;
         $this->stockRepository = $stockRepository;
         $this->tokenStorage = $tokenStorage;
         $this->validator = $validator;
@@ -86,7 +94,15 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
     {
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->stockBuilder->createFromUI($form->getData(), $this->tokenStorage->getToken()->getUser());
+            $form->getData()->stockItems
+                ? $this->stockItemsBuilder->createFromUI($form->getData()->stockItems)
+                : $form->getData()->stockItems = [];
+
+            $this->stockBuilder->createFromUI(
+                $form->getData(),
+                $this->tokenStorage->getToken()->getUser(),
+                $this->stockItemsBuilder->getStockItems()
+            );
 
             $errors = $this->validator->validate($this->stockBuilder->getStock(), [], 'stock_creation');
 

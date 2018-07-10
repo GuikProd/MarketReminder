@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Dashboard\Stock\Interfaces;
 
+use App\UI\Form\FormHandler\Dashboard\Interfaces\StockCreationTypeHandlerInterface;
 use App\UI\Responder\Dashboard\Stock\Interfaces\StockCreationResponderInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,6 +26,17 @@ use Symfony\Component\HttpFoundation\Response;
  */
 interface StockCreationActionInterface
 {
+    /**
+     * StockCreationActionInterface constructor.
+     *
+     * @param FormFactoryInterface $factory
+     * @param StockCreationTypeHandlerInterface $stockCreationTypeHandler
+     */
+    public function __construct(
+        FormFactoryInterface $factory,
+        StockCreationTypeHandlerInterface $stockCreationTypeHandler
+    );
+
     /**
      * @param Request $request
      * @param StockCreationResponderInterface $responder

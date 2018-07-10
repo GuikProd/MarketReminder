@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace App\Domain\Models;
 
 use App\Domain\Models\Interfaces\StockInterface;
+use App\Domain\Models\Interfaces\StockItemsInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -25,12 +25,17 @@ use Ramsey\Uuid\UuidInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class Stock implements StockInterface
+final class Stock implements StockInterface
 {
     /**
      * @var UuidInterface
      */
     private $id;
+
+    /**
+     * @var string
+     */
+    private $title;
 
     /**
      * @var array
@@ -43,7 +48,7 @@ class Stock implements StockInterface
     private $tags = [];
 
     /**
-     * @var array
+     * @var StockItemsInterface[]
      */
     private $stockItems = [];
 
@@ -67,16 +72,19 @@ class Stock implements StockInterface
      */
     public function __construct(
         StockCreationDTOInterface $stockCreationDTO,
-        UserInterface $owner
+        UserInterface $owner,
+        array $stockItems = []
     ) {
         $this->id = Uuid::uuid4();
+        $this->title = $stockCreationDTO->title;
         $this->status = $stockCreationDTO->status;
         $this->tags = $stockCreationDTO->tags;
-        $this->stockItems = new ArrayCollection();
         $this->creationDate = time();
         $this->owner = $owner;
 
-        $this->addItems($stockCreationDTO->stockItems);
+        \count($stockItems) > 0
+            ? $this->addItems($stockItems)
+            : $this->stockItems = $stockItems;
     }
 
     /**
@@ -85,6 +93,14 @@ class Stock implements StockInterface
     public function getId(): UuidInterface
     {
         return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     /**
@@ -122,8 +138,6 @@ class Stock implements StockInterface
 
         foreach ($items as $item) {
             $this->stockItems[] = $item;
-
-            $item->setStock($this);
         }
     }
 

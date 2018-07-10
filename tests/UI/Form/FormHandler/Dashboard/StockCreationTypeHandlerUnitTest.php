@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace App\Tests\UI\Form\FormHandler\Dashboard;
 
 use App\Domain\Builder\Interfaces\StockBuilderInterface;
+use App\Domain\Builder\Interfaces\StockItemsBuilderInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
+use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockCreationDTO;
 use App\UI\Form\FormHandler\Dashboard\Interfaces\StockCreationTypeHandlerInterface;
 use App\UI\Form\FormHandler\Dashboard\StockCreationTypeHandler;
 use PHPUnit\Framework\TestCase;
@@ -56,6 +58,11 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
     private $stockBuilder = null;
 
     /**
+     * @var StockItemsBuilderInterface|null
+     */
+    private $stockItemsBuilder = null;
+
+    /**
      * @var StockRepositoryInterface|null
      */
     private $stockRepository = null;
@@ -79,6 +86,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
         $this->formInterface = $this->createMock(FormInterface::class);
         $this->workflowRegistry = $this->createMock(Registry::class);
         $this->stockBuilder = $this->createMock(StockBuilderInterface::class);
+        $this->stockItemsBuilder = $this->createMock(StockItemsBuilderInterface::class);
         $this->stockRepository = $this->createMock(StockRepositoryInterface::class);
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->validator = $this->createMock(ValidatorInterface::class);
@@ -90,6 +98,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
             $this->eventDispatcher,
             $this->workflowRegistry,
             $this->stockBuilder,
+            $this->stockItemsBuilder,
             $this->stockRepository,
             $this->tokenStorage,
             $this->validator
@@ -107,6 +116,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
             $this->eventDispatcher,
             $this->workflowRegistry,
             $this->stockBuilder,
+            $this->stockItemsBuilder,
             $this->stockRepository,
             $this->tokenStorage,
             $this->validator
@@ -122,7 +132,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
     {
         $tokenMock = $this->createMock(TokenInterface::class);
         $userMock = $this->createMock(UserInterface::class);
-        $dtoMock = $this->createMock(StockCreationDTOInterface::class);
+        $dtoMock = new StockCreationDTO('', '', [], []);
         $workflowMock = $this->createMock(Workflow::class);
 
         $this->formInterface->method('getData')->willReturn($dtoMock);
@@ -135,6 +145,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
             $this->eventDispatcher,
             $this->workflowRegistry,
             $this->stockBuilder,
+            $this->stockItemsBuilder,
             $this->stockRepository,
             $this->tokenStorage,
             $this->validator

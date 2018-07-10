@@ -36,10 +36,11 @@ final class StockBuilder implements StockBuilderInterface
      */
     public function createFromUI(
         StockCreationDTOInterface $stockCreationDTO,
-        UserInterface $owner
+        UserInterface $owner,
+        array $items = []
     ): void {
 
-        $this->stock = new Stock($stockCreationDTO, $owner);
+        $this->stock = new Stock($stockCreationDTO, $owner, $items ?: []);
     }
 
     /**

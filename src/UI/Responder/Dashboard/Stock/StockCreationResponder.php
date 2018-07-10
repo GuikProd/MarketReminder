@@ -15,8 +15,11 @@ namespace App\UI\Responder\Dashboard\Stock;
 
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Dashboard\Stock\Interfaces\StockCreationResponderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
@@ -37,23 +40,42 @@ final class StockCreationResponder implements StockCreationResponderInterface
     private $twig;
 
     /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
         PresenterInterface $presenter,
-        Environment $twig
+        Environment $twig,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->presenter = $presenter;
         $this->twig = $twig;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, FormInterface $form = null, $redirect = false): Response
     {
-        return new Response(
-            $this->twig->render('dashboard/stock/stock_creation.html.twig')
-        );
+        $this->presenter->prepareOptions([
+            '_locale' => $request->getLocale(),
+            'form' => $form,
+            'page' => [
+
+            ]
+        ]);
+
+        $redirect
+            ? $response = new RedirectResponse($this->urlGenerator->generate('dashboard_home'))
+            : $response = new Response(
+                $this->twig->render('dashboard/stock/stock_creation.html.twig')
+            );
+
+        return $response;
     }
 }

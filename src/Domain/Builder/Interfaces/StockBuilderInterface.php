@@ -27,8 +27,13 @@ interface StockBuilderInterface
     /**
      * @param StockCreationDTOInterface $stockCreationDTO
      * @param UserInterface $owner
+     * @param array $items
      */
-    public function createFromUI(StockCreationDTOInterface $stockCreationDTO, UserInterface $owner): void;
+    public function createFromUI(
+        StockCreationDTOInterface $stockCreationDTO,
+        UserInterface $owner,
+        array $items = []
+    ): void;
 
     /**
      * @return StockInterface

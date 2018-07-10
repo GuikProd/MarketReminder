@@ -40,6 +40,11 @@ interface StockInterface
     public function getId(): UuidInterface;
 
     /**
+     * @return string
+     */
+    public function getTitle(): string;
+
+    /**
      * @return array
      */
     public function getStatus(): array;

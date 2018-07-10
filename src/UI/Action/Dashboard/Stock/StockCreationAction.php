@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace App\UI\Action\Dashboard\Stock;
 
 use App\UI\Action\Dashboard\Stock\Interfaces\StockCreationActionInterface;
+use App\UI\Form\FormHandler\Dashboard\Interfaces\StockCreationTypeHandlerInterface;
+use App\UI\Form\Type\Stock\StockCreationType;
 use App\UI\Responder\Dashboard\Stock\Interfaces\StockCreationResponderInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,12 +36,40 @@ use Symfony\Component\Routing\Annotation\Route;
 final class StockCreationAction implements StockCreationActionInterface
 {
     /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
+     * @var StockCreationTypeHandlerInterface
+     */
+    private $stockCreationHandler;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(
+        FormFactoryInterface $formFactory,
+        StockCreationTypeHandlerInterface $stockCreationHandler
+    ) {
+        $this->formFactory = $formFactory;
+        $this->stockCreationHandler = $stockCreationHandler;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __invoke(
         Request $request,
         StockCreationResponderInterface $responder
     ): Response {
-        return $responder($request);
+
+        $form = $this->formFactory->create(StockCreationType::class)->handleRequest($request);
+
+        if ($this->stockCreationHandler->handle($form)) {
+            return $responder($request, null, true);
+        }
+
+        return $responder($request, $form);
     }
 }
