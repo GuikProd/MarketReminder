@@ -1,3 +1,11 @@
+@import "@material/card/mdc-card";
+
+.dashboard-card {
+  @import "@material/card/mdc-card";
+
+  height: 300px;
+}
+
 .reset-password_card {
   margin: auto;
   height: 300px;

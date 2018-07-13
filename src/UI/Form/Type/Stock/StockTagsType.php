@@ -48,7 +48,9 @@ final class StockTagsType extends AbstractType implements StockTagsTypeInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('tags', TextType::class);
+        $builder->add('tags', TextType::class, [
+            'help' => 'stock.creations_items.tags'
+        ]);
 
         $builder->get('tags')->addViewTransformer($this->tagsTransformer);
     }
@@ -62,7 +64,7 @@ final class StockTagsType extends AbstractType implements StockTagsTypeInterface
             'data_class' => StockTagsDTOInterface::class,
             'empty_data' => function (FormInterface $form) {
                 return new StockTagsDTO(
-                    $form->get('tags')->getData()
+                    $form->get('tags')->getData() ?? []
                 );
             }
         ]);

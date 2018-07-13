@@ -1,5 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    {{ presenter.page.title.value }}
+{% endblock %}
+
 {% block body %}
-    <p>Hello from stock creation !</p>
+    {% form_theme presenter.viewOptions.form.createView 'form/themes/dashboard/_stock_creation.html.twig' %}
+    {{ form(presenter.viewOptions.form.createView) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('build/stock_tags.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('build/collectionHandler.js') }}"></script>
 {% endblock %}

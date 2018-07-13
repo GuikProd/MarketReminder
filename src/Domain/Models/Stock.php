@@ -38,9 +38,14 @@ final class Stock implements StockInterface
     private $title;
 
     /**
-     * @var array
+     * @var string
      */
     public $status;
+
+    /**
+     * @var array
+     */
+    public $currentStatus;
 
     /**
      * @var array
@@ -78,9 +83,10 @@ final class Stock implements StockInterface
         $this->id = Uuid::uuid4();
         $this->title = $stockCreationDTO->title;
         $this->status = $stockCreationDTO->status;
-        $this->tags = $stockCreationDTO->tags;
         $this->creationDate = time();
         $this->owner = $owner;
+
+        $this->addTags($stockCreationDTO->tags->tags);
 
         \count($stockItems) > 0
             ? $this->addItems($stockItems)
@@ -122,7 +128,7 @@ final class Stock implements StockInterface
     /**
      * {@inheritdoc}
      */
-    public function getStatus(): array
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -150,10 +156,12 @@ final class Stock implements StockInterface
     }
 
     /**
-     * @param Products $products
+     * {@inheritdoc}
      */
-    public function removeProduct(Products $products)
+    public function addTags(array $tags): void
     {
-        $this->products->removeElement($products);
+        foreach ($tags as $tag) {
+            $this->tags[] = $tag;
+        }
     }
 }

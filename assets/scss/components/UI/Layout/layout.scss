@@ -1,3 +1,19 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Roboto';
+  margin: 0;
+  padding-top: 0.1px;
+}
+
+.main {
+  display: flex;
+  background-color: $mdc-theme-background;
+  color: $mdc-theme-on-background;
+}
+
 .layout {
   margin-top: 100px;
 }

@@ -6,6 +6,7 @@ account.greeting: Content de vous voir à bord !
 reset_password.title: Réinitialiser son mot de passe
 registration.title: Créer un compte
 password.raw: Mot de passe
+stock.creation_title: "Créer un stock"
 
 # Pages button
 image.text: Image de profil

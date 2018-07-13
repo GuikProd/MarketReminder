@@ -1,0 +1,20 @@
+{% extends 'layout/base_dashboard.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/dashboard.css') }}" />
+{% endblock %}
+
+{% block body %}
+    <section class="dashboard_body">
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell">
+                    <p>Hello from dashboard !</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

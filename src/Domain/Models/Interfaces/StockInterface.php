@@ -45,9 +45,9 @@ interface StockInterface
     public function getTitle(): string;
 
     /**
-     * @return array
+     * @return string
      */
-    public function getStatus(): array;
+    public function getStatus(): string;
 
     /**
      * @param array $items
@@ -58,4 +58,9 @@ interface StockInterface
      * @return array
      */
     public function getItems(): array;
+
+    /**
+     * @param array $tags
+     */
+    public function addTags(array $tags): void;
 }

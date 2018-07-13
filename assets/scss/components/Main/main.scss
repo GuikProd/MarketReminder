@@ -1,0 +1,5 @@
+@import "@material/button";
+
+.foo-button {
+  @include mdc-button-ink-color(steal);
+}

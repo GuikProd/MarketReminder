@@ -8,5 +8,5 @@ document.getElementById("register_profileImage").onchange = function () {
 import { MDCFloatingLabel } from '@material/floating-label';
 import { MDCTextField } from '@material/textfield';
 
-const textField = new MDCTextField(document.querySelector('.mdc-text-field'));
+const textField = new MDCTextField(document.querySelectorAll('.mdc-text-field'));
 const floatingLabel = new MDCFloatingLabel(document.querySelector('.mdc-floating-label'));

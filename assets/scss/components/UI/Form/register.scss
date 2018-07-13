@@ -1,0 +1,18 @@
+@import "@material/textfield/mdc-text-field";
+
+.register_username, .register_email, .register_password, .register_profileImage {
+  display: block;
+  margin: 20px auto;
+  width: 300px;
+}
+
+.register_container--button {
+  display: flex;
+  justify-content: flex-end;
+  width: 300px;
+  margin: auto;
+
+  .register_container--button button {
+    margin: 3px;
+  }
+}

@@ -1,0 +1,16 @@
+@import "@material/drawer/mdc-drawer";
+@import "@material/list/mdc-list";
+@import "@material/elevation/mdc-elevation";
+
+.drawer-title {
+  align-self: center;
+  margin: 50px auto;
+}
+
+.dashboard_body {
+  @include mdc-elevation(4);
+
+  display: block;
+  overflow: auto;
+  width: 100%;
+}

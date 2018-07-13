@@ -29,7 +29,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class RegisterType extends AbstractType
+final class RegisterType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -60,7 +60,11 @@ class RegisterType extends AbstractType
             ])
             ->add('profileImage', FileType::class, [
                 'required' => false,
-                'help' => 'register.profileImage_help'
+                'help' => 'register.profileImage_help',
+                'attr' => [
+                    'accept' => 'image/png, image/jpg, image/jpeg',
+                    'type' => 'file'
+                ]
             ])
         ;
     }

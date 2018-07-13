@@ -70,6 +70,7 @@ event:
 router: ## Allow to debug the router
 	    $(ENV_PHP) ./bin/console d:r
 
+## Doctrine
 create-schema: ## Allow to create the BDD schema
 	    $(ENV_PHP) ./bin/console d:d:d --force --env=$(ENV)
 	    $(ENV_PHP) ./bin/console d:d:c --env=$(ENV)
@@ -90,6 +91,10 @@ fixtures: src/DataFixtures
 doctrine-cache: ## Allow to clean the Doctrine cache
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-query
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-metadata
+
+migrations: config/doctrine
+	    $(ENV_PHP) ./bin/console doctrine:migrations:diff
+	    $(ENV_PHP) ./bin/console doctrine:migrations:migrate
 
 phpunit: tests
 	    make fixtures ENV=test

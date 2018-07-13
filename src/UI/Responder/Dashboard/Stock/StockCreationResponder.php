@@ -66,14 +66,19 @@ final class StockCreationResponder implements StockCreationResponderInterface
             '_locale' => $request->getLocale(),
             'form' => $form,
             'page' => [
-
+                'title' => [
+                    'channel' => 'messages',
+                    'key' => 'stock.creation_title'
+                ],
             ]
         ]);
 
         $redirect
             ? $response = new RedirectResponse($this->urlGenerator->generate('dashboard_home'))
             : $response = new Response(
-                $this->twig->render('dashboard/stock/stock_creation.html.twig')
+                $this->twig->render('dashboard/stock/stock_creation.html.twig', [
+                    'presenter' => $this->presenter
+                ])
             );
 
         return $response;

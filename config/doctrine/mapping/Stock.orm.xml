@@ -5,7 +5,12 @@
                           http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
     <entity name="App\Domain\Models\Stock" table="marketReminder_stock" repository-class="App\Infra\Doctrine\Repository\StockRepository">
         <id name="id" type="uuid" />
-        <field name="status" type="array" />
+        <field name="title" type="string" length="50" nullable="false" unique="true" />
+        <field name="status" type="array" nullable="false" unique="false" />
+        <field name="currentStatus" type="array" nullable="false" unique="false" />
+        <field name="tags" type="array" nullable="true" />
+        <field name="creationDate" type="integer" nullable="true" unique="true" />
+        <field name="modificationDate" type="integer" nullable="true" unique="true" />
         <many-to-one field="owner" target-entity="App\Domain\Models\User" inversed-by="stocks">
             <join-column name="user_id" referenced-column-name="id" />
         </many-to-one>

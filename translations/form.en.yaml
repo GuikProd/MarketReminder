@@ -2,3 +2,13 @@ register.username_help: 'The nickname must be between 3 and 25 characters and ca
 register.email_help: 'The email must be between 10 and 50 characters and can not be empty!'
 register.password_help: 'The password must be between 5 and 25 characters and can not be empty!'
 register.profileImage_help: 'The profile image should not weigh more than 2MB, only the following formats are accepted: jpeg / png / jpg'
+stock.creation.item_type: Food
+stock.creation_title: appellation
+stock.creation_choices: Status
+stock.creation_choices.help: Status
+stock.creation_choices.on_text: Active
+stock.creation_choices.off_text: Inactive
+stock.creation_tags: Tags
+stock.creations_items.tags: 'Tag List'
+stock.creation_items: 'Items in this stock'
+stock.creation_items.name: Name

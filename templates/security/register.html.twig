@@ -7,10 +7,11 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('build/registration.css') }}" />
+    <link rel="stylesheet" href="{{ asset('build/register.css') }}" />
 {% endblock %}
 
 {% block body %}
-    <section class="mdc-layout-grid__cell--align-middle registration-bloc">
+    <section class="registration-bloc">
         {% form_theme registerForm 'form/themes/_registerTypeTheme.html.twig' %}
         {{ form(registerForm) }}
 
@@ -28,6 +29,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('build/registrationForm.js') }}"></script>
     <script src="{{ asset('build/form.js') }}"></script>
     <script src="{{ asset('build/file_check.js') }}"></script>
     <script src="{{ asset('build/snackbar.js') }}"></script>

@@ -39,22 +39,27 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
     {
         $builder
             ->add('title', TextType::class, [
-                'help' => 'stock_creation.title'
+                'help' => 'stock.creation_title'
             ])
             ->add('status', ChoiceType::class, [
                 'choices' => [
-                    'stock.creation_on.text' => 'on',
-                    'stock.creation_off.text' => 'off'
+                    'stock.creation_choices.on_text' => 'on',
+                    'stock.creation_choices.off_text' => 'off'
                 ],
-                'help' => 'stock_creation.choices'
+                'help' => 'stock.creation_choices',
+                'choice_attr' => [
+                    'help' => 'stock.creation_choices.help'
+                ]
             ])
             ->add('tags', StockTagsType::class, [
-                'help' => 'stock.creation.tags'
+                'help' => 'stock.creation_tags',
+                'required' => false
             ])
             ->add('stockItems', CollectionType::class, [
                 'entry_type' => StockItemCreationType::class,
                 'allow_add' => true,
-                'allow_delete' => true
+                'allow_delete' => true,
+                'help' => 'stock.creation_items',
             ])
         ;
     }

@@ -5,6 +5,7 @@ account.greeting: 'Glad to see you on board!'
 reset_password.title: 'Reset password'
 registration.title: 'Create an account'
 password.raw: Password
+stock.creation_title: 'Create a stock'
 image.text: 'Profile Image'
 account.creation: 'Create an account'
 account.already_exist: 'Account already created?'

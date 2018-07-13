@@ -52,18 +52,31 @@ final class StockItemCreationType extends AbstractType implements StockItemCreat
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, [
+                'help' => 'stock.creation_items.name'
+            ])
             ->add('status', ChoiceType::class, [
                 'choices' => [
                     'stock.creation.item_on.text' => 'on',
                     'stock.creation.item_off.text' => 'off',
                 ],
-                'help' => 'stock.creation.item_help'
+                'help' => 'stock.creation.item_help',
+                'choice_attr' => [
+                    'help' => ''
+                ]
             ])
-            ->add('quantity', IntegerType::class)
-            ->add('withoutTaxesPrice', MoneyType::class)
-            ->add('withTaxesPrice', MoneyType::class)
-            ->add('type', TextType::class)
+            ->add('quantity', IntegerType::class, [
+                'help' => ''
+            ])
+            ->add('withoutTaxesPrice', MoneyType::class, [
+                'help' => ''
+            ])
+            ->add('withTaxesPrice', MoneyType::class, [
+                'help' => ''
+            ])
+            ->add('type', TextType::class, [
+                'help' => ''
+            ])
         ;
 
         $builder->get('type')->addEventSubscriber($this->stockItemSubscriber);
@@ -88,7 +101,8 @@ final class StockItemCreationType extends AbstractType implements StockItemCreat
                     $form->get('limitConsumptionDate') ? $form->get('limitConsumptionDate')->getData() : null,
                     $form->get('limitOptimalUsageDate') ? $form->get('limitOptimalUsageDate')->getData() : null
                 );
-            }
+            },
+            'help' => ''
         ]);
     }
 }

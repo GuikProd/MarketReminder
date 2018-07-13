@@ -22,7 +22,7 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class DashboardHomeResponder implements DashboardHomeResponderInterface
+final class DashboardHomeResponder implements DashboardHomeResponderInterface
 {
     /**
      * @var Environment
@@ -49,7 +49,7 @@ class DashboardHomeResponder implements DashboardHomeResponderInterface
     public function __invoke(): Response
     {
         return new Response(
-            $this->twig->render('dashboard/dashboard_home.html.twig')
+            $this->twig->render('dashboard/home.html.twig')
         );
     }
 }
