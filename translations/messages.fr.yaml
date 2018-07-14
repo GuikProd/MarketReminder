@@ -3,6 +3,7 @@ home.text: Accueil
 home.title: Inventory management
 account.welcome: Bienvenue sur MarketReminder
 account.greeting: Content de vous voir à bord !
+login.title: Se connecter
 reset_password.title: Réinitialiser son mot de passe
 registration.title: Créer un compte
 password.raw: Mot de passe

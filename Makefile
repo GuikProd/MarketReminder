@@ -171,10 +171,10 @@ phpmetrics: ## Allow to launch a phpmetrics analyze
 	    $(ENV_PHP) vendor/bin/phpmetrics src
 
 ## NodeJS commands
-watch: ## Allow to use Encore to watch the asssets
+encore_watch: ## Allow to use Encore to watch the asssets
 	    $(ENV_NODE) yarn watch
 
-production: ## Allow to build the assets for a production usage.
+encore_production: ## Allow to build the assets for a production usage.
 	    $(ENV_NODE) yarn build
 
 yarn_add_prod: ## Allow to add a new package in the "prod" env

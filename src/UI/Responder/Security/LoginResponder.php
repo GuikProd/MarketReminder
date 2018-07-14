@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security;
 
+use App\UI\Presenter\Interfaces\PresenterInterface;
+use App\UI\Responder\Security\Interfaces\LoginResponderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class LoginResponder
+final class LoginResponder implements LoginResponderInterface
 {
     /**
      * @var Environment
@@ -29,38 +33,45 @@ final class LoginResponder
     private $twig;
 
     /**
-     * LoginResponder constructor.
-     *
-     * @param Environment $twig
+     * @var PresenterInterface
      */
-    public function __construct(Environment $twig)
-    {
+    private $presenter;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(
+        Environment $twig,
+        PresenterInterface $presenter
+    ) {
         $this->twig = $twig;
+        $this->presenter = $presenter;
     }
 
     /**
-     * @param \Exception $exception
-     * @param string $username
-     *
-     * @return Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function __invoke(
-        \Exception $exception = null,
-        string $username = null
-    ) {
-        $response = new Response(
+        Request $request,
+        FormInterface $form
+    ): Response {
+
+        $this->presenter->prepareOptions([
+            '_locale' => $request->getLocale(),
+            'form' => $form,
+            'page' => [
+                'title' => [
+                    'channel' => 'messages',
+                    'key' => 'login.title'
+                ]
+            ],
+            'user' => null
+        ]);
+
+        return new Response(
             $this->twig->render('security/login.html.twig', [
-                'username' => $username,
-                'errors' => $exception
+                'presenter' => $this->presenter
             ])
         );
-
-        return $response->setCache([
-            'public' => true
-        ]);
     }
 }

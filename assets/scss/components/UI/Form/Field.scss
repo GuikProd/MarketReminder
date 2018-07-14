@@ -1,0 +1,18 @@
+@import "@material/textfield/mdc-text-field";
+
+.mk-main__form {
+  display: block;
+  margin: 20px auto;
+  width: 300px;
+}
+
+.mk-button__container {
+  display: flex;
+  justify-content: flex-end;
+  width: 300px;
+  margin: auto;
+
+  .button-container button {
+    margin: 3px;
+  }
+}

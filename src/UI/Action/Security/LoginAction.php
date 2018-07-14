@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
-use App\UI\Responder\Security\LoginResponder;
+use App\UI\Action\Security\Interfaces\LoginActionInterface;
+use App\UI\Form\Type\LoginType;
+use App\UI\Responder\Security\Interfaces\LoginResponderInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Class LoginAction
@@ -28,38 +32,31 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  *     methods={"GET", "POST"}
  * )
  */
-class LoginAction
+final class LoginAction implements LoginActionInterface
 {
     /**
-     * @var AuthenticationUtils
+     * @var FormFactoryInterface
      */
-    private $authenticationUtils;
+    private $formFactory;
 
     /**
-     * LoginAction constructor.
-     *
-     * @param AuthenticationUtils $authenticationUtils
+     * {@inheritdoc}
      */
-    public function __construct(AuthenticationUtils $authenticationUtils)
+    public function __construct(FormFactoryInterface $formFactory)
     {
-        $this->authenticationUtils = $authenticationUtils;
+        $this->formFactory = $formFactory;
     }
 
     /**
-     * @param LoginResponder $responder
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function __invoke(
-        LoginResponder $responder
-    ) {
-        return $responder(
-            $this->authenticationUtils->getLastAuthenticationError(),
-            $this->authenticationUtils->getLastUsername()
-        );
+        Request $request,
+        LoginResponderInterface $responder
+    ): Response {
+
+        $form = $this->formFactory->create(LoginType::class)->handleRequest($request);
+
+        return $responder($request, $form);
     }
 }

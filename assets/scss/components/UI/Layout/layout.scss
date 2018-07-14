@@ -6,6 +6,10 @@ body {
   font-family: 'Roboto';
   margin: 0;
   padding-top: 0.1px;
+
+  a {
+    color: $mdc-theme-secondary;
+  }
 }
 
 .main {
@@ -16,4 +20,9 @@ body {
 
 .layout {
   margin-top: 100px;
+}
+
+.mk-main__container {
+  text-align: center;
+  padding: 20px;
 }

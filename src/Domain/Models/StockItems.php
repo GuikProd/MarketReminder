@@ -23,7 +23,7 @@ use Ramsey\Uuid\UuidInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class StockItems implements StockItemsInterface
+class StockItems implements StockItemsInterface
 {
     /**
      * @var UuidInterface

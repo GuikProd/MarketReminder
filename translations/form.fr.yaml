@@ -1,3 +1,6 @@
+login.help: "Veuillez saisir votre pseudonyme ainsi que votre mot de passe."
+login.username_help: "Le pseudonyme doit être compris entre 3 et 25 caractères et ne peut être vide !"
+login.password_help: "Le mot de passe doit être compris entre 5 et 25 caractères et ne peut être vide !"
 register.username_help: "Le pseudonyme doit être compris entre 3 et 25 caractères et ne peut être vide !"
 register.email_help: "L'email doit être compris entre 10 et 50 caractères et ne peut être vide !"
 register.password_help: "Le mot de passe doit être compris entre 5 et 25 caractères et ne peut être vide !"

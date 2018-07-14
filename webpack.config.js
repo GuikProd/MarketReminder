@@ -63,6 +63,7 @@ Encore
     .addEntry('collectionHandler', './assets/javascript/public/form.js')
     .addEntry('form', './assets/javascript/components/form.js')
     .addEntry('file_check', './assets/javascript/components/form/file_check.js')
+    .addEntry('login', './assets/javascript/public/login.js')
     .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')
     .addEntry('stock_tags', './assets/javascript/components/form/stock_tags.js')
     .addEntry('registrationForm', './assets/javascript/public/register.js')

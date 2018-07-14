@@ -1,0 +1,22 @@
+App\Domain\UseCase\UserLogin\DTO\UserLoginDTO:
+    properties:
+        username:
+            - NotBlank:
+                message: "validation.filled"
+                groups: ['login']
+            - Length:
+                min: 3
+                minMessage: "validation.length_short"
+                max: 25
+                maxMessage: "validation.length_long"
+                groups: ['login']
+        password:
+            - NotBlank:
+                message: "validation.filled"
+                groups: ['login']
+            - Length:
+                min: 5
+                minMessage: "validation.length_short"
+                max: 25
+                maxMessage: "validation.length_long"
+                groups: ['login']

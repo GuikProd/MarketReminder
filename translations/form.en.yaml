@@ -1,3 +1,6 @@
+login.help: 'Please enter your username and password.'
+login.username_help: 'The nickname must be between 3 and 25 characters and can not be empty!'
+login.password_help: 'The password must be between 5 and 25 characters and can not be empty!'
 register.username_help: 'The nickname must be between 3 and 25 characters and can not be empty!'
 register.email_help: 'The email must be between 10 and 50 characters and can not be empty!'
 register.password_help: 'The password must be between 5 and 25 characters and can not be empty!'
