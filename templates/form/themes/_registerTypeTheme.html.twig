@@ -1,11 +1,14 @@
 {% block form %}
+
+    {% import "macros/form_file_type_macro.html.twig" as fileType %}
+
     {{ form_start(form) }}
     {{ form_errors(form) }}
 
     {{- form_row(form.username) -}}
     {{- form_row(form.email) -}}
     {{- form_row(form.password) -}}
-    {{- form_row(form.profileImage) -}}
+    {{ fileType.form_file_type(form) }}
     <div class="register_container--button">
         <button class="mdc-button {{ form.vars.id~'_'~'button--cancel' }}" type="reset">
             Cancel

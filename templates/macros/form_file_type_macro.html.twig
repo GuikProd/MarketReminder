@@ -1,0 +1,12 @@
+{% macro form_file_type(fileType) %}
+    <div class="mk-main__form">
+        <label for="{{ fileType.profileImage.vars.id }}" class="mk-form__file-label mdc-fab mdc-fab--extended mdc-elevation--z2" aria-label="image">
+            <span class="mdc-fab__label">
+                Upload a profile image
+            </span>
+            <i class="mdc-fab__icon material-icons">image</i>
+            {{ form_widget(fileType.profileImage, {'attr': {'class': 'mk-form__none'}}) }}
+        </label>
+        {{ form_errors(fileType.profileImage) }}
+    </div>
+{% endmacro %}

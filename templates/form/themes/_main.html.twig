@@ -1,9 +1,4 @@
 {% block form_row %}
-    {% if form.vars.attr.type is defined and form.vars.attr.type == "file" %}
-        {{ form_label(form) }}
-        {{ form_widget(form) }}
-        {{ form_errors(form) }}
-    {% endif %}
     <div class="mdc-text-field mdc-text-field--box mk-main__form {{ form.vars.id }}">
         {{ form_widget(form, {'attr': {'class': 'mdc-text-field__input', 'aria-describedby': form.vars.id ~'-helper-text', 'aria-controls': form.vars.id ~'-helper-text', 'placeholder': ''}}) }}
         {{ form_label(form, '', {'label_attr': {'class': 'mdc-floating-label', 'for': form.vars.id}}) }}

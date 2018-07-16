@@ -7,3 +7,4 @@ new MDCTextField(document.querySelector('.register_password'));
 
 new MDCRipple(document.querySelector('.register_button--submit'));
 new MDCRipple(document.querySelector('.register_button--cancel'));
+new MDCRipple(document.querySelector('.mdc-fab'));
