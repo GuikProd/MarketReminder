@@ -10,7 +10,7 @@
 
 {% block form_help %}
     <p id="{{ id }}-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
-        {{- help|cloudTranslate('form', app.request.locale) -}}
+        {{- help -}}
     </p>
 {% endblock %}
 

@@ -65,3 +65,7 @@ services:
     App\UI\Form\Extension\StockTagsTypeExtension:
         tags:
             - { name: form.type_extension, extended_type: App\UI\Form\Type\StockTagsType }
+
+    App\Infra\GCP\CloudTranslation\UI\Form\Extension\CloudTranslationTypeExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }

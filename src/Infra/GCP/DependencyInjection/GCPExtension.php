@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\DependencyInjection;
 
-use App\Infra\GCP\Bridge\CloudVisionBridge;
-use App\Infra\GCP\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
 use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Infra\GCP\CloudStorage\Helper\CloudStorageCleanerHelper;
@@ -34,6 +32,8 @@ use App\Infra\GCP\CloudTranslation\Domain\Repository\CloudTranslationRepository;
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\Infra\GCP\CloudTranslation\Helper\CloudTranslationWriter;
 use App\Infra\GCP\CloudTranslation\Helper\Interfaces\CloudTranslationWriterInterface;
+use App\Infra\GCP\CloudVision\Bridge\CloudVisionBridge;
+use App\Infra\GCP\CloudVision\Bridge\Interfaces\CloudVisionBridgeInterface;
 use App\Infra\GCP\CloudVision\CloudVisionAnalyserHelper;
 use App\Infra\GCP\CloudVision\CloudVisionDescriberHelper;
 use App\Infra\GCP\CloudVision\CloudVisionVoterHelper;
@@ -140,6 +140,7 @@ final class GCPExtension extends Extension implements GCPExtensionInterface
                     $containerBuilder->register(RedisConnectorInterface::class, RedisConnector::class)
                                      ->addArgument(getenv('REDIS_URL'))
                                      ->addArgument(getenv('APP_ENV'))
+                                     ->setShared(true)
                                      ->addTag('gcp.translation_connector');
                     $containerBuilder->register(ConnectorInterface::class, ConnectorInterface::class);
                     $containerBuilder->setAlias(ConnectorInterface::class, RedisConnectorInterface::class);
@@ -149,6 +150,7 @@ final class GCPExtension extends Extension implements GCPExtensionInterface
                 if (!$containerBuilder->hasDefinition(FileSystemConnectorInterface::class)) {
                     $containerBuilder->register(FileSystemConnectorInterface::class, FileSystemConnector::class)
                                      ->addArgument(getenv('APP_ENV'))
+                                     ->setShared(true)
                                      ->addTag('gcp.translation_connector');
                     $containerBuilder->register(ConnectorInterface::class, ConnectorInterface::class);
                     $containerBuilder->setAlias(ConnectorInterface::class, FileSystemConnectorInterface::class);

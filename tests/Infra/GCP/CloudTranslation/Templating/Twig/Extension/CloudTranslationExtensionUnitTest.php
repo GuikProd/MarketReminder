@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Twig\Extension\AbstractExtension;
 
 /**
- * Class CloudTranslationExtensionUnitTest.
+ * Class CloudTranslationTypeExtensionUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */

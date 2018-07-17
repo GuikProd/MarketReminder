@@ -9,11 +9,11 @@
     {{- form_row(form.email) -}}
     {{- form_row(form.password) -}}
     {{ fileType.form_file_type(form) }}
-    <div class="register_container--button">
+    <div class="mk-button__container">
         <button class="mdc-button {{ form.vars.id~'_'~'button--cancel' }}" type="reset">
-            Cancel
+            {{ 'main.button_cancel'|cloudTranslate('button', app.request.locale) }}
         </button>
-        <button class="mdc-button mdc-button--raised mdc-elevation--z4 {{ form.vars.id~'_'~'button--submit' }}" type="submit">
+        <button class="mdc-button mdc-button--raised mdc-elevation--z4 {{ form.vars.id~'_'~'button--submit' }}" id="{{ form.vars.id }}" type="submit">
             {{ "account.creation"|trans }}
         </button>
     </div>

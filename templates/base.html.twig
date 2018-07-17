@@ -39,9 +39,17 @@
                         <span class="mdc-top-app-bar__title">MarketReminder</span>
                     </section>
                     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-                        <a href="{{ path('index') }}" class="mdc-top-app-bar__action-item">{{ 'home.text'|trans }}</a>
-                        <a href="#" class="mdc-top-app-bar__action-item">{{ 'home.text'|trans }}</a>
-                        <a href="#" class="mdc-top-app-bar__action-item">{{ 'home.text'|trans }}</a>
+                        <a href="{{ path('index') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="home" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
+                            home
+                        </a>
+                        <a href="{{ path('web_login') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="person" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
+                            person
+                        </a>
+                        {% if is_granted('ROLE_USER') %}
+                            <a href="{{ path('dashboard_home') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="dashboard" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
+                                dashboard
+                            </a>
+                        {% endif %}
                     </section>
                 </div>
             </header>

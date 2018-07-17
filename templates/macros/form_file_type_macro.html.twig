@@ -2,11 +2,12 @@
     <div class="mk-main__form">
         <label for="{{ fileType.profileImage.vars.id }}" class="mk-form__file-label mdc-fab mdc-fab--extended mdc-elevation--z2" aria-label="image">
             <span class="mdc-fab__label">
-                Upload a profile image
+                {{ 'register.profileImage_label'|cloudTranslate('form', app.request.locale) }}
             </span>
             <i class="mdc-fab__icon material-icons">image</i>
             {{ form_widget(fileType.profileImage, {'attr': {'class': 'mk-form__none'}}) }}
         </label>
+        {{ form_help(fileType.profileImage) }}
         {{ form_errors(fileType.profileImage) }}
     </div>
 {% endmacro %}

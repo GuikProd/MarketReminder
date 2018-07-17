@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\CloudTranslation\Connector;
 
+use Redis;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\ConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
-use Predis\Client;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
@@ -59,15 +59,14 @@ final class RedisConnector implements RedisConnectorInterface, ConnectorInterfac
      */
     public function getAdapter(): CacheItemPoolInterface
     {
-        $connexion = new Client($this->redisDSN);
+        $connexion = new Redis();
+        $connexion->connect($this->redisDSN);
 
         $redisAdapter = new RedisAdapter(
             $connexion,
             $this->namespace,
             0
         );
-
-        $redisAdapter::createConnection($this->redisDSN);
 
         $this->adapter = new TagAwareAdapter(
             $redisAdapter

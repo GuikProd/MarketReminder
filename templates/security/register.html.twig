@@ -35,23 +35,20 @@
     <script src="{{ asset('build/snackbar.js') }}"></script>
     <script type="text/javascript">
         form = document.getElementById("{{ registerForm.children.profileImage.vars.id|e('js') }}");
-        formBtn = document.getElementById('register_button');
-        profileImageHelper = document.getElementById('profileImage-help');
-        let help = document.createElement('p');
-        help.textContent = 'Cette image dépasse la limite autorisé (2mo).';
-        form.addEventListener('change', handleFiles, false);
+        formBtn = document.getElementById('register');
+        profileImageHelper = document.getElementById('{{ registerForm.children.profileImage.vars.id }}-helper-text');
+        form.addEventListener('change', checkFileSize, false);
 
-        function handleFiles() {
-            console.log(this.files);
+        function checkFileSize() {
             for (var i = 0, numFiles = this.files.length; i < numFiles; i++) {
                 let file = this.files[i];
 
                 if (file.size > 2000000) {
                     formBtn.disabled = true;
-                    profileImageHelper.appendChild(help);
+                    profileImageHelper.visible = true;
                 } else {
                     formBtn.disabled = false;
-                    profileImageHelper.removeChild(help);
+                    profileImageHelper.visible = false;
                 }
             }
         }
