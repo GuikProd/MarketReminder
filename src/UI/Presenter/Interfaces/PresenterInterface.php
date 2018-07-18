@@ -43,7 +43,8 @@ interface PresenterInterface
      *         'class' => '',
      *         'id' => ''
      *     ]
-     * ]
+     * ],
+     * 'content' => []
      * ```
      *
      * In order to execute properly, the 'value' key should be blank,

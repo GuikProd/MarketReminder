@@ -55,13 +55,10 @@ Encore
     // Style
     .addStyleEntry('core', './assets/scss/public/core.scss')
     .addStyleEntry('register', './assets/scss/public/register.scss')
-    .addStyleEntry('registration', './assets/scss/public/registration.scss')
     .addStyleEntry('dashboard', './assets/scss/public/dashboard.scss')
 
     // Javascript
     .addEntry('mc', './assets/javascript/public/mc.js')
-    .addEntry('collectionHandler', './assets/javascript/public/form.js')
-    .addEntry('form', './assets/javascript/components/form.js')
     .addEntry('file_check', './assets/javascript/components/form/file_check.js')
     .addEntry('login', './assets/javascript/public/login.js')
     .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')

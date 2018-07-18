@@ -55,6 +55,32 @@ cache-clear: ## Allow to clear the cache
 cache-warm: ## Allow to warm the cache
 	    $(ENV_PHP) ./bin/console cache:warmup
 
+translation: translations
+	    $(ENV_PHP) ./bin/console app:translation:dump button fr
+	    $(ENV_PHP) ./bin/console app:translation:dump button en
+	    $(ENV_PHP) ./bin/console app:translation:dump form fr
+	    $(ENV_PHP) ./bin/console app:translation:dump form en
+	    $(ENV_PHP) ./bin/console app:translation:dump mail fr
+	    $(ENV_PHP) ./bin/console app:translation:dump mail en
+	    $(ENV_PHP) ./bin/console app:translation:dump messages fr
+	    $(ENV_PHP) ./bin/console app:translation:dump messages en
+	    $(ENV_PHP) ./bin/console app:translation:dump session fr
+	    $(ENV_PHP) ./bin/console app:translation:dump session en
+	    $(ENV_PHP) ./bin/console app:translation:dump validators fr
+	    $(ENV_PHP) ./bin/console app:translation:dump validators en
+	    $(ENV_PHP) ./bin/console app:translation:warm button fr
+	    $(ENV_PHP) ./bin/console app:translation:warm button en
+	    $(ENV_PHP) ./bin/console app:translation:warm form fr
+	    $(ENV_PHP) ./bin/console app:translation:warm form en
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en
+	    $(ENV_PHP) ./bin/console app:translation:warm messages fr
+	    $(ENV_PHP) ./bin/console app:translation:warm messages en
+	    $(ENV_PHP) ./bin/console app:translation:warm validators fr
+	    $(ENV_PHP) ./bin/console app:translation:warm validators en
+	    $(ENV_PHP) ./bin/console app:translation:warm session fr
+	    $(ENV_PHP) ./bin/console app:translation:warm session en
+
 translation-warm: translations
 	    $(ENV_PHP) ./bin/console app:translation:warm $(CHANNEL) $(LOCALE) --env=$(ENV)
 
@@ -140,24 +166,7 @@ behat: features
 	    make fixtures ENV=test
 	    make doctrine-cache
 	    $(ENV_PHP) ./bin/console cache:pool:prune
-	    $(ENV_PHP) ./bin/console app:translation:dump messages fr
-	    $(ENV_PHP) ./bin/console app:translation:dump messages en
-	    $(ENV_PHP) ./bin/console app:translation:dump validators fr
-	    $(ENV_PHP) ./bin/console app:translation:dump validators en
-	    $(ENV_PHP) ./bin/console app:translation:dump session fr
-	    $(ENV_PHP) ./bin/console app:translation:dump session en
-	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
-	    $(ENV_PHP) ./bin/console app:translation:warm mail en
-	    $(ENV_PHP) ./bin/console app:translation:warm messages fr
-	    $(ENV_PHP) ./bin/console app:translation:warm messages en
-	    $(ENV_PHP) ./bin/console app:translation:warm validators fr
-	    $(ENV_PHP) ./bin/console app:translation:warm validators en
-	    $(ENV_PHP) ./bin/console app:translation:warm session fr
-	    $(ENV_PHP) ./bin/console app:translation:warm session en
-	    $(ENV_PHP) ./bin/console app:translation:warm form fr
-	    $(ENV_PHP) ./bin/console app:translation:warm form en
-	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
-	    $(ENV_PHP) ./bin/console app:translation:warm mail en
+	    make translation
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## Tools commands
@@ -192,46 +201,12 @@ profile_php: ## Allow to profile a page using Blackfire and PHP environment
 	    make cache-clear
 	    make doctrine-cache ENV=prod
 	    $(ENV_PHP) ./bin/console cache:pool:prune
-	    $(ENV_PHP) ./bin/console app:translation:dump messages fr
-	    $(ENV_PHP) ./bin/console app:translation:dump messages en
-	    $(ENV_PHP) ./bin/console app:translation:dump validators fr
-	    $(ENV_PHP) ./bin/console app:translation:dump validators en
-	    $(ENV_PHP) ./bin/console app:translation:dump session fr
-	    $(ENV_PHP) ./bin/console app:translation:dump session en
-	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
-	    $(ENV_PHP) ./bin/console app:translation:warm mail en
-	    $(ENV_PHP) ./bin/console app:translation:warm messages fr
-	    $(ENV_PHP) ./bin/console app:translation:warm messages en
-	    $(ENV_PHP) ./bin/console app:translation:warm validators fr
-	    $(ENV_PHP) ./bin/console app:translation:warm validators en
-	    $(ENV_PHP) ./bin/console app:translation:warm session fr
-	    $(ENV_PHP) ./bin/console app:translation:warm session en
-	    $(ENV_PHP) ./bin/console app:translation:warm form fr
-	    $(ENV_PHP) ./bin/console app:translation:warm form en
-	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
-	    $(ENV_PHP) ./bin/console app:translation:warm mail en
+	    make translation
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
 
 profile_varnish: ## Allow to profile a page using Blackfire and Varnish environment
 	    make cache-clear
 	    make doctrine-cache ENV=prod
 	    $(ENV_PHP) ./bin/console cache:pool:prune
-	    $(ENV_PHP) ./bin/console app:translation:dump messages fr
-	    $(ENV_PHP) ./bin/console app:translation:dump messages en
-	    $(ENV_PHP) ./bin/console app:translation:dump validators fr
-	    $(ENV_PHP) ./bin/console app:translation:dump validators en
-	    $(ENV_PHP) ./bin/console app:translation:dump session fr
-	    $(ENV_PHP) ./bin/console app:translation:dump session en
-	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
-	    $(ENV_PHP) ./bin/console app:translation:warm mail en
-	    $(ENV_PHP) ./bin/console app:translation:warm messages fr
-	    $(ENV_PHP) ./bin/console app:translation:warm messages en
-	    $(ENV_PHP) ./bin/console app:translation:warm validators fr
-	    $(ENV_PHP) ./bin/console app:translation:warm validators en
-	    $(ENV_PHP) ./bin/console app:translation:warm session fr
-	    $(ENV_PHP) ./bin/console app:translation:warm session en
-	    $(ENV_PHP) ./bin/console app:translation:warm form fr
-	    $(ENV_PHP) ./bin/console app:translation:warm form en
-	    $(ENV_PHP) ./bin/console app:translation:warm mail fr
-	    $(ENV_PHP) ./bin/console app:translation:warm mail en
+	    make translation
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)

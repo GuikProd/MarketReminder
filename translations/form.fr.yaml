@@ -6,6 +6,8 @@ register.email_help: "L'email doit être compris entre 10 et 50 caractères et n
 register.password_help: "Le mot de passe doit être compris entre 5 et 25 caractères et ne peut être vide !"
 register.profileImage_help: "L'image de profil ne doit pas peser plus de 2Mo, seuls les formats suivants sont acceptés: jpeg/png/jpg "
 register.profileImage_label: "Image de profil"
+register.profileImage_size_error: "Image trop lourde"
+register.profileImage_size_success: "Image valide"
 stock.creation.item_type: "Nourriture"
 stock.creation_title: "Appelation "
 stock.creation_choices: "Status"

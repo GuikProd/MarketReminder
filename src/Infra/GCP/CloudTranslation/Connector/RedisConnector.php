@@ -34,6 +34,11 @@ final class RedisConnector implements RedisConnectorInterface, ConnectorInterfac
     private $adapter;
 
     /**
+     * @var Redis
+     */
+    private $connection;
+
+    /**
      * @var string
      */
     private $namespace;
@@ -59,11 +64,14 @@ final class RedisConnector implements RedisConnectorInterface, ConnectorInterfac
      */
     public function getAdapter(): CacheItemPoolInterface
     {
-        $connexion = new Redis();
-        $connexion->connect($this->redisDSN);
+        $this->connection = RedisAdapter::createConnection($this->redisDSN, [
+            'class' => Redis::class,
+            'persistent_connection' => 1,
+            'persistent_id' => md5(str_rot13((string) time()))
+        ]);
 
         $redisAdapter = new RedisAdapter(
-            $connexion,
+            $this->connection,
             $this->namespace,
             0
         );

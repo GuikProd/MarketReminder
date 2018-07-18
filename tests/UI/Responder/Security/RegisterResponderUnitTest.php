@@ -13,40 +13,51 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Security;
 
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\Interfaces\RegisterResponderInterface;
 use App\UI\Responder\Security\RegisterResponder;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
- * Class RegisterResponderTest.
+ * Class RegisterResponderUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class RegisterResponderTest extends TestCase
+final class RegisterResponderUnitTest extends TestCase
 {
-    use TestCaseTrait;
+    /**
+     * @var PresenterInterface|null
+     */
+    private $presenter = null;
 
     /**
-     * @var Environment
+     * @var Request|null
      */
-    private $twig;
+    private $request = null;
 
     /**
-     * @var UrlGeneratorInterface
+     * @var Environment|null
      */
-    private $urlGenerator;
+    private $twig = null;
+
+    /**
+     * @var UrlGeneratorInterface|null
+     */
+    private $urlGenerator = null;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
+        $this->presenter = $this->createMock(PresenterInterface::class);
+        $this->request = Request::create('/fr/register', 'GET');
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
@@ -57,6 +68,7 @@ class RegisterResponderTest extends TestCase
     {
         $registerResponder = new RegisterResponder(
             $this->twig,
+            $this->presenter,
             $this->urlGenerator
         );
 
@@ -66,64 +78,17 @@ class RegisterResponderTest extends TestCase
         );
     }
 
-    /**
-     * @group Blackfire
-     */
-    public function testBlackfireProfilingWithRedirectResponse()
-    {
-        $registerResponder = new RegisterResponder(
-            $this->twig,
-            $this->urlGenerator
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $registerResponder(true);
-
-        static::$blackfire->endProbe($probe);
-
-        static::assertInstanceOf(
-            RedirectResponse::class,
-            $registerResponder(true)
-        );
-    }
-
-    /**
-     * @group Blackfire
-     */
-    public function testBlackfireProfilingWithResponse()
-    {
-        $formInterfaceMock = $this->createMock(FormInterface::class);
-
-        $registerResponder = new RegisterResponder(
-            $this->twig,
-            $this->urlGenerator
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $registerResponder(false, $formInterfaceMock);
-
-        static::$blackfire->endProbe($probe);
-
-        static::assertInstanceOf(
-            Response::class,
-            $registerResponder(false, $formInterfaceMock)
-        );
-    }
-
     public function testRedirectResponseIsReturned()
     {
         $registerResponder = new RegisterResponder(
             $this->twig,
+            $this->presenter,
             $this->urlGenerator
         );
 
-        $registerResponder(true);
-
         static::assertInstanceOf(
             RedirectResponse::class,
-            $registerResponder(true)
+            $registerResponder($this->request, true)
         );
     }
 
@@ -133,14 +98,13 @@ class RegisterResponderTest extends TestCase
 
         $registerResponder = new RegisterResponder(
             $this->twig,
+            $this->presenter,
             $this->urlGenerator
         );
 
-        $registerResponder(false, $formInterfaceMock);
-
         static::assertInstanceOf(
             Response::class,
-            $registerResponder(false, $formInterfaceMock)
+            $registerResponder($this->request, false, $formInterfaceMock)
         );
     }
 }

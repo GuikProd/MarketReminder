@@ -16,8 +16,8 @@ namespace App\Tests\UI\Action\Security;
 use App\UI\Action\Security\Interfaces\RegisterActionInterface;
 use App\UI\Action\Security\RegisterAction;
 use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\RegisterResponder;
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -29,29 +29,33 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
- * Class RegisterActionTest.
+ * Class RegisterActionUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class RegisterActionTest extends TestCase
+final class RegisterActionUnitTest extends TestCase
 {
-    use TestCaseTrait;
+    /**
+     * @var PresenterInterface|null
+     */
+    private $presenter = null;
 
     /**
-     * @var Environment
+     * @var Environment|null
      */
-    private $twig;
+    private $twig = null;
 
     /**
-     * @var UrlGeneratorInterface
+     * @var UrlGeneratorInterface|null
      */
-    private $urlGenerator;
+    private $urlGenerator = null;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
+        $this->presenter = $this->createMock(PresenterInterface::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
@@ -76,78 +80,6 @@ class RegisterActionTest extends TestCase
         static::assertInstanceOf(RegisterActionInterface::class, $registerAction);
     }
 
-    /**
-     * @group Blackfire
-     */
-    public function testBlackfireProfilingWithGoodHandlerProcess()
-    {
-        $formFactoryMock = $this->createMock(FormFactoryInterface::class);
-        $formInterfaceMock = $this->createMock(FormInterface::class);
-        $registerTypeHandlerMock = $this->createMock(RegisterTypeHandlerInterface::class);
-        $requestMock = $this->createMock(Request::class);
-
-        $formFactoryMock->method('create')->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('handleRequest')->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('createView')->willReturn(new FormView());
-
-        $registerTypeHandlerMock->method('handle')->willReturn(true);
-
-        $registerResponder = new RegisterResponder(
-            $this->twig,
-            $this->urlGenerator
-        );
-
-        $registerAction = new RegisterAction(
-            $formFactoryMock,
-            $registerTypeHandlerMock
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $registerAction($requestMock, $registerResponder);
-
-        static::$blackfire->endProbe($probe);
-
-        static::assertInstanceOf(
-            RedirectResponse::class,
-            $registerAction($requestMock, $registerResponder)
-        );
-    }
-
-    /**
-     * @group Blackfire
-     */
-    public function testBlackfireProfilingWithWrongHandlerProcess()
-    {
-        $formFactoryMock = $this->createMock(FormFactoryInterface::class);
-        $formInterfaceMock = $this->createMock(FormInterface::class);
-        $registerTypeHandlerMock = $this->createMock(RegisterTypeHandlerInterface::class);
-        $requestMock = $this->createMock(Request::class);
-        $registerResponderMock = $this->createMock(RegisterResponder::class);
-
-        $formFactoryMock->method('create')->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('handleRequest')->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('createView')->willReturn(new FormView());
-
-        $registerTypeHandlerMock->method('handle')->willReturn(false);
-
-        $registerAction = new RegisterAction(
-            $formFactoryMock,
-            $registerTypeHandlerMock
-        );
-
-        $probe = static::$blackfire->createProbe();
-
-        $registerAction($requestMock, $registerResponderMock);
-
-        static::$blackfire->endProbe($probe);
-
-        static::assertInstanceOf(
-            Response::class,
-            $registerAction($requestMock, $registerResponderMock)
-        );
-    }
-
     public function testGoodHandlerProcess()
     {
         $formFactoryMock = $this->createMock(FormFactoryInterface::class);
@@ -163,6 +95,7 @@ class RegisterActionTest extends TestCase
 
         $registerResponder = new RegisterResponder(
             $this->twig,
+            $this->presenter,
             $this->urlGenerator
         );
 
@@ -195,6 +128,7 @@ class RegisterActionTest extends TestCase
 
         $registerResponder = new RegisterResponder(
             $this->twig,
+            $this->presenter,
             $this->urlGenerator
         );
 

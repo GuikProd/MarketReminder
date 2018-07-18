@@ -52,9 +52,11 @@ phpunit:
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
         - apk add --no-cache zlib-dev
+        - pecl install redis
         - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
              && docker-php-ext-install zip
-        - docker-php-ext-install zip
+        - docker-php-ext-install zip \
+             && docker-php-ext-enable redis
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
@@ -81,9 +83,11 @@ behat_core:
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
         - apk add --no-cache zlib-dev
+        - pecl install redis
         - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
              && docker-php-ext-install zip
-        - docker-php-ext-install zip
+        - docker-php-ext-install zip \
+             && docker-php-ext-enable redis
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
@@ -100,6 +104,8 @@ behat_core:
         - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
+        - php $CI_PROJECT_DIR/bin/console app:translation:warm button fr
+        - php $CI_PROJECT_DIR/bin/console app:translation:warm button en
         - php $CI_PROJECT_DIR/bin/console app:translation:warm messages fr
         - php $CI_PROJECT_DIR/bin/console app:translation:warm messages en
         - php $CI_PROJECT_DIR/bin/console app:translation:warm validators fr
@@ -123,9 +129,11 @@ behat_e2e:
         - php composer-setup.php
         - php -r "unlink('composer-setup.php');"
         - apk add --no-cache zlib-dev
+        - pecl install redis
         - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
              && docker-php-ext-install zip
-        - docker-php-ext-install zip
+        - docker-php-ext-install zip \
+             && docker-php-ext-enable redis
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
@@ -142,6 +150,8 @@ behat_e2e:
         - php $CI_PROJECT_DIR/bin/console d:f:l -n --env=test
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-query
         - php $CI_PROJECT_DIR/bin/console doctrine:cache:clear-metadata
+        - php $CI_PROJECT_DIR/bin/console app:translation:warm button fr
+        - php $CI_PROJECT_DIR/bin/console app:translation:warm button en
         - php $CI_PROJECT_DIR/bin/console app:translation:warm messages fr
         - php $CI_PROJECT_DIR/bin/console app:translation:warm messages en
         - php $CI_PROJECT_DIR/bin/console app:translation:warm validators fr

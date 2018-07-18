@@ -58,7 +58,8 @@ final class LoginResponder implements LoginResponderInterface
 
         $this->presenter->prepareOptions([
             '_locale' => $request->getLocale(),
-            'form' => $form,
+            'content' => [],
+            'form' => $form ? $form->createView() : null,
             'page' => [
                 'title' => [
                     'channel' => 'messages',

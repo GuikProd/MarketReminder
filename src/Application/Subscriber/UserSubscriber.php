@@ -93,6 +93,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     {
         $this->presenter->prepareOptions([
             '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
+            'content' => [],
             'page' => [
                 'content' => [
                     'key' => 'user.ask_reset_password.content',
@@ -139,6 +140,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     {
         $this->presenter->prepareOptions([
             '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
+            'content' => [],
             'page' => [
                 'content_first' => [
                     'key' => 'user.registration.welcome.content_first_part',
@@ -189,6 +191,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     {
         $this->presenter->prepareOptions([
             '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
+            'content' => [],
             'page' => [
                 'body' => [
                     'key' => 'user.reset_password.content',
@@ -235,6 +238,7 @@ final class UserSubscriber implements EventSubscriberInterface, UserSubscriberIn
     {
         $this->presenter->prepareOptions([
             '_locale' => $this->requestStack->getCurrentRequest()->getLocale(),
+            'content' => [],
             'page' => [
                 'subject' => [
                     'key' => 'user.validation.subject',

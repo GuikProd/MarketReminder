@@ -27,24 +27,24 @@ use Ramsey\Uuid\Uuid;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class PresenterUnitTest extends TestCase
+final class PresenterUnitTest extends TestCase
 {
     /**
      * @var CloudTranslationRepositoryInterface
      */
-    private $redisTranslationRepository;
+    private $cloudTranslationRepository;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
+        $this->cloudTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
     }
 
     public function testItImplements()
     {
-        $presenter = new Presenter($this->redisTranslationRepository);
+        $presenter = new Presenter($this->cloudTranslationRepository);
 
         static::assertInstanceOf(PresenterInterface::class, $presenter);
         static::assertInstanceOf(
@@ -61,9 +61,10 @@ class PresenterUnitTest extends TestCase
      */
     public function testItResolveOptionsWithoutCache(string $locale, array $values)
     {
-        $presenter = new Presenter($this->redisTranslationRepository);
+        $presenter = new Presenter($this->cloudTranslationRepository);
         $presenter->prepareOptions([
             '_locale' => $locale,
+            'content' => [],
             'page' => $values
         ]);
 
@@ -78,11 +79,12 @@ class PresenterUnitTest extends TestCase
      */
     public function testItResolveOptionsWithCache(CloudTranslationItemInterface $redisTranslation)
     {
-        $this->redisTranslationRepository->method('getSingleEntry')->willReturn($redisTranslation);
+        $this->cloudTranslationRepository->method('getSingleEntry')->willReturn($redisTranslation);
 
-        $presenter = new Presenter($this->redisTranslationRepository);
+        $presenter = new Presenter($this->cloudTranslationRepository);
         $presenter->prepareOptions([
             '_locale' => $redisTranslation->getLocale(),
+            'content' => [],
             'page' => [
                 'button' => [
                     'channel' => 'messages',

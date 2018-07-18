@@ -1,12 +1,13 @@
 {% macro form_file_type(fileType) %}
     <div class="mk-main__form">
-        <label for="{{ fileType.profileImage.vars.id }}" class="mk-form__file-label mdc-fab mdc-fab--extended mdc-elevation--z2" aria-label="image">
+        <label for="{{ fileType.profileImage.vars.id }}" id="{{ fileType.profileImage.vars.id~'-label' }}" class="mk-form__file-label mdc-fab mdc-fab--extended mdc-elevation--z2" aria-label="image">
             <span class="mdc-fab__label">
                 {{ 'register.profileImage_label'|cloudTranslate('form', app.request.locale) }}
             </span>
             <i class="mdc-fab__icon material-icons">image</i>
-            {{ form_widget(fileType.profileImage, {'attr': {'class': 'mk-form__none'}}) }}
         </label>
+
+        {{ form_widget(fileType.profileImage, {'attr': {'class': 'mk-form__none'}}) }}
         {{ form_help(fileType.profileImage) }}
         {{ form_errors(fileType.profileImage) }}
     </div>

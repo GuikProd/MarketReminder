@@ -54,6 +54,7 @@ final class HomeResponder implements HomeResponderInterface
     {
         $this->presenter->prepareOptions([
             '_locale' => $request->attributes->get('_locale'),
+            'content' => [],
             'page' => [
                 'content' => [
                     'key' => 'home.text',

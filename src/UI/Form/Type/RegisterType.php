@@ -41,20 +41,26 @@ final class RegisterType extends AbstractType
                 'attr' => [
                     'placeholder' => 'security.registration_username',
                     'aria-label' => 'security.registration_username',
+                    'minlength' => 3,
+                    'maxlength' => 25
                 ],
                 'help' => 'register.username_help'
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
                     'placeholder' => 'security.registration_email',
-                    'aria-label' => 'security.registration_email'
+                    'aria-label' => 'security.registration_email',
+                    'minlength' => 10,
+                    'maxlength' => 50
                 ],
                 'help' => 'register.email_help'
             ])
             ->add('password', PasswordType::class, [
                 'attr' => [
                     'placeholder' => 'security.registration_password',
-                    'aria-label' => 'security.registration_password'
+                    'aria-label' => 'security.registration_password',
+                    'minlength' => 5,
+                    'maxlength' => 25
                 ],
                 'help' => 'register.password_help'
             ])

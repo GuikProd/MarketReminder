@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"GET", "POST"}
  * )
  */
-class RegisterAction implements RegisterActionInterface
+final class RegisterAction implements RegisterActionInterface
 {
     /**
      * @var FormFactoryInterface
@@ -66,9 +66,9 @@ class RegisterAction implements RegisterActionInterface
                                           ->handleRequest($request);
 
         if ($this->registerTypeHandler->handle($registerType)) {
-            return $responder(true);
+            return $responder($request, true);
         }
 
-        return $responder(false, $registerType);
+        return $responder($request, false, $registerType);
     }
 }

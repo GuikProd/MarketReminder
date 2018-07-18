@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Security\Interfaces;
 
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -28,25 +30,26 @@ interface RegisterResponderInterface
     /**
      * RegisterResponderInterface constructor.
      *
-     * @param Environment           $twig
+     * @param Environment $twig
+     * @param PresenterInterface $presenter
      * @param UrlGeneratorInterface $urlGenerator
      */
     public function __construct(
         Environment $twig,
+        PresenterInterface $presenter,
         UrlGeneratorInterface $urlGenerator
     );
 
     /**
-     * @param bool          $redirect
+     * @param Request $request
+     * @param bool $redirect
      * @param FormInterface $registerForm
      *
      * @return Response
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function __invoke(
+        Request $request,
         bool $redirect,
         FormInterface $registerForm = null
     ): Response;

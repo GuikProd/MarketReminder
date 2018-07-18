@@ -6,6 +6,8 @@ register.email_help: 'The email must be between 10 and 50 characters and can not
 register.password_help: 'The password must be between 5 and 25 characters and can not be empty!'
 register.profileImage_help: 'The profile image should not weigh more than 2MB, only the following formats are accepted: jpeg / png / jpg'
 register.profileImage_label: 'Profile Image'
+register.profileImage_size_error: 'Image too heavy'
+register.profileImage_size_success: 'Valid image'
 stock.creation.item_type: Food
 stock.creation_title: appellation
 stock.creation_choices: Status

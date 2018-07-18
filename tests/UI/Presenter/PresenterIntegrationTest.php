@@ -93,6 +93,7 @@ final class PresenterIntegrationTest extends TestCase
         $presenter = new Presenter($this->redisTranslationRepository);
         $presenter->prepareOptions([
             '_locale' => 'ru',
+            'content' => [],
             'page' => [
                 'button' => [
                     'key' => $values['key'],
@@ -125,6 +126,7 @@ final class PresenterIntegrationTest extends TestCase
         $presenter = new Presenter($this->redisTranslationRepository);
         $presenter->prepareOptions([
             '_locale' => $locale,
+            'content' => [],
             'page' => [
                 'button' => [
                     'key' => $values['key'],

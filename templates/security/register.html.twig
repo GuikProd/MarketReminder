@@ -1,19 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ "registration.title"|trans }}
+    {{ presenter.page.title.value }}
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('build/registration.css') }}" />
     <link rel="stylesheet" href="{{ asset('build/register.css') }}" />
 {% endblock %}
 
 {% block body %}
     <section class="registration-bloc">
-        {% form_theme registerForm 'form/themes/_registerTypeTheme.html.twig' %}
-        {{ form(registerForm) }}
+        {% form_theme presenter.viewOptions.form 'form/themes/_registerTypeTheme.html.twig' %}
+        {{ form(presenter.viewOptions.form) }}
 
         <div class="mdc-snackbar mdc-snackbar--align-start"
              aria-live="assertive"
@@ -30,25 +29,24 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('build/registrationForm.js') }}"></script>
-    <script src="{{ asset('build/form.js') }}"></script>
-    <script src="{{ asset('build/file_check.js') }}"></script>
     <script src="{{ asset('build/snackbar.js') }}"></script>
     <script type="text/javascript">
-        form = document.getElementById("{{ registerForm.children.profileImage.vars.id|e('js') }}");
+        form = document.getElementById("{{ presenter.viewOptions.form.children.profileImage.vars.id|e('js') }}");
+        formLabel = document.getElementById("{{ presenter.viewOptions.form.children.profileImage.vars.id|e('js')~'-label' }}");
         formBtn = document.getElementById('register');
-        profileImageHelper = document.getElementById('{{ registerForm.children.profileImage.vars.id }}-helper-text');
+        profileImageHelper = document.getElementById('{{ presenter.viewOptions.form.children.profileImage.vars.id }}-helper-text');
         form.addEventListener('change', checkFileSize, false);
 
         function checkFileSize() {
-            for (var i = 0, numFiles = this.files.length; i < numFiles; i++) {
+            for (let i = 0, numFiles = this.files.length; i < numFiles; i++) {
                 let file = this.files[i];
 
-                if (file.size > 2000000) {
+                if (file.size > {{ presenter.viewOptions.content.maxFileSize|e('js') }}) {
                     formBtn.disabled = true;
-                    profileImageHelper.visible = true;
+                    formLabel.textContent = "{{ presenter.viewOptions.content.file_size_error.value }}"
                 } else {
                     formBtn.disabled = false;
-                    profileImageHelper.visible = false;
+                    formLabel.textContent = "{{ presenter.viewOptions.content.file_size_success.value }}"
                 }
             }
         }
