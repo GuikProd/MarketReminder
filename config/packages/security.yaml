@@ -27,3 +27,6 @@ security:
             logout:
                 path: logout
                 target: index
+            guard:
+                authenticator:
+                    - 'App\Application\Security\Guard\LoginFormAuthenticator'

@@ -68,3 +68,12 @@ tests:
         assertions:
             - { label: null, expression: 'metrics.redis.connections.count <= 1' }
         exclude: {  }
+    'OPcache interned strings buffer should not use more than 85% of its allocated memory':
+        path:
+            - '/.*'
+        methods:
+            - ANY
+        command: '.*'
+        assertions:
+            - { label: null, expression: '(runtime.opcache.status.interned_strings_usage.used_memory / runtime.opcache.status.interned_strings_usage.buffer_size) <= 0.85' }
+        exclude: {  }

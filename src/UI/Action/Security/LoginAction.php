@@ -50,11 +50,8 @@ final class LoginAction implements LoginActionInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(
-        Request $request,
-        LoginResponderInterface $responder
-    ): Response {
-
+    public function __invoke(Request $request, LoginResponderInterface $responder): Response
+    {
         $form = $this->formFactory->create(LoginType::class)->handleRequest($request);
 
         return $responder($request, $form);
