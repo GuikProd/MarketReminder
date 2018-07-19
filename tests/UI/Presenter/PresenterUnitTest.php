@@ -69,7 +69,8 @@ final class PresenterUnitTest extends TestCase
         ]);
 
         static::assertSame($locale, $presenter->getViewOptions()['_locale']);
-        static::assertCount(count($values), $presenter->getPage());
+        static::assertCount(0, $presenter->getPage());
+        static::assertCount(\count($values), $presenter->getPage());
     }
 
     /**

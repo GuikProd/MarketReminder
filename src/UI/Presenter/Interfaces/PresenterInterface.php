@@ -63,6 +63,11 @@ interface PresenterInterface
     /**
      * @return array
      */
+    public function getContent(): array;
+
+    /**
+     * @return array
+     */
     public function getPage(): array;
 
     /**

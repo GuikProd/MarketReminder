@@ -109,11 +109,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if (!$this->userPasswordEncoder->isPasswordValid($user, $credentials['password'])) {
-            return false;
-        }
-
-        return true;
+        return $this->userPasswordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     /**

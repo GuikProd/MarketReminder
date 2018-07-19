@@ -202,6 +202,34 @@ final class LoginFormAuthenticatorUnitTest extends TestCase
     }
 
     /**
+     * @dataProvider provideEmptyCredentials
+     *
+     * @param array $credentials
+     */
+    public function testItRefuseCredentials(array $credentials)
+    {
+        $this->userPasswordEncoder->method('isPasswordValid')->willReturn(false);
+
+        $userInterfaceMock = $this->createMock(UserInterface::class);
+
+        static::assertFalse($this->authenticator->checkCredentials($credentials, $userInterfaceMock));
+    }
+
+    /**
+     * @dataProvider provideEmptyCredentials
+     *
+     * @param array $credentials
+     */
+    public function testItAcceptCredentials(array $credentials)
+    {
+        $this->userPasswordEncoder->method('isPasswordValid')->willReturn(true);
+
+        $userInterfaceMock = $this->createMock(UserInterface::class);
+
+        static::assertTrue($this->authenticator->checkCredentials($credentials, $userInterfaceMock));
+    }
+
+    /**
      * @return \Generator
      */
     public function provideWrongRequestPath()
@@ -250,5 +278,21 @@ final class LoginFormAuthenticatorUnitTest extends TestCase
     {
         yield array('/fr/login', '/fr/login', ['username' => 'toto', 'password' => 'toto']);
         yield array('/en/login', '/en/login', ['username' => 'toto', 'password' => 'toto']);
+    }
+
+    /**
+     * @return \Generator
+     */
+    public function provideEmptyCredentials()
+    {
+        yield array(['username' => '', 'password' => '']);
+    }
+
+    /**
+     * @return \Generator
+     */
+    public function provideValidCredentials()
+    {
+        yield array(['username' => 'toto', 'password' => 'toto']);
     }
 }

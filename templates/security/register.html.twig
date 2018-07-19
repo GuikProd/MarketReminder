@@ -11,6 +11,9 @@
 
 {% block body %}
     <section class="registration-bloc">
+        <h2 class="mk-main__center">
+            {{ presenter.page.title.value }}
+        </h2>
         {% form_theme presenter.viewOptions.form 'form/themes/_registerTypeTheme.html.twig' %}
         {{ form(presenter.viewOptions.form) }}
 

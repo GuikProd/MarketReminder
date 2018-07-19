@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block body %}
-    {% form_theme presenter.viewOptions.form.createView 'form/themes/dashboard/_stock_creation.html.twig' %}
-    {{ form(presenter.viewOptions.form.createView) }}
+    {% form_theme presenter.viewOptions.form 'form/themes/dashboard/_stock_creation.html.twig' %}
+    {{ form(presenter.viewOptions.form) }}
 {% endblock %}
 
 {% block javascripts %}

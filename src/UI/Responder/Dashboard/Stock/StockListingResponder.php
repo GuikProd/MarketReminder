@@ -11,31 +11,30 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\UI\Responder\Security;
+namespace App\UI\Responder\Dashboard\Stock;
 
 use App\UI\Presenter\Interfaces\PresenterInterface;
-use App\UI\Responder\Security\Interfaces\LoginResponderInterface;
-use Symfony\Component\Form\FormInterface;
+use App\UI\Responder\Dashboard\Stock\Interfaces\StockListingResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
- * Class LoginResponder
- *
+ * Class StockListingResponder.
+ * 
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class LoginResponder implements LoginResponderInterface
+final class StockListingResponder implements StockListingResponderInterface
 {
-    /**
-     * @var Environment
-     */
-    private $twig;
-
     /**
      * @var PresenterInterface
      */
     private $presenter;
+
+    /**
+     * @var Environment
+     */
+    private $twig;
 
     /**
      * {@inheritdoc}
@@ -51,31 +50,18 @@ final class LoginResponder implements LoginResponderInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(
-        Request $request,
-        FormInterface $form
-    ): Response {
-
+    public function __invoke(Request $request, array $data = []): Response
+    {
         $this->presenter->prepareOptions([
             '_locale' => $request->getLocale(),
             'content' => [
-                'registration_link' => [
-                    'channel' => 'messages',
-                    'key' => 'registration.title'
-                ]
+                'data' => $data
             ],
-            'form' => $form ? $form->createView() : null,
-            'page' => [
-                'title' => [
-                    'channel' => 'messages',
-                    'key' => 'login.title'
-                ]
-            ],
-            'user' => null
+            'page' => []
         ]);
 
         return new Response(
-            $this->twig->render('security/login.html.twig', [
+            $this->twig->render('dashboard/stock/stock_listing.html.twig', [
                 'presenter' => $this->presenter
             ])
         );

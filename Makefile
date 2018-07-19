@@ -180,11 +180,20 @@ phpmetrics: ## Allow to launch a phpmetrics analyze
 	    $(ENV_PHP) vendor/bin/phpmetrics src
 
 ## NodeJS commands
+lighthouse: node_modules
+	    $(ENV_NODE) lighthouse $(URL) --output html --output-path ./lighthouse.html
+
+yarn_install: node_modules
+	    $(ENV_NODE) yarn install
+
 encore_watch: ## Allow to use Encore to watch the asssets
 	    $(ENV_NODE) yarn watch
 
 encore_production: ## Allow to build the assets for a production usage.
 	    $(ENV_NODE) yarn build
+
+yarn_add_global: ## Allow to add a new package in the "prod" env
+	    $(ENV_NODE) yarn global add $(PACKAGE)
 
 yarn_add_prod: ## Allow to add a new package in the "prod" env
 	    $(ENV_NODE) yarn add $(PACKAGE)

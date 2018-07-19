@@ -7,6 +7,8 @@ reset_password.title: 'Reset password'
 registration.title: 'Create an account'
 password.raw: Password
 stock.creation_title: 'Create a stock'
+dashboard.title: Dashboard
+dashboard.stock_list.title: 'List of stocks'
 image.text: 'Profile Image'
 account.creation: 'Create an account'
 account.already_exist: 'Account already created?'

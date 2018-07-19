@@ -57,19 +57,17 @@ final class PresenterIntegrationTest extends TestCase
     protected function setUp()
     {
         $connector = new FileSystemConnector('test');
-        $backUpConnector = new FileSystemConnector('backup_test');
 
         $cloudTranslationFactory = new CloudTranslationFactory();
         $cloudTranslationValidator = new CloudTranslationValidator();
 
-        $this->redisTranslationRepository = new CloudTranslationRepository($connector, $backUpConnector);
+        $this->redisTranslationRepository = new CloudTranslationRepository($connector);
         $this->redisTranslationWriter = new CloudTranslationWriter($connector, $cloudTranslationFactory, $cloudTranslationValidator);
         $this->presenter = new Presenter($this->redisTranslationRepository);
 
         $this->testingData = ['channel' => 'messages', 'key' => 'home.text'];
 
         $connector->getAdapter()->clear();
-        $backUpConnector->getAdapter()->clear();
     }
 
     /**

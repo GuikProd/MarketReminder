@@ -14,7 +14,7 @@
         <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('icons/apple-icon-144x144.png') }}" />
         <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('icons/apple-icon-152x152.png') }}" />
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-icon-180x180.png') }}" />
-        <link rel="icon" type="image/png" sizes="192x192"  href="{{ asset('icons/android-icon-192x192.png') }}" />
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icons/android-icon-192x192.png') }}" />
         <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('icons/favicon-32x32.png') }}" />
         <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('icons/favicon-96x96.png') }}" />
         <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('icons/favicon-16x16.png') }}" />
@@ -32,43 +32,72 @@
     </head>
     <body class="main">
         {% block navigation %}
-            <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+            <header class="mdc-top-app-bar mdc-top-app-bar--fixed mdc-elevation--z2">
                 <div class="mdc-top-app-bar__row">
                     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-                        <a href="#" class="material-icons mdc-top-app-bar__navigation-icon">menu</a>
+                        <a href="#" class="material-icons mdc-top-app-bar__navigation-icon" id="aside_menu">menu</a>
                         <span class="mdc-top-app-bar__title">MarketReminder</span>
                     </section>
                     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
                         <a href="{{ path('index') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="home" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
                             home
                         </a>
-                        <a href="{{ path('web_login') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="person" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
-                            person
-                        </a>
                         {% if is_granted('ROLE_USER') %}
                             <a href="{{ path('dashboard_home') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="dashboard" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
                                 dashboard
+                            </a>
+                        {% else %}
+                            <a href="{{ path('web_login') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="person" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
+                                person
                             </a>
                         {% endif %}
                     </section>
                 </div>
             </header>
+            <aside class="mdc-drawer mdc-drawer--temporary mdc-typography">
+                <nav class="mdc-drawer__drawer">
+                    <header class="mdc-drawer__header">
+                        <div class="mdc-drawer__header-content">
+                            MarketReminder
+                        </div>
+                    </header>
+                    <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
+                        <a class="mdc-list-item" aria-label="home" href="{{ path('index') }}">
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">home</i>{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}
+                        </a>
+                        {% if is_granted('ROLE_USER') %}
+                            <a class="mdc-list-item" aria-label="dashboard" href="{{ path('dashboard_home') }}">
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">dashboard</i>{{ 'dashboard.title'|cloudTranslate('messages', app.request.locale) }}
+                            </a>
+                            <a class="mdc-list-item" aria-label="list" href="{{ path('dashboard_stock_listing') }}">
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">list</i>{{ 'dashboard.stock_list.title'|cloudTranslate('messages', app.request.locale) }}
+                            </a>
+                            <a class="mdc-list-item" aria-label="list" href="{{ path('logout') }}">
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">list</i>{{ 'dashboard.stock_list.title'|cloudTranslate('messages', app.request.locale) }}
+                            </a>
+                        {% else %}
+                            <a class="mdc-list-item" aria-label="person" href="{{ path('web_login') }}">
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">person</i>{{ 'login.title'|cloudTranslate('messages', app.request.locale) }}
+                            </a>
+                        {% endif %}
+                    </nav>
+                </nav>
+            </aside>
         {% endblock %}
         <div class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell--span-12">
-                    {% for success in app.flashes('success') %}
-                        <div id="snackbar-content">
-                            <p>{{ success }}</p>
-                        </div>
-                    {% endfor %}
-                    {% for failure in app.flashes('failure') %}
-                        <div id="snackbar-content">
-                            <p>{{ failure }}</p>
-                        </div>
-                    {% endfor %}
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12 layout">
-
+                        {% for success in app.flashes('success') %}
+                            <div id="snackbar-content">
+                                <p>{{ success }}</p>
+                            </div>
+                        {% endfor %}
+                        {% for failure in app.flashes('failure') %}
+                            <div id="snackbar-content">
+                                <p>{{ failure }}</p>
+                            </div>
+                        {% endfor %}
                         <!-- Main body -->
                         {% block body %}{% endblock %}
 
@@ -87,6 +116,7 @@
             </div>
         </div>
         {% block javascripts %}
+            <script src="{{ asset('build/navigation.js') }}"></script>
             <script src="{{ asset('build/mc.js') }}"></script>
             <script src="{{ asset('build/webcomponents/custom-elements-es5-adapter.js') }}"></script>
             <script src="{{ asset('build/webcomponents/webcomponents-bundle.js') }}"></script>

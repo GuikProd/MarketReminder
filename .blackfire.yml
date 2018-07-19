@@ -15,6 +15,23 @@ tests:
         path: "/.*"
         assertions:
             - "main.network_in < 400kb"
+    '.env configuration should not be parsed in production':
+        path:
+            - '/.*'
+        methods:
+            - ANY
+        assertions:
+            - { label: null, expression: 'metrics.symfony.dotenv.parse.count == 0' }
+        exclude: {  }
+    '"display_errors" should be disabled':
+        path:
+            - '/.*'
+        methods:
+            - ANY
+        command: '.*'
+        assertions:
+            - { label: null, expression: 'not is_configuration_enabled("display_errors")' }
+        exclude: {  }
     '"session.use_strict_mode" should be enabled':
         path:
             - '/.*'

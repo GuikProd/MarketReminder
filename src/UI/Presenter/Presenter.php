@@ -145,6 +145,14 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
     /**
      * {@inheritdoc}
      */
+    public function getContent(): array
+    {
+        return $this->viewOptions['content'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPage(): array
     {
         return $this->viewOptions['page'];

@@ -8,11 +8,16 @@
 
 {% block body %}
     <section>
+        <div class="mk-main__center">
+            <h2>
+                {{ presenter.page.title.value }}
+            </h2>
+        </div>
         {{ form(presenter.viewOptions.form) }}
     </section>
     <section class="mk-main__container">
         <a href="{{ path('web_registration') }}">
-            {{ "Create an account ?" }}
+            {{ presenter.content.registration_link.value }}
         </a>
     </section>
 {% endblock %}
