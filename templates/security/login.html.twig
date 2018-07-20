@@ -4,7 +4,7 @@
     {{ presenter.page.title.value }}
 {% endblock %}
 
-{% form_theme presenter.viewOptions.form 'form/themes/security/_login_theme.html.twig' %}
+{% form_theme presenter.form 'form/themes/security/_login_theme.html.twig' %}
 
 {% block body %}
     <section>
@@ -13,7 +13,7 @@
                 {{ presenter.page.title.value }}
             </h2>
         </div>
-        {{ form(presenter.viewOptions.form) }}
+        {{ form(presenter.form) }}
     </section>
     <section class="mk-main__container">
         <a href="{{ path('web_registration') }}">

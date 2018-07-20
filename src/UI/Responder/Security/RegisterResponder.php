@@ -79,7 +79,7 @@ final class RegisterResponder implements RegisterResponderInterface
                 ],
                 'maxFileSize' => 2000000
             ],
-            'form' => $registerForm ? $registerForm->createView() : null,
+            'form' => $registerForm,
             'page' => [
                 'title' => [
                     'key' => 'registration.title',

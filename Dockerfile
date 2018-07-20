@@ -1,8 +1,8 @@
-FROM php:fpm-alpine
+FROM php:fpm-alpine as base
 
 ENV WORKPATH "/var/www/marketReminder"
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go \
     && docker-php-ext-configure pgsql --with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install zip intl pdo_pgsql pdo_mysql opcache json pdo_pgsql pgsql mysqli \
     && pecl install apcu redis \
@@ -54,3 +54,7 @@ COPY . ./
 EXPOSE 9000
 
 CMD ["php-fpm"]
+
+FROM base
+
+COPY docker/php/conf/production/php.ini /usr/local/etc/php/php.ini

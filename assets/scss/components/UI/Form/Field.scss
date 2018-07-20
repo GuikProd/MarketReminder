@@ -1,5 +1,14 @@
 @import "@material/textfield/mdc-text-field";
 
+.mk-main__form-container {
+  @include mdc-text-field-outlined_;
+
+  display: flex;
+  justify-content: flex-end;
+  width: 300px;
+  margin: auto;
+}
+
 .mk-main__form {
   display: block;
   margin: 20px auto;

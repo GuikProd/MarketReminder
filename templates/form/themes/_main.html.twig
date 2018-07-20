@@ -1,8 +1,13 @@
 {% block form_row %}
-    <div class="mdc-text-field mdc-text-field--box mk-main__form {{ form.vars.id }}">
+    <div class="mdc-text-field mdc-text-field--outlined {{ form.vars.id }}" style="display: flex; justify-content: flex-end; width: 300px; margin: auto;">
         {{ form_widget(form, {'attr': {'class': 'mdc-text-field__input', 'aria-describedby': form.vars.id ~'-helper-text', 'aria-controls': form.vars.id ~'-helper-text', 'placeholder': ''}}) }}
         {{ form_label(form, '', {'label_attr': {'class': 'mdc-floating-label', 'for': form.vars.id}}) }}
-        <div class="mdc-line-ripple"></div>
+        <div class="mdc-notched-outline">
+            <svg>
+                <path class="mdc-notched-outline__path"/>
+            </svg>
+        </div>
+        <div class="mdc-notched-outline__idle"></div>
         {{ form_errors(form) }}
     </div>
     {{ form_help(form) }}

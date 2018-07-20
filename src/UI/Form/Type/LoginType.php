@@ -36,10 +36,20 @@ final class LoginType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'help' => 'login.username_help'
+                'label' => 'login.username_label',
+                'help' => 'login.username_help',
+                'attr' => [
+                    'minLength' => 3,
+                    'maxLength' => 25
+                ]
             ])
             ->add('password', PasswordType::class, [
-                'help' => 'login.password_help'
+                'label' => 'login.password_label',
+                'help' => 'login.password_help',
+                'attr' => [
+                    'minLength' => 5,
+                    'maxLength' => 25
+                ]
             ])
         ;
     }

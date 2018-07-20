@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html amp lang="en">
+<html amp lang="{{ app.request.locale }}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -72,8 +72,8 @@
                             <a class="mdc-list-item" aria-label="list" href="{{ path('dashboard_stock_listing') }}">
                                 <i class="material-icons mdc-list-item__graphic" aria-hidden="true">list</i>{{ 'dashboard.stock_list.title'|cloudTranslate('messages', app.request.locale) }}
                             </a>
-                            <a class="mdc-list-item" aria-label="list" href="{{ path('logout') }}">
-                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">list</i>{{ 'dashboard.stock_list.title'|cloudTranslate('messages', app.request.locale) }}
+                            <a class="mdc-list-item" aria-label="perm_identity" href="{{ path('logout') }}">
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">perm_identity</i>{{ 'logout.title'|cloudTranslate('messages', app.request.locale) }}
                             </a>
                         {% else %}
                             <a class="mdc-list-item" aria-label="person" href="{{ path('web_login') }}">

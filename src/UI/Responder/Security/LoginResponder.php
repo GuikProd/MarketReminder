@@ -64,7 +64,7 @@ final class LoginResponder implements LoginResponderInterface
                     'key' => 'registration.title'
                 ]
             ],
-            'form' => $form ? $form->createView() : null,
+            'form' => $form,
             'page' => [
                 'title' => [
                     'channel' => 'messages',

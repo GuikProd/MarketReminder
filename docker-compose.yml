@@ -1,10 +1,12 @@
-version: "3.1"
+version: "3.6"
 
 services:
     # Core configuration
     php-fpm:
         container_name: ${CONTAINER_NAME}_php-fpm
-        build: .
+        build:
+            context: .
+            target: base
         environment:
             BLACKFIRE_LOG_LEVEL: 4
             BLACKFIRE_SERVER_ID: '${BLACKFIRE_SERVER_ID}'

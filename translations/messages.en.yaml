@@ -9,6 +9,7 @@ password.raw: Password
 stock.creation_title: 'Create a stock'
 dashboard.title: Dashboard
 dashboard.stock_list.title: 'List of stocks'
+logout.title: 'Sign out'
 image.text: 'Profile Image'
 account.creation: 'Create an account'
 account.already_exist: 'Account already created?'

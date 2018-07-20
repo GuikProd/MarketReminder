@@ -18,6 +18,7 @@ use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslation
 use App\Infra\GCP\CloudTranslation\UI\Interfaces\CloudTranslationPresenterInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -60,9 +61,6 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
 
         try {
             $translatedViewOptions = $this->prepareTranslations($viewOptions);
-            if (isset($viewOptions['form'])) {
-                $this->translateFormViewVariables($viewOptions['form']->children, $viewOptions['_locale']);
-            }
         } catch (InvalidArgumentException $exception) {
             sprintf($exception->getMessage());
         }
@@ -137,7 +135,7 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
 
         $resolver->setAllowedTypes('_locale', 'string');
         $resolver->setAllowedTypes('content', 'array');
-        $resolver->setAllowedTypes('form', array('null', FormView::class));
+        $resolver->setAllowedTypes('form', array('null', FormInterface::class));
         $resolver->setAllowedTypes('page', 'array');
         $resolver->setAllowedTypes('user', array('null', UserInterface::class));
     }
@@ -148,6 +146,14 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
     public function getContent(): array
     {
         return $this->viewOptions['content'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForm(): ?FormView
+    {
+        return $this->viewOptions['form']->createView() ?? null;
     }
 
     /**

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Presenter\Interfaces;
 
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
@@ -59,6 +60,11 @@ interface PresenterInterface
      * @throws \LogicException
      */
     public function configureOptions(Options $resolver): void;
+
+    /**
+     * @return FormView|null
+     */
+    public function getForm(): ?FormView;
 
     /**
      * @return array

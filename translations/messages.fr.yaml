@@ -11,6 +11,9 @@ stock.creation_title: "Créer un stock"
 dashboard.title: "Dashboard"
 dashboard.stock_list.title: "Liste des stocks"
 
+# Navigation
+logout.title: "Se déconnecter"
+
 # Pages button
 image.text: Image de profil
 account.creation: Créer un compte

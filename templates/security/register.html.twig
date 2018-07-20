@@ -14,8 +14,8 @@
         <h2 class="mk-main__center">
             {{ presenter.page.title.value }}
         </h2>
-        {% form_theme presenter.viewOptions.form 'form/themes/_registerTypeTheme.html.twig' %}
-        {{ form(presenter.viewOptions.form) }}
+        {% form_theme presenter.form 'form/themes/_registerTypeTheme.html.twig' %}
+        {{ form(presenter.form) }}
 
         <div class="mdc-snackbar mdc-snackbar--align-start"
              aria-live="assertive"
@@ -34,10 +34,10 @@
     <script src="{{ asset('build/registrationForm.js') }}"></script>
     <script src="{{ asset('build/snackbar.js') }}"></script>
     <script type="text/javascript">
-        form = document.getElementById("{{ presenter.viewOptions.form.children.profileImage.vars.id|e('js') }}");
-        formLabel = document.getElementById("{{ presenter.viewOptions.form.children.profileImage.vars.id|e('js')~'-label' }}");
+        form = document.getElementById("{{ presenter.form.children.profileImage.vars.id|e('js') }}");
+        formLabel = document.getElementById("{{ presenter.form.children.profileImage.vars.id|e('js')~'-label' }}");
         formBtn = document.getElementById('register');
-        profileImageHelper = document.getElementById('{{ presenter.viewOptions.form.children.profileImage.vars.id }}-helper-text');
+        profileImageHelper = document.getElementById('{{ presenter.form.children.profileImage.vars.id }}-helper-text');
         form.addEventListener('change', checkFileSize, false);
 
         function checkFileSize() {
