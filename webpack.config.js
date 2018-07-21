@@ -53,6 +53,7 @@ Encore
     ]))
 
     // Style
+    .addStyleEntry('app-shell', './assets/scss/public/app-shell.scss')
     .addStyleEntry('core', './assets/scss/public/core.scss')
     .addStyleEntry('register', './assets/scss/public/register.scss')
     .addStyleEntry('dashboard', './assets/scss/public/dashboard.scss')
@@ -60,6 +61,7 @@ Encore
     // Javascript
     .addEntry('navigation', './assets/javascript/public/navigation.js')
     .addEntry('mc', './assets/javascript/public/mc.js')
+    .addEntry('askResetPassword', './assets/javascript/public/askResetPassword.js')
     .addEntry('file_check', './assets/javascript/components/form/file_check.js')
     .addEntry('login', './assets/javascript/public/login.js')
     .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')

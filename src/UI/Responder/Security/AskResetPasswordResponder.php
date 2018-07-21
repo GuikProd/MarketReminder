@@ -68,6 +68,7 @@ final class AskResetPasswordResponder implements AskResetPasswordResponderInterf
 
         $this->presenter->prepareOptions([
             '_locale' => $request->getLocale(),
+            'content' => [],
             'form' => $askResetPasswordForm,
             'page' => [
                 'card_button' => [

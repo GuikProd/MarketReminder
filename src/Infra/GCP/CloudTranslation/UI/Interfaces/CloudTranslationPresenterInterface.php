@@ -38,12 +38,4 @@ interface CloudTranslationPresenterInterface
      * @return array The new view options translated.
      */
     public function prepareTranslations(array $viewOptions): array;
-
-    /**
-     * @param array $viewVariables
-     * @param string $locale
-     *
-     * @return void
-     */
-    public function translateFormViewVariables(array $viewVariables, string $locale): void;
 }

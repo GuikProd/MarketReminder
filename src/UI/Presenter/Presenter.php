@@ -99,30 +99,6 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
     /**
      * {@inheritdoc}
      */
-    public function translateFormViewVariables(array $viewVariables, string $locale): void
-    {
-        if (!isset($viewVariables)) { return; }
-
-        foreach ($viewVariables as $variable) {
-            $viewOptions = $variable->vars;
-
-            foreach ($viewOptions as $key => $value) {
-                if (\in_array($key, self::FORM_ALLOWED_VARS) && null !== $value) {
-                    try {
-                        $viewOptions[$key] = $this->cloudTranslationRepository->getSingleEntry('form.' . $locale . '.yaml', $locale, $value)->getValue();
-                    } catch (InvalidArgumentException $e) {
-                        $viewOptions[$key] = sprintf($e->getMessage());
-                    }
-                }
-            }
-
-            $variable->vars = array_replace($variable->vars, $viewOptions);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(Options $resolver): void
     {
         $resolver->setDefaults([

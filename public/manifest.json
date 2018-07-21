@@ -31,10 +31,27 @@
       "src": "/pwa/_icons/192.png",
       "types": "image/png",
       "sizes": "192x192"
+    },
+    {
+      "src": "/pwa/_icons/256.png",
+      "types": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/pwa/_icons/384.png",
+      "types": "image/png",
+      "sizes": "384x384"
+    },
+    {
+      "src": "/pwa/_icons/512.png",
+      "types": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": "/",
   "scope": ".",
   "display": "standalone",
-  "lang": "fr-FR"
+  "lang": "fr-FR",
+  "theme_color": "#ffb300",
+  "background_color": "#FFFFFF"
 }

@@ -38,29 +38,32 @@ final class RegisterType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
+                'label' => 'register.username_label',
                 'attr' => [
                     'placeholder' => 'security.registration_username',
                     'aria-label' => 'security.registration_username',
-                    'minlength' => 3,
-                    'maxlength' => 25
+                    'minLength' => 3,
+                    'maxLength' => 25
                 ],
                 'help' => 'register.username_help'
             ])
             ->add('email', EmailType::class, [
+                'label' => 'register.email_label',
                 'attr' => [
                     'placeholder' => 'security.registration_email',
                     'aria-label' => 'security.registration_email',
-                    'minlength' => 10,
-                    'maxlength' => 50
+                    'minLength' => 10,
+                    'maxLength' => 50
                 ],
                 'help' => 'register.email_help'
             ])
             ->add('password', PasswordType::class, [
+                'label' => 'register.password_label',
                 'attr' => [
                     'placeholder' => 'security.registration_password',
                     'aria-label' => 'security.registration_password',
-                    'minlength' => 5,
-                    'maxlength' => 25
+                    'minLength' => 5,
+                    'maxLength' => 25
                 ],
                 'help' => 'register.password_help'
             ])

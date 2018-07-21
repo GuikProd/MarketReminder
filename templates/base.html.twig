@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta name="theme-color" content="#ffb300" />
         <title>MarketReminder - {% block title %}{% endblock %}</title>
         <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('icons/apple-icon-57x57.png') }}" />
         <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('icons/apple-icon-60x60.png') }}" />
@@ -22,6 +23,7 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="{{ asset('icons/ms-icon-144x144.png') }}">
         <meta name="theme-color" content="#ffffff">
+        <link rel="stylesheet" href="{{ asset('build/app-shell.css') }}" />
         {% block stylesheets %}
             <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
             <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css" />
