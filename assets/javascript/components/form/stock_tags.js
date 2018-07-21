@@ -1,4 +1,4 @@
-let addBtn = document.querySelector('#newItem');
+let addBtn = document.querySelector('#stock_creation-button_newItem');
 let index = document.querySelector('#collection').getAttribute('data-index');
 
 addBtn.addEventListener('click', function (e) {

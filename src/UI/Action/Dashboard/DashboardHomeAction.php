@@ -16,6 +16,7 @@ namespace App\UI\Action\Dashboard;
 use App\UI\Action\Dashboard\Interfaces\DashboardHomeActionInterface;
 use App\UI\Responder\Dashboard\Interfaces\DashboardHomeResponderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -37,8 +38,11 @@ final class DashboardHomeAction implements DashboardHomeActionInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(DashboardHomeResponderInterface $responder): Response
-    {
-        return $responder();
+    public function __invoke(
+        Request $request,
+        DashboardHomeResponderInterface $responder
+    ): Response {
+
+        return $responder($request);
     }
 }

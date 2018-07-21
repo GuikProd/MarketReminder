@@ -39,9 +39,15 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
     {
         $builder
             ->add('title', TextType::class, [
-                'help' => 'stock.creation_title'
+                'label' => 'stock.creation_title',
+                'help' => 'stock.creation_title',
+                'attr' => [
+                    'minLength' => 5,
+                    'maxLength' => 50
+                ]
             ])
             ->add('status', ChoiceType::class, [
+                'label' => 'stock.creation_choices',
                 'choices' => [
                     'stock.creation_choices.on_text' => 'on',
                     'stock.creation_choices.off_text' => 'off'
@@ -52,6 +58,7 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
                 ]
             ])
             ->add('tags', StockTagsType::class, [
+                'label' => 'stock.creation_tags',
                 'help' => 'stock.creation_tags',
                 'required' => false
             ])
@@ -78,7 +85,8 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
                     $form->get('tags')->getData()->tags,
                     $form->get('stockItems')->getData()
                 );
-            }
+            },
+            'validation_groups' => ['stock_creation']
         ]);
     }
 }

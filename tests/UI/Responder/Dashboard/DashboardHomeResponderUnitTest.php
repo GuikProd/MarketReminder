@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /*
  * This file is part of the MarketReminder project.
@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Dashboard;
 
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Dashboard\DashboardHomeResponder;
+use App\UI\Responder\Dashboard\Interfaces\DashboardHomeResponderInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -23,12 +26,17 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class DashboardHomeResponderUnitTest extends TestCase
+final class DashboardHomeResponderUnitTest extends TestCase
 {
     /**
-     * @var Environment
+     * @var PresenterInterface|null
      */
-    private $twig;
+    private $presenter = null;
+
+    /**
+     * @var Environment|null
+     */
+    private $twig = null;
 
     /**
      * {@inheritdoc}
@@ -36,12 +44,34 @@ class DashboardHomeResponderUnitTest extends TestCase
     protected function setUp()
     {
         $this->twig = $this->createMock(Environment::class);
+        $this->presenter = $this->createMock(PresenterInterface::class);
+    }
+
+    public function testItImplements()
+    {
+        $responder = new DashboardHomeResponder(
+            $this->twig,
+            $this->presenter
+        );
+
+        static::assertInstanceOf(
+            DashboardHomeResponderInterface::class,
+            $responder
+        );
     }
 
     public function testInvokeReturn()
     {
-        $dashboardHomeResponder = new DashboardHomeResponder($this->twig);
+        $requestMock = $this->createMock(Request::class);
 
-        static::assertInstanceOf(Response::class, $dashboardHomeResponder());
+        $dashboardHomeResponder = new DashboardHomeResponder(
+            $this->twig,
+            $this->presenter
+        );
+
+        static::assertInstanceOf(
+            Response::class,
+            $dashboardHomeResponder($requestMock)
+        );
     }
 }

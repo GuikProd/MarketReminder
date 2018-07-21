@@ -26,7 +26,6 @@
         <link rel="stylesheet" href="{{ asset('build/app-shell.css') }}" />
         {% block stylesheets %}
             <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-            <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
             <link rel="stylesheet" href="{{ asset('build/core.css') }}" />
         {% endblock %}
@@ -123,11 +122,8 @@
             <script src="{{ asset('build/webcomponents/custom-elements-es5-adapter.js') }}"></script>
             <script src="{{ asset('build/webcomponents/webcomponents-bundle.js') }}"></script>
             <script src="{{ asset('build/webcomponents/webcomponents-loader.js') }}"></script>
-            <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
             <script src="{{ asset('build/snackbar.js') }}"></script>
             <script src="{{ asset('build/serviceWorker.js') }}"></script>
-            <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-            <script defer src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
             <script src="{{ asset('build/snackbar.js') }}"></script>
             <script src="{{ asset('build/snackbar_polymer.js') }}"></script>
         {% endblock %}

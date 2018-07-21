@@ -49,6 +49,7 @@ final class StockTagsType extends AbstractType implements StockTagsTypeInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('tags', TextType::class, [
+            'label' => 'stock.creation_tags',
             'help' => 'stock.creations_items.tags'
         ]);
 

@@ -8,6 +8,7 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
     // uncomment to create hashed filenames (e.g. app.abc123.css)
     // .enableVersioning(Encore.isProduction())
+    .enableBuildNotifications()
     .enableTypeScriptLoader()
     .enableVueLoader()
     .enableSassLoader()
@@ -67,6 +68,8 @@ Encore
     .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')
     .addEntry('stock_tags', './assets/javascript/components/form/stock_tags.js')
     .addEntry('registrationForm', './assets/javascript/public/register.js')
+    .addEntry('collectionHandler', './assets/javascript/components/UI/Form/CollectionHandler.js')
+    .addEntry('stockCreation', './assets/javascript/public/stockCreation.js')
 
     // PWA
     .addEntry('serviceWorker', './assets/javascript/pwa/app.js')

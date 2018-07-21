@@ -17,6 +17,7 @@ use App\UI\Action\Dashboard\Stock\Interfaces\StockCreationActionInterface;
 use App\UI\Form\FormHandler\Dashboard\Interfaces\StockCreationTypeHandlerInterface;
 use App\UI\Form\Type\Stock\StockCreationType;
 use App\UI\Responder\Dashboard\Stock\Interfaces\StockCreationResponderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *     path="/dashboard/stock/creation",
  *     methods={"GET", "POST"}
  * )
+ *
+ * @Security("has_role('ROLE_USER')")
  */
 final class StockCreationAction implements StockCreationActionInterface
 {

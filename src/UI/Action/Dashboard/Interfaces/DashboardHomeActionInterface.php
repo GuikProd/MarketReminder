@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Dashboard\Interfaces;
 
-use App\UI\Responder\Dashboard\DashboardHomeResponder;
 use App\UI\Responder\Dashboard\Interfaces\DashboardHomeResponderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -25,9 +25,13 @@ use Symfony\Component\HttpFoundation\Response;
 interface DashboardHomeActionInterface
 {
     /**
+     * @param Request $request
      * @param DashboardHomeResponderInterface $responder
      *
      * @return Response
      */
-    public function __invoke(DashboardHomeResponderInterface $responder): Response;
+    public function __invoke(
+        Request $request,
+        DashboardHomeResponderInterface $responder
+    ): Response;
 }

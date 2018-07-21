@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /*
  * This file is part of the MarketReminder project.
@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Dashboard;
 
+use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Dashboard\Interfaces\DashboardHomeResponderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -25,31 +27,43 @@ use Twig\Environment;
 final class DashboardHomeResponder implements DashboardHomeResponderInterface
 {
     /**
+     * @var PresenterInterface
+     */
+    private $presenter;
+
+    /**
      * @var Environment
      */
     private $twig;
 
     /**
-     * DashboardHomeResponder constructor.
-     *
-     * @param Environment $twig
+     * {@inheritdoc}
      */
-    public function __construct(Environment $twig)
-    {
+    public function __construct(
+        Environment $twig,
+        PresenterInterface $presenter
+    ) {
         $this->twig = $twig;
+        $this->presenter = $presenter;
     }
 
     /**
-     * @return Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
-        return new Response(
+        $this->presenter->prepareOptions([
+            '_locale' => $request->getLocale(),
+            'content' => [],
+            'page' => []
+        ]);
+
+        $response = new Response(
             $this->twig->render('dashboard/home.html.twig')
         );
+
+        return $response->setCache([
+            'etag' => md5(str_rot13($request->getLocale()))
+        ]);
     }
 }

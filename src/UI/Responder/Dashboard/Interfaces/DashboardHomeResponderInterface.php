@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /*
  * This file is part of the MarketReminder project.
@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace App\UI\Responder\Dashboard\Interfaces;
 
+use App\UI\Presenter\Interfaces\PresenterInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
  * Interface DashboardHomeResponderInterface.
@@ -23,7 +26,20 @@ use Symfony\Component\HttpFoundation\Response;
 interface DashboardHomeResponderInterface
 {
     /**
+     * DashboardHomeResponderInterface constructor.
+     *
+     * @param Environment $twig
+     * @param PresenterInterface $presenter
+     */
+    public function __construct(
+        Environment $twig,
+        PresenterInterface $presenter
+    );
+
+    /**
+     * @param Request $request
+     *
      * @return Response
      */
-    public function __invoke(): Response;
+    public function __invoke(Request $request): Response;
 }

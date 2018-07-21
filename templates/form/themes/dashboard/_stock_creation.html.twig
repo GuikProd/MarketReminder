@@ -2,12 +2,12 @@
     {{ form_start(form) }}
         {{ form_row(form.title) }}
         {{ form_row(form.status) }}
-        {{ form_row(form.tags) }}
+        {{ form_row(form.tags.tags) }}
         <div id="collection" data-prototype="{{ form_widget(form.stockItems.vars.prototype)|e('html_attr') }}" data-index="{{ form.stockItems|length }}">
             {{ form_row(form.stockItems) }}
         </div>
-        <button id="newItem" class="mdc-button mdc-button--raised mdc-elevation--z2">Add a new item</button>
-        <button class="mdc-button mdc-button--raised mdc-elevation--z2">
+        <button id="{{ form.vars.id~'-button_newItem' }}" class="mdc-button mdc-button--raised mdc-elevation--z2">Add a new item</button>
+        <button id="{{ form.vars.id~'-button_submit' }}" class="mdc-button mdc-button--raised mdc-elevation--z2">
             Submit
         </button>
     {{ form_end(form) }}

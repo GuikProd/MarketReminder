@@ -1,0 +1,12 @@
+App\Domain\Models\UseCase\Dashboard\StockCreation\DTO\StockCreationDTO:
+    properties:
+        title:
+            - NotBlank:
+                message: ""
+                groups: ['stock_creation']
+            - Length:
+                min: 5
+                minMessage: ""
+                max: 50
+                maxMessage: ""
+                groups: ['stock_creation']

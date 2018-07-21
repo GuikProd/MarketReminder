@@ -65,7 +65,7 @@ final class StockCreationResponder implements StockCreationResponderInterface
         $this->presenter->prepareOptions([
             '_locale' => $request->getLocale(),
             'content' => [],
-            'form' => $form->createView() ?? null,
+            'form' => $form,
             'page' => [
                 'title' => [
                     'channel' => 'messages',

@@ -4,13 +4,15 @@
     {{ presenter.page.title.value }}
 {% endblock %}
 
+{% form_theme presenter.form 'form/themes/dashboard/_stock_creation.html.twig' %}
+
 {% block body %}
-    {% form_theme presenter.viewOptions.form 'form/themes/dashboard/_stock_creation.html.twig' %}
-    {{ form(presenter.viewOptions.form) }}
+    {{ form(presenter.form) }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('build/stock_tags.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/collectionHandler.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('build/stockCreation.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('build/stock_tags.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('build/collectionHandler.js') }}"></script>
 {% endblock %}
