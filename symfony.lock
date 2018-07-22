@@ -128,9 +128,6 @@
     "fabpot/goutte": {
         "version": "v3.2.2"
     },
-    "facebook/webdriver": {
-        "version": "1.6.0"
-    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
@@ -397,9 +394,6 @@
     },
     "symfony/orm-pack": {
         "version": "v1.0.5"
-    },
-    "symfony/panthere": {
-        "version": "1.0.x-dev"
     },
     "symfony/phpunit-bridge": {
         "version": "3.3",
