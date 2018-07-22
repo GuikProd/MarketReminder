@@ -47,7 +47,11 @@ phpunit:
     services:
         - redis
     before_script:
-        - apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go
+        - apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go \
+            && docker-php-ext-configure pgsql --with-pgsql=/usr/local/pgsql \
+            && docker-php-ext-install zip intl pdo_pgsql pdo_mysql opcache json pdo_pgsql pgsql mysqli \
+            && pecl install apcu redis \
+            && docker-php-ext-enable apcu mysqli redis
         - php -vv
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
@@ -170,5 +174,7 @@ behat_e2e:
 docker_images:
     stage: deployment
     image: google/cloud-sdk
+    before_script:
+        - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > /tmp/google_cloud.json
     script:
-        - echo "Hello from google cloud !"
+        - gcloud auth activate-service-account --key-file /tmp/google_cloud.json
