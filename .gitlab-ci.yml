@@ -55,6 +55,8 @@ phpunit:
         - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
              && docker-php-ext-install zip
         - docker-php-ext-install zip
+        - pecl install apcu redis \
+            && docker-php-ext-enable apcu mysqli redis
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
@@ -84,6 +86,8 @@ behat_core:
         - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
              && docker-php-ext-install zip
         - docker-php-ext-install zip
+        - pecl install apcu redis \
+            && docker-php-ext-enable apcu mysqli redis
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
@@ -127,6 +131,8 @@ behat_e2e:
         - docker-php-ext-configure zlib --with-dir/usr/local/zlib \
              && docker-php-ext-install zip
         - docker-php-ext-install zip
+        - pecl install apcu redis \
+            && docker-php-ext-enable apcu mysqli redis
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/tests/_credentials/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/config/credentials/google/credentials.json
         - echo $GOOGLE_CLOUD_SERVICE_ACCOUNT_FILE > $CI_PROJECT_DIR/features/assets/_credentials/credentials.json
