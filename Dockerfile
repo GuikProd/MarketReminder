@@ -55,6 +55,7 @@ EXPOSE 9000
 
 CMD ["php-fpm"]
 
+## Production build
 FROM base
 
 COPY docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
