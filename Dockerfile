@@ -1,7 +1,9 @@
 # Development build
 FROM php:fpm-alpine as base
 
-ENV WORKPATH "/var/www/marketReminder"
+ARG WORKFOLDER
+
+ENV WORKPATH ${WORKFOLDER}
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go \
     && docker-php-ext-configure pgsql --with-pgsql=/usr/local/pgsql \

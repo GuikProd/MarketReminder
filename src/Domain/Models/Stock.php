@@ -86,7 +86,7 @@ class Stock implements StockInterface
         $this->creationDate = time();
         $this->owner = $owner;
 
-        $this->addTags($stockCreationDTO->tags->tags);
+        $this->addTags($stockCreationDTO->tags);
 
         \count($stockItems) > 0
             ? $this->addItems($stockItems)

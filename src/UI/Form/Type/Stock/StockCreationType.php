@@ -33,6 +33,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class StockCreationType extends AbstractType implements StockCreationTypeInterface
 {
     /**
+     * @var StockCreationTagsTransformerInterface
+     */
+    private $stockTagsTransformer;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(StockCreationTagsTransformerInterface $stockTagsTransformer)
+    {
+        $this->stockTagsTransformer = $stockTagsTransformer;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -57,7 +70,7 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
                     'help' => 'stock.creation_choices.help'
                 ]
             ])
-            ->add('tags', StockTagsType::class, [
+            ->add('tags', TextType::class, [
                 'label' => 'stock.creation_tags',
                 'help' => 'stock.creation_tags',
                 'required' => false
@@ -69,6 +82,8 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
                 'help' => 'stock.creation_items',
             ])
         ;
+
+        $builder->get('tags')->addViewTransformer($this->stockTagsTransformer);
     }
 
     /**
@@ -82,7 +97,7 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
                 return new StockCreationDTO(
                     $form->get('title')->getData(),
                     $form->get('status')->getData(),
-                    $form->get('tags')->getData()->tags,
+                    $form->get('tags')->getData(),
                     $form->get('stockItems')->getData()
                 );
             },

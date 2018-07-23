@@ -22,7 +22,6 @@ use App\UI\Form\Subscriber\Interfaces\StockItemCreationSubscriberInterface;
 use App\UI\Form\Subscriber\StockItemCreationSubscriber;
 use App\UI\Form\Type\Stock\StockCreationType;
 use App\UI\Form\Type\Stock\StockItemCreationType;
-use App\UI\Form\Type\Stock\StockTagsType;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,14 +66,13 @@ final class StockCreationTypeUnitTest extends TypeTestCase
         $this->stockItemSubscriber = new StockItemCreationSubscriber($this->cloudTranslationRepository, $this->request);
         $this->tagsTransformer = new StockCreationTagsTransformer();
 
-        $stockCreationType = new StockCreationType();
+        $stockCreationType = new StockCreationType($this->tagsTransformer);
         $stockItemCreationType = new StockItemCreationType($this->stockItemSubscriber);
-        $stockTagsType = new StockTagsType($this->tagsTransformer);
 
         $this->request->method('getCurrentRequest')->willReturn($requestMock);
         $requestMock->method('getLocale')->willReturn('fr');
 
-        return [new PreloadedExtension([$stockCreationType, $stockItemCreationType, $stockTagsType], [])];
+        return [new PreloadedExtension([$stockCreationType, $stockItemCreationType], [])];
     }
 
     public function testStockCreationWithoutItems()
@@ -89,9 +87,7 @@ final class StockCreationTypeUnitTest extends TypeTestCase
         $form->submit([
             'title' => 'test',
             'status' => 'on',
-            'tags' => [
-                'tags' => 'toto, test, test_II'
-            ],
+            'tags' => 'toto, test, test_II',
             'stockItems' => []
         ]);
 
@@ -100,8 +96,8 @@ final class StockCreationTypeUnitTest extends TypeTestCase
 
         static::assertSame('test', $form->get('title')->getData());
         static::assertSame('on', $form->get('status')->getData());
-        static::assertArrayNotHasKey('content', $form->get('tags')->getData()->tags);
-        static::assertContains('test', $form->get('tags')->getData()->tags);
+        static::assertArrayNotHasKey('content', $form->get('tags')->getData());
+        static::assertContains('test', $form->get('tags')->getData());
         static::assertInstanceOf(StockCreationDTOInterface::class, $form->getData());
     }
 
@@ -122,9 +118,7 @@ final class StockCreationTypeUnitTest extends TypeTestCase
         $form->submit([
             'title' => 'test',
             'status' => 'on',
-            'tags' => [
-                'tags' => 'toto, test, test_II'
-            ],
+            'tags' => 'toto, test, test_II',
             'stockItems' => [
                 0 => [
                     'name' => 'test',
@@ -142,7 +136,7 @@ final class StockCreationTypeUnitTest extends TypeTestCase
 
         static::assertSame('test', $form->get('title')->getData());
         static::assertSame('on', $form->get('status')->getData());
-        static::assertContains('toto', $form->get('tags')->getData()->tags);
+        static::assertContains('toto', $form->get('tags')->getData());
         static::assertCount(1, $form->getData()->stockItems);
     }
 

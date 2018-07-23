@@ -39,7 +39,6 @@ final class StockBuilder implements StockBuilderInterface
         UserInterface $owner,
         array $items = []
     ): void {
-
         $this->stock = new Stock($stockCreationDTO, $owner, $items ?: []);
     }
 

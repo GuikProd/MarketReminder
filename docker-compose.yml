@@ -5,8 +5,13 @@ services:
     php-fpm:
         container_name: ${CONTAINER_NAME}_php-fpm
         build:
+            cache_from:
+                - 'php:fpm-alpine'
             context: .
             target: base
+            args:
+                WORKFOLDER: "${WORKPATH}"
+        env_file: .env
         environment:
             BLACKFIRE_LOG_LEVEL: 4
             BLACKFIRE_SERVER_ID: '${BLACKFIRE_SERVER_ID}'
@@ -22,6 +27,7 @@ services:
     nginx:
         container_name: ${CONTAINER_NAME}_nginx
         image: nginx
+        env_file: .env
         ports:
             - '${NGINX_PORT}:80'
         links:
@@ -37,7 +43,11 @@ services:
     # Frontend configuration
     node:
         container_name: ${CONTAINER_NAME}_nodejs
-        build: './docker/node'
+        build:
+            context: './docker/node'
+            cache_from:
+                - 'node:8'
+        env_file: .env
         ports:
             - 3000:3000
         volumes:
@@ -48,7 +58,11 @@ services:
     # Server optimization
     varnish:
         container_name: ${CONTAINER_NAME}_varnish
-        build: './docker/varnish'
+        build:
+            cache_from:
+                - 'alpine:3.6'
+            context: './docker/varnish'
+        env_file: .env
         volumes:
             - './docker/varnish/conf:/etc/varnish:rw,cached'
         ports:
@@ -60,6 +74,7 @@ services:
     redis:
         container_name: ${CONTAINER_NAME}_redis
         image: redis:alpine
+        env_file: .env
         ports:
             - '${REDIS_PORT}:6379'
         links:
@@ -70,6 +85,7 @@ services:
     mysql:
         container_name: ${CONTAINER_NAME}_mysql
         image: mysql:5.7
+        env_file: .env
         ports:
             - '3306:3306'
         environment:
@@ -84,6 +100,7 @@ services:
     postgresql:
         container_name: ${CONTAINER_NAME}_postgresql
         image: postgres:9.6-alpine
+        env_file: .env
         environment:
             POSTGRES_DB: '${POSTGRES_DB}'
             POSTGRES_USER: '${POSTGRES_USER}'
@@ -98,6 +115,7 @@ services:
     blackfire:
         container_name: ${CONTAINER_NAME}_blackfire
         image: blackfire/blackfire
+        env_file: .env
         environment:
             BLACKFIRE_LOG_LEVEL: 4
             BLACKFIRE_SERVER_ID: '${BLACKFIRE_SERVER_ID}'

@@ -53,9 +53,7 @@ final class StockBuilderUnitTest extends TestCase
 
     public function testItCreate()
     {
-        $stockTagsDTOMock = new StockTagsDTO([]);
-
-        $dto = new StockCreationDTO('', '', [$stockTagsDTOMock], []);
+        $dto = new StockCreationDTO('', '', [], []);
 
         $builder = new StockBuilder();
 
