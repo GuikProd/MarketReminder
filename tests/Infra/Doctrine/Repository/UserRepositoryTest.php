@@ -24,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserRepositoryTest extends KernelTestCase
+final class UserRepositoryTest extends KernelTestCase
 {
     /**
      * @var EntityManagerInterface

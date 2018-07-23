@@ -27,12 +27,12 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 final class RedisConnectorUnitTest extends TestCase
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $redisDSN = null;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $redisNamespace = null;
 

@@ -15,7 +15,6 @@ namespace App\Tests\UI\Responder\Security;
 
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
-use App\UI\Presenter\Presenter;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
 use App\UI\Responder\Security\ResetPasswordResponder;
 use PHPUnit\Framework\TestCase;
@@ -45,9 +44,9 @@ final class ResetPasswordResponderUnitTest extends TestCase
     private $presenter = null;
 
     /**
-     * @var CloudTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface|null
      */
-    private $redisTranslationRepository;
+    private $cloudTranslationRepository = null;
 
     /**
      * @var ServerRequestInterface
@@ -55,14 +54,14 @@ final class ResetPasswordResponderUnitTest extends TestCase
     private $request;
 
     /**
-     * @var Environment
+     * @var Environment|null
      */
-    private $twig;
+    private $twig = null;
 
     /**
-     * @var UrlGeneratorInterface
+     * @var UrlGeneratorInterface|null
      */
-    private $urlGenerator;
+    private $urlGenerator = null;
 
     /**
      * {@inheritdoc}
@@ -70,15 +69,14 @@ final class ResetPasswordResponderUnitTest extends TestCase
     protected function setUp()
     {
         $this->form = $this->createMock(FormInterface::class);
-        $this->redisTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
+        $this->cloudTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
+        $this->presenter = $this->createMock(PresenterInterface::class);
         $this->twig = $this->createMock(Environment::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->urlGenerator->method('generate')->willReturn('/fr/');
 
+        $this->urlGenerator->method('generate')->willReturn('/fr/');
         $this->request = Request::create('/fr/reset-password', 'GET');
         $this->request->attributes->set('_locale', 'fr');
-
-        $this->presenter = new Presenter($this->redisTranslationRepository);
     }
 
     public function testItImplements()

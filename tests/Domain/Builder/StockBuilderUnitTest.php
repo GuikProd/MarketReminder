@@ -18,6 +18,7 @@ use App\Domain\Builder\StockBuilder;
 use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockCreationDTO;
+use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockTagsDTO;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -52,7 +53,9 @@ final class StockBuilderUnitTest extends TestCase
 
     public function testItCreate()
     {
-        $dto = new StockCreationDTO('', '', [], []);
+        $stockTagsDTOMock = new StockTagsDTO([]);
+
+        $dto = new StockCreationDTO('', '', [$stockTagsDTOMock], []);
 
         $builder = new StockBuilder();
 
