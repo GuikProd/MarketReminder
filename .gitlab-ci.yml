@@ -47,6 +47,7 @@ phpunit:
     services:
         - redis
     before_script:
+        - apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go
         - php -vv
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
@@ -78,6 +79,7 @@ behat_core:
     services:
         - redis
     before_script:
+        - apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go
         - php -vv
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
@@ -123,6 +125,7 @@ behat_e2e:
     services:
         - redis
     before_script:
+        - apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go
         - php -vv
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         - php composer-setup.php
