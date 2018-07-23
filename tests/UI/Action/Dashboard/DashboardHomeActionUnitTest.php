@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /*
  * This file is part of the MarketReminder project.
@@ -11,32 +11,32 @@ declare(strict_types = 1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\UI\Responder\Dashboard;
+namespace App\Tests\UI\Action\Dashboard;
 
+use App\UI\Action\Dashboard\DashboardHomeAction;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Dashboard\DashboardHomeResponder;
-use App\UI\Responder\Dashboard\Interfaces\DashboardHomeResponderInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * Class DashboardHomeResponderUnitTest.
+ * Class DashboardHomeActionUnitTest.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class DashboardHomeResponderUnitTest extends TestCase
+final class DashboardHomeActionUnitTest extends TestCase
 {
-    /**
-     * @var PresenterInterface|null
-     */
-    private $presenter = null;
-
     /**
      * @var Environment|null
      */
     private $twig = null;
+
+    /**
+     * @var PresenterInterface|null
+     */
+    private $presenter = null;
 
     /**
      * {@inheritdoc}
@@ -47,23 +47,12 @@ final class DashboardHomeResponderUnitTest extends TestCase
         $this->presenter = $this->createMock(PresenterInterface::class);
     }
 
-    public function testItImplements()
-    {
-        $responder = new DashboardHomeResponder(
-            $this->twig,
-            $this->presenter
-        );
-
-        static::assertInstanceOf(
-            DashboardHomeResponderInterface::class,
-            $responder
-        );
-    }
-
     public function testInvokeReturn()
     {
         $requestMock = $this->createMock(Request::class);
         $requestMock->method('getLocale')->willReturn('fr');
+
+        $dashboardHomeAction = new DashboardHomeAction();
 
         $dashboardHomeResponder = new DashboardHomeResponder(
             $this->twig,
@@ -72,7 +61,7 @@ final class DashboardHomeResponderUnitTest extends TestCase
 
         static::assertInstanceOf(
             Response::class,
-            $dashboardHomeResponder($requestMock)
+            $dashboardHomeAction($requestMock, $dashboardHomeResponder)
         );
     }
 }

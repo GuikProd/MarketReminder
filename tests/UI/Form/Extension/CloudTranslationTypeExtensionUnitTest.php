@@ -18,6 +18,7 @@ use App\UI\Form\Extension\CloudTranslationTypeExtension;
 use App\UI\Form\Extension\Interfaces\CloudTranslationTypeExtensionInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class CloudTranslationTypeExtensionUnitTest.
@@ -32,16 +33,25 @@ final class CloudTranslationTypeExtensionUnitTest extends TestCase
     private $cloudTranslationRepository = null;
 
     /**
+     * @var RequestStack|null
+     */
+    private $requestStack = null;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
         $this->cloudTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
+        $this->requestStack = $this->createMock(RequestStack::class);
     }
 
     public function testItImplementsAndExtends()
     {
-        $extension = new CloudTranslationTypeExtension($this->cloudTranslationRepository);
+        $extension = new CloudTranslationTypeExtension(
+            $this->cloudTranslationRepository,
+            $this->requestStack
+        );
 
         static::assertInstanceOf(
             AbstractTypeExtension::class,
@@ -51,10 +61,5 @@ final class CloudTranslationTypeExtensionUnitTest extends TestCase
             CloudTranslationTypeExtensionInterface::class,
             $extension
         );
-    }
-
-    public function testItPrepareTheView()
-    {
-        $extension = new CloudTranslationTypeExtension($this->cloudTranslationRepository);
     }
 }

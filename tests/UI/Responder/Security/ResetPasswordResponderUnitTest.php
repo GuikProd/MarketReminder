@@ -32,17 +32,17 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class ResetPasswordResponderUnitTest extends TestCase
+final class ResetPasswordResponderUnitTest extends TestCase
 {
     /**
-     * @var FormInterface
+     * @var FormInterface|null
      */
-    private $form;
+    private $form = null;
 
     /**
-     * @var PresenterInterface
+     * @var PresenterInterface|null
      */
-    private $presenter;
+    private $presenter = null;
 
     /**
      * @var CloudTranslationRepositoryInterface

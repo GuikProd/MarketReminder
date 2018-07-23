@@ -122,6 +122,7 @@ migrations: config/doctrine
 	    $(ENV_PHP) ./bin/console doctrine:migrations:diff
 	    $(ENV_PHP) ./bin/console doctrine:migrations:migrate
 
+## Tests
 phpunit: tests
 	    make fixtures ENV=test
 	    make doctrine-cache
@@ -168,6 +169,9 @@ behat: features
 	    $(ENV_PHP) ./bin/console cache:pool:prune
 	    make translation
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
+
+phpstan: vendor/bin/phpstan
+	    $(ENV_PHP) vendor/bin/phpstan analyse $(FOLDER)
 
 ## Tools commands
 php-cs: ## Allow to use php-cs-fixer

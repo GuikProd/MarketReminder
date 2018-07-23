@@ -1,3 +1,4 @@
+# Development build
 FROM php:fpm-alpine as base
 
 ENV WORKPATH "/var/www/marketReminder"

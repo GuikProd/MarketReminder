@@ -12,7 +12,6 @@
         "grpc/grpc": "^1.12",
         "guzzlehttp/guzzle": "^6.3",
         "php-http/httplug-pack": "^1.1",
-        "phpstan/phpstan": "^0.10.2",
         "predis/predis": "^1.1",
         "ramsey/uuid": "^3.7",
         "ramsey/uuid-doctrine": "^1.4",
@@ -56,6 +55,7 @@
         "blackfire/php-sdk": "^1.14",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "phpmetrics/phpmetrics": "^2.3",
+        "phpstan/phpstan": "^0.10.2",
         "symfony/dotenv": "^4.1",
         "symfony/flex": "^1.0"
     },
