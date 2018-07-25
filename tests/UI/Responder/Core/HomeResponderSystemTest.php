@@ -13,11 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Responder\Core;
 
-use App\Infra\Redis\RedisConnector;
-use App\Infra\Redis\Translation\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\Redis\Translation\CloudTranslationRepository;
 use App\UI\Presenter\Interfaces\PresenterInterface;
-use App\UI\Presenter\Presenter;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -36,29 +32,24 @@ class HomeResponderSystemTest extends KernelTestCase
     use TestCaseTrait;
 
     /**
-     * @var HomeResponderInterface
+     * @var HomeResponderInterface|null
      */
-    private $homeResponder;
+    private $homeResponder = null;
 
     /**
-     * @var PresenterInterface
+     * @var PresenterInterface|null
      */
-    private $presenter;
+    private $presenter = null;
 
     /**
-     * @var CloudTranslationRepositoryInterface
+     * @var Request|null
      */
-    private $redisTranslationRepository;
+    private $request = null;
 
     /**
-     * @var Request
+     * @var Environment|null
      */
-    private $request;
-
-    /**
-     * @var Environment
-     */
-    private $twig;
+    private $twig = null;
 
     /**
      * {@inheritdoc}
@@ -67,16 +58,10 @@ class HomeResponderSystemTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $redisConnector = new RedisConnector(
-            static::$kernel->getContainer()->getParameter('redis.test_dsn'),
-            static::$kernel->getContainer()->getParameter('redis.namespace_test')
-        );
+        $this->twig = static::$container->get('twig');
+        $this->presenter = static::$container->get(PresenterInterface::class);
 
-        $this->redisTranslationRepository = new CloudTranslationRepository($redisConnector);
-        $this->presenter = new Presenter($this->redisTranslationRepository);
         $this->request = Request::create('/fr/', 'GET');
-        $this->twig = static::$kernel->getContainer()->get('twig');
-
         $this->homeResponder = new HomeResponder($this->twig, $this->presenter);
     }
 

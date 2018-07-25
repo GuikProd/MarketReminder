@@ -58,4 +58,11 @@ final class StockCreationTagsTransformerUnitTest extends TestCase
             $dataTransformer->reverseTransform('test, toto, content')
         );
     }
+
+    public function testItDoesNotReverseEmptyString()
+    {
+        $transformer = new StockCreationTagsTransformer();
+
+        static::assertSame([''], $transformer->reverseTransform(''));
+    }
 }

@@ -65,21 +65,11 @@ final class CredentialsLoaderSystemTest extends TestCase
      */
     public function testItLoadFile()
     {
-        static::expectException(\InvalidArgumentException::class);
-
         $configuration = new Configuration();
-        $configuration->assert('main.peak_memory < 20kB', 'Loader success memory usage');
+        $configuration->assert('main.peak_memory < 25kB', 'Loader success memory usage');
 
         $this->assertBlackfire($configuration, function () {
             $this->loader->loadJson('credentials.json', __DIR__.'/../../../_credentials');
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown()
-    {
-        $this->loader = null;
     }
 }

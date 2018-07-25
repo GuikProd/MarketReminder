@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\UI\Action\Core;
 
 use App\UI\Action\Core\HomeAction;
-use App\UI\Action\Core\Interfaces\HomeActionInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
-use App\UI\Presenter\Presenter;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
@@ -30,34 +28,29 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class HomeActionSystemTest extends KernelTestCase
+final class HomeActionSystemTest extends KernelTestCase
 {
     use TestCaseTrait;
 
     /**
-     * @var HomeActionInterface
+     * @var PresenterInterface|null
      */
-    private $homeAction;
+    private $presenter = null;
 
     /**
-     * @var PresenterInterface
+     * @var HomeResponderInterface|null
      */
-    private $presenter;
+    private $homeResponder = null;
 
     /**
-     * @var HomeResponderInterface
+     * @var Request|null
      */
-    private $homeResponder;
+    private $request = null;
 
     /**
-     * @var Request
+     * @var Environment|null
      */
-    private $request;
-
-    /**
-     * @var Environment
-     */
-    private $twig;
+    private $twig = null;
 
     /**
      * {@inheritdoc}
@@ -68,10 +61,11 @@ class HomeActionSystemTest extends KernelTestCase
 
         $this->request = new Request();
         $this->request::create('/', 'GET');
+        $this->request->setLocale('fr');
+
+        $this->presenter = static::$container->get(PresenterInterface::class);
         $this->twig = static::$kernel->getContainer()->get('twig');
 
-        $this->homeAction = new HomeAction();
-        $this->presenter = new Presenter();
         $this->homeResponder = new HomeResponder($this->twig, $this->presenter);
     }
 

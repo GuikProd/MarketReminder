@@ -97,7 +97,7 @@ final class StockCreationType extends AbstractType implements StockCreationTypeI
                 return new StockCreationDTO(
                     $form->get('title')->getData(),
                     $form->get('status')->getData(),
-                    $form->get('tags')->getData(),
+                    $form->get('tags')->getData() ?? [],
                     $form->get('stockItems')->getData()
                 );
             },

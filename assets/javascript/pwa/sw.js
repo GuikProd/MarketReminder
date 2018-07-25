@@ -50,19 +50,13 @@ self.addEventListener('install', function (event) {
         caches.open(cacheName).then(function (cache) {
             return cache.addAll(filesToCache);
         })
-    )
+    );
 });
 
 self.addEventListener('fetch', function (event) {
     event.respondWith(
-        caches.open(cacheName).then(function(cache) {
-            return cache.match(event.request).then(function(response) {
-                let fetchPromise = fetch(event.request).then(function(networkResponse) {
-                    cache.put(event.request, networkResponse.clone());
-                    return networkResponse;
-                });
-                return response || fetchPromise;
-            })
+        caches.match(event.request).then(function(response) {
+            return response || fetch(event.request);
         })
     );
 });

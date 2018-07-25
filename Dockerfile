@@ -3,6 +3,7 @@ FROM php:fpm-alpine as base
 
 ARG WORKFOLDER
 
+ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV WORKPATH ${WORKFOLDER}
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go \
@@ -14,7 +15,6 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev
 COPY docker/php/conf/php.ini /usr/local/etc/php/php.ini
 
 # Composer
-ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Blackfire (Docker approach) & Blackfire Player
@@ -36,19 +36,9 @@ RUN wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer 
     && chmod +x deptrac.phar \
     && mv deptrac.phar /usr/local/bin/deptrac
 
-RUN mkdir -p ${WORKPATH}
-
-RUN rm -rf ${WORKDIR}/vendor \
-    && ls -l ${WORKDIR}
-
-RUN mkdir -p \
-		${WORKDIR}/var/cache \
-		${WORKDIR}/var/logs \
-		${WORKDIR}/var/sessions \
-	&& chown -R www-data ${WORKDIR}/var \
-	&& chown -R www-data /tmp/
-
-RUN chown www-data:www-data -R ${WORKPATH}
+RUN mkdir -p ${WORKPATH} \
+    && chown -R www-data /tmp/ \
+    && chown www-data:www-data -R ${WORKPATH}
 
 WORKDIR ${WORKPATH}
 

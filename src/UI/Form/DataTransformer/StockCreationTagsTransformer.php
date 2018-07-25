@@ -47,16 +47,6 @@ final class StockCreationTagsTransformer implements StockCreationTagsTransformer
 
         $tags = explode(', ', $value);
 
-        $values = array_values($tags);
-
-        foreach ($values as $value) {
-            if ('' === $value) {
-                throw new TransformationFailedException(
-                    sprintf('')
-                );
-            }
-        }
-
         return $tags;
     }
 }

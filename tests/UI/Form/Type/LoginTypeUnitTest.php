@@ -35,14 +35,14 @@ final class LoginTypeUnitTest extends TypeTestCase
 
         static::assertTrue($form->isSynchronized());
         static::assertTrue($form->isValid());
-        static::assertCount(1, $form->getErrors());
+        static::assertCount(0, $form->getErrors());
         static::assertInstanceOf(
             UserLoginDTOInterface::class,
             $form->getData()
         );
     }
 
-    public function testItReceiveData()
+    public function testItReceiveValidData()
     {
         $form = $this->factory->create(LoginType::class);
 

@@ -2,7 +2,7 @@
     {{ form_start(form) }}
         {{ form_row(form.title) }}
         {{ form_row(form.status) }}
-        {{ form_row(form.tags.tags) }}
+        {{ form_row(form.tags) }}
         <div id="collection" data-prototype="{{ form_widget(form.stockItems.vars.prototype)|e('html_attr') }}" data-index="{{ form.stockItems|length }}">
             {{ form_row(form.stockItems) }}
         </div>

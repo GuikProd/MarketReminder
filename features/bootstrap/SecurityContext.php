@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /*
  * This file is part of the MarketReminder project.
@@ -11,19 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\UI\Responder\Security;
-
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Behat\Behat\Context\Context;
 
 /**
- * Class RegisterResponderSystemTest.
+ * Class SecurityContext.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
- *
- * @group Blackfire
  */
-final class RegisterResponderSystemTest extends KernelTestCase
+final class SecurityContext implements Context
 {
-    use TestCaseTrait;
 }

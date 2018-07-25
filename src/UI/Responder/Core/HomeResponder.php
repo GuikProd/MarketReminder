@@ -27,14 +27,14 @@ use Twig\Environment;
 final class HomeResponder implements HomeResponderInterface
 {
     /**
-     * @var PresenterInterface
+     * @var PresenterInterface|null
      */
-    private $presenter;
+    private $presenter = null;
 
     /**
-     * @var Environment
+     * @var Environment|null
      */
-    private $twig;
+    private $twig = null;
 
     /**
      * {@inheritdoc}
@@ -53,7 +53,7 @@ final class HomeResponder implements HomeResponderInterface
     public function __invoke(Request $request): Response
     {
         $this->presenter->prepareOptions([
-            '_locale' => $request->attributes->get('_locale'),
+            '_locale' => $request->getLocale(),
             'content' => [],
             'page' => [
                 'content' => [
