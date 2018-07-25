@@ -30,9 +30,9 @@ use Ramsey\Uuid\Uuid;
 final class PresenterUnitTest extends TestCase
 {
     /**
-     * @var CloudTranslationRepositoryInterface
+     * @var CloudTranslationRepositoryInterface|null
      */
-    private $cloudTranslationRepository;
+    private $cloudTranslationRepository = null;
 
     /**
      * {@inheritdoc}
@@ -69,7 +69,7 @@ final class PresenterUnitTest extends TestCase
         ]);
 
         static::assertSame($locale, $presenter->getViewOptions()['_locale']);
-        static::assertCount(0, $presenter->getPage());
+        static::assertCount(1, $presenter->getPage());
         static::assertCount(\count($values), $presenter->getPage());
     }
 
@@ -108,6 +108,8 @@ final class PresenterUnitTest extends TestCase
 
     /**
      * @return \Generator
+     *
+     * @throws \Exception
      */
     public function provideRedisTranslations()
     {

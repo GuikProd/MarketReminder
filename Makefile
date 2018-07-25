@@ -10,18 +10,19 @@ ENV_VARNISH = $(DOCKER) exec marketReminder_varnish
 ENV_BLACKFIRE = $(DOCKER) exec marketReminder_blackfire
 
 ## Globals commands
-start: ## Allow to create the project
+start: docker-compose.yml
+	    $(ENV_PHP) cp .env.dist .env
 		$(DOCKER_COMPOSE) build --no-cache
 	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --force-recreate
 	    make install
 	    make cache-clear
 
-restart: ## Allow to recreate the project
+restart: docker-compose.yml
 	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --no-recreate
 	    make install
 	    make cache-clear
 
-stop: ## Allow to stop the containers
+stop: docker-compose.yml
 	    $(DOCKER_COMPOSE) stop
 
 clean: ## Allow to delete the generated files and clean the project folder
@@ -87,17 +88,17 @@ translation-warm: translations
 translation-dump: translations
 	    $(ENV_PHP) ./bin/console app:translation:dump $(CHANNEL) $(LOCALE) --env=$(ENV)
 
-container: ## Allow to debug the container
+container: bin/console
 	    $(ENV_PHP) ./bin/console debug:container --show-private $(SERVICE)
 
-event:
+event: bin/console
 	    $(ENV_PHP) ./bin/console debug:event-dispatcher
 
-router: ## Allow to debug the router
+router: bin/console
 	    $(ENV_PHP) ./bin/console d:r
 
 ## Doctrine
-create-schema: ## Allow to create the BDD schema
+create-schema: config/doctrine
 	    $(ENV_PHP) ./bin/console d:d:d --force --env=$(ENV)
 	    $(ENV_PHP) ./bin/console d:d:c --env=$(ENV)
 	    $(ENV_PHP) ./bin/console d:s:c --env=$(ENV)
@@ -190,19 +191,19 @@ lighthouse: node_modules
 yarn_install: node_modules
 	    $(ENV_NODE) yarn install
 
-encore_watch: ## Allow to use Encore to watch the asssets
+encore_watch: webpack.config.js
 	    $(ENV_NODE) yarn watch
 
-encore_production: ## Allow to build the assets for a production usage.
+encore_production: webpack.config.js
 	    $(ENV_NODE) yarn build
 
-yarn_add_global: ## Allow to add a new package in the "prod" env
+yarn_add_global: package.json
 	    $(ENV_NODE) yarn global add $(PACKAGE)
 
-yarn_add_prod: ## Allow to add a new package in the "prod" env
+yarn_add_prod: package.json
 	    $(ENV_NODE) yarn add $(PACKAGE)
 
-yarn_add_dev: ## Allow to add a new package in the "dev" env
+yarn_add_dev: package.json
 	    $(ENV_NODE) yarn add --dev $(PACKAGE)
 
 ## Varnish commands
@@ -210,14 +211,14 @@ varnish_logs: ## Allow to see the varnish logs
 	    $(ENV_VARNISH) varnishlog -b
 
 ## Blackfire commands
-profile_php: ## Allow to profile a page using Blackfire and PHP environment
+profile_php: public/index.php
 	    make cache-clear
 	    make doctrine-cache ENV=prod
 	    $(ENV_PHP) ./bin/console cache:pool:prune
 	    make translation
 	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
 
-profile_varnish: ## Allow to profile a page using Blackfire and Varnish environment
+profile_varnish: public/index.php
 	    make cache-clear
 	    make doctrine-cache ENV=prod
 	    $(ENV_PHP) ./bin/console cache:pool:prune

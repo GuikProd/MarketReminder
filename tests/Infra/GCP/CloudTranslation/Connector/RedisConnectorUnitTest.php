@@ -18,6 +18,7 @@ use App\Infra\GCP\CloudTranslation\Connector\Interfaces\RedisConnectorInterface;
 use App\Infra\GCP\CloudTranslation\Connector\RedisConnector;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use Symfony\Component\Cache\Exception\InvalidArgumentException;
 
 /**
  * Class RedisConnectorUnitTest.
@@ -41,7 +42,7 @@ final class RedisConnectorUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->redisDSN = 'redis://localhost:6973';
+        $this->redisDSN = 'localhost:6973';
         $this->redisNamespace = "test";
     }
 
@@ -62,8 +63,16 @@ final class RedisConnectorUnitTest extends TestCase
         );
     }
 
+    /**
+     * This test can throw an InvalidArgumentException due to the fact
+     * that the connection is creating using a @see RedisAdapter::createConnection
+     *
+     * @throws InvalidArgumentException
+     */
     public function testItConfigureConnectionAndReturnAdapter()
     {
+        static::expectException(InvalidArgumentException::class);
+
         $redisConnector = new RedisConnector(
             $this->redisDSN,
             $this->redisNamespace
@@ -73,14 +82,5 @@ final class RedisConnectorUnitTest extends TestCase
             TagAwareAdapterInterface::class,
             $redisConnector->getAdapter()
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown()
-    {
-        $this->redisDSN = null;
-        $this->redisNamespace = null;
     }
 }

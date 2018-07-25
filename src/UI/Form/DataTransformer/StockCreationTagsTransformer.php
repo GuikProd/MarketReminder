@@ -15,7 +15,6 @@ namespace App\UI\Form\DataTransformer;
 
 use App\UI\Form\DataTransformer\Interfaces\StockCreationTagsTransformerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
  * Class StockCreationTagsTransformer.
@@ -45,8 +44,6 @@ final class StockCreationTagsTransformer implements StockCreationTagsTransformer
             return [];
         }
 
-        $tags = explode(', ', $value);
-
-        return $tags;
+        return explode(', ', $value);
     }
 }
