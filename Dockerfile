@@ -37,12 +37,11 @@ RUN wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer 
     && mv deptrac.phar /usr/local/bin/deptrac
 
 RUN mkdir -p ${WORKPATH} \
-    && chown -R www-data /tmp/ \
-    && chown www-data:www-data -R ${WORKPATH}
+    && chown -R www-data /tmp/
 
 WORKDIR ${WORKPATH}
 
-COPY . ./
+COPY --chown=www-data:www-data . ./
 
 EXPOSE 9000
 
@@ -52,3 +51,9 @@ CMD ["php-fpm"]
 FROM base
 
 COPY docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
+
+RUN rm -rf /usr/local/bin/deptrac \
+    && rm -rf /usr/local/bin/php-cs-fixer \
+    && --from=node:8 yarn install \
+    && --from=node:8 yarn build \
+    && rm -rf ./node_modules

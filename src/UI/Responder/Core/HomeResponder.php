@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /*
  * This file is part of the MarketReminder project.
@@ -27,14 +27,14 @@ use Twig\Environment;
 final class HomeResponder implements HomeResponderInterface
 {
     /**
-     * @var PresenterInterface|null
+     * @var PresenterInterface
      */
-    private $presenter = null;
+    private $presenter;
 
     /**
-     * @var Environment|null
+     * @var Environment
      */
-    private $twig = null;
+    private $twig;
 
     /**
      * {@inheritdoc}
@@ -63,8 +63,12 @@ final class HomeResponder implements HomeResponderInterface
             ]
         ]);
 
-        return new Response($this->twig->render('core/index.html.twig', [
+        $response = new Response($this->twig->render('core/index.html.twig', [
             'presenter' => $this->presenter
         ]));
+
+        return $response->setCache([
+            'etag' => md5(str_rot13($request->getLocale()))
+        ]);
     }
 }

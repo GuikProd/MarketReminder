@@ -34,11 +34,6 @@ Once this is done, let's build the project.
 
 ```bash
 cp .env.dist .env
-```
-
-Update the information linked to Docker then use Docker-Compose :
-
-```bash
 make start
 ```
 

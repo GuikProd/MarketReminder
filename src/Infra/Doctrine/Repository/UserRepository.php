@@ -25,7 +25,7 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserRepository extends ServiceEntityRepository implements UserLoaderInterface, UserRepositoryInterface
+final class UserRepository extends ServiceEntityRepository implements UserLoaderInterface, UserRepositoryInterface
 {
     /**
      * {@inheritdoc}
@@ -67,7 +67,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     /**
      * {@inheritdoc}
      */
-    public function getUserByUsername(string $username):? UserInterface
+    public function getUserByUsername(string $username): ?UserInterface
     {
         return $this->createQueryBuilder('user')
                     ->where('user.username = :username')
@@ -80,7 +80,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     /**
      * {@inheritdoc}
      */
-    public function getUserByEmail(string $email):? UserInterface
+    public function getUserByEmail(string $email): ?UserInterface
     {
         return $this->createQueryBuilder('user')
                     ->where('user.email = :email')
@@ -93,7 +93,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     /**
      * {@inheritdoc}
      */
-    public function getUserByToken(string $token):? UserInterface
+    public function getUserByToken(string $token): ?UserInterface
     {
         return $this->createQueryBuilder('user')
                     ->where('user.validationToken = :token AND user.validated = false')
@@ -105,7 +105,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     /**
      * {@inheritdoc}
      */
-    public function getUserByResetPasswordToken(string $token): ? UserInterface
+    public function getUserByResetPasswordToken(string $token): ?UserInterface
     {
         return $this->createQueryBuilder('user')
                     ->where('user.resetPasswordToken = :token')

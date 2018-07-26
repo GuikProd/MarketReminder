@@ -6,7 +6,7 @@ services:
         container_name: ${CONTAINER_NAME}_php-fpm
         build:
             cache_from:
-                - 'php:fpm-alpine'
+                - '${CONTAINER_REGISTRY}'
             context: .
             target: base
             args:
@@ -26,7 +26,11 @@ services:
 
     nginx:
         container_name: ${CONTAINER_NAME}_nginx
-        image: nginx
+        build:
+            context: ./docker/nginx
+            target: base
+            args:
+                WORKFOLDER: "${WORKPATH}"
         env_file: .env
         ports:
             - '${NGINX_PORT}:80'
@@ -34,9 +38,6 @@ services:
             - php-fpm
         volumes:
             - './:${WORKPATH}:rw'
-            - './docker/nginx/conf/core/nginx.conf:/etc/nginx/nginx.conf'
-            - './docker/nginx/conf/development/marketReminder.conf:/etc/nginx/conf.d/default.conf'
-            # - './docker/nginx/conf/production/marketReminder.conf:/etc/nginx/conf.d/default.conf' -> Uncomment this line for production.
             - './docker/nginx/logs/:/var/log/nginx'
         restart: always
 
@@ -87,7 +88,7 @@ services:
         image: mysql:5.7
         env_file: .env
         ports:
-            - '3306:3306'
+            - '${MYSQL_PORT}:3306'
         environment:
             MYSQL_DATABASE: '${MYSQL_DBNAME}'
             MYSQL_USER: '${MYSQL_USER}'
@@ -126,6 +127,35 @@ services:
             - php-fpm
         volumes:
             - './:${WORKPATH}:rw,cached'
+        restart: always
+
+    # CI/CD
+    drone-server:
+        container_name: ${CONTAINER_NAME}_drone-server
+        image: drone/drone:0.8
+        env_file: .env
+        environment:
+            DRONE_OPEN: 1
+            DRONE_HOST: '${DRONE_HOST}'
+        ports:
+            - '${DRONE_PORT}:8000'
+            - 9600
+        volumes:
+            - './docker/drone/:/var/lib/drone/'
+        restart: always
+
+    drone-agent:
+        container_name: ${CONTAINER_NAME}_drone-agent
+        image: drone/agent:0.8
+        env_file: .env
+        command: agent
+        depends_on:
+            - drone-server
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            DRONE_SERVER: 'drone-server:9600'
+            DRONE_SECRET: '${DRONE_SECRET}'
         restart: always
 
 volumes:

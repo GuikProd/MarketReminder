@@ -11,7 +11,6 @@ ENV_BLACKFIRE = $(DOCKER) exec marketReminder_blackfire
 
 ## Globals commands
 start: docker-compose.yml
-	    $(ENV_PHP) cp .env.dist .env
 		$(DOCKER_COMPOSE) build --no-cache
 	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --force-recreate
 	    make install
