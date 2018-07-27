@@ -15,7 +15,7 @@ namespace App\Infra\Doctrine\Repository;
 
 use App\Domain\Models\StockItems;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Class StockItemsRepository.
@@ -27,7 +27,7 @@ final class StockItemsRepository extends ServiceEntityRepository
     /**
      * {@inheritdoc}
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, StockItems::class);
     }

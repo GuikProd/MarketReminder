@@ -12,7 +12,7 @@
         "--target",
         "${_ENV_PRODUCTION_STAGE_}",
         "--cache-from",
-        "gcr.io/$PROJECT_ID/marketreminder_php",
+        "gcr.io/$PROJECT_ID/marketreminder_php:latest",
         "."
       ]
     },
@@ -27,6 +27,8 @@
         "${_ENV_PRODUCTION_STAGE_}",
         "-t",
         "gcr.io/$PROJECT_ID/marketreminder_nginx",
+        "--cache-from",
+        "gcr.io/$PROJECT_ID/marketreminder_nginx:latest",
         "./docker/nginx"
       ],
       "waitFor": "php_main",

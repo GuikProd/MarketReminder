@@ -17,7 +17,7 @@ use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Stock;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Class StockRepository.
@@ -29,7 +29,7 @@ final class StockRepository extends ServiceEntityRepository implements StockRepo
     /**
      * {@inheritdoc}
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Stock::class);
     }

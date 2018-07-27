@@ -124,6 +124,7 @@ migrations: config/doctrine
 
 ## Tests
 phpunit: tests
+	    make update-schema ENV=test
 	    make fixtures ENV=test
 	    make doctrine-cache
 	    $(ENV_PHP) ./bin/console cache:pool:prune
