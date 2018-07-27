@@ -16,6 +16,6 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 # Production build
-FROM base
+FROM base as production
 
 COPY conf/production/marketReminder.conf /etc/nginx/conf.d/default.conf

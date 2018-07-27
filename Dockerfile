@@ -47,13 +47,22 @@ EXPOSE 9000
 
 CMD ["php-fpm"]
 
-## Production build
-FROM base
+## Used for build the frontend assets
+FROM node:8 as front_assets
+
+COPY . ./
+
+RUN yarn install \
+    && yarn build \
+    && rm -rf ./node_modules
+
+# Production build
+FROM base as production
+
+COPY --from=front_assets public/build ./public/build
 
 COPY docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
 
 RUN rm -rf /usr/local/bin/deptrac \
-    && rm -rf /usr/local/bin/php-cs-fixer \
-    && --from=node:8 yarn install \
-    && --from=node:8 yarn build \
-    && rm -rf ./node_modules
+    && rm -rf /usr/local/bin/php-cs-fixer
+

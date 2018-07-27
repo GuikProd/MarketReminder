@@ -1,34 +1,20 @@
 {
   "steps": [
     {
-      "name": "gcr.io/cloud-builders/yarn",
-      "id": "main_front_assets_install",
-      "args": ["install"],
-      "timeout": "80s"
-    },
-    {
-      "name": "gcr.io/cloud-builders/yarn",
-      "id": "main_front_assets_build",
-      "args": ["build"],
-      "waitFor": ["main_front_assets_install"],
-      "timeout": "45s"
-    },
-    {
       "name": "gcr.io/cloud-builders/docker",
       "id": "php_main",
       "args": [
         "build",
         "--build-arg",
         "WORKFOLDER=${_APP_FOLDER_}",
-        "--target",
-        "${_PHP_BUILD_TARGET_}",
         "-t",
-        "gcr.io/$PROJECT_ID/marketreminder",
+        "gcr.io/$PROJECT_ID/marketreminder_php",
+        "--target",
+        "${_ENV_PRODUCTION_STAGE_}",
         "--cache-from",
-        "gcr.io/$PROJECT_ID/marketreminder",
+        "gcr.io/$PROJECT_ID/marketreminder_php",
         "."
-      ],
-      "waitFor": ["main_front_assets_build"]
+      ]
     },
     {
       "name": "gcr.io/cloud-builders/docker",
@@ -37,16 +23,19 @@
         "build",
         "--build-arg",
         "WORKFOLDER=${_APP_FOLDER_}",
+        "--target",
+        "${_ENV_PRODUCTION_STAGE_}",
         "-t",
         "gcr.io/$PROJECT_ID/marketreminder_nginx",
         "./docker/nginx"
       ],
+      "waitFor": "php_main",
       "timeout": "10s"
     }
   ],
-  "images": ["gcr.io/$PROJECT_ID/marketreminder", "gcr.io/$PROJECT_ID/marketreminder_nginx"],
+  "images": ["gcr.io/$PROJECT_ID/marketreminder_php", "gcr.io/$PROJECT_ID/marketreminder_nginx"],
   "substitutions": {
     "_APP_FOLDER_": "/var/www/marketReminder",
-    "_PHP_BUILD_TARGET_": "base"
+    "_ENV_PRODUCTION_STAGE_": "production"
   }
 }

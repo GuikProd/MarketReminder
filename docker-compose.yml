@@ -6,7 +6,7 @@ services:
         container_name: ${CONTAINER_NAME}_php-fpm
         build:
             cache_from:
-                - '${CONTAINER_REGISTRY}'
+                - '${PHP_CONTAINER_REGISTRY}'
             context: .
             target: base
             args:
@@ -27,6 +27,8 @@ services:
     nginx:
         container_name: ${CONTAINER_NAME}_nginx
         build:
+            cache_from:
+                - '${NGINX_CONTAINER_REGISTRY}'
             context: ./docker/nginx
             target: base
             args:
