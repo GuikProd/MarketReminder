@@ -26,12 +26,12 @@ use Twig\Environment;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class HomeActionUnitTest extends TestCase
+final class HomeActionUnitTest extends TestCase
 {
     /**
-     * @var PresenterInterface
+     * @var PresenterInterface|null
      */
-    private $homePresenter;
+    private $homePresenter = null;
 
     /**
      * @var CloudTranslationRepositoryInterface
@@ -39,9 +39,9 @@ class HomeActionUnitTest extends TestCase
     private $redisTranslationRepository;
 
     /**
-     * @var Environment
+     * @var Environment|null
      */
-    private $twig;
+    private $twig = null;
 
     /**
      * {@inheritdoc}

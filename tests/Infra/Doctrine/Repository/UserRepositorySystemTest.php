@@ -24,14 +24,14 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserRepositorySystemTest extends KernelTestCase
+final class UserRepositorySystemTest extends KernelTestCase
 {
     use TestCaseTrait;
 
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepositoryInterface|null
      */
-    private $userRepository;
+    private $userRepository = null;
 
     /**
      * {@inheritdoc}
@@ -40,9 +40,8 @@ class UserRepositorySystemTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->userRepository = static::$kernel->getContainer()
-                                               ->get('doctrine.orm.entity_manager')
-                                               ->getRepository(User::class);
+        $this->userRepository = static::$container->get('doctrine.orm.entity_manager')
+                                                  ->getRepository(User::class);
     }
 
     /**
