@@ -65,6 +65,7 @@ final class PresenterUnitTest extends TestCase
         $presenter->prepareOptions([
             '_locale' => $locale,
             'content' => [],
+            'data' => [],
             'page' => $values
         ]);
 
@@ -86,6 +87,7 @@ final class PresenterUnitTest extends TestCase
         $presenter->prepareOptions([
             '_locale' => $redisTranslation->getLocale(),
             'content' => [],
+            'data' => [],
             'page' => [
                 'button' => [
                     'channel' => 'messages',

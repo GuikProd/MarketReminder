@@ -106,14 +106,24 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
             'content' => [],
             'form' => null,
             'user' => null,
-            'page' => []
+            'page' => [],
+            'data' => []
         ]);
 
         $resolver->setAllowedTypes('_locale', 'string');
         $resolver->setAllowedTypes('content', 'array');
+        $resolver->setAllowedTypes('data', 'array');
         $resolver->setAllowedTypes('form', array('null', FormInterface::class));
         $resolver->setAllowedTypes('page', 'array');
         $resolver->setAllowedTypes('user', array('null', UserInterface::class));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData(): array
+    {
+        return $this->viewOptions['data'];
     }
 
     /**

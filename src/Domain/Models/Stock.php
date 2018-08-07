@@ -16,7 +16,6 @@ namespace App\Domain\Models;
 use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Interfaces\StockItemsInterface;
 use App\Domain\Models\Interfaces\UserInterface;
-use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -45,7 +44,7 @@ class Stock implements StockInterface
     /**
      * @var array
      */
-    public $currentStatus;
+    public $currentStatus = [];
 
     /**
      * @var array
@@ -58,12 +57,12 @@ class Stock implements StockInterface
     private $stockItems = [];
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $creationDate;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $modificationDate;
 
@@ -74,19 +73,23 @@ class Stock implements StockInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function __construct(
-        StockCreationDTOInterface $stockCreationDTO,
+        string $title,
+        string $status,
         UserInterface $owner,
+        array $tags = [],
         array $stockItems = []
     ) {
-        $this->id = Uuid::uuid4();
-        $this->title = $stockCreationDTO->title;
-        $this->status = $stockCreationDTO->status;
-        $this->creationDate = time();
+        $this->id = Uuid::uuid1();
+        $this->title = $title;
+        $this->status = $status;
+        $this->creationDate = new \DateTimeImmutable();
         $this->owner = $owner;
 
-        $this->addTags($stockCreationDTO->tags);
+        $this->addTags($tags);
 
         \count($stockItems) > 0
             ? $this->addItems($stockItems)
@@ -120,7 +123,7 @@ class Stock implements StockInterface
     /**
      * @return string
      */
-    public function getModificationDate(): ? string
+    public function getModificationDate(): ?string
     {
         return $this->modificationDate->format('d-m-Y h:i:s');
     }
@@ -138,9 +141,7 @@ class Stock implements StockInterface
      */
     public function addItems(array $items): void
     {
-        if (\is_array($items) && \count($items) == 0) {
-            return;
-        }
+        if (\is_array($items) && \count($items) == 0) { return; }
 
         foreach ($items as $item) {
             $this->stockItems[] = $item;

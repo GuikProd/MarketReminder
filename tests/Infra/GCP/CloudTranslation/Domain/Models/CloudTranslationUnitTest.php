@@ -36,10 +36,7 @@ final class CloudTranslationUnitTest extends TestCase
     {
         $cloudTranslation = new CloudTranslation($name, $channel, $items);
 
-        static::assertInstanceOf(
-            CloudTranslationInterface::class,
-            $cloudTranslation
-        );
+        static::assertInstanceOf(CloudTranslationInterface::class, $cloudTranslation);
     }
 
     /**

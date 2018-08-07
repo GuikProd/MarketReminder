@@ -1,8 +1,8 @@
 let addBtn = document.querySelector('#stock_creation-button_newItem');
 let index = document.querySelector('#collection').getAttribute('data-index');
 
-addBtn.addEventListener('click', function (e) {
-    e.preventDefault();
+addBtn.addEventListener('click', function (event) {
+    event.preventDefault();
 
     let prototype = document.querySelector('#collection').getAttribute('data-prototype');
     let newForm = prototype.replace(/__name__/g, index);

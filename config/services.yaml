@@ -69,3 +69,9 @@ services:
     App\UI\Form\Extension\CloudTranslationTypeExtension:
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+
+
+    App\Application\DataCollector\RequestHandlerDataCollector:
+        public: false
+        tags:
+            - { name: data_collector, template: "application/data_collector/request_handler_collector.html.twig", id: 'requestHandler' }

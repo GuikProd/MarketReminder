@@ -13,6 +13,10 @@ The source code of the web application/API used for MarketReminder mobile applic
 
 ## Usage
 
+In order to use this project, you should have Docker & Docker-compose installed, 
+the last requirements is to use [Google Cloud Platform](https://cloud.google.com/) (along with the GCP SDK), 
+here, the GCP is used for building and API purpose. 
+
 Once you've installed Docker, time to build the project.
 
 This project use Docker environment files in order to allow the configuration according to your needs,
@@ -117,3 +121,26 @@ make behat
 ## Contributing 
 
 See [Contributing](contributing/contribution.md)
+
+### Building local images
+
+This project is automatically build using Cloud Build but sometimes, you may need to build locally in order
+to improve the Docker cache or something else, in order to do this, a command has been build via Makefile:
+
+**Be sure to have set the project linked to this repository before launching the build**
+
+```bash
+gcloud config set project _projectID_
+```
+
+Once the project is set, time to build the images:
+
+```bash
+make gcp-build
+```
+
+The goal of this command is to build the Docker images using the `cloudbuild.json` file, once built, the images are
+available in the Container Registry of your GCP account.
+
+**_Please be aware that every image is used in order to launch the project, if the image fail, you probably should not 
+build the project_**

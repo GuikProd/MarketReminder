@@ -67,7 +67,7 @@ final class RedisConnector implements RedisConnectorInterface, ConnectorInterfac
         $this->connection = RedisAdapter::createConnection($this->redisDSN, [
             'class' => Redis::class,
             'persistent_connection' => 1,
-            'persistent_id' => md5(str_rot13((string) time()))
+            'persistent_id' => md5(str_rot13($this->namespace))
         ]);
 
         $redisAdapter = new RedisAdapter(
@@ -76,9 +76,7 @@ final class RedisConnector implements RedisConnectorInterface, ConnectorInterfac
             0
         );
 
-        $this->adapter = new TagAwareAdapter(
-            $redisAdapter
-        );
+        $this->adapter = new TagAwareAdapter($redisAdapter);
 
         return $this->adapter;
     }

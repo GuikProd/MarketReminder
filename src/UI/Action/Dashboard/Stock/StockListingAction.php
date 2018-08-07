@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Dashboard\Stock;
 
+use App\Domain\Repository\Interfaces\StockRepositoryInterface;
 use App\UI\Action\Dashboard\Stock\Interfaces\StockListingActionInterface;
 use App\UI\Responder\Dashboard\Stock\Interfaces\StockListingResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,12 +34,28 @@ use Symfony\Component\Routing\Annotation\Route;
 final class StockListingAction implements StockListingActionInterface
 {
     /**
+     * @var StockRepositoryInterface
+     */
+    private $stockRepository;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(StockRepositoryInterface $stockRepository)
+    {
+        $this->stockRepository = $stockRepository;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __invoke(
         Request $request,
         StockListingResponderInterface $responder
     ): Response {
-        return $responder($request);
+
+        $stocks = $this->stockRepository->getAllTricks();
+
+        return $responder($request, $stocks);
     }
 }

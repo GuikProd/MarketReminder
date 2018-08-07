@@ -20,7 +20,7 @@ use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class CloudTranslationTypeExtension.
@@ -37,19 +37,11 @@ final class CloudTranslationTypeExtension extends AbstractTypeExtension implemen
     private $cloudTranslationRepository;
 
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
      * {@inheritdoc}
      */
-    public function __construct(
-        CloudTranslationRepositoryInterface $cloudTranslationRepository,
-        RequestStack $requestStack
-    ) {
+    public function __construct(CloudTranslationRepositoryInterface $cloudTranslationRepository)
+    {
         $this->cloudTranslationRepository = $cloudTranslationRepository;
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -60,12 +52,17 @@ final class CloudTranslationTypeExtension extends AbstractTypeExtension implemen
         return FormType::class;
     }
 
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefined(['_locale']);
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $locale = $this->requestStack->getCurrentRequest()->getLocale();
+        isset($options['_locale']) ? $view->vars['_locale'] = $options['_locale'] : $view->vars['_locale'] = '';
 
         $newVariables = [];
 
@@ -73,8 +70,8 @@ final class CloudTranslationTypeExtension extends AbstractTypeExtension implemen
             if (\in_array($key, self::TO_TRANSLATE_KEYS) && (!\is_null($value) && "" !== $value)) {
                 try {
                     $newVariables[$key] = $this->cloudTranslationRepository->getSingleEntry(
-                        'form.' . $locale . '.yaml',
-                        $locale,
+                        'form.' . $view->vars['_locale'] . '.yaml',
+                        $view->vars['_locale'],
                         $value
                     )->getValue();
                 } catch (InvalidArgumentException $e) {

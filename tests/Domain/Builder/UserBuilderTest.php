@@ -15,6 +15,7 @@ namespace App\Tests\Domain\Builder;
 
 use App\Domain\Builder\Interfaces\UserBuilderInterface;
 use App\Domain\Builder\UserBuilder;
+use App\Domain\Models\Interfaces\ImageInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Models\User;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +27,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserBuilderTest extends TestCase
+final class UserBuilderTest extends TestCase
 {
     /**
      * @var EncoderFactoryInterface
@@ -53,8 +54,13 @@ class UserBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUserCreation()
     {
+        $imageMock = $this->createMock(ImageInterface::class);
+
         $encoder = $this->encoderFactory->getEncoder(User::class);
 
         $userBuilder = new UserBuilder();
@@ -64,7 +70,7 @@ class UserBuilderTest extends TestCase
             'toto',
             'Ie1FDLTOTO',
             \Closure::fromCallable([$encoder, 'encodePassword']),
-            ''
+            $imageMock
         );
 
         static::assertInstanceOf(

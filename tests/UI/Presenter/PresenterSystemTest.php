@@ -29,7 +29,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class PresenterSystemTest extends KernelTestCase
+final class PresenterSystemTest extends KernelTestCase
 {
     use TestCaseTrait;
 

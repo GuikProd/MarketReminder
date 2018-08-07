@@ -1,7 +1,8 @@
-# Main commands
+# Constants
 DOCKER_COMPOSE = docker-compose
 DOCKER = docker
 COMPOSER = $(ENV_PHP) composer
+GCLOUD = gcloud
 
 ## Environments
 ENV_PHP = $(DOCKER) exec marketReminder_php-fpm
@@ -11,49 +12,67 @@ ENV_BLACKFIRE = $(DOCKER) exec marketReminder_blackfire
 
 ## Globals commands
 start: docker-compose.yml
-		$(DOCKER_COMPOSE) build --no-cache
-	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --force-recreate
-	    make install
-	    make cache-clear
+	$(DOCKER_COMPOSE) build --no-cache
+	$(DOCKER_COMPOSE) up -d --build --remove-orphans --force-recreate
+	make install
+	make cache-clear
+	make yarn_install
 
 restart: docker-compose.yml
-	    $(DOCKER_COMPOSE) up -d --build --remove-orphans --no-recreate
-	    make install
-	    make cache-clear
+	$(DOCKER_COMPOSE) up -d --build --remove-orphans --no-recreate
+	make install
+	make cache-clear
+	make yarn_install
 
 stop: docker-compose.yml
-	    $(DOCKER_COMPOSE) stop
+	$(DOCKER) stop $(docker ps -a -q)
 
 clean: ## Allow to delete the generated files and clean the project folder
-	    $(ENV_PHP) rm -rf .env ./node_modules ./vendor
+	$(ENV_PHP) rm -rf .env ./node_modules ./vendor
+
+## Tools
+php-cs: .php_cs.cache
+	$(ENV_PHP) php-cs-fixer fix $(FOLDER) --rules=@$(RULES)
+
+deptrac: depfile.yml
+	$(ENV_PHP) deptrac
+
+phpmetrics: ## Allow to launch a phpmetrics analyze
+	$(ENV_PHP) vendor/bin/phpmetrics src
+
+phpstan: vendor/bin/phpstan
+	$(ENV_PHP) vendor/bin/phpstan analyse $(FOLDER)
+
+gcp-build: cloudbuild.json
+	$(GCLOUD) builds submit --config cloudbuild.json
 
 ## PHP commands
 install: composer.json
-	     $(COMPOSER) install -a -o
-	     $(COMPOSER) clear-cache
-	     $(COMPOSER) dump-autoload --optimize --classmap-authoritative
+	$(COMPOSER) install -a -o
+	$(COMPOSER) clear-cache
+	$(COMPOSER) dump-autoload --optimize --classmap-authoritative
 
 update: composer.lock
-	     $(COMPOSER) update -a -o
+	$(COMPOSER) update -a -o
 
-require: ## Allow to install a new dependencies
-	    $(COMPOSER) req $(PACKAGE) -a -o
+require: composer.json
+	$(COMPOSER) req $(PACKAGE) -a -o
 
-require-dev:
-	    $(COMPOSER) req --dev $(PACKAGE) -a -o
+require-dev: composer.json
+	$(COMPOSER) req --dev $(PACKAGE) -a -o
 
-remove: ## Allow to remove a dependencie
-	    $(COMPOSER) remove $(PACKAGE) -a -o
+remove: composer.lock
+	$(COMPOSER) remove $(PACKAGE) -a -o
 
-autoload: ## Allow to dump the autoload
-	    $(COMPOSER) dump-autoload -a -o
+autoload: composer.json
+	$(COMPOSER) dump-autoload -a -o
 
 ## Symfony commands
-cache-clear: ## Allow to clear the cache
-	     $(ENV_PHP) rm -rf ./var/cache/*
+cache-clear: var/cache
+	$(ENV_PHP) rm -rf ./var/cache/*
 
-cache-warm: ## Allow to warm the cache
-	    $(ENV_PHP) ./bin/console cache:warmup
+cache-warm: var/cache
+	$(ENV_PHP) ./bin/console cache:warmup
 
 translation: translations
 	    $(ENV_PHP) ./bin/console app:translation:dump button fr
@@ -171,23 +190,7 @@ behat: features
 	    make translation
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
-phpstan: vendor/bin/phpstan
-	    $(ENV_PHP) vendor/bin/phpstan analyse $(FOLDER)
-
-## Tools commands
-php-cs: ## Allow to use php-cs-fixer
-	    $(ENV_PHP) php-cs-fixer fix $(FOLDER) --rules=@$(RULES)
-
-deptrac: ## Allow to use the deptrac analyzer
-	    $(ENV_PHP) deptrac
-
-phpmetrics: ## Allow to launch a phpmetrics analyze
-	    $(ENV_PHP) vendor/bin/phpmetrics src
-
 ## NodeJS commands
-lighthouse: node_modules
-	    $(ENV_NODE) lighthouse $(URL) --output html --output-path ./lighthouse.html
-
 yarn_install: node_modules
 	    $(ENV_NODE) yarn install
 
@@ -208,19 +211,19 @@ yarn_add_dev: package.json
 
 ## Varnish commands
 varnish_logs: ## Allow to see the varnish logs
-	    $(ENV_VARNISH) varnishlog -b
+	$(ENV_VARNISH) varnishlog -b
 
 ## Blackfire commands
 profile_php: public/index.php
-	    make cache-clear
-	    make doctrine-cache ENV=prod
-	    $(ENV_PHP) ./bin/console cache:pool:prune
-	    make translation
-	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
+	make cache-clear
+	make doctrine-cache ENV=prod
+	$(ENV_PHP) ./bin/console cache:pool:prune
+	make translation
+	$(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
 
 profile_varnish: public/index.php
-	    make cache-clear
-	    make doctrine-cache ENV=prod
-	    $(ENV_PHP) ./bin/console cache:pool:prune
-	    make translation
-	    $(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)
+	make cache-clear
+	make doctrine-cache ENV=prod
+	$(ENV_PHP) ./bin/console cache:pool:prune
+	make translation
+	$(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)

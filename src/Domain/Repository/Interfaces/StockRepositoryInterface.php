@@ -23,6 +23,11 @@ use App\Domain\Models\Interfaces\StockInterface;
 interface StockRepositoryInterface
 {
     /**
+     * @return array
+     */
+    public function getAllTricks(): array;
+
+    /**
      * @param StockInterface $stock
      */
     public function save(StockInterface $stock): void;

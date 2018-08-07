@@ -1,0 +1,54 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}
+        {# this is the content displayed as a panel in the toolbar #}
+        <svg xmlns="http://www.w3.org/2000/svg"> ... </svg>
+        <span class="sf-toolbar-value">RequestHandler</span>
+    {% endset %}
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>Called RequestHandler</b>
+            <span>{{ collector.requestHandler }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Checked</b>
+            <span>{{ collector.checked }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>AMP</b>
+            <span>{{ collector.amp }}</span>
+        </div>
+    {% endset %}
+
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: false }) }}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block menu %}
+    {# This left-hand menu appears when using the full-screen profiler. #}
+    <span class="label">
+    <span class="icon"><img src="..." alt=""/></span>
+    <strong>RequestHandler</strong>
+</span>
+{% endblock %}
+
+{% block panel %}
+    {# Optional, for showing the most details. #}
+    <h2>RequestHandler informations</h2>
+    <table>
+        <thead>
+            <tr>
+                RequestHandler name
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>{{ collector.requestHandler }}</th>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -11,32 +11,48 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Domain\Builder\Interfaces;
+namespace App\Domain\Factory\Interfaces;
 
 use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
 
 /**
- * Interface StockBuilderInterface.
+ * Interface StockFactoryInterface.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-interface StockBuilderInterface
+interface StockFactoryInterface
 {
     /**
      * @param StockCreationDTOInterface $stockCreationDTO
-     * @param UserInterface $owner
-     * @param array $items
+     * @param UserInterface                 $owner
+     * @param array                           $tags
+     * @param array                           $stockItems
+     *
+     * @return StockInterface
      */
     public function createFromUI(
         StockCreationDTOInterface $stockCreationDTO,
         UserInterface $owner,
-        array $items = []
-    ): void;
+        array $tags = [],
+        array $stockItems = []
+    ): StockInterface;
 
     /**
+     * @param string           $title
+     * @param string           $status
+     * @param UserInterface $owner
+     * @param array           $tags
+     * @param array           $stockItems
+     *
      * @return StockInterface
      */
-    public function getStock(): StockInterface;
+    public function createFromData(
+        string $title,
+        string $status,
+        UserInterface $owner,
+        array $tags = [],
+        array $stockItems = []
+    ): StockInterface;
 }

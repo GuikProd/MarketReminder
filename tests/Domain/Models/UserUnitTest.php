@@ -26,47 +26,40 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class UserUnitTest extends TestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testItImplementsAndReturnData()
     {
-        $user = new User(
-            'toto@gmail.com',
-            'Toto',
-            'Ie1FDLTOTO',
-            'aa194daz4dz24ad4zd9d9adza4d9d9a'
-        );
+        $user = new User('toto@gmail.com', 'Toto', 'Ie1FDLTOTO');
 
         static::assertInstanceOf(UserInterface::class, $user);
         static::assertInstanceOf(UuidInterface::class, $user->getId());
         static::assertSame('toto@gmail.com', $user->getEmail());
         static::assertSame('Toto', $user->getUsername());
         static::assertSame('Ie1FDLTOTO', $user->getPassword());
-        static::assertSame('aa194daz4dz24ad4zd9d9adza4d9d9a', $user->getValidationToken());
+        static::assertNotNull($user->getValidationToken());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testImageRelation()
     {
         $image = $this->createMock(ImageInterface::class);
         $image->method('getAlt')->willReturn('toto.png');
 
-        $user = new User(
-            'toto@gmail.com',
-            'Toto',
-            'Ie1FDLTOTO',
-            'aa194daz4dz24ad4zd9d9adza4d9d9a',
-            $image
-        );
+        $user = new User('toto@gmail.com', 'Toto', 'Ie1FDLTOTO', $image);
 
         static::assertInstanceOf(ImageInterface::class, $user->getProfileImage());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUserValidation()
     {
-        $user = new User(
-            'toto@gmail.com',
-            'Toto',
-            'Ie1FDLTOTO',
-            'aa194daz4dz24ad4zd9d9adza4d9d9a'
-        );
+        $user = new User('toto@gmail.com', 'Toto', 'Ie1FDLTOTO');
 
         $user->validate();
 

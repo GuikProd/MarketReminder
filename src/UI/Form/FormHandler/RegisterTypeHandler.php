@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class RegisterTypeHandler implements RegisterTypeHandlerInterface
+final class RegisterTypeHandler implements RegisterTypeHandlerInterface
 {
     /**
      * @var CloudStorageWriterHelperInterface
@@ -131,7 +131,6 @@ class RegisterTypeHandler implements RegisterTypeHandlerInterface
                 $registerForm->getData()->username,
                 $registerForm->getData()->password,
                 \Closure::fromCallable([$encoder, 'encodePassword']),
-                $registerForm->getData()->validationToken,
                 $this->imageBuilder->getImage() ?: null
             );
 

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Dashboard\Stock\Interfaces;
 
+use App\Domain\Repository\Interfaces\StockRepositoryInterface;
+
 /**
  * Interface StockListingActionInterface.
  *
@@ -20,5 +22,10 @@ namespace App\UI\Action\Dashboard\Stock\Interfaces;
  */
 interface StockListingActionInterface
 {
-
+    /**
+     * StockListingActionInterface constructor.
+     *
+     * @param StockRepositoryInterface $repository
+     */
+    public function __construct(StockRepositoryInterface $repository);
 }

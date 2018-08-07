@@ -11,42 +11,53 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Domain\Builder;
+namespace App\Domain\Factory;
 
-use App\Domain\Builder\Interfaces\StockBuilderInterface;
+use App\Domain\Factory\Interfaces\StockFactoryInterface;
 use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Models\Stock;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
 
 /**
- * Class StockBuilder.
+ * Class StockFactory.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class StockBuilder implements StockBuilderInterface
+final class StockFactory implements StockFactoryInterface
 {
     /**
-     * @var StockInterface
-     */
-    private $stock;
-
-    /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function createFromUI(
         StockCreationDTOInterface $stockCreationDTO,
         UserInterface $owner,
-        array $items = []
-    ): void {
-        $this->stock = new Stock($stockCreationDTO, $owner, $items ?: []);
+        array $tags = [],
+        array $stockItems = []
+    ): StockInterface {
+        return new Stock(
+            $stockCreationDTO->title,
+            $stockCreationDTO->status,
+            $owner,
+            $tags,
+            $stockItems
+        );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
-    public function getStock(): StockInterface
-    {
-        return $this->stock;
+    public function createFromData(
+        string $title,
+        string $status,
+        UserInterface $owner,
+        array $tags = [],
+        array $stockItems = []
+    ): StockInterface {
+        return new Stock($title, $status, $owner, $tags, $stockItems);
     }
 }

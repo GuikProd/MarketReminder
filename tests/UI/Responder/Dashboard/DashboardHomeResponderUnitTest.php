@@ -49,10 +49,7 @@ final class DashboardHomeResponderUnitTest extends TestCase
 
     public function testItImplements()
     {
-        $responder = new DashboardHomeResponder(
-            $this->twig,
-            $this->presenter
-        );
+        $responder = new DashboardHomeResponder($this->twig, $this->presenter);
 
         static::assertInstanceOf(
             DashboardHomeResponderInterface::class,
@@ -65,10 +62,7 @@ final class DashboardHomeResponderUnitTest extends TestCase
         $requestMock = $this->createMock(Request::class);
         $requestMock->method('getLocale')->willReturn('fr');
 
-        $dashboardHomeResponder = new DashboardHomeResponder(
-            $this->twig,
-            $this->presenter
-        );
+        $dashboardHomeResponder = new DashboardHomeResponder($this->twig, $this->presenter);
 
         static::assertInstanceOf(
             Response::class,

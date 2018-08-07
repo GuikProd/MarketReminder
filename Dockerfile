@@ -4,6 +4,7 @@ FROM php:fpm-alpine as base
 ARG WORKFOLDER
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV PANTHER_NO_SANDBOX 1
 ENV WORKPATH ${WORKFOLDER}
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go \
@@ -37,15 +38,16 @@ RUN wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer 
     && mv deptrac.phar /usr/local/bin/deptrac
 
 RUN mkdir -p ${WORKPATH} \
-    && chown -R www-data /tmp/
+    && chown -R www-data /tmp/ \
+    && mkdir -p \
+       ${WORKPATH}/var/cache \
+       ${WORKPATH}/var/logs \
+       ${WORKPATH}/var/sessions \
+    && chown -R www-data ${WORKPATH}/var
 
 WORKDIR ${WORKPATH}
 
 COPY --chown=www-data:www-data . ./
-
-EXPOSE 9000
-
-CMD ["php-fpm"]
 
 ## Used for build the frontend assets
 FROM node:8 as front_assets
@@ -65,4 +67,3 @@ COPY docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
 
 RUN rm -rf /usr/local/bin/deptrac \
     && rm -rf /usr/local/bin/php-cs-fixer
-

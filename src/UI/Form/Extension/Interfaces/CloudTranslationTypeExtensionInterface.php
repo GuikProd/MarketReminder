@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\UI\Form\Extension\Interfaces;
 
 use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Interface CloudTranslationTypeExtensionInterface.
@@ -27,10 +26,6 @@ interface CloudTranslationTypeExtensionInterface
      * CloudTranslationTypeExtensionInterface constructor.
      *
      * @param CloudTranslationRepositoryInterface $repository
-     * @param RequestStack $requestStack
      */
-    public function __construct(
-        CloudTranslationRepositoryInterface $repository,
-        RequestStack $requestStack
-    );
+    public function __construct(CloudTranslationRepositoryInterface $repository);
 }

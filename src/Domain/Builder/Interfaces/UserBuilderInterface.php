@@ -24,12 +24,11 @@ use App\Domain\Models\Interfaces\UserInterface;
 interface UserBuilderInterface
 {
     /**
-     * @param string               $email
-     * @param string               $username
-     * @param string               $password
-     * @param callable             $passwordEncoder
-     * @param string               $validationToken
-     * @param ImageInterface|null  $profileImage
+     * @param string $email
+     * @param string $username
+     * @param string $password
+     * @param callable $passwordEncoder
+     * @param ImageInterface|null $profileImage
      *
      * @return UserBuilderInterface
      *
@@ -41,7 +40,6 @@ interface UserBuilderInterface
         string $username,
         string $password,
         callable $passwordEncoder,
-        string $validationToken,
         ImageInterface $profileImage = null
     ): UserBuilderInterface;
 

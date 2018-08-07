@@ -57,7 +57,8 @@
         "phpmetrics/phpmetrics": "^2.3",
         "phpstan/phpstan": "^0.10.2",
         "symfony/dotenv": "^4.1",
-        "symfony/flex": "^1.0"
+        "symfony/flex": "^1.0",
+        "symfony/panthere": "^0.1.0"
     },
     "config": {
         "preferred-install": {

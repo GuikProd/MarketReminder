@@ -52,7 +52,8 @@ final class LoginAction implements LoginActionInterface
      */
     public function __invoke(Request $request, LoginResponderInterface $responder): Response
     {
-        $form = $this->formFactory->create(LoginType::class)->handleRequest($request);
+        $form = $this->formFactory->create(LoginType::class, null, ['_locale' => $request->getLocale()])
+                                  ->handleRequest($request);
 
         return $responder($request, $form);
     }

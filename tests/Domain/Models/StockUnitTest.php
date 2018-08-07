@@ -17,8 +17,6 @@ use App\Domain\Models\Interfaces\StockInterface;
 use App\Domain\Models\Interfaces\StockItemsInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Models\Stock;
-use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
-use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockCreationDTO;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\UuidInterface;
 
@@ -30,11 +28,6 @@ use Ramsey\Uuid\UuidInterface;
 final class StockUnitTest extends TestCase
 {
     /**
-     * @var StockCreationDTOInterface|null
-     */
-    private $stockCreationDTO = null;
-
-    /**
      * @var UserInterface|null
      */
     private $stockOwner = null;
@@ -44,51 +37,38 @@ final class StockUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $stockItemMock = $this->createMock(StockItemsInterface::class);
-
-        $this->stockCreationDTO = new StockCreationDTO('', '', [], [$stockItemMock]);
         $this->stockOwner = $this->createMock(UserInterface::class);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testItImplements()
     {
-        $stock = new Stock(
-            $this->stockCreationDTO,
-            $this->stockOwner
-        );
+        $stock = new Stock('', '', $this->stockOwner);
 
-        static::assertInstanceOf(
-            StockInterface::class,
-            $stock
-        );
+        static::assertInstanceOf(StockInterface::class, $stock);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testItReceiveData()
     {
-        $stock = new Stock(
-            $this->stockCreationDTO,
-            $this->stockOwner
-        );
+        $stock = new Stock('', '', $this->stockOwner);
 
-        static::assertInstanceOf(
-            UuidInterface::class,
-            $stock->getId()
-        );
-        static::assertSame(
-            '',
-            $stock->getTitle()
-        );
+        static::assertInstanceOf(UuidInterface::class, $stock->getId());
+        static::assertSame('', $stock->getTitle());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testItCouldReceiveItems()
     {
         $itemMock = $this->createMock(StockItemsInterface::class);
 
-        $stock = new Stock(
-            $this->stockCreationDTO,
-            $this->stockOwner,
-            [$itemMock]
-        );
+        $stock = new Stock('', '', $this->stockOwner, [], [$itemMock]);
 
         static::assertCount(1, $stock->getItems());
     }

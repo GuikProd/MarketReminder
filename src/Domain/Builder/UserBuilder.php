@@ -23,7 +23,7 @@ use App\Domain\Models\User;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserBuilder implements UserBuilderInterface
+final class UserBuilder implements UserBuilderInterface
 {
     /**
      * @var UserInterface
@@ -32,19 +32,20 @@ class UserBuilder implements UserBuilderInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function createFromRegistration(
         string $email,
         string $username,
         string $password,
         callable $passwordEncoder,
-        string $validationToken,
         ImageInterface $profileImage = null
     ): UserBuilderInterface {
 
         $encryptedPassword = $passwordEncoder($password, null);
 
-        $this->user = new User($email, $username, $encryptedPassword, $validationToken, $profileImage);
+        $this->user = new User($email, $username, $encryptedPassword, $profileImage);
 
         return $this;
     }

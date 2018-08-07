@@ -70,3 +70,4 @@ core:
              paths: ['%paths.base%/features/core']
              contexts:
                  - CloudTranslationBridgeContext
+                 - UserContext

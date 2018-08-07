@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: app
+spec:
+    selector:
+        app: production
+    ports:
+        - port: 80
+          targetPort: 8080
+    type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: production
+    labels:
+        app: production
+spec:
+    selector:
+        matchLabels:
+            name: nginx
+    replicas: 3
+    template:
+        spec:
+           volumes:
+               - name: shared-files
+                 emptyDir: {}
+           containers:
+               - name: php-fpm
+                 image: gcr.io/marketreminder-206206/marketreminder_php_prod
+                 volumeMounts:
+                     - mountPath: shared-files
+                       name: /var/www/app
+                 lifecycle:
+                     postStart:
+                         exec:
+                             command: ['/bin/sh', 'cp', 'cp -r /var/www/marketReminder /var/www/app']
+                 ports:
+                     - containerPort: 9000
+               - name: nginx
+                 image: gcr.io/marketreminder-206206/marketreminder_nginx_prod
+                 volumeMounts:
+                     - mountPath: shared-files
+                       name: /var/www/app
+                 ports:
+                     - containerPort: 80

@@ -62,6 +62,11 @@ interface PresenterInterface
     public function configureOptions(Options $resolver): void;
 
     /**
+     * @return array
+     */
+    public function getData(): array;
+
+    /**
      * @return FormView|null
      */
     public function getForm(): ?FormView;

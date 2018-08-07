@@ -2,42 +2,47 @@
   "steps": [
     {
       "name": "gcr.io/cloud-builders/docker",
-      "id": "php_main",
-      "args": [
-        "build",
-        "--build-arg",
-        "WORKFOLDER=${_APP_FOLDER_}",
-        "-t",
-        "gcr.io/$PROJECT_ID/marketreminder_php",
-        "--target",
-        "${_ENV_PRODUCTION_STAGE_}",
-        "--cache-from",
-        "gcr.io/$PROJECT_ID/marketreminder_php:latest",
-        "."
+      "id": "php",
+      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_php", "--target", "${_ENV_PRODUCTION_STAGE_}", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_php:latest", "."
       ]
     },
     {
       "name": "gcr.io/cloud-builders/docker",
-      "id": "nginx_main",
-      "args": [
-        "build",
-        "--build-arg",
-        "WORKFOLDER=${_APP_FOLDER_}",
-        "--target",
-        "${_ENV_PRODUCTION_STAGE_}",
-        "-t",
-        "gcr.io/$PROJECT_ID/marketreminder_nginx",
-        "--cache-from",
-        "gcr.io/$PROJECT_ID/marketreminder_nginx:latest",
-        "./docker/nginx"
+      "id": "nginx_dev",
+      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "--target", "${_ENV_DEVELOPMENT_STAGE_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_nginx_dev", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_nginx_dev:latest", "./docker/nginx"
       ],
-      "waitFor": "php_main",
+      "waitFor": "php",
       "timeout": "10s"
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "nginx_prod",
+      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "--target", "${_ENV_PRODUCTION_STAGE_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_nginx_prod", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_nginx_prod:latest", "./docker/nginx"
+      ],
+      "waitFor": "php",
+      "timeout": "10s"
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "varnish_dev",
+      "args": ["build", "--target", "${_ENV_DEVELOPMENT_STAGE_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_varnish", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_varnish:latest", "./docker/varnish"
+      ],
+      "waitFor": "nginx_dev",
+      "timeout": "100s"
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "varnish_prod",
+      "args": ["build", "--target", "${_ENV_PRODUCTION_STAGE_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_varnish_prod", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_varnish_prod:latest", "./docker/varnish"
+      ],
+      "waitFor": "nginx_prod",
+      "timeout": "100s"
     }
   ],
-  "images": ["gcr.io/$PROJECT_ID/marketreminder_php", "gcr.io/$PROJECT_ID/marketreminder_nginx"],
+  "images": ["gcr.io/$PROJECT_ID/marketreminder_php", "gcr.io/$PROJECT_ID/marketreminder_nginx_dev", "gcr.io/$PROJECT_ID/marketreminder_nginx_prod", "gcr.io/$PROJECT_ID/marketreminder_varnish", "gcr.io/$PROJECT_ID/marketreminder_varnish_prod"],
   "substitutions": {
     "_APP_FOLDER_": "/var/www/marketReminder",
+    "_ENV_DEVELOPMENT_STAGE_": "base",
     "_ENV_PRODUCTION_STAGE_": "production"
   }
 }

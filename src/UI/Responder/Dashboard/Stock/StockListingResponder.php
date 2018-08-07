@@ -54,8 +54,9 @@ final class StockListingResponder implements StockListingResponderInterface
     {
         $this->presenter->prepareOptions([
             '_locale' => $request->getLocale(),
-            'content' => [
-                'data' => $data
+            'content' => [],
+            'data' => [
+                'stocks' => $data
             ],
             'page' => []
         ]);

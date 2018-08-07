@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Models\Interfaces;
 
-use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -26,12 +25,18 @@ interface StockInterface
     /**
      * StockInterface constructor.
      *
-     * @param StockCreationDTOInterface $stockCreationDTO
+     * @param string           $title
+     * @param string           $status
      * @param UserInterface $owner
+     * @param array           $tags
+     * @param array           $stockItems
      */
     public function __construct(
-        StockCreationDTOInterface $stockCreationDTO,
-        UserInterface $owner
+        string $title,
+        string $status,
+        UserInterface $owner,
+        array $tags = [],
+        array $stockItems = []
     );
 
     /**
@@ -63,4 +68,14 @@ interface StockInterface
      * @param array $tags
      */
     public function addTags(array $tags): void;
+
+    /**
+     * @return string
+     */
+    public function getCreationDate(): string;
+
+    /**
+     * @return null|string
+     */
+    public function getModificationDate(): ?string;
 }

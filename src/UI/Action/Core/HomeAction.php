@@ -30,6 +30,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"GET"},
  *     requirements={
  *         "_locale": "%accepted_locales%"
+ *     },
+ *     defaults={
+ *         "_request_handler": "App\Application\Request\Handler\HomeRequestHandler"
  *     }
  * )
  */
@@ -42,6 +45,7 @@ final class HomeAction implements HomeActionInterface
         Request $request,
         HomeResponderInterface $responder
     ): Response {
+
         return $responder($request);
     }
 }

@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme presenter.form 'form/themes/_registerTypeTheme.html.twig' %}
+
 {% block title %}
     {{ presenter.page.title.value }}
 {% endblock %}
@@ -14,7 +16,6 @@
         <h2 class="mk-main__center">
             {{ presenter.page.title.value }}
         </h2>
-        {% form_theme presenter.form 'form/themes/_registerTypeTheme.html.twig' %}
         {{ form(presenter.form) }}
 
         <div class="mdc-snackbar mdc-snackbar--align-start"

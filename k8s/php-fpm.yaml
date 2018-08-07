@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: php
+spec:
+    containers:
+        - name: php
+          image: marketreminder-symfony_php-fpm

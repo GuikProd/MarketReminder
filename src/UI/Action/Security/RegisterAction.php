@@ -62,8 +62,7 @@ final class RegisterAction implements RegisterActionInterface
         Request $request,
         RegisterResponderInterface $responder
     ) {
-        $registerType = $this->formFactory->create(RegisterType::class)
-                                          ->handleRequest($request);
+        $registerType = $this->formFactory->create(RegisterType::class)->handleRequest($request);
 
         if ($this->registerTypeHandler->handle($registerType)) {
             return $responder($request, true);

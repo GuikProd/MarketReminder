@@ -37,6 +37,16 @@ final class StockRepository extends ServiceEntityRepository implements StockRepo
     /**
      * {@inheritdoc}
      */
+    public function getAllTricks(): array
+    {
+        return $this->createNativeNamedQuery('stock_all')->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
     public function save(StockInterface $stock): void
     {
         $this->_em->persist($stock);

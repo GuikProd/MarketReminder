@@ -17,6 +17,7 @@ use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Twig\Environment;
 
 /**
@@ -53,7 +54,7 @@ final class HomeResponder implements HomeResponderInterface
     public function __invoke(Request $request): Response
     {
         $this->presenter->prepareOptions([
-            '_locale' => $request->getLocale(),
+            '_locale' => $request->attributes->get('_locale'),
             'content' => [],
             'page' => [
                 'content' => [
@@ -66,6 +67,8 @@ final class HomeResponder implements HomeResponderInterface
         $response = new Response($this->twig->render('core/index.html.twig', [
             'presenter' => $this->presenter
         ]));
+
+        $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
 
         return $response->setCache([
             'etag' => md5(str_rot13($request->getLocale()))

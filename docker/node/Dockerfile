@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:8 as base
 
 RUN mkdir /usr/src/app
 

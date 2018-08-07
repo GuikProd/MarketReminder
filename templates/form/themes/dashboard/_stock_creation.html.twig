@@ -10,5 +10,5 @@
         <button id="{{ form.vars.id~'-button_submit' }}" class="mdc-button mdc-button--raised mdc-elevation--z2">
             Submit
         </button>
-    {{ form_end(form) }}
+    {{ form_end(form, {'render_rest': 'false'}) }}
 {% endblock %}

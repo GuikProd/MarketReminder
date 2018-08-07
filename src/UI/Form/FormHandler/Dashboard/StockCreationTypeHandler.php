@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Form\FormHandler\Dashboard;
 
 use App\Application\Event\SessionMessageEvent;
-use App\Domain\Builder\Interfaces\StockBuilderInterface;
+use App\Domain\Factory\Interfaces\StockFactoryInterface;
 use App\Domain\Builder\Interfaces\StockItemsBuilderInterface;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
 use App\UI\Form\FormHandler\Dashboard\Interfaces\StockCreationTypeHandlerInterface;
@@ -42,7 +42,7 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
     private $workflowRegistry;
 
     /**
-     * @var StockBuilderInterface
+     * @var StockFactoryInterface
      */
     private $stockBuilder;
 
@@ -72,7 +72,7 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         Registry $workflowRegistry,
-        StockBuilderInterface $stockBuilder,
+        StockFactoryInterface $stockBuilder,
         StockItemsBuilderInterface $stockItemsBuilder,
         StockRepositoryInterface $stockRepository,
         TokenStorageInterface $tokenStorage,
@@ -98,13 +98,13 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
                 ? $this->stockItemsBuilder->createFromUI($form->getData()->stockItems)
                 : $form->getData()->stockItems = [];
 
-            $this->stockBuilder->createFromUI(
+            $stock = $this->stockBuilder->createFromUI(
                 $form->getData(),
                 $this->tokenStorage->getToken()->getUser(),
                 $this->stockItemsBuilder->getStockItems()
             );
 
-            $errors = $this->validator->validate($this->stockBuilder->getStock(), [], 'stock_creation');
+            $errors = $this->validator->validate($stock, [], 'stock_creation');
 
             if (\count($errors) > 0) {
 
@@ -116,10 +116,10 @@ final class StockCreationTypeHandler implements StockCreationTypeHandlerInterfac
                 return false;
             }
 
-            $workflow = $this->workflowRegistry->get($this->stockBuilder->getStock());
-            $workflow->apply($this->stockBuilder->getStock(), 'used');
+            $workflow = $this->workflowRegistry->get($stock);
+            $workflow->apply($stock, 'used');
 
-            $this->stockRepository->save($this->stockBuilder->getStock());
+            $this->stockRepository->save($stock);
 
             return true;
         }

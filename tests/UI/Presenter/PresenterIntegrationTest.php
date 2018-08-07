@@ -92,6 +92,7 @@ final class PresenterIntegrationTest extends TestCase
         $presenter->prepareOptions([
             '_locale' => 'ru',
             'content' => [],
+            'data' => [],
             'page' => [
                 'button' => [
                     'key' => $values['key'],
@@ -125,6 +126,7 @@ final class PresenterIntegrationTest extends TestCase
         $presenter->prepareOptions([
             '_locale' => $locale,
             'content' => [],
+            'data' => [],
             'page' => [
                 'button' => [
                     'key' => $values['key'],

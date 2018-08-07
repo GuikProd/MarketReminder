@@ -51,32 +51,32 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * @var array
      */
-    private $roles;
+    private $roles = [];
 
     /**
      * @var bool
      */
-    private $active;
+    private $active = false;
 
     /**
      * @var array
      */
-    private $currentState;
+    private $currentState = [];
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $creationDate;
 
     /**
-     * @var int
+     * @var \DateTimeInterface
      */
     private $validationDate;
 
     /**
      * @var bool
      */
-    private $validated;
+    private $validated = false;
 
     /**
      * @var string
@@ -99,9 +99,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $resetPasswordDate;
 
     /**
-     * @var ImageInterface
+     * @var ImageInterface|null
      */
-    private $profileImage;
+    private $profileImage = null;
 
     /**
      * @var array
@@ -110,36 +110,39 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function __construct(
         string $email,
         string $username,
         string $password,
-        string $validationToken,
         ImageInterface $profileImage = null
     ) {
         $this->active = false;
         $this->currentState = ['toValidate'];
         $this->id = Uuid::uuid4();
-        $this->creationDate = time();
+        $this->creationDate = new \DateTimeImmutable();
         $this->email = $email;
         $this->password = $password;
         $this->profileImage = $profileImage;
-        $this->roles[] = 'ROLE_USER';
         $this->username = $username;
         $this->validated = false;
-        $this->validationToken = $validationToken;
+        $this->validationToken = md5(str_rot13($username));
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception @see \DatetimeImmutable
      */
     public function validate(): void
     {
         $this->active = true;
         $this->validated = true;
         $this->validationToken = null;
-        $this->validationDate = time();
+        $this->validationDate = new \DateTimeImmutable();
+        $this->roles[] = 'ROLE_USER';
     }
 
     /**
@@ -157,7 +160,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     public function updatePassword(string $newPassword): void
     {
         $this->password = $newPassword;
-        $this->resetPasswordDate = time();
+        $this->resetPasswordDate = new \DateTime();
         $this->resetPasswordToken = null;
     }
 
@@ -188,7 +191,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -196,7 +199,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -204,7 +207,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -212,7 +215,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getRoles(): ? array
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -220,7 +223,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getActive(): ? bool
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -236,9 +239,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getCreationDate(): ? \DateTime
+    public function getCreationDate(): string
     {
-        return \DateTime::createFromFormat('U', (string) $this->creationDate);
+        return $this->creationDate->format('d-M-Y H:i:s');
     }
 
     /**
@@ -260,9 +263,9 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getValidationDate(): ?int
+    public function getValidationDate(): ?string
     {
-        return $this->validationDate;
+        return $this->validationDate->format('d-M-Y H:i:s');
     }
 
     /**

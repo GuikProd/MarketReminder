@@ -1,4 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+
+{% endblock %}
+
 {% block body %}
+    {% for stock in presenter.data.stocks %}
+        {{ stock.id }}
+    {% endfor %}
+    <a href="{{ path('dashboard_stock_creation') }}">
+        Créer un stock
+    </a>
 {% endblock %}

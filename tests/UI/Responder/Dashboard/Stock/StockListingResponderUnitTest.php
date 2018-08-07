@@ -17,6 +17,8 @@ use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Dashboard\Stock\Interfaces\StockListingResponderInterface;
 use App\UI\Responder\Dashboard\Stock\StockListingResponder;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
@@ -47,14 +49,17 @@ final class StockListingResponderUnitTest extends TestCase
 
     public function testItImplements()
     {
-        $responder = new StockListingResponder(
-            $this->twig,
-            $this->presenter
-        );
+        $responder = new StockListingResponder($this->twig, $this->presenter);
 
-        static::assertInstanceOf(
-            StockListingResponderInterface::class,
-            $responder
-        );
+        static::assertInstanceOf(StockListingResponderInterface::class, $responder);
+    }
+
+    public function testItReturn()
+    {
+        $requestMock = $this->createMock(Request::class);
+
+        $responder = new StockListingResponder($this->twig, $this->presenter);
+
+        static::assertInstanceOf(Response::class, $responder($requestMock));
     }
 }

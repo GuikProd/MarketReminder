@@ -10,8 +10,8 @@
         <field name="email" type="string" length="50" unique="true" nullable="false" />
         <field name="password" type="string" length="60" unique="false" nullable="false" />
         <field name="roles" type="array" nullable="false" unique="false" />
-        <field name="creationDate" type="integer" nullable="false" />
-        <field name="validationDate" type="integer" nullable="true" unique="true" />
+        <field name="creationDate" type="date_immutable" nullable="false" />
+        <field name="validationDate" type="date_immutable" nullable="true" unique="true" />
         <field name="validated" type="boolean" nullable="false" />
         <field name="validationToken" type="string" length="35" nullable="true" unique="false" />
         <field name="resetPasswordToken" type="string" length="10" unique="true" nullable="true" />

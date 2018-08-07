@@ -1,0 +1,12 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: Ingress
+spec:
+    rules:
+        - http:
+            paths:
+                - path: /
+                  backend:
+                      serviceName: varnish
+                      servicePort: 8000

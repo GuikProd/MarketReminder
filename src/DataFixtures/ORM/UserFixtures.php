@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserFixtures extends Fixture
+final class UserFixtures extends Fixture
 {
     /**
      * {@inheritdoc}
@@ -41,13 +41,7 @@ class UserFixtures extends Fixture
             'hp@gmail.com',
             'HP',
             'Ie1FDLHPP',
-            \Closure::fromCallable([$encoder, 'encodePassword']),
-            md5(
-                crypt(
-                    str_rot13('HP'),
-                    "hp@gmail.com"
-                )
-            )
+            \Closure::fromCallable([$encoder, 'encodePassword'])
         );
 
         $this->setReference('user', $userBuilder->getUser());
@@ -56,13 +50,7 @@ class UserFixtures extends Fixture
             'toto@gmail.com',
             'Toto',
             'Ie1FDLTOTO',
-            \Closure::fromCallable([$encoder, 'encodePassword']),
-            md5(
-                crypt(
-                    str_rot13('Toto'),
-                    "toto@gmail.com"
-                )
-            )
+            \Closure::fromCallable([$encoder, 'encodePassword'])
         );
 
         $this->setReference('user_II', $userBuilderII->getUser());
@@ -71,13 +59,7 @@ class UserFixtures extends Fixture
             'guik@gmail.com',
             'Guik',
             'Ie1FDLGK',
-            \Closure::fromCallable([$encoder, 'encodePassword']),
-            md5(
-                crypt(
-                    str_rot13('Guik'),
-                    "guik@gmail.com"
-                )
-            )
+            \Closure::fromCallable([$encoder, 'encodePassword'])
         );
 
 

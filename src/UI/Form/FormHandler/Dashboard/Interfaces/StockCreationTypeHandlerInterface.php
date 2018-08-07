@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Form\FormHandler\Dashboard\Interfaces;
 
-use App\Domain\Builder\Interfaces\StockBuilderInterface;
+use App\Domain\Factory\Interfaces\StockFactoryInterface;
 use App\Domain\Builder\Interfaces\StockItemsBuilderInterface;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -34,7 +34,7 @@ interface StockCreationTypeHandlerInterface
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param Registry $workflowRegistry
-     * @param StockBuilderInterface $stockBuilder
+     * @param StockFactoryInterface $stockBuilder
      * @param StockItemsBuilderInterface $stockItemsBuilder
      * @param StockRepositoryInterface $stockRepository
      * @param TokenStorageInterface $tokenStorage
@@ -43,7 +43,7 @@ interface StockCreationTypeHandlerInterface
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         Registry $workflowRegistry,
-        StockBuilderInterface $stockBuilder,
+        StockFactoryInterface $stockBuilder,
         StockItemsBuilderInterface $stockItemsBuilder,
         StockRepositoryInterface $stockRepository,
         TokenStorageInterface $tokenStorage,

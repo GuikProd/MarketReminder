@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\FormHandler\Dashboard;
 
-use App\Domain\Builder\Interfaces\StockBuilderInterface;
+use App\Domain\Builder\Interfaces\StockFactoryInterface;
 use App\Domain\Builder\Interfaces\StockItemsBuilderInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
@@ -53,7 +53,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
     private $workflowRegistry = null;
 
     /**
-     * @var StockBuilderInterface|null
+     * @var StockFactoryInterface|null
      */
     private $stockBuilder = null;
 
@@ -85,7 +85,7 @@ final class StockCreationTypeHandlerUnitTest extends TestCase
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->formInterface = $this->createMock(FormInterface::class);
         $this->workflowRegistry = $this->createMock(Registry::class);
-        $this->stockBuilder = $this->createMock(StockBuilderInterface::class);
+        $this->stockBuilder = $this->createMock(StockFactoryInterface::class);
         $this->stockItemsBuilder = $this->createMock(StockItemsBuilderInterface::class);
         $this->stockRepository = $this->createMock(StockRepositoryInterface::class);
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);

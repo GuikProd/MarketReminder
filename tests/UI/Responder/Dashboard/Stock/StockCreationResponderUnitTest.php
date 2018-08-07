@@ -31,24 +31,24 @@ use Twig\Environment;
 final class StockCreationResponderUnitTest extends TestCase
 {
     /**
-     * @var PresenterInterface
+     * @var PresenterInterface|null
      */
-    private $presenter;
+    private $presenter = null;
 
     /**
-     * @var Request
+     * @var Request|null
      */
     private $request = null;
 
     /**
-     * @var Environment
+     * @var Environment|null
      */
-    private $twig;
+    private $twig = null;
 
     /**
-     * @var UrlGeneratorInterface
+     * @var UrlGeneratorInterface|null
      */
-    private $urlGenerator;
+    private $urlGenerator = null;
 
     /**
      * {@inheritdoc}
@@ -71,10 +71,7 @@ final class StockCreationResponderUnitTest extends TestCase
             $this->urlGenerator
         );
 
-        static::assertInstanceOf(
-            StockCreationResponderInterface::class,
-            $responder
-        );
+        static::assertInstanceOf(StockCreationResponderInterface::class, $responder);
     }
 
     public function testItReturnAResponse()
@@ -87,10 +84,7 @@ final class StockCreationResponderUnitTest extends TestCase
             $this->urlGenerator
         );
 
-        static::assertInstanceOf(
-            Response::class,
-            $responder($this->request, $formMock)
-        );
+        static::assertInstanceOf(Response::class, $responder($this->request, $formMock));
     }
 
     public function testItReturnARedirectResponse()
