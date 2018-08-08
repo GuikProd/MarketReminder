@@ -143,6 +143,9 @@
     "google/cloud-core": {
         "version": "v1.15.3"
     },
+    "google/cloud-pubsub": {
+        "version": "v1.4.1"
+    },
     "google/cloud-storage": {
         "version": "v1.3.3"
     },
@@ -151,9 +154,6 @@
     },
     "google/gax": {
         "version": "0.30.0"
-    },
-    "google/proto-client": {
-        "version": "0.32.0"
     },
     "google/protobuf": {
         "version": "v3.5.1.1"
@@ -413,6 +413,15 @@
     "symfony/intl": {
         "version": "v3.4.3"
     },
+    "symfony/messenger": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.1",
+            "ref": "85ab0b55d90a8f3e29e1b685a71f5b37923a7f5e"
+        }
+    },
     "symfony/monolog-bridge": {
         "version": "v4.0.3"
     },
@@ -431,7 +440,7 @@
     "symfony/orm-pack": {
         "version": "v1.0.5"
     },
-    "symfony/panthere": {
+    "symfony/panther": {
         "version": "v0.1.0"
     },
     "symfony/phpunit-bridge": {

@@ -57,6 +57,10 @@
         <env name="SENDGRID_TRANSPORT" value="smtp" />
         <env name="SENDGRID_ENCRYPTION" value="tls" />
         <env name="SENGRID_API_KEY" value="test" />
+
+        <!-- ###+ symfony/messenger ### -->
+        <!-- MESSENGER_TRANSPORT_DSN=amqp://guest:guest@localhost:5672/%2f/messages -->
+        <!-- ###- symfony/messenger ### -->
     </php>
 
     <testsuites>

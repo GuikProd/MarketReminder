@@ -6,9 +6,10 @@
     "require": {
         "php": "^7.2",
         "doctrine/common": "^2.8",
-        "google/cloud-storage": "^1.5",
+        "google/cloud-pubsub": "^1.4",
+        "google/cloud-storage": "^1.6",
         "google/cloud-translate": "^1.2",
-        "google/cloud-vision": "^0.12",
+        "google/cloud-vision": "^0.15",
         "grpc/grpc": "^1.12",
         "guzzlehttp/guzzle": "^6.3",
         "php-http/httplug-pack": "^1.1",
@@ -24,6 +25,7 @@
         "symfony/form": "^4.1",
         "symfony/framework-bundle": "^4.1",
         "symfony/intl": "^4.1",
+        "symfony/messenger": "^4.1",
         "symfony/monolog-bundle": "^3.2",
         "symfony/orm-pack": "^1.0",
         "symfony/phpunit-bridge": "^4.1",
@@ -58,7 +60,7 @@
         "phpstan/phpstan": "^0.10.2",
         "symfony/dotenv": "^4.1",
         "symfony/flex": "^1.0",
-        "symfony/panthere": "^0.1.0"
+        "symfony/panther": "^0.1.0"
     },
     "config": {
         "preferred-install": {

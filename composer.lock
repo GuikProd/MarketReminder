@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "875d07627d64a24197cda6b83948e72e",
+    "content-hash": "072f7bc848a61c4e65298d2214b06369",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1487,6 +1487,56 @@
             "time": "2018-07-19T17:51:07+00:00"
         },
         {
+            "name": "google/cloud-pubsub",
+            "version": "v1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-pubsub.git",
+                "reference": "0bb2ae3eae060cc0c2f234b4be6accfaf1bdb555"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-pubsub/zipball/0bb2ae3eae060cc0c2f234b4be6accfaf1bdb555",
+                "reference": "0bb2ae3eae060cc0c2f234b4be6accfaf1bdb555",
+                "shasum": ""
+            },
+            "require": {
+                "google/cloud-core": "^1.14",
+                "google/gax": "^0.36"
+            },
+            "require-dev": {
+                "erusev/parsedown": "^1.6",
+                "phpdocumentor/reflection": "^3.0",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "suggest": {
+                "ext-grpc": "The gRPC extension enables use of the performant gRPC transport",
+                "ext-protobuf": "Provides a significant increase in throughput over the pure PHP protobuf implementation. See https://cloud.google.com/php/grpc for installation instructions."
+            },
+            "type": "library",
+            "extra": {
+                "component": {
+                    "id": "cloud-pubsub",
+                    "target": "GoogleCloudPlatform/google-cloud-php-pubsub.git",
+                    "path": "PubSub",
+                    "entry": "src/PubSubClient.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Google\\Cloud\\PubSub\\": "src",
+                    "GPBMetadata\\Google\\Pubsub\\": "metadata"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Cloud PubSub Client for PHP",
+            "time": "2018-07-19T17:51:07+00:00"
+        },
+        {
             "name": "google/cloud-storage",
             "version": "v1.6.0",
             "source": {
@@ -1582,22 +1632,21 @@
         },
         {
             "name": "google/cloud-vision",
-            "version": "v0.12.0",
+            "version": "v0.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-vision.git",
-                "reference": "26e339d78d0d087e033eefcbb9b353e459ce5181"
+                "reference": "951b0d682ecaf8bcdf40bb5b7deb80fe1143a35c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-vision/zipball/26e339d78d0d087e033eefcbb9b353e459ce5181",
-                "reference": "26e339d78d0d087e033eefcbb9b353e459ce5181",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-vision/zipball/951b0d682ecaf8bcdf40bb5b7deb80fe1143a35c",
+                "reference": "951b0d682ecaf8bcdf40bb5b7deb80fe1143a35c",
                 "shasum": ""
             },
             "require": {
                 "google/cloud-core": "^1.14",
-                "google/gax": "^0.33",
-                "google/proto-client": "^0.39"
+                "google/gax": "^0.36"
             },
             "require-dev": {
                 "erusev/parsedown": "^1.6",
@@ -1622,7 +1671,8 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Google\\Cloud\\Vision\\": "src"
+                    "Google\\Cloud\\Vision\\": "src",
+                    "GPBMetadata\\Google\\Cloud\\Vision\\": "metadata"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1630,25 +1680,25 @@
                 "Apache-2.0"
             ],
             "description": "Cloud Vision Client for PHP",
-            "time": "2018-05-24T20:25:11+00:00"
+            "time": "2018-07-19T17:51:07+00:00"
         },
         {
             "name": "google/gax",
-            "version": "0.33.1",
+            "version": "0.36.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "9d15f56374ab3940f5f11761cfefc7dfb18ea363"
+                "reference": "9dd3911738aaf61bafd861917820317402cba798"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/9d15f56374ab3940f5f11761cfefc7dfb18ea363",
-                "reference": "9d15f56374ab3940f5f11761cfefc7dfb18ea363",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/9dd3911738aaf61bafd861917820317402cba798",
+                "reference": "9dd3911738aaf61bafd861917820317402cba798",
                 "shasum": ""
             },
             "require": {
                 "google/auth": "^1.2.0",
-                "google/protobuf": "3.5.*",
+                "google/protobuf": "^3.5.1",
                 "grpc/grpc": "^1.4",
                 "guzzlehttp/promises": "^1.3",
                 "guzzlehttp/psr7": "^1.2",
@@ -1656,6 +1706,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8.36",
+                "sami/sami": "*",
                 "squizlabs/php_codesniffer": "2.*"
             },
             "type": "library",
@@ -1681,60 +1732,20 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-06-07T17:09:36+00:00"
-        },
-        {
-            "name": "google/proto-client",
-            "version": "0.39.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/googleapis/proto-client-php.git",
-                "reference": "a9e1f93e443216583d05bc87d931646ccd630b28"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/proto-client-php/zipball/a9e1f93e443216583d05bc87d931646ccd630b28",
-                "reference": "a9e1f93e443216583d05bc87d931646ccd630b28",
-                "shasum": ""
-            },
-            "require": {
-                "google/protobuf": "^3.4",
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "google/gax": ">=0.25.0",
-                "phpunit/phpunit": "^4.8.36"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Google\\": "src/Google/",
-                    "GPBMetadata\\": "src/GPBMetadata/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Generated proto and gRPC classes for Google Cloud Platform in PHP",
-            "homepage": "https://github.com/googleapis/proto-client-php",
-            "keywords": [
-                "google"
-            ],
-            "time": "2018-05-24T16:41:41+00:00"
+            "time": "2018-07-18T21:57:44+00:00"
         },
         {
             "name": "google/protobuf",
-            "version": "v3.5.2",
+            "version": "v3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/protobuf.git",
-                "reference": "b5fbb742af122b565925987e65c08957739976a7"
+                "reference": "48cb18e5c419ddd23d9badcfe4e9df7bde1979b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/protobuf/zipball/b5fbb742af122b565925987e65c08957739976a7",
-                "reference": "b5fbb742af122b565925987e65c08957739976a7",
+                "url": "https://api.github.com/repos/google/protobuf/zipball/48cb18e5c419ddd23d9badcfe4e9df7bde1979b2",
+                "reference": "48cb18e5c419ddd23d9badcfe4e9df7bde1979b2",
                 "shasum": ""
             },
             "require": {
@@ -1762,7 +1773,7 @@
             "keywords": [
                 "proto"
             ],
-            "time": "2018-03-06T03:54:18+00:00"
+            "time": "2018-07-27T20:30:28+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -4785,6 +4796,69 @@
             "time": "2018-08-01T08:24:03+00:00"
         },
         {
+            "name": "symfony/messenger",
+            "version": "v4.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/messenger.git",
+                "reference": "00e620218b545261ce242a9b145e31a01ae77d42"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/messenger/zipball/00e620218b545261ce242a9b145e31a01ae77d42",
+                "reference": "00e620218b545261ce242a9b145e31a01ae77d42",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/console": "~3.4|~4.0",
+                "symfony/dependency-injection": "~3.4.6|~4.0",
+                "symfony/http-kernel": "~3.4|~4.0",
+                "symfony/process": "~3.4|~4.0",
+                "symfony/property-access": "~3.4|~4.0",
+                "symfony/serializer": "~3.4|~4.0",
+                "symfony/validator": "~3.4|~4.0",
+                "symfony/var-dumper": "~3.4|~4.0"
+            },
+            "suggest": {
+                "enqueue/messenger-adapter": "For using the php-enqueue library as a transport."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Messenger\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                },
+                {
+                    "name": "Samuel Roze",
+                    "email": "samuel.roze@gmail.com"
+                }
+            ],
+            "description": "Symfony Messenger Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-07-26T21:05:42+00:00"
+        },
+        {
             "name": "symfony/monolog-bridge",
             "version": "v4.1.3",
             "source": {
@@ -5063,25 +5137,28 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.8.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae"
+                "reference": "e3d826245268269cd66f8326bd8bc066687b4a19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
-                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e3d826245268269cd66f8326bd8bc066687b4a19",
+                "reference": "e3d826245268269cd66f8326bd8bc066687b4a19",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
+            "suggest": {
+                "ext-ctype": "For best performance"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.8-dev"
+                    "dev-master": "1.9-dev"
                 }
             },
             "autoload": {
@@ -5114,20 +5191,20 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2018-04-30T19:57:29+00:00"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/polyfill-intl-icu",
-            "version": "v1.8.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-icu.git",
-                "reference": "80ee17ae83c10cd513e5144f91a73607a21edb4e"
+                "reference": "f22a90256d577c7ef7efad8df1f0201663d57644"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/80ee17ae83c10cd513e5144f91a73607a21edb4e",
-                "reference": "80ee17ae83c10cd513e5144f91a73607a21edb4e",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/f22a90256d577c7ef7efad8df1f0201663d57644",
+                "reference": "f22a90256d577c7ef7efad8df1f0201663d57644",
                 "shasum": ""
             },
             "require": {
@@ -5140,7 +5217,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.8-dev"
+                    "dev-master": "1.9-dev"
                 }
             },
             "autoload": {
@@ -5172,20 +5249,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-04-25T14:53:50+00:00"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.8.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "3296adf6a6454a050679cde90f95350ad604b171"
+                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/3296adf6a6454a050679cde90f95350ad604b171",
-                "reference": "3296adf6a6454a050679cde90f95350ad604b171",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
+                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
                 "shasum": ""
             },
             "require": {
@@ -5197,7 +5274,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.8-dev"
+                    "dev-master": "1.9-dev"
                 }
             },
             "autoload": {
@@ -5231,20 +5308,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-04-26T10:06:28+00:00"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.8.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
-                "reference": "a4576e282d782ad82397f3e4ec1df8e0f0cafb46"
+                "reference": "95c50420b0baed23852452a7f0c7b527303ed5ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/a4576e282d782ad82397f3e4ec1df8e0f0cafb46",
-                "reference": "a4576e282d782ad82397f3e4ec1df8e0f0cafb46",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/95c50420b0baed23852452a7f0c7b527303ed5ae",
+                "reference": "95c50420b0baed23852452a7f0c7b527303ed5ae",
                 "shasum": ""
             },
             "require": {
@@ -5253,7 +5330,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.8-dev"
+                    "dev-master": "1.9-dev"
                 }
             },
             "autoload": {
@@ -5286,7 +5363,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-04-26T10:06:28+00:00"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/process",
@@ -8996,17 +9073,17 @@
             "time": "2018-07-29T16:20:30+00:00"
         },
         {
-            "name": "symfony/panthere",
+            "name": "symfony/panther",
             "version": "v0.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/panthere.git",
-                "reference": "f6f88ba9874baa5880c22de0ecd5aeebc644c7d1"
+                "url": "https://github.com/symfony/panther.git",
+                "reference": "29cd7655c47acc0a398aba1558590b2e1cf41e34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/panthere/zipball/f6f88ba9874baa5880c22de0ecd5aeebc644c7d1",
-                "reference": "f6f88ba9874baa5880c22de0ecd5aeebc644c7d1",
+                "url": "https://api.github.com/repos/symfony/panther/zipball/29cd7655c47acc0a398aba1558590b2e1cf41e34",
+                "reference": "29cd7655c47acc0a398aba1558590b2e1cf41e34",
                 "shasum": ""
             },
             "require": {
@@ -9031,7 +9108,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Symfony\\Component\\Panthere\\": "src/"
+                    "Symfony\\Component\\Panther\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -9059,8 +9136,7 @@
                 "testing",
                 "webdriver"
             ],
-            "abandoned": "symfony/panther",
-            "time": "2018-07-12T08:11:17+00:00"
+            "time": "2018-07-17T07:25:58+00:00"
         }
     ],
     "aliases": [],
