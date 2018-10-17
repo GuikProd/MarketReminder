@@ -24,6 +24,7 @@ report/*
 public/images/profiles/
 config/credentials/google/credentials.json
 config/credentials/google/pubsub/credentials.json
+marketReminder_google_credentials.json
 
 # Behat
 .env.behat
