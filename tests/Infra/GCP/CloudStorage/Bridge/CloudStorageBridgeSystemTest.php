@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\CloudStorage\Bridge;
 
 use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
 use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
@@ -57,7 +57,7 @@ final class CloudStorageBridgeSystemTest extends TestCase
     {
         $this->bucketCredentialsFolder = __DIR__.'/../../../../_credentials';
         $this->bucketCredentialsFileName = 'credentials.json';
-        $this->credentialsLoader = new CredentialsLoader();
+        $this->credentialsLoader = new AbstractCredentialsLoader();
 
         $this->cloudStorageBridge = new CloudStorageBridge(
             $this->bucketCredentialsFileName,

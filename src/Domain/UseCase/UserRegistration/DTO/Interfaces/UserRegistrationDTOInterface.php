@@ -26,14 +26,12 @@ interface UserRegistrationDTOInterface
      * @param string             $username
      * @param string             $email
      * @param string             $password
-     * @param string             $validationToken
      * @param \SplFileInfo|null  $uploadedImage
      */
     public function __construct(
         string $username,
         string $email,
         string $password,
-        string $validationToken,
         \SplFileInfo $uploadedImage = null
     );
 }

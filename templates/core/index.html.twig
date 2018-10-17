@@ -1,13 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ presenter.page.content.value }}
+    {{- presenter.page.content.value -}}
+{% endblock %}
+
+{% block canonical %}
+    {{- url('index') -}}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/homepage.css') }}" />
 {% endblock %}
 
 {% block body %}
-    <section>
-        <img src="{{ asset('images/main/hero_II.jpg') }}" />
+    <section class="mk-main__homepage-intro">
+        <p>Hello World !</p>
     </section>
 {% endblock %}
-
-

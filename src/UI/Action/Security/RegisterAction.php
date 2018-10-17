@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\UI\Action\Security;
 
 use App\UI\Action\Security\Interfaces\RegisterActionInterface;
-use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use App\UI\Form\FormHandler\Security\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Form\Type\RegisterType;
 use App\UI\Responder\Security\Interfaces\RegisterResponderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -26,9 +26,11 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
- * @Route(
+ * @Route({
+ *         "en": "/register",
+ *         "fr": "/enregistrement"
+ *     },
  *     name="web_registration",
- *     path="/register",
  *     methods={"GET", "POST"}
  * )
  */
@@ -62,9 +64,10 @@ final class RegisterAction implements RegisterActionInterface
         Request $request,
         RegisterResponderInterface $responder
     ) {
-        $registerType = $this->formFactory->create(RegisterType::class)->handleRequest($request);
+        $registerType = $this->formFactory->create(RegisterType::class)
+                                          ->handleRequest($request);
 
-        if ($this->registerTypeHandler->handle($registerType)) {
+        if ($this->registerTypeHandler->handle($registerType, $request)) {
             return $responder($request, true);
         }
 

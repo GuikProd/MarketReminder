@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
-use App\Application\Event\SessionMessageEvent;
+use App\Application\Messenger\Message\SessionMessage;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ResetPasswordActionInterface;
-use App\UI\Form\FormHandler\Interfaces\ResetPasswordTypeHandlerInterface;
+use App\UI\Form\FormHandler\Security\Interfaces\ResetPasswordTypeHandlerInterface;
 use App\UI\Form\Type\ResetPasswordType;
 use App\UI\Responder\Security\Interfaces\ResetPasswordResponderInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -41,14 +41,14 @@ use Symfony\Component\Routing\Annotation\Route;
 final class ResetPasswordAction implements ResetPasswordActionInterface
 {
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @var FormFactoryInterface
      */
     private $formFactory;
+
+    /**
+     * @var MessageBusInterface
+     */
+    private $messageBus;
 
     /**
      * @var ResetPasswordTypeHandlerInterface
@@ -61,16 +61,16 @@ final class ResetPasswordAction implements ResetPasswordActionInterface
     private $userRepository;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct(
-        EventDispatcherInterface $eventDispatcher,
         FormFactoryInterface $formFactory,
+        MessageBusInterface $messageBus,
         ResetPasswordTypeHandlerInterface $resetPasswordTypeHandler,
         UserRepositoryInterface $userRepository
     ) {
-        $this->eventDispatcher = $eventDispatcher;
         $this->formFactory = $formFactory;
+        $this->messageBus = $messageBus;
         $this->resetPasswordTypeHandler = $resetPasswordTypeHandler;
         $this->userRepository = $userRepository;
     }
@@ -87,13 +87,10 @@ final class ResetPasswordAction implements ResetPasswordActionInterface
 
         if (!$user = $this->userRepository->getUserByResetPasswordToken($request->attributes->get('token'))) {
 
-            $this->eventDispatcher->dispatch(
-                SessionMessageEvent::NAME,
-                new SessionMessageEvent(
-                    'failure',
-                    'user.notification.wrong_reset_password_token'
-                )
-            );
+            $this->messageBus->dispatch(new SessionMessage(
+                'failure',
+                'user.notification.wrong_reset_password_token'
+            ));
 
             return $responder($request, true);
         }

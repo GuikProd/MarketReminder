@@ -36,7 +36,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class TranslationWarmerCommandSystemTest extends KernelTestCase
+final class TranslationWarmerCommandSystemTest extends KernelTestCase
 {
     use TestCaseTrait;
 

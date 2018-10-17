@@ -1,0 +1,17 @@
+name "Register"
+
+scenario
+    name "Register - fr"
+
+    visit url('/fr/register')
+        method "GET"
+        expect status_code() == 200
+        expect body() matches "/MarketReminder/"
+
+scenario
+    name "Register - en"
+
+    visit url('/en/register')
+        method "GET"
+        expect status_code() == 200
+        expect body() matches "/MarketReminder/"

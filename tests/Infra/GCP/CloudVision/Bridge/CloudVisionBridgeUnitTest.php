@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\CloudVision\Bridge;
 
 use App\Infra\GCP\CloudVision\Bridge\CloudVisionBridge;
 use App\Infra\GCP\CloudVision\Bridge\Interfaces\CloudVisionBridgeInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Vision\VisionClient;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +49,7 @@ final class CloudVisionBridgeUnitTest extends TestCase
     {
         $this->cloudVisionCredentialsFolder = __DIR__.'/../../../../_credentials';
         $this->cloudVisionCredentialsFileName = 'credentials.json';
-        $this->credentialsLoader = new CredentialsLoader();
+        $this->credentialsLoader = new AbstractCredentialsLoader();
     }
 
     public function testItImplements()

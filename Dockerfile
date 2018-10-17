@@ -5,13 +5,14 @@ ARG WORKFOLDER
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV PANTHER_NO_SANDBOX 1
+ENV PANTHER_WEB_SERVER_PORT 9800
 ENV WORKPATH ${WORKFOLDER}
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg graphviz make autoconf git zlib-dev curl chromium go \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS zip icu-dev postgresql-dev gnupg graphviz make autoconf git unzip zlib-dev curl rabbitmq-c rabbitmq-c-dev \
     && docker-php-ext-configure pgsql --with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install zip intl pdo_pgsql pdo_mysql opcache json pdo_pgsql pgsql mysqli \
-    && pecl install apcu redis \
-    && docker-php-ext-enable apcu mysqli redis
+    && pecl install apcu redis grpc protobuf amqp \
+    && docker-php-ext-enable apcu mysqli redis grpc protobuf amqp
 
 COPY docker/php/conf/php.ini /usr/local/etc/php/php.ini
 
@@ -27,7 +28,10 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && mkdir -p /tmp/blackfire \
     && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
     && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
-    && rm -Rf /tmp/blackfire
+    && rm -Rf /tmp/blackfire \
+    && curl -OLsS http://get.blackfire.io/blackfire-player.phar \
+    && chmod +x blackfire-player.phar \
+    && mv blackfire-player.phar /usr/local/bin/blackfire-player
 
 # PHP-CS-FIXER & Deptrac
 RUN wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer \
@@ -49,19 +53,10 @@ WORKDIR ${WORKPATH}
 
 COPY --chown=www-data:www-data . ./
 
-## Used for build the frontend assets
-FROM node:8 as front_assets
-
-COPY . ./
-
-RUN yarn install \
-    && yarn build \
-    && rm -rf ./node_modules
-
 # Production build
 FROM base as production
 
-COPY --from=front_assets public/build ./public/build
+COPY --from=gcr.io/marketreminder-206206/node:latest ${WORKPATH}/public/build ./public/build
 
 COPY docker/php/conf/production/php.ini /usr/local/etc/php/php.ini
 

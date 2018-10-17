@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Application\Validator;
 
 use App\Application\Validator\Interfaces\UserExistValidatorInterface;
+use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -24,38 +24,42 @@ use Symfony\Component\Validator\ConstraintValidator;
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserExistValidator extends ConstraintValidator implements UserExistValidatorInterface
+final class UserExistValidator extends ConstraintValidator implements UserExistValidatorInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
     /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function __construct(
-        TranslatorInterface $translator,
-        UserRepositoryInterface $userRepository
-    ) {
-        $this->translator = $translator;
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
         $this->userRepository = $userRepository;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$this->userRepository->getUserByUsernameAndEmail($value->username, $value->email)) {
-            $this->context->buildViolation(
-                $this->translator->trans($constraint->message, [], 'validators')
-            )->addViolation();
+        $user = $this->userRepository->getUserByUsernameAndEmail($value->username, $value->email);
+
+        if (!$constraint instanceof UserExist) {
+            throw new \LogicException(sprintf(''));
+        }
+
+        if ($constraint->exist && $user instanceof UserInterface) {
+            $this->context->buildViolation($constraint->message)
+                          ->setTranslationDomain('validators')
+                          ->addViolation();
+        }
+
+        if (!$constraint->exist && \is_null($user)) {
+            $this->context->buildViolation($constraint->message)
+                          ->setTranslationDomain('validators')
+                          ->addViolation();
         }
     }
 }

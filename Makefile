@@ -43,14 +43,11 @@ phpmetrics: ## Allow to launch a phpmetrics analyze
 phpstan: vendor/bin/phpstan
 	$(ENV_PHP) vendor/bin/phpstan analyse $(FOLDER)
 
-gcp-build: cloudbuild.json
-	$(GCLOUD) builds submit --config cloudbuild.json
-
 ## PHP commands
 install: composer.json
 	$(COMPOSER) install -a -o
 	$(COMPOSER) clear-cache
-	$(COMPOSER) dump-autoload --optimize --classmap-authoritative
+	make autoload
 
 update: composer.lock
 	$(COMPOSER) update -a -o
@@ -64,6 +61,9 @@ require-dev: composer.json
 remove: composer.lock
 	$(COMPOSER) remove $(PACKAGE) -a -o
 
+remove-dev: composer.lock
+	$(COMPOSER) remove --dev $(PACKAGE) -a -o
+
 autoload: composer.json
 	$(COMPOSER) dump-autoload -a -o
 
@@ -73,6 +73,9 @@ cache-clear: var/cache
 
 cache-warm: var/cache
 	$(ENV_PHP) ./bin/console cache:warmup
+
+messenger: config/packages/messenger.yaml
+	$(ENV_PHP) bin/console messenger:consume-messages $(TRANSPORT)
 
 translation: translations
 	    $(ENV_PHP) ./bin/console app:translation:dump button fr
@@ -109,9 +112,6 @@ translation-dump: translations
 container: bin/console
 	    $(ENV_PHP) ./bin/console debug:container --show-private $(SERVICE)
 
-event: bin/console
-	    $(ENV_PHP) ./bin/console debug:event-dispatcher
-
 router: bin/console
 	    $(ENV_PHP) ./bin/console d:r
 
@@ -131,7 +131,7 @@ update-schema: ## Allow to update the schema
 	    $(ENV_PHP) ./bin/console d:s:u --force --env=$(ENV)
 
 fixtures: src/DataFixtures
-	    $(ENV_PHP) ./bin/console doctrine:fixtures:load -n --env=${ENV}
+	    $(ENV_PHP) ./bin/console doctrine:fixtures:load -n --env=$(ENV)
 
 doctrine-cache: ## Allow to clean the Doctrine cache
 	    $(ENV_PHP) ./bin/console doctrine:cache:clear-query
@@ -175,10 +175,36 @@ phpunit-e2e: tests
 	    $(ENV_PHP) ./bin/console app:translation:warm form en --env=test
 	    $(ENV_PHP) ./bin/console app:translation:warm mail fr --env=test
 	    $(ENV_PHP) ./bin/console app:translation:warm mail en --env=test
+	    make autoload
 	    $(ENV_PHP) ./bin/phpunit --group e2e
 
 phpunit-blackfire: tests
+	    make cache-clear
+	    make update-schema ENV=test
+	    make fixtures ENV=test
+	    make doctrine-cache
 	    $(ENV_PHP) ./bin/console cache:pool:prune
+	    $(ENV_PHP) ./bin/console app:translation:dump messages fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:dump messages en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:dump validators fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:dump validators en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:dump session fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:dump session en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm form fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm form en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm messages fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm messages en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm validators fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm validators en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm session fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm session en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm form fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm form en --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm mail fr --env=test
+	    $(ENV_PHP) ./bin/console app:translation:warm mail en --env=test
+	    make autoload
 	    $(ENV_PHP) ./bin/phpunit --group Blackfire tests/$(FOLDER)
 
 behat: features
@@ -191,8 +217,14 @@ behat: features
 	    $(ENV_PHP) vendor/bin/behat --profile $(PROFILE)
 
 ## NodeJS commands
-yarn_install: node_modules
+yarn_install: package.json
 	    $(ENV_NODE) yarn install
+
+yarn_require: package.json
+	    $(ENV_NODE) yarn add $(PACKAGE)
+
+yarn_require_dev: package.json
+	    $(ENV_NODE) yarn add --dev $(PACKAGE)
 
 encore_watch: webpack.config.js
 	    $(ENV_NODE) yarn watch
@@ -200,30 +232,37 @@ encore_watch: webpack.config.js
 encore_production: webpack.config.js
 	    $(ENV_NODE) yarn build
 
-yarn_add_global: package.json
-	    $(ENV_NODE) yarn global add $(PACKAGE)
-
-yarn_add_prod: package.json
-	    $(ENV_NODE) yarn add $(PACKAGE)
-
-yarn_add_dev: package.json
-	    $(ENV_NODE) yarn add --dev $(PACKAGE)
+mjml: templates/emails
+	$(ENV_NODE) node_modules/.bin/mjml -r templates/emails/$(FILE).mjml -o templates/emails/$(FILE).html.twig
 
 ## Varnish commands
 varnish_logs: ## Allow to see the varnish logs
 	$(ENV_VARNISH) varnishlog -b
 
 ## Blackfire commands
-profile_php: public/index.php
+blackfire_php: public/index.php
 	make cache-clear
 	make doctrine-cache ENV=prod
 	$(ENV_PHP) ./bin/console cache:pool:prune
 	make translation
+	make autoload
 	$(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8080$(URL) --samples $(SAMPLES)
 
-profile_varnish: public/index.php
+blackfire_varnish: public/index.php
 	make cache-clear
 	make doctrine-cache ENV=prod
 	$(ENV_PHP) ./bin/console cache:pool:prune
 	make translation
-	$(ENV_BLACKFIRE) blackfire curl http://172.18.0.1$(URL) --samples $(SAMPLES)
+	make autoload
+	$(ENV_BLACKFIRE) blackfire curl http://172.18.0.1:8000$(URL) --samples $(SAMPLES)
+
+blackfire-player: scenarios
+	make cache-clear
+	make doctrine-cache ENV=test
+	$(ENV_PHP) ./bin/console cache:pool:prune
+	make translation
+	$(ENV_PHP) blackfire-player run scenarios/main.bkf --endpoint=$(ENDPOINT)
+
+## GCP commands
+gcp-build: cloudbuild.json
+	$(GCLOUD) builds submit --config cloudbuild.json

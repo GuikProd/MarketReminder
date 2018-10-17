@@ -6,10 +6,7 @@ Encore
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
-    .enableVersioning(Encore.isProduction())
     .enableBuildNotifications()
-    .enableTypeScriptLoader()
-    .enableVueLoader()
     .enableSassLoader()
     .addLoader(
         {
@@ -52,30 +49,38 @@ Encore
         }
     ]))
 
+    // PWA
+    .addEntry('serviceWorker', './assets/javascript/pwa/app.js')
+
     // Style
     .addStyleEntry('app-shell', './assets/scss/public/app-shell.scss')
+    .addStyleEntry('homepage', './assets/scss/public/homepage.scss')
     .addStyleEntry('core', './assets/scss/public/core.scss')
     .addStyleEntry('register', './assets/scss/public/register.scss')
     .addStyleEntry('dashboard', './assets/scss/public/dashboard.scss')
 
     // Javascript
+    .addEntry('snackbar', './assets/javascript/public/Snackbar.js')
     .addEntry('navigation', './assets/javascript/public/navigation.js')
     .addEntry('mc', './assets/javascript/public/mc.js')
     .addEntry('askResetPassword', './assets/javascript/public/askResetPassword.js')
     .addEntry('file_check', './assets/javascript/components/form/file_check.js')
     .addEntry('login', './assets/javascript/public/login.js')
-    .addEntry('snackbar', './assets/javascript/components/form/snackbar.js')
     .addEntry('stock_tags', './assets/javascript/components/form/stock_tags.js')
     .addEntry('registrationForm', './assets/javascript/public/register.js')
     .addEntry('collectionHandler', './assets/javascript/components/UI/Form/CollectionHandler.js')
     .addEntry('stockCreation', './assets/javascript/public/stockCreation.js')
 
-    // PWA
-    .addEntry('serviceWorker', './assets/javascript/pwa/app.js')
-    .addEntry('sw', './assets/javascript/pwa/sw.js')
-
     // Polymer
     .addEntry('snackbar_polymer', './assets/javascript/polymer/components/UI/snackbar.js')
 ;
+
+if (Encore.isProduction()) {
+    Encore
+        //.enableVersioning()
+        .configureUglifyJsPlugin()
+        .configureUrlLoader()
+    ;
+}
 
 module.exports = Encore.getWebpackConfig();

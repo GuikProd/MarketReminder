@@ -21,7 +21,7 @@ App\Domain\UseCase\UserRegistration\DTO\UserRegistrationDTO:
                  maxMessage: "validation.length_long"
                  groups: ['registration']
              - Email:
-                message: "The value `{{ value }}` must be a valid email !"
+                message: "validation.email_format"
          password:
              - NotBlank:
                  message: "validation.filled"

@@ -1,4 +1,0 @@
-scenario
-    name: "Homepage"
-    visit url('/fr/')
-        method "GET"

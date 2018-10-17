@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Form\FormHandler\Dashboard;
 
-use App\Domain\Builder\Interfaces\StockFactoryInterface;
 use App\Domain\Builder\Interfaces\StockItemsBuilderInterface;
+use App\Domain\Factory\Interfaces\StockFactoryInterface;
 use App\Domain\Models\Interfaces\UserInterface;
 use App\Domain\Repository\Interfaces\StockRepositoryInterface;
-use App\Domain\UseCase\Dashboard\StockCreation\DTO\Interfaces\StockCreationDTOInterface;
 use App\Domain\UseCase\Dashboard\StockCreation\DTO\StockCreationDTO;
 use App\UI\Form\FormHandler\Dashboard\Interfaces\StockCreationTypeHandlerInterface;
 use App\UI\Form\FormHandler\Dashboard\StockCreationTypeHandler;

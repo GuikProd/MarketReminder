@@ -25,13 +25,12 @@ services:
         image: nginx:alpine
         ports:
             - '${NGINX_PORT}:80'
-        links:
+        depends_on:
             - php-fpm
         volumes:
             - './:${WORKPATH}:rw'
             - './docker/nginx/conf/core/nginx.conf:/etc/nginx/nginx.conf'
             - './docker/nginx/conf/development/marketReminder.conf:/etc/nginx/conf.d/default.conf'
-            # - './docker/nginx/conf/production/marketReminder.conf:/etc/nginx/conf.d/default.conf' -> Uncomment this line for production.
             - './docker/nginx/logs/:/var/log/nginx'
         restart: always
 
@@ -49,7 +48,7 @@ services:
         entrypoint: "yarn watch"
         restart: always
 
-    # Server optimization
+    # Server tools
     varnish:
         container_name: ${CONTAINER_NAME}_varnish
         build:
@@ -68,8 +67,19 @@ services:
         image: redis:alpine
         ports:
             - '${REDIS_PORT}:6379'
-        links:
-            - php-fpm
+        restart: always
+
+    rabbit_mq:
+        container_name: ${CONTAINER_NAME}_rabbitmq
+        image: rabbitmq:alpine
+        environment:
+            RABBITMQ_DEFAULT_USER: '${RABBITMQ_USER}'
+            RABBITMQ_DEFAULT_PASS: '${RABBITMQ_PASS}'
+        ports:
+            - '4369:4369'
+            - '5671:5671'
+            - '5672:5672'
+            - '25672:25672'
         restart: always
 
     # DB configuration
@@ -96,12 +106,9 @@ services:
             BLACKFIRE_SERVER_TOKEN: '${BLACKFIRE_SERVER_TOKEN}'
             BLACKFIRE_CLIENT_ID: '${BLACKFIRE_CLIENT_ID}'
             BLACKFIRE_CLIENT_TOKEN: '${BLACKFIRE_CLIENT_TOKEN}'
-        links:
-            - php-fpm
         volumes:
             - './:${WORKPATH}:rw,cached'
         restart: always
 
 volumes:
     db-data: {}
-    mysql:

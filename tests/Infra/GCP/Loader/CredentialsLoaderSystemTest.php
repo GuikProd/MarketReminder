@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\Loader;
 
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
@@ -38,7 +38,7 @@ final class CredentialsLoaderSystemTest extends TestCase
      */
     protected function setUp()
     {
-        $this->loader = new CredentialsLoader();
+        $this->loader = new AbstractCredentialsLoader();
     }
 
     /**

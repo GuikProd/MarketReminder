@@ -130,6 +130,7 @@ to improve the Docker cache or something else, in order to do this, a command ha
 **Be sure to have set the project linked to this repository before launching the build**
 
 ```bash
+gcloud auth login # Used in order to authenticate yourself
 gcloud config set project _projectID_
 ```
 

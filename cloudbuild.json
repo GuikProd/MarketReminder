@@ -2,47 +2,78 @@
   "steps": [
     {
       "name": "gcr.io/cloud-builders/docker",
+      "id": "node_pull",
+      "args": ["pull", "gcr.io/$PROJECT_ID/node:latest"]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "php_pull",
+      "args": ["pull", "gcr.io/$PROJECT_ID/php:latest"]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "nginx_pull",
+      "args": ["pull", "gcr.io/$PROJECT_ID/nginx:latest"]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "varnish_pull",
+      "args": ["pull", "gcr.io/$PROJECT_ID/varnish:latest"]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "node",
+      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "-t", "gcr.io/$PROJECT_ID/node:$COMMIT_SHA", "--target", "${_ENV_PRODUCTION_STAGE_}", "--cache-from", "gcr.io/$PROJECT_ID/node:latest", "-f", "Dockerfile.node", "."]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "node_push",
+      "args": ["push", "gcr.io/$PROJECT_ID/node:$COMMIT_SHA"],
+      "waitFor": ["node"]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
       "id": "php",
-      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_php", "--target", "${_ENV_PRODUCTION_STAGE_}", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_php:latest", "."
-      ]
+      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "-t", "gcr.io/$PROJECT_ID/php:$COMMIT_SHA", "--target", "${_ENV_PRODUCTION_STAGE_}", "--cache-from", "gcr.io/$PROJECT_ID/php:latest", "."],
+      "waitFor": ["node"]
     },
     {
       "name": "gcr.io/cloud-builders/docker",
-      "id": "nginx_dev",
-      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "--target", "${_ENV_DEVELOPMENT_STAGE_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_nginx_dev", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_nginx_dev:latest", "./docker/nginx"
+      "id": "php_push",
+      "args": ["push", "gcr.io/$PROJECT_ID/php:$COMMIT_SHA"],
+      "waitFor": ["php"]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "id": "nginx",
+      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "--target", "${_ENV_PRODUCTION_STAGE_}", "-t", "gcr.io/$PROJECT_ID/nginx:$COMMIT_SHA", "--cache-from", "gcr.io/$PROJECT_ID/nginx:latest", "./docker/nginx"
       ],
-      "waitFor": "php",
+      "waitFor": ["php_push"],
       "timeout": "10s"
     },
     {
       "name": "gcr.io/cloud-builders/docker",
-      "id": "nginx_prod",
-      "args": ["build", "--build-arg", "WORKFOLDER=${_APP_FOLDER_}", "--target", "${_ENV_PRODUCTION_STAGE_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_nginx_prod", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_nginx_prod:latest", "./docker/nginx"
-      ],
-      "waitFor": "php",
-      "timeout": "10s"
+      "id": "nginx_push",
+      "args": ["push", "gcr.io/$PROJECT_ID/nginx:$COMMIT_SHA"],
+      "waitFor": ["nginx"]
     },
     {
       "name": "gcr.io/cloud-builders/docker",
-      "id": "varnish_dev",
-      "args": ["build", "--target", "${_ENV_DEVELOPMENT_STAGE_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_varnish", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_varnish:latest", "./docker/varnish"
+      "id": "varnish",
+      "args": ["build", "--target", "${_ENV_PRODUCTION_STAGE_}", "-t", "gcr.io/$PROJECT_ID/varnish:$COMMIT_SHA", "--cache-from", "gcr.io/$PROJECT_ID/varnish:latest", "./docker/varnish"
       ],
-      "waitFor": "nginx_dev",
+      "waitFor": ["nginx_push"],
       "timeout": "100s"
     },
     {
       "name": "gcr.io/cloud-builders/docker",
-      "id": "varnish_prod",
-      "args": ["build", "--target", "${_ENV_PRODUCTION_STAGE_}", "-t", "gcr.io/$PROJECT_ID/marketreminder_varnish_prod", "--cache-from", "gcr.io/$PROJECT_ID/marketreminder_varnish_prod:latest", "./docker/varnish"
-      ],
-      "waitFor": "nginx_prod",
-      "timeout": "100s"
+      "id": "varnish_push",
+      "args": ["push", "gcr.io/$PROJECT_ID/varnish:$COMMIT_SHA"],
+      "waitFor": ["varnish"]
     }
   ],
-  "images": ["gcr.io/$PROJECT_ID/marketreminder_php", "gcr.io/$PROJECT_ID/marketreminder_nginx_dev", "gcr.io/$PROJECT_ID/marketreminder_nginx_prod", "gcr.io/$PROJECT_ID/marketreminder_varnish", "gcr.io/$PROJECT_ID/marketreminder_varnish_prod"],
   "substitutions": {
     "_APP_FOLDER_": "/var/www/marketReminder",
-    "_ENV_DEVELOPMENT_STAGE_": "base",
     "_ENV_PRODUCTION_STAGE_": "production"
   }
 }

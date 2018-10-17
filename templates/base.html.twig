@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html amp lang="{{ app.request.locale }}">
+<html lang="{{- app.request.locale -}}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta name="Description" content="{% block meta_description %}{% endblock %}" />
         <meta name="theme-color" content="#ffb300" />
         <title>MarketReminder - {% block title %}{% endblock %}</title>
+        <link rel="canonical" href="{% block canonical %}{% endblock %}" />
         <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('icons/apple-icon-57x57.png') }}" />
         <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('icons/apple-icon-60x60.png') }}" />
         <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('icons/apple-icon-72x72.png') }}" />
@@ -40,15 +42,15 @@
                         <span class="mdc-top-app-bar__title">MarketReminder</span>
                     </section>
                     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-                        <a href="{{ path('index') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="home" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
+                        <a href="{{ path('index') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="home" alt="{{- 'home.text'|trans({"%name%": 'home.text'}, 'messages') -}}">
                             home
                         </a>
                         {% if is_granted('ROLE_USER') %}
-                            <a href="{{ path('dashboard_home') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="dashboard" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
+                            <a href="{{ path('dashboard_home') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="dashboard" alt="{{- 'home.text'|trans({"%name%": 'home.text'}, 'messages') -}}">
                                 dashboard
                             </a>
                         {% else %}
-                            <a href="{{ path('web_login') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="person" alt="{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}">
+                            <a href="{{ path('web_login') }}" class="material-icons mdc-top-app-bar__action-item" aria-label="person" alt="{{- 'home.text'|trans({"%name%": 'home.text'}, 'messages') -}}">
                                 person
                             </a>
                         {% endif %}
@@ -64,41 +66,43 @@
                     </header>
                     <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
                         <a class="mdc-list-item" aria-label="home" href="{{ path('index') }}">
-                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">home</i>{{ 'home.text'|cloudTranslate('messages', app.request.locale) }}
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">home</i>{{- 'home.text'|trans({"%name%": 'home.text'}, 'messages') -}}
                         </a>
                         {% if is_granted('ROLE_USER') %}
                             <a class="mdc-list-item" aria-label="dashboard" href="{{ path('dashboard_home') }}">
-                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">dashboard</i>{{ 'dashboard.title'|cloudTranslate('messages', app.request.locale) }}
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">dashboard</i>{{- 'dashboard.title'|trans({"%name%": 'dashboard.title'}, 'messages') -}}
                             </a>
                             <a class="mdc-list-item" aria-label="list" href="{{ path('dashboard_stock_listing') }}">
-                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">list</i>{{ 'dashboard.stock_list.title'|cloudTranslate('messages', app.request.locale) }}
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">list</i>{{- 'dashboard.stock_list.title'|trans({"%name%": 'dashboard.stock_list.title'}, 'messages') -}}
                             </a>
                             <a class="mdc-list-item" aria-label="perm_identity" href="{{ path('logout') }}">
-                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">perm_identity</i>{{ 'logout.title'|cloudTranslate('messages', app.request.locale) }}
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">perm_identity</i>{{- 'login.title'|trans({"%name%": 'login.title'}, 'messages') -}}
                             </a>
                         {% else %}
                             <a class="mdc-list-item" aria-label="person" href="{{ path('web_login') }}">
-                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">person</i>{{ 'login.title'|cloudTranslate('messages', app.request.locale) }}
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">person</i>{{- 'login.title'|trans({"%name%": 'login.title'}, 'messages') -}}
                             </a>
                         {% endif %}
                     </nav>
                 </nav>
             </aside>
         {% endblock %}
-        <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid mk-main__content">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell--span-12">
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12 layout">
-                        {% for success in app.flashes('success') %}
-                            <div id="snackbar-content">
-                                <p>{{ success }}</p>
-                            </div>
-                        {% endfor %}
-                        {% for failure in app.flashes('failure') %}
-                            <div id="snackbar-content">
-                                <p>{{ failure }}</p>
-                            </div>
-                        {% endfor %}
+                        {% if app.request.hasPreviousSession() %}
+                            {% for success in app.flashes('success') %}
+                                <div id="snackbar-content">
+                                    <p>{{- success -}}</p>
+                                </div>
+                            {% endfor %}
+                            {% for failure in app.flashes('failure') %}
+                                <div id="snackbar-content">
+                                    <p>{{- failure -}}</p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         <!-- Main body -->
                         {% block body %}{% endblock %}
 
@@ -116,14 +120,17 @@
                 </div>
             </div>
         </div>
+        <footer class="mdc-elevation--z2">
+            <p>Made with &hearts; by GuikProd | 2018</p>
+        </footer>
         {% block javascripts %}
+            <script src="{{ asset('build/serviceWorker.js') }}"></script>
+            <script defer src="{{ asset('build/snackbar.js') }}"></script>
             <script src="{{ asset('build/navigation.js') }}"></script>
             <script src="{{ asset('build/mc.js') }}"></script>
             <script src="{{ asset('build/webcomponents/custom-elements-es5-adapter.js') }}"></script>
             <script src="{{ asset('build/webcomponents/webcomponents-bundle.js') }}"></script>
             <script src="{{ asset('build/webcomponents/webcomponents-loader.js') }}"></script>
-            <script src="{{ asset('build/snackbar.js') }}"></script>
-            <script src="{{ asset('build/serviceWorker.js') }}"></script>
             <script src="{{ asset('build/snackbar.js') }}"></script>
             <script src="{{ asset('build/snackbar_polymer.js') }}"></script>
         {% endblock %}

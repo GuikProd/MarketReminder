@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\DependencyInjection;
 
+use App\Infra\GCP\CloudPubSub\Bridge\CloudPubSubBridge;
+use App\Infra\GCP\CloudPubSub\Bridge\Interfaces\CloudPubSubBridgeInterface;
+use App\Infra\GCP\CloudPubSub\Loader\CloudPubSubAbstractCredentialsLoader;
+use App\Infra\GCP\CloudPubSub\Loader\Interfaces\CloudPubSubCredentialsLoaderInterface;
 use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
 use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
 use App\Infra\GCP\CloudStorage\Helper\CloudStorageCleanerHelper;
@@ -41,7 +45,7 @@ use App\Infra\GCP\CloudVision\Interfaces\CloudVisionAnalyserHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionDescriberHelperInterface;
 use App\Infra\GCP\CloudVision\Interfaces\CloudVisionVoterHelperInterface;
 use App\Infra\GCP\DependencyInjection\Interfaces\GCPExtensionInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -63,6 +67,7 @@ final class GCPExtension extends Extension implements GCPExtensionInterface
         $config = $this->processConfiguration($configuration, $configs);
 
         $this->processGlobalConfiguration($config, $container);
+        $this->processPubSubConfiguration($config, $container);
         $this->processStorageConfiguration($config, $container);
         $this->processTranslationConfiguration($config, $container);
         $this->processVisionConfiguration($config, $container);
@@ -77,10 +82,32 @@ final class GCPExtension extends Extension implements GCPExtensionInterface
         $containerBuilder->setParameter('credentials_folder', $configuration['credentials_folder']);
 
         if (!$containerBuilder->hasDefinition(LoaderInterface::class)) {
-            $containerBuilder->register(LoaderInterface::class, CredentialsLoader::class)
+            $containerBuilder->register(LoaderInterface::class, AbstractCredentialsLoader::class)
                              ->setPublic(false)
                              ->addTag('gcp.loader');
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processPubSubConfiguration(array $configuration, ContainerBuilder $containerBuilder): void
+    {
+        $containerBuilder->setParameter('cloud.pubsub.credentials_filename', $configuration['pubsub']['credentials_filename']);
+        $containerBuilder->setParameter('cloud.pubsub.credentials_folder', $configuration['pubsub']['credentials_folder']);
+
+        if (!$containerBuilder->hasDefinition(CloudPubSubCredentialsLoaderInterface::class)) {
+            $containerBuilder->register(CloudPubSubCredentialsLoaderInterface::class, CloudPubSubAbstractCredentialsLoader::class)
+                             ->setPublic(false)
+                             ->addTag('gcp.loader_pubsub');
+        }
+
+        $containerBuilder->register(CloudPubSubBridgeInterface::class, CloudPubSubBridge::class)
+                         ->addArgument($configuration['pubsub']['credentials_filename'])
+                         ->addArgument($configuration['pubsub']['credentials_folder'])
+                         ->addArgument($containerBuilder->getDefinition(CloudPubSubCredentialsLoaderInterface::class))
+                         ->setPublic(false)
+                         ->addTag('gcp.pubsub_bridge');
     }
 
     /**

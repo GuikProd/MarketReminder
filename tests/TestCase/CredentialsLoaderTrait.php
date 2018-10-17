@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\TestCase;
 
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 
 /**
@@ -30,6 +30,6 @@ trait CredentialsLoaderTrait
 
     public function createCredentialsLoader()
     {
-        $this->loader = new CredentialsLoader();
+        $this->loader = new AbstractCredentialsLoader();
     }
 }

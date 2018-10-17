@@ -32,6 +32,12 @@ interface GCPExtensionInterface
      * @param array $configuration
      * @param ContainerBuilder $containerBuilder
      */
+    public function processPubSubConfiguration(array $configuration, ContainerBuilder $containerBuilder): void;
+
+    /**
+     * @param array $configuration
+     * @param ContainerBuilder $containerBuilder
+     */
     public function processStorageConfiguration(array $configuration, ContainerBuilder $containerBuilder): void;
 
     /**

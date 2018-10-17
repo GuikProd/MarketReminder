@@ -13,18 +13,20 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security;
 
-use App\Application\Event\SessionMessageEvent;
-use App\Application\Event\UserEvent;
+use App\Application\Messenger\Message\SessionMessage;
+use App\Application\Messenger\Message\UserMessage;
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Action\Security\Interfaces\ValidationTokenActionInterface;
 use App\UI\Responder\Security\Interfaces\ValidationTokenResponderInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ValidationTokenAction;
+ * Class ValidationTokenAction.
+ *
+ * @package App\UI\Action\Security
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
@@ -34,12 +36,12 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"GET"}
  * )
  */
-class ValidationTokenAction implements ValidationTokenActionInterface
+final class ValidationTokenAction implements ValidationTokenActionInterface
 {
     /**
-     * @var EventDispatcherInterface
+     * @var MessageBusInterface
      */
-    private $eventDispatcher;
+    private $messageBus;
 
     /**
      * @var UserRepositoryInterface
@@ -50,45 +52,27 @@ class ValidationTokenAction implements ValidationTokenActionInterface
      * {@inheritdoc}
      */
     public function __construct(
-        EventDispatcherInterface $eventDispatcher,
+        MessageBusInterface $messageBus,
         UserRepositoryInterface $userRepository
     ) {
-        $this->eventDispatcher = $eventDispatcher;
+        $this->messageBus = $messageBus;
         $this->userRepository = $userRepository;
     }
 
     /**
-     * @param Request $request
-     * @param ValidationTokenResponderInterface $responder
-     *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __invoke(
         Request $request,
         ValidationTokenResponderInterface $responder
     ): RedirectResponse {
 
-        if (!$request->attributes->get('token')) {
+        if (\is_null($user = $this->userRepository->getUserByToken($request->attributes->get('token')))) {
 
-            $this->eventDispatcher->dispatch(
-                SessionMessageEvent::NAME,
-                new SessionMessageEvent(
-                    'failure',
-                    'security.validation_failure.notFound_token'
-                )
-            );
-
-            return $responder();
-        }
-
-        if (!$user = $this->userRepository->getUserByToken($request->attributes->get('token'))) {
-            $this->eventDispatcher->dispatch(
-                SessionMessageEvent::NAME,
-                new SessionMessageEvent(
-                    'failure',
-                    'security.validation_failure.notFound_token'
-                )
-            );
+            $this->messageBus->dispatch(new SessionMessage(
+                'failure',
+                'security.validation_failure.notFound_token'
+            ));
 
             return $responder();
         }
@@ -97,18 +81,17 @@ class ValidationTokenAction implements ValidationTokenActionInterface
 
         $this->userRepository->flush();
 
-        $this->eventDispatcher->dispatch(
-            UserEvent::USER_VALIDATED,
-            new UserEvent($user)
-        );
+        $this->messageBus->dispatch(new UserMessage([
+            '_topic' => 'reset_password',
+            'id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail()
+        ]));
 
-        $this->eventDispatcher->dispatch(
-            SessionMessageEvent::NAME,
-            new SessionMessageEvent(
-                'success',
-                'security.validation_success'
-            )
-        );
+        $this->messageBus->dispatch(new SessionMessage(
+            'success',
+            'security.validation_success'
+        ));
 
         return $responder();
     }

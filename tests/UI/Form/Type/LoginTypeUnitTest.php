@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /*
  * This file is part of the MarketReminder project.
@@ -36,10 +36,7 @@ final class LoginTypeUnitTest extends TypeTestCase
         static::assertTrue($form->isSynchronized());
         static::assertTrue($form->isValid());
         static::assertCount(0, $form->getErrors());
-        static::assertInstanceOf(
-            UserLoginDTOInterface::class,
-            $form->getData()
-        );
+        static::assertInstanceOf(UserLoginDTOInterface::class, $form->getData());
     }
 
     public function testItReceiveValidData()
@@ -53,9 +50,6 @@ final class LoginTypeUnitTest extends TypeTestCase
 
         static::assertTrue($form->isSynchronized());
         static::assertTrue($form->isValid());
-        static::assertInstanceOf(
-            UserLoginDTOInterface::class,
-            $form->getData()
-        );
+        static::assertInstanceOf(UserLoginDTOInterface::class, $form->getData());
     }
 }

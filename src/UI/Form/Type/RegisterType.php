@@ -90,12 +90,6 @@ final class RegisterType extends AbstractType
                     $form->get('username')->getData(),
                     $form->get('email')->getData(),
                     $form->get('password')->getData(),
-                    md5(
-                        crypt(
-                            str_rot13($form->get('username')->getData()),
-                            $form->get('email')->getData()
-                        )
-                    ),
                     $form->get('profileImage')->getData()
                 );
             },

@@ -1,0 +1,17 @@
+name "Login"
+
+scenario
+    name "Login - fr"
+
+    visit url('/fr/login')
+        method "GET"
+        expect status_code() == 200
+        expect body() matches "/MarketReminder/"
+
+scenario
+    name "Login - en"
+
+    visit url('/en/login')
+        method "GET"
+        expect status_code() == 200
+        expect body() matches "/MarketReminder/"

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-use App\Infra\GCP\Bridge\Interfaces\CloudStorageBridgeInterface;
+use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
 use Behat\Behat\Context\Context;
 use Symfony\Component\Config\FileLocator;
 

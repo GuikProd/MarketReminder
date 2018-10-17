@@ -24,6 +24,8 @@ use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 /**
  * Class User.
  *
+ * @package App\Domain\Models
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class User implements SecurityUserInterface, UserInterface, \Serializable
@@ -104,7 +106,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     private $profileImage = null;
 
     /**
-     * @var array
+     * @var \ArrayAccess
      */
     private $stocks = [];
 
@@ -129,6 +131,14 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
         $this->username = $username;
         $this->validated = false;
         $this->validationToken = md5(str_rot13($username));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function renewValidationToken(string $token): void
+    {
+        $this->validationToken = $token;
     }
 
     /**
@@ -265,7 +275,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
      */
     public function getValidationDate(): ?string
     {
-        return $this->validationDate->format('d-M-Y H:i:s');
+        return \is_a($this->validationDate, \DateTimeInterface::class) ? $this->validationDate->format('d-M-Y H:i:s') : null;
     }
 
     /**
@@ -303,7 +313,7 @@ class User implements SecurityUserInterface, UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getStocks(): array
+    public function getStocks(): \ArrayAccess
     {
         return $this->stocks;
     }

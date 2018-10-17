@@ -2,6 +2,7 @@ validation.length_short: Cette valeur est trop courte !
 validation.length_long: Cette valeur est trop longue !
 validation.filled: Ce champs est requis, veuillez saisir une valeur.
 credentials.already_exist: Ces identifiants existent déjà !
+validation.email_format: Ce format n'est pas valide en tant qu'email !
 
 # Form validations
 form.format_error: Le format est invalide ! Veuillez réessayer avec un nouveau format valide !

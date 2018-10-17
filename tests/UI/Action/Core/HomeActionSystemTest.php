@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\UI\Action\Core;
 
 use App\UI\Action\Core\HomeAction;
+use App\UI\Action\Core\Interfaces\HomeActionInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Core\HomeResponder;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
@@ -38,6 +39,11 @@ final class HomeActionSystemTest extends KernelTestCase
     private $presenter = null;
 
     /**
+     * @var HomeActionInterface|null
+     */
+    private $homeAction = null;
+
+    /**
      * @var HomeResponderInterface|null
      */
     private $homeResponder = null;
@@ -59,8 +65,7 @@ final class HomeActionSystemTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->request = new Request();
-        $this->request::create('/', 'GET');
+        $this->request = Request::create('/', 'GET');
         $this->request->setLocale('fr');
 
         $this->presenter = static::$container->get(PresenterInterface::class);
@@ -74,17 +79,17 @@ final class HomeActionSystemTest extends KernelTestCase
      *
      * @requires extension blackfire
      */
-    public function testBlackfireProfilingWithTemplateReturn()
+    public function testResponseIsReturned()
     {
         $configuration = new Configuration();
         $configuration->assert('main.peak_memory < 1.5MB', 'HomeAction memory usage for template return');
         $configuration->assert('main.network_in == 0', 'HomeAction network call for template return');
         $configuration->assert('main.network_out == 0', 'HomeAction network callees for template return');
 
-        $this->assertBlackfire($configuration, function () {
-            $homeAction = new HomeAction();
+        $action = new HomeAction();
 
-            $homeAction($this->request, $this->homeResponder);
+        $this->assertBlackfire($configuration, function () use ($action) {
+            $action($this->request, $this->homeResponder);
         });
     }
 }

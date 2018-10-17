@@ -1,0 +1,19 @@
+## Main build & configuration
+FROM node:alpine as base
+
+ARG WORKFOLDER
+
+ENV WORKPATH ${WORKFOLDER}
+
+RUN mkdir -p ${WORKFOLDER}
+
+WORKDIR ${WORKPATH}
+
+COPY . ./
+
+RUN yarn install
+
+## Production build
+FROM base as production
+
+RUN yarn build

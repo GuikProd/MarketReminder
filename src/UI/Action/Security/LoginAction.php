@@ -22,13 +22,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class LoginAction
+ * Class LoginAction.
+ *
+ * @package App\UI\Action\Security
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  *
- * @Route(
+ * @Route({
+ *         "fr": "/connexion",
+ *         "en": "/login"
+ *     },
  *     name="web_login",
- *     path="/login",
  *     methods={"GET", "POST"}
  * )
  */
@@ -50,9 +54,12 @@ final class LoginAction implements LoginActionInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(Request $request, LoginResponderInterface $responder): Response
-    {
-        $form = $this->formFactory->create(LoginType::class, null, ['_locale' => $request->getLocale()])
+    public function __invoke(
+        Request $request,
+        LoginResponderInterface $responder
+    ): Response {
+
+        $form = $this->formFactory->create(LoginType::class)
                                   ->handleRequest($request);
 
         return $responder($request, $form);

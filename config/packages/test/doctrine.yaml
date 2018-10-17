@@ -1,19 +1,7 @@
 doctrine:
     dbal:
-        driver: '%env(DB_DRIVER_TEST)%'
-        server_version: '%env(DB_VERSION_TEST)%'
-        charset: '%env(DB_CHARSET_TEST)%'
+        driver: 'pdo_sqlite'
+        server_version: 'utf8mb4'
+        charset: '5.7'
         memory: true
         url: '%env(resolve:DATABASE_URL_TEST)%'
-
-    orm:
-        auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
-        mappings:
-            App:
-                is_bundle: false
-                type: xml
-                dir: '%kernel.project_dir%/config/doctrine/mapping'
-                prefix: 'App\Domain\Models'
-                alias: App

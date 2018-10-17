@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * 
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class ValidationTokenResponder implements ValidationTokenResponderInterface
+final class ValidationTokenResponder implements ValidationTokenResponderInterface
 {
     /**
      * @var UrlGeneratorInterface

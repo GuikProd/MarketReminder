@@ -16,7 +16,7 @@ namespace App\Tests\Infra\GCP\CloudPubSub\Bridge;
 use App\Infra\GCP\Bridge\Interfaces\CloudBridgeInterface;
 use App\Infra\GCP\CloudPubSub\Bridge\CloudPubSubBridge;
 use App\Infra\GCP\CloudPubSub\Bridge\Interfaces\CloudPubSubBridgeInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\PubSub\PubSubClient;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +50,7 @@ final class CloudPubSubBridgeUnitTest extends TestCase
     {
         $this->cloudCredentialsFilename = 'credentials.json';
         $this->cloudCredentialsFolder = __DIR__.'/../../../../_credentials/';
-        $this->credentialsLoader = new CredentialsLoader();
+        $this->credentialsLoader = new AbstractCredentialsLoader();
     }
 
     public function testItImplements()

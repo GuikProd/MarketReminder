@@ -15,6 +15,7 @@ namespace App\UI\Presenter\Interfaces;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Interface PresenterInterface.
@@ -23,6 +24,13 @@ use Symfony\Component\OptionsResolver\Options;
  */
 interface PresenterInterface
 {
+    /**
+     * PresenterInterface constructor.
+     *
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(TranslatorInterface $translator);
+
     /**
      * @param array $viewOptions
      */
@@ -62,12 +70,26 @@ interface PresenterInterface
     public function configureOptions(Options $resolver): void;
 
     /**
+     * @param array $content
+     *
+     * @return array
+     */
+    public function prepareContent(array $content = []): array ;
+
+    /**
+     * @param array $values
+     *
+     * @return void
+     */
+    public function prepareForm(array $values = []): void;
+
+    /**
      * @return array
      */
     public function getData(): array;
 
     /**
-     * @return FormView|null
+     * @return FormView|null The FormView which contain the translated values.
      */
     public function getForm(): ?FormView;
 

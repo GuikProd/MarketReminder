@@ -1,3 +1,4 @@
+mail.main_hello: 'Hello, excuse us from the inconvenience but we have a message for you!'
 user.registration.welcome.header: 'Welcome to MarketReminder'
 user.registration.welcome.content_first_part: 'As we are very happy to see you on board, we have sent you this email, the latter will allow you to start your adventure.'
 user.registration.welcome.content_second_part: 'In a second time, we ask you to validate your account in order to give you access on the platform, to do this, please click on the link below.'

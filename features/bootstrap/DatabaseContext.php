@@ -18,25 +18,24 @@ use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
  * Class DatabaseContext.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class DatabaseContext implements Context
+final class DatabaseContext implements Context
 {
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
-
     /**
      * @var RegistryInterface
      */
     private $doctrine;
+
+    /**
+     * @var EncoderFactoryInterface
+     */
+    private $encoderFactory;
 
     /**
      * @var SchemaTool
@@ -46,15 +45,15 @@ class DatabaseContext implements Context
     /**
      * DatabaseContext constructor.
      *
-     * @param RegistryInterface $doctrine
-     * @param KernelInterface   $kernel
+     * @param RegistryInterface       $doctrine
+     * @param EncoderFactoryInterface $encoderFactory
      */
     public function __construct(
         RegistryInterface $doctrine,
-        KernelInterface $kernel
+        EncoderFactoryInterface $encoderFactory
     ) {
         $this->doctrine = $doctrine;
-        $this->kernel = $kernel;
+        $this->encoderFactory = $encoderFactory;
         $this->schemaTool = new SchemaTool($this->doctrine->getManager());
     }
 
@@ -80,22 +79,17 @@ class DatabaseContext implements Context
      */
     public function iLoadFollowingUsers(TableNode $users)
     {
-        $encoder = new BCryptPasswordEncoder(13);
-        $callable = Closure::fromCallable([$encoder, 'encodePassword']);
-
         foreach ($users->getHash() as $hash) {
             $userDTO = new UserRegistrationDTO(
                 $hash['username'],
                 $hash['email'],
-                $hash['plainPassword'],
-                $hash['validationToken']
+                $hash['plainPassword']
             );
 
             $user = new User(
                 $userDTO->email,
                 $userDTO->username,
-                $callable($hash['plainPassword'], null),
-                $userDTO->validationToken
+                $this->encoderFactory->getEncoder(User::class)->encodePassword($hash['plainPassword'], null)
             );
 
             if ($hash['validated']) {
@@ -103,11 +97,13 @@ class DatabaseContext implements Context
             }
 
             if ($hash['resetPasswordToken']) {
-                $userResetPasswordToken = new UserResetPasswordToken(
-                    $hash['resetPasswordToken']
-                );
+                $userResetPasswordToken = new UserResetPasswordToken($hash['resetPasswordToken']);
 
                 $user->askForPasswordReset($userResetPasswordToken);
+            }
+
+            if ($hash['validationToken']) {
+                $user->renewValidationToken($hash['validationToken']);
             }
 
             $this->doctrine->getManager()->persist($user);

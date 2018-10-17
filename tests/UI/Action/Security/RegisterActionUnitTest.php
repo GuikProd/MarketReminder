@@ -15,7 +15,7 @@ namespace App\Tests\UI\Action\Security;
 
 use App\UI\Action\Security\Interfaces\RegisterActionInterface;
 use App\UI\Action\Security\RegisterAction;
-use App\UI\Form\FormHandler\Interfaces\RegisterTypeHandlerInterface;
+use App\UI\Form\FormHandler\Security\Interfaces\RegisterTypeHandlerInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Security\RegisterResponder;
 use PHPUnit\Framework\TestCase;

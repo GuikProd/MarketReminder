@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\CloudTranslation\Bridge;
 
 use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Translate\TranslateClient;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +49,7 @@ final class CloudTranslationBridgeUnitTest extends TestCase
     {
         $this->cloudTranslationCredentialsFileName = 'credentials.json';
         $this->cloudTranslationCredentialsFolder = __DIR__.'/../../../../_credentials/';
-        $this->credentialsLoader = new CredentialsLoader();
+        $this->credentialsLoader = new AbstractCredentialsLoader();
     }
 
     public function testItImplements()

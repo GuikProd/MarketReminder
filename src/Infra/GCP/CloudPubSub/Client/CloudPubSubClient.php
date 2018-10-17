@@ -55,8 +55,18 @@ final class CloudPubSubClient implements CloudPubSubClientInterface
 
         $toPublishTopic = $pubSubClient->topic($topic);
 
-        $toPublishTopic->publish([$key => $message]);
+        $toPublishTopic->publish(['data' => serialize($message->getData())]);
 
         $this->logger->info(sprintf('A new message has been published : %s', $message->getIdentifier()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function receive(string $subscription): void
+    {
+        $pubSubClient = $this->cloudPubSubBridge->getPubSubClient();
+
+        $subscription = $pubSubClient->subscription($subscription);
     }
 }

@@ -16,8 +16,8 @@ namespace App\Tests\Application\Security\Guard;
 use App\Application\Security\Guard\Interfaces\LoginFormAuthenticatorInterface;
 use App\Application\Security\Guard\LoginFormAuthenticator;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,6 +27,8 @@ use Symfony\Component\Security\Guard\AuthenticatorInterface;
 
 /**
  * Class LoginFormAuthenticatorUnitTest.
+ *
+ * @package App\Tests\Application\Security\Guard
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
@@ -38,9 +40,9 @@ final class LoginFormAuthenticatorUnitTest extends TestCase
     private $authenticator = null;
 
     /**
-     * @var EventDispatcherInterface|null
+     * @var MessageBusInterface|null
      */
-    private $eventDispatcher = null;
+    private $messageBus = null;
 
     /**
      * @var Request|null
@@ -62,12 +64,12 @@ final class LoginFormAuthenticatorUnitTest extends TestCase
      */
     protected function setUp()
     {
-        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->messageBus = $this->createMock(MessageBusInterface::class);
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->userPasswordEncoder = $this->createMock(UserPasswordEncoderInterface::class);
 
         $this->authenticator = new LoginFormAuthenticator(
-            $this->eventDispatcher,
+            $this->messageBus,
             $this->urlGenerator,
             $this->userPasswordEncoder
         );

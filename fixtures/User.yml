@@ -1,0 +1,3 @@
+App\Domain\Models\User:
+    user{1..100}:
+        __construct: ['<email()>', '<username()>', '<password()>']

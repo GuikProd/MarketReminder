@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Application\Security\Guard;
 
-use App\Application\Event\SessionMessageEvent;
+use App\Application\Messenger\Message\SessionMessage;
 use App\Application\Security\Guard\Interfaces\LoginFormAuthenticatorInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -29,14 +29,16 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 /**
  * Class LoginFormAuthenticator.
  *
+ * @package App\Application\Security\Guard
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements LoginFormAuthenticatorInterface
 {
     /**
-     * @var EventDispatcherInterface
+     * @var MessageBusInterface
      */
-    private $eventDispatcher;
+    private $messageBus;
 
     /**
      * @var UrlGeneratorInterface
@@ -52,11 +54,11 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
      * {@inheritdoc}
      */
     public function __construct(
-        EventDispatcherInterface $eventDispatcher,
+        MessageBusInterface $messageBus,
         UrlGeneratorInterface $urlGenerator,
         UserPasswordEncoderInterface $userPasswordEncoder
     ) {
-        $this->eventDispatcher = $eventDispatcher;
+        $this->messageBus = $messageBus;
         $this->urlGenerator = $urlGenerator;
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
@@ -125,10 +127,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $this->eventDispatcher->dispatch(
-            SessionMessageEvent::NAME,
-            new SessionMessageEvent('failure', 'security.login_failure')
-        );
+        $this->messageBus->dispatch(new SessionMessage('failure', 'security.login_failure'));
 
         return new RedirectResponse($this->urlGenerator->generate('web_login'));
     }

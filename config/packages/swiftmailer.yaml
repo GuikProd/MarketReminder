@@ -5,6 +5,4 @@ swiftmailer:
     password:  '%env(SENDGRID_API_KEY)%'
     port:      '%env(SENDGRID_PORT)%'
     encryption: '%env(SENDGRID_ENCRYPTION)%'
-    spool:
-        type: "memory"
     logging: true

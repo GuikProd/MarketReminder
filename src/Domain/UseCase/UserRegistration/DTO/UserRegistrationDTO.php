@@ -16,11 +16,13 @@ namespace App\Domain\UseCase\UserRegistration\DTO;
 use App\Domain\UseCase\UserRegistration\DTO\Interfaces\UserRegistrationDTOInterface;
 
 /**
- * Class UserRegistrationDTO
+ * Class UserRegistrationDTO.
+ *
+ * @package App\Domain\UseCase\UserRegistration\DTO
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class UserRegistrationDTO implements UserRegistrationDTOInterface
+final class UserRegistrationDTO implements UserRegistrationDTOInterface
 {
     /**
      * @var string
@@ -43,24 +45,17 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     public $profileImage;
 
     /**
-     * @var string
-     */
-    public $validationToken;
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(
         string $username,
         string $email,
         string $password,
-        string $validationToken,
         \SplFileInfo $uploadedImage = null
     ) {
         $this->username = $username;
         $this->email = $email;
         $this->password = $password;
-        $this->validationToken = $validationToken;
         $this->profileImage = $uploadedImage;
     }
 }

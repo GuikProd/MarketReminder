@@ -15,7 +15,7 @@ use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
 use App\Infra\GCP\CloudTranslation\Client\CloudTranslationClient;
 use App\Infra\GCP\CloudTranslation\Client\Interfaces\CloudTranslationClientInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Behat\Behat\Context\Context;
 
@@ -53,7 +53,7 @@ final class CloudTranslationBridgeContext implements Context
      */
     public function iCreateANewCloudTranslationBridgeUsingCredentials(string $credentialsFileName)
     {
-        $this->loader = new CredentialsLoader();
+        $this->loader = new AbstractCredentialsLoader();
 
         $this->cloudTranslationBridge = new CloudTranslationBridge(
             $credentialsFileName,

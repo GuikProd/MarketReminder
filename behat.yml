@@ -1,47 +1,3 @@
-default:
-    suites:
-        core:
-            paths: ['%paths.base%/features']
-            contexts:
-                - DatabaseContext:
-                    doctrine: '@doctrine'
-                    kernel: '@kernel'
-                - FeatureContext:
-                    kernel: '@kernel'
-    extensions:
-        Behat\Symfony2Extension:
-            kernel:
-                bootstrap: features/bootstrap/bootstrap.php
-                class: App\Kernel
-        Behat\MinkExtension:
-            files_path: '%paths.base%/features/assets'
-            base_url: 'http://localhost:8080/'
-            goutte: ~
-            sessions:
-                default:
-                    symfony2: ~
-blackfire:
-    suites:
-        core:
-            paths: ['%paths.base%/features']
-            contexts:
-                - BlackfireContext:
-                - DatabaseContext:
-                    doctrine: '@doctrine'
-                    kernel: '@kernel'
-                - FeatureContext:
-                    kernel: '@kernel'
-    extensions:
-        Behat\Symfony2Extension:
-            kernel:
-                bootstrap: features/bootstrap/bootstrap.php
-                class: App\Kernel
-        Behat\MinkExtension:
-            files_path: '%paths.base%/features/assets'
-            goutte: ~
-            sessions:
-                default:
-                    symfony2: ~
 e2e:
     suites:
         core:
@@ -49,9 +5,9 @@ e2e:
             contexts:
                 - DatabaseContext:
                     doctrine: '@doctrine'
-                    kernel: '@kernel'
-                - FeatureContext:
-                    kernel: '@kernel'
+                    encoderFactory: '@security.encoder_factory'
+                - SecurityContext:
+                    session: '@session'
     extensions:
         Behat\Symfony2Extension:
             kernel:

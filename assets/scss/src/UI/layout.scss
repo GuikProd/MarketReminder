@@ -1,0 +1,50 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Roboto';
+  margin: 0;
+  padding-top: 0.1px;
+  font-size: 14px;
+
+  a {
+    color: $mdc-theme-secondary;
+  }
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  text-align: center;
+  width: 100%;
+  max-height: 50px;
+  background-color: $mdc-theme-background;
+}
+
+.main {
+  display: flex;
+  background-color: $mdc-theme-background;
+  color: $mdc-theme-on-background;
+
+  .mk-main__content {
+    padding-top: 75px;
+  }
+}
+
+.layout {
+  margin-top: 100px;
+}
+
+.mk-main__container {
+  text-align: center;
+  padding: 20px;
+}
+
+.mk-main__center {
+  text-align: center;
+}
+
+.mk-main__dashboard-container {
+  margin: auto;
+}

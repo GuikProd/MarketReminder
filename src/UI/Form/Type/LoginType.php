@@ -41,8 +41,7 @@ final class LoginType extends AbstractType
                 'attr' => [
                     'minLength' => 3,
                     'maxLength' => 25
-                ],
-                '_locale' => $options['_locale']
+                ]
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'login.password_label',
@@ -50,8 +49,7 @@ final class LoginType extends AbstractType
                 'attr' => [
                     'minLength' => 5,
                     'maxLength' => 25
-                ],
-                '_locale' => $options['_locale']
+                ]
             ])
         ;
     }

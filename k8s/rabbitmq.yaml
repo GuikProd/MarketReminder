@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: rabbitmq
+    labels:
+        app: rabbitmq
+        stage: production
+spec:
+    selector:
+         matchLabels:
+             app: rabbitmq
+             stage: production
+    replicas: 2
+    template:
+        metadata:
+            labels:
+                app: rabbitmq
+                stage: production
+        spec:
+            containers:
+                - name: rabbitmq
+                  image: rabbitmq:alpine
+                  ports:
+                      - containerPort: 5672
+            restartPolicy: Always

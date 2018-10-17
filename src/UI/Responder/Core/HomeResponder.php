@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /*
  * This file is part of the MarketReminder project.
@@ -17,11 +17,12 @@ use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Responder\Core\Interfaces\HomeResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Twig\Environment;
 
 /**
  * Class HomeResponder.
+ *
+ * @package App\UI\Responder\Core
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
@@ -38,7 +39,7 @@ final class HomeResponder implements HomeResponderInterface
     private $twig;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct(
         Environment $twig,
@@ -49,7 +50,7 @@ final class HomeResponder implements HomeResponderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __invoke(Request $request): Response
     {
@@ -64,14 +65,8 @@ final class HomeResponder implements HomeResponderInterface
             ]
         ]);
 
-        $response = new Response($this->twig->render('core/index.html.twig', [
+        return new Response($this->twig->render('core/index.html.twig', [
             'presenter' => $this->presenter
         ]));
-
-        $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
-
-        return $response->setCache([
-            'etag' => md5(str_rot13($request->getLocale()))
-        ]);
     }
 }

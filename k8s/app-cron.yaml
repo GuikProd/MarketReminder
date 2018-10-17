@@ -1,0 +1,15 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+    name: email-spool
+spec:
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    containers:
+                        - name: php-fpm
+                          image: gcr.io/marketreminder-206206/php
+                          args: ["bin/console", "messenger:consume-messages amqp"]
+                    restartPolicy: OnFailure
+    schedule: "5 * * * *"

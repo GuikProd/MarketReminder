@@ -55,6 +55,9 @@ final class CloudPubSubClientUnitTest extends TestCase
         static::assertInstanceOf(CloudPubSubClientInterface::class, $client);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testItPublish()
     {
         $pubSubClientMock = $this->createMock(PubSubClient::class);
@@ -66,7 +69,7 @@ final class CloudPubSubClientUnitTest extends TestCase
 
         $client = new CloudPubSubClient($this->cloudPubSubBridge, $this->logger);
 
-        $message = new TestMessage();
+        $message = new TestMessage('test', 'test', ['test' => 'test']);
 
         $client->publish('test', 'test', $message);
     }

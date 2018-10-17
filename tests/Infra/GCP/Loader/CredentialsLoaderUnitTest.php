@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\Loader;
 
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +26,7 @@ final class CredentialsLoaderUnitTest extends TestCase
 {
     public function testItImplements()
     {
-        $loader = new CredentialsLoader();
+        $loader = new AbstractCredentialsLoader();
 
         static::assertInstanceOf(
             LoaderInterface::class,
@@ -38,7 +38,7 @@ final class CredentialsLoaderUnitTest extends TestCase
     {
         static::expectException(\InvalidArgumentException::class);
 
-        $loader = new CredentialsLoader();
+        $loader = new AbstractCredentialsLoader();
 
         $loader->loadJson('toto.json', __DIR__.'/../../../_credentials');
 
@@ -47,7 +47,7 @@ final class CredentialsLoaderUnitTest extends TestCase
 
     public function testItLoadCredentials()
     {
-        $loader = new CredentialsLoader();
+        $loader = new AbstractCredentialsLoader();
 
         $loader->loadJson('credentials.json', __DIR__.'/../../../_credentials');
 

@@ -23,11 +23,13 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class AskResetPasswordType
+ * Class AskResetPasswordType.
+ *
+ * @package App\UI\Form\Type
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-class AskResetPasswordType extends AbstractType
+final class AskResetPasswordType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -57,7 +59,7 @@ class AskResetPasswordType extends AbstractType
                     $form->get('email')->getData()
                 );
             },
-            'validation_groups' => ['resetPassword']
+            'validation_groups' => ['UserResetPasswordDTO']
         ]);
     }
 }

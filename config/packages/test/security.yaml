@@ -1,0 +1,6 @@
+security:
+    encoders:
+        App\Domain\Models\User:
+            algorithm: sha512
+            cost: 10
+            encode_as_base64: true

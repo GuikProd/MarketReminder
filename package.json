@@ -9,9 +9,11 @@
         "extract-loader": "^2.0.1",
         "file-loader": "^1.1.11",
         "node-sass": "^4.8.3",
+        "optimize-css-assets-webpack-plugin": "^5.0.1",
         "sass-loader": "^7.0.1",
         "ts-loader": "3.5.0",
         "typescript": "^2.7.2",
+        "url-loader": "^1.1.1",
         "vue": "^2.5.16",
         "vue-loader": "^14.2.2",
         "vue-template-compiler": "^2.5.16",
@@ -45,6 +47,7 @@
         "es2016": "^0.0.0",
         "lighthouse": "^3.0.3",
         "material-components-web": "^0.37.0",
+        "mjml": "^4.2.0-beta.2",
         "postcss-loader": "^2.1.6"
     }
 }

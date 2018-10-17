@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Infra\GCP\DependencyInjection\Compiler;
 
+use App\Infra\GCP\CloudPubSub\Bridge\CloudPubSubBridge;
+use App\Infra\GCP\CloudPubSub\Loader\CloudPubSubAbstractCredentialsLoader;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -28,6 +30,9 @@ final class GCPCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-
+        $container->getDefinition(CloudPubSubBridge::class)
+                  ->addArgument($container->getParameter('cloud.pubsub.credentials_filename'))
+                  ->addArgument($container->getParameter('cloud.pubsub.credentials_folder'))
+                  ->addArgument($container->getDefinition(CloudPubSubAbstractCredentialsLoader::class));
     }
 }

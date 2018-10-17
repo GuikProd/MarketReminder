@@ -1,0 +1,23 @@
+name "Homepage"
+
+scenario
+    name "Homepage - fr"
+
+    visit url('/fr/')
+        method "GET"
+        expect status_code() == 200
+        expect body() matches "/MarketReminder/"
+        expect body() matches "/Made with &hearts; by GuikProd | 2018/"
+        expect body() matches "/Accueil/"
+        expect body() matches "/Se connecter/"
+
+scenario
+    name "Homepage - en"
+
+    visit url('/en/')
+        method "GET"
+        expect status_code() == 200
+        expect body() matches "/MarketReminder/"
+        expect body() matches "/Made with &hearts; by GuikProd | 2018/"
+        expect body() matches "/Home/"
+        expect body() matches "/To log in/"

@@ -1,12 +1,16 @@
+# Docker
+docker/nginx/logs/
+
+# Terraform
+.terraform
+terraform.tfstate
+
 ###> symfony/framework-bundle ###
 .env
 /public/bundles/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-# Docker
-docker/nginx/logs/
 
 # Frontend
 /node_modules/
@@ -19,6 +23,7 @@ report/*
 # Google Cloud
 public/images/profiles/
 config/credentials/google/credentials.json
+config/credentials/google/pubsub/credentials.json
 
 # Behat
 .env.behat

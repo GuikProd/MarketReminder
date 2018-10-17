@@ -18,17 +18,28 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Class UserExist.
  *
+ * @package App\Application\Validator
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 class UserExist extends Constraint
 {
     /**
+     * The key used to translate the error message.
+     *
      * @var string
      */
     public $message = 'user.exist';
 
     /**
-     * {@inheritdoc}
+     * Allow to decide if the user should exist or not.
+     *
+     * @var bool
+     */
+    public $exist = true;
+
+    /**
+     * @inheritdoc
      */
     public function validatedBy()
     {
@@ -36,7 +47,7 @@ class UserExist extends Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTargets()
     {

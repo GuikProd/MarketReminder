@@ -6,8 +6,8 @@
         <div id="collection" data-prototype="{{ form_widget(form.stockItems.vars.prototype)|e('html_attr') }}" data-index="{{ form.stockItems|length }}">
             {{ form_row(form.stockItems) }}
         </div>
-        <button id="{{ form.vars.id~'-button_newItem' }}" class="mdc-button mdc-button--raised mdc-elevation--z2">Add a new item</button>
-        <button id="{{ form.vars.id~'-button_submit' }}" class="mdc-button mdc-button--raised mdc-elevation--z2">
+        <button type="submit" id="{{ form.vars['id']~'-button_newItem' }}" class="mdc-button mdc-button--raised mdc-elevation--z2">Add a new item</button>
+        <button id="{{ form.vars['id']~'-button_submit' }}" class="mdc-button mdc-button--raised mdc-elevation--z2">
             Submit
         </button>
     {{ form_end(form, {'render_rest': 'false'}) }}

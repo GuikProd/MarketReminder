@@ -4,10 +4,10 @@
         {{ form_row(form.password) }}
         <div class="mk-button__container">
             <button type="reset" class="mdc-button {{ form.vars.id~'_'~'button--cancel' }}">
-                {{ 'main.button_cancel'|cloudTranslate('button', app.request.locale) }}
+                {{- 'main.button_cancel'|trans({"%name%": "main.button_cancel"}, 'button') -}}
             </button>
             <button type="submit" class="mdc-button mdc-button--raised mdc-elevation--z4 {{ form.vars.id~'_'~'button--submit' }}">
-                {{ "login.button"|cloudTranslate('button', app.request.locale) }}
+                {{- 'login.button'|trans({"%name%": "login.button"}, 'button') -}}
             </button>
         </div>
     {{ form_end(form) }}

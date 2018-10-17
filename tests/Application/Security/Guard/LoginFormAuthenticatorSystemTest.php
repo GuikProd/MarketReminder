@@ -18,14 +18,16 @@ use App\Application\Security\Guard\LoginFormAuthenticator;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 
 /**
  * Class LoginFormAuthenticatorSystemTest.
+ *
+ * @package App\Tests\Application\Security\Guard
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
@@ -39,9 +41,9 @@ final class LoginFormAuthenticatorSystemTest extends KernelTestCase
     private $authenticator = null;
 
     /**
-     * @var EventDispatcherInterface|null
+     * @var MessageBusInterface|null
      */
-    private $eventDispatcher = null;
+    private $messageBus = null;
 
     /**
      * @var Request|null
@@ -59,18 +61,18 @@ final class LoginFormAuthenticatorSystemTest extends KernelTestCase
     private $userPasswordEncoder = null;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {
         static::bootKernel();
 
-        $this->eventDispatcher = static::$container->get('event_dispatcher');
+        $this->messageBus = static::$container->get('message_bus');
         $this->urlGenerator = static::$container->get('router')->getGenerator();
         $this->userPasswordEncoder = static::$container->get('security.password_encoder');
 
         $this->authenticator = new LoginFormAuthenticator(
-            $this->eventDispatcher,
+            $this->messageBus,
             $this->urlGenerator,
             $this->userPasswordEncoder
         );
@@ -81,13 +83,13 @@ final class LoginFormAuthenticatorSystemTest extends KernelTestCase
      */
     public function testItSupports()
     {
-        $this->request = Request::create('/fr/login', 'GET');
+        $request = Request::create('/fr/login', 'GET');
 
         $configuration = new Configuration();
         $configuration->assert('main.peak_memory < 150kB', 'LoginFormAuthenticator memory usage with support');
 
-        $this->assertBlackfire($configuration, function() {
-            $this->authenticator->supports($this->request);
+        $this->assertBlackfire($configuration, function() use ($request) {
+            $this->authenticator->supports($request);
         });
     }
 
@@ -96,13 +98,13 @@ final class LoginFormAuthenticatorSystemTest extends KernelTestCase
      */
     public function testItDoesNotSupports()
     {
-        $this->request = Request::create('/fr', 'GET');
+        $request = Request::create('/fr', 'GET');
 
         $configuration = new Configuration();
         $configuration->assert('main.peak_memory < 20kB', 'LoginFormAuthenticator memory usage without support');
 
-        $this->assertBlackfire($configuration, function() {
-            $this->authenticator->supports($this->request);
+        $this->assertBlackfire($configuration, function() use ($request) {
+            $this->authenticator->supports($request);
         });
     }
 }

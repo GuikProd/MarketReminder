@@ -70,12 +70,16 @@ interface UserRepositoryInterface
     public function getUserByResetPasswordToken(string $token):? UserInterface;
 
     /**
-     * @param UserInterface $user
+     * @param UserInterface $user The user to save in DB.
+     *
+     * @return void
      */
     public function save(UserInterface $user): void;
 
     /**
      * Allow to flush the last operations.
+     *
+     * @return void
      */
     public function flush(): void;
 }

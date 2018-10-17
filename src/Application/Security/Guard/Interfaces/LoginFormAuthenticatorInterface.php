@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Application\Security\Guard\Interfaces;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -27,12 +27,12 @@ interface LoginFormAuthenticatorInterface
     /**
      * LoginFormAuthenticatorInterface constructor.
      *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param UrlGeneratorInterface $urlGenerator
+     * @param MessageBusInterface          $messageBus
+     * @param UrlGeneratorInterface        $urlGenerator
      * @param UserPasswordEncoderInterface $userPasswordEncoder
      */
     public function __construct(
-        EventDispatcherInterface $eventDispatcher,
+        MessageBusInterface $messageBus,
         UrlGeneratorInterface $urlGenerator,
         UserPasswordEncoderInterface $userPasswordEncoder
     );

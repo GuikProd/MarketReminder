@@ -6,6 +6,13 @@ import std;
 backend default {
     .host = "clusterIP";
     .port = "8080";
+    .probe = {
+        .url = "/fr/";
+        .timeout = 1s;
+        .interval = 5s;
+        .window = 5;
+        .threshold = 3;
+    }
 }
 
 sub vcl_recv {

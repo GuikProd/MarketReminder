@@ -72,6 +72,7 @@ final class ResetPasswordResponder implements ResetPasswordResponderInterface
         
         $this->presenter->prepareOptions([
             '_locale' => $request->attributes->get('_locale'),
+            'content' => [],
             'form' => $form,
             'page' => [
                 'title' => [

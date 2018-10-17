@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\Bridge;
 
 use App\Infra\GCP\CloudTranslation\Bridge\CloudTranslationBridge;
 use App\Infra\GCP\CloudTranslation\Bridge\Interfaces\CloudTranslationBridgeInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
@@ -45,7 +45,7 @@ final class CloudTranslationBridgeSystemTest extends TestCase
      */
     protected function setUp()
     {
-        $this->credentialsLoader = new CredentialsLoader();
+        $this->credentialsLoader = new AbstractCredentialsLoader();
 
         $this->cloudTranslationBridge = new CloudTranslationBridge(
             'credentials.json',

@@ -13,121 +13,72 @@ declare(strict_types=1);
 
 namespace App\Tests\UI\Presenter;
 
-use App\Infra\GCP\CloudTranslation\Domain\Models\CloudTranslationItem;
-use App\Infra\GCP\CloudTranslation\Domain\Models\Interfaces\CloudTranslationItemInterface;
-use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\UI\Interfaces\CloudTranslationPresenterInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
 use App\UI\Presenter\Presenter;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class PresenterUnitTest.
+ *
+ * @package App\Tests\UI\Presenter
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 final class PresenterUnitTest extends TestCase
 {
     /**
-     * @var CloudTranslationRepositoryInterface|null
+     * @var TranslatorInterface|null
      */
-    private $cloudTranslationRepository = null;
+    private $translator = null;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $this->cloudTranslationRepository = $this->createMock(CloudTranslationRepositoryInterface::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
     }
 
     public function testItImplements()
     {
-        $presenter = new Presenter($this->cloudTranslationRepository);
+        $presenter = new Presenter($this->translator);
 
         static::assertInstanceOf(PresenterInterface::class, $presenter);
-        static::assertInstanceOf(
-            CloudTranslationPresenterInterface::class,
-            $presenter
-        );
     }
 
     /**
-     * @dataProvider provideRightOptions
+     * @dataProvider provideContent
      *
      * @param string $locale
-     * @param array $values
+     * @param array $content
+     * @param string $value
+     *
+     * @return void
      */
-    public function testItResolveOptionsWithoutCache(string $locale, array $values)
-    {
-        $presenter = new Presenter($this->cloudTranslationRepository);
+    public function testItTranslateContent(
+        string $locale,
+        array $content,
+        string $value
+    ): void {
+
+        $presenter = new Presenter($this->translator);
+
         $presenter->prepareOptions([
             '_locale' => $locale,
-            'content' => [],
-            'data' => [],
-            'page' => $values
-        ]);
-
-        static::assertSame($locale, $presenter->getViewOptions()['_locale']);
-        static::assertCount(1, $presenter->getPage());
-        static::assertCount(\count($values), $presenter->getPage());
-    }
-
-    /**
-     * @dataProvider provideRedisTranslations
-     *
-     * @param CloudTranslationItemInterface $redisTranslation
-     */
-    public function testItResolveOptionsWithCache(CloudTranslationItemInterface $redisTranslation)
-    {
-        $this->cloudTranslationRepository->method('getSingleEntry')->willReturn($redisTranslation);
-
-        $presenter = new Presenter($this->cloudTranslationRepository);
-        $presenter->prepareOptions([
-            '_locale' => $redisTranslation->getLocale(),
-            'content' => [],
-            'data' => [],
-            'page' => [
-                'button' => [
-                    'channel' => 'messages',
-                    'key' => 'home.text'
-                ]
+            'content' => [
+                'home.text' => $content
             ]
         ]);
 
-        static::assertSame($redisTranslation->getLocale(), $presenter->getViewOptions()['_locale']);
+        static::assertSame($value, $presenter->getContent()['home.text']['value']);
     }
 
     /**
      * @return \Generator
      */
-    public function provideRightOptions()
+    public function provideContent()
     {
-        yield array('fr', ['button' => ['channel' => 'messages', 'key' => 'home.text']]);
-        yield array('en', ['link' => ['channel' => 'messages', 'key' => 'home.link.welcome']]);
-    }
-
-    /**
-     * @return \Generator
-     *
-     * @throws \Exception
-     */
-    public function provideRedisTranslations()
-    {
-        yield array(new CloudTranslationItem([
-            '_locale' => 'fr',
-            'channel' => 'messages',
-            'tag' => Uuid::uuid4()->toString(),
-            'key' => 'home.text',
-            'value' => ''
-        ]));
-        yield array(new CloudTranslationItem([
-            '_locale' => 'en',
-            'channel' => 'messages',
-            'tag' => Uuid::uuid4()->toString(),
-            'key' => 'home.text',
-            'value' => ''
-        ]));
+        yield array('fr', ['channel' => 'messages', 'key' => 'home.text'], 'Hello World !');
     }
 }

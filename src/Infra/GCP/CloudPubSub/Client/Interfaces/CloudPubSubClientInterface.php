@@ -36,6 +36,13 @@ interface CloudPubSubClientInterface
      * @param string $topic
      * @param string $key
      * @param MessageInterface $message
+     *
+     * @return void
      */
     public function publish(string $topic, string $key, MessageInterface $message): void;
+
+    /**
+     * @param string $subscription
+     */
+    public function receive(string $subscription): void;
 }

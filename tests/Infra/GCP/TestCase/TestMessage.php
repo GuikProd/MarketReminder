@@ -13,38 +13,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Infra\GCP\TestCase;
 
-use App\Infra\GCP\CloudPubSub\Message\Interfaces\MessageInterface;
+use App\Infra\GCP\CloudPubSub\Message\AbstractMessage;
 
 /**
  * Class TestMessage.
  *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class TestMessage implements MessageInterface
+final class TestMessage extends AbstractMessage
 {
-    /**
-     * @var string
-     */
-    private $topic;
-
-    public function getTopic(): string
-    {
-        return $this->topic;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier(): string
-    {
-        return 'test';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData(): array
-    {
-        return ['test' => 'test'];
-    }
 }

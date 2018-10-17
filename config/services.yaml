@@ -36,7 +36,7 @@ services:
             $acceptedLocales: "%accepted_locales%"
             $defaultLocale: "%locale%"
             $filePath: "%kernel.images_dir%"
-            $emailSender: "%email.sender_address%"
+            $sender: "%email.sender_address%"
 
             ## Redis
             $redisDSN: '%redis.dsn%'
@@ -62,14 +62,13 @@ services:
         resource: '../src/UI/Action'
         tags: ['controller.service_arguments']
 
+    App\Application\Messenger\Handler\:
+        resource: '../src/Application/Messenger/Handler/*'
+        tags: ['messenger.message_handler']
+
     App\UI\Form\Extension\StockTagsTypeExtension:
         tags:
             - { name: form.type_extension, extended_type: App\UI\Form\Type\StockTagsType }
-
-    App\UI\Form\Extension\CloudTranslationTypeExtension:
-        tags:
-            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
-
 
     App\Application\DataCollector\RequestHandlerDataCollector:
         public: false

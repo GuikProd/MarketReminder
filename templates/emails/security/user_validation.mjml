@@ -1,0 +1,24 @@
+<mjml>
+    <mj-body>
+        <mj-section background-color="#344955" padding="20px 0" text-align="center" vertical-align="top" width="800px" height="100%">
+            <mj-text align="center" color="#FFFFFF" font-size="20px" font-style="italic">
+                {{- 'mail.account_validation'|trans -}}
+            </mj-text>
+        </mj-section>
+        <mj-section background-color="#FFFFFF" text-align="center">
+            <mj-text align="center" color="#344955">
+                A new message has been sent : {{- message.content -}}
+            </mj-text>
+        </mj-section>
+        <mj-section background-color="#FFFFFF" text-align="center">
+            <mj-text align="center" color="#344955" font-style="italic">
+                If you wish to answer this email, here's the sender email: <a href="mailto:{{- message.email -}}">{{- message.email -}}</a>
+            </mj-text>
+        </mj-section>
+        <mj-section background-color="#344955" text-align="center" text-align="center">
+            <mj-text align="center" font-size="12px" color="#FFFFFF" font-style="italic">
+                This email has been sent from <a href="{{ url('index') }}" style="color: #FFFFFF">MarketReminder</a>
+            </mj-text>
+        </mj-section>
+    </mj-body>
+</mjml>

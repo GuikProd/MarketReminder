@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\CloudVision\Bridge;
 
 use App\Infra\GCP\CloudVision\Bridge\CloudVisionBridge;
 use App\Infra\GCP\CloudVision\Bridge\Interfaces\CloudVisionBridgeInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Blackfire\Profile\Configuration;
@@ -57,7 +57,7 @@ final class CloudVisionBridgeSystemTest extends TestCase
     {
         $this->cloudVisionCredentialsFolder = __DIR__.'/../../../../_credentials';
         $this->cloudVisionCredentialsFileName = 'credentials.json';
-        $this->credentialsLoader = new CredentialsLoader();
+        $this->credentialsLoader = new AbstractCredentialsLoader();
 
         $this->cloudVisionBridge = new CloudVisionBridge(
             $this->cloudVisionCredentialsFileName,

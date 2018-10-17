@@ -20,7 +20,9 @@ use Psr\Cache\CacheItemInterface;
 
 /**
  * Class CloudTranslationRepository.
- * 
+ *
+ * @package App\Infra\GCP\CloudTranslation\Domain\Repository
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
 final class CloudTranslationRepository implements CloudTranslationRepositoryInterface
@@ -29,11 +31,6 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
      * @var ConnectorInterface
      */
     private $connector;
-
-    /**
-     * @var CloudTranslationItemInterface
-     */
-    private $cacheEntry;
 
     /**
      * {@inheritdoc}
@@ -65,11 +62,11 @@ final class CloudTranslationRepository implements CloudTranslationRepositoryInte
         if ($cacheItem->isHit() && \count($cacheItem->get()->getItems()) > 0) {
             foreach ($cacheItem->get()->getItems() as $k => $v) {
                 if ($key === $v->getKey() && $locale === $v->getLocale()) {
-                    $this->cacheEntry = $v;
+                    $entry = $v;
                 }
             }
         }
 
-        return $this->cacheEntry ?? null;
+        return $entry ?? null;
     }
 }

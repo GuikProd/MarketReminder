@@ -15,7 +15,7 @@ namespace App\Tests\Infra\GCP\CloudStorage\Bridge;
 
 use App\Infra\GCP\CloudStorage\Bridge\CloudStorageBridge;
 use App\Infra\GCP\CloudStorage\Bridge\Interfaces\CloudStorageBridgeInterface;
-use App\Infra\GCP\Loader\CredentialsLoader;
+use App\Infra\GCP\Loader\AbstractCredentialsLoader;
 use App\Infra\GCP\Loader\Interfaces\LoaderInterface;
 use Google\Cloud\Storage\StorageClient;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +49,7 @@ final class CloudStorageBridgeUnitTest extends TestCase
     {
         $this->bucketCredentialsFolder = __DIR__.'/../../../../_credentials';
         $this->bucketCredentialsFileName = 'credentials.json';
-        $this->credentialsLoader = new CredentialsLoader();
+        $this->credentialsLoader = new AbstractCredentialsLoader();
     }
 
     public function testItImplements()

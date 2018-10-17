@@ -1,0 +1,3 @@
+App\Domain\Models\Stock:
+    stock{1..100}:
+        __construct: ['<sentence(2, false)>', '<sentence(2, false)>', '@user*']

@@ -42,6 +42,15 @@ interface UserInterface
     );
 
     /**
+     * Allow to change the validation token (if the user send a bad one for example).
+     *
+     * @param string $token
+     *
+     * @return void
+     */
+    public function renewValidationToken(string $token): void;
+
+    /**
      * Allow to mark the user as validated once he has validate his account via a token.
      */
     public function validate(): void;
@@ -150,7 +159,7 @@ interface UserInterface
     public function getProfileImage(): ?ImageInterface;
 
     /**
-     * @return array
+     * @return \ArrayAccess
      */
-    public function getStocks(): array;
+    public function getStocks(): \ArrayAccess;
 }

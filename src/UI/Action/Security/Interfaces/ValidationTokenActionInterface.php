@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security\Interfaces;
 
+use App\Domain\Repository\Interfaces\UserRepositoryInterface;
 use App\UI\Responder\Security\Interfaces\ValidationTokenResponderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * Interface ValidationTokenActionInterface.
@@ -25,10 +27,26 @@ use Symfony\Component\HttpFoundation\Request;
 interface ValidationTokenActionInterface
 {
     /**
+     * ValidationTokenActionInterface constructor.
+     *
+     * @param MessageBusInterface $messageBus
+     * @param UserRepositoryInterface $repository
+     */
+    public function __construct(
+        MessageBusInterface $messageBus,
+        UserRepositoryInterface $repository
+    );
+
+    /**
      * @param Request $request
      * @param ValidationTokenResponderInterface $responder
+     * 
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return RedirectResponse
      */
-    public function __invoke(Request $request, ValidationTokenResponderInterface $responder): RedirectResponse;
+    public function __invoke(
+        Request $request,
+        ValidationTokenResponderInterface $responder
+    ): RedirectResponse;
 }

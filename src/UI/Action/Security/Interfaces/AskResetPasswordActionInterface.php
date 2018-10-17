@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Security\Interfaces;
 
-use App\UI\Form\FormHandler\Interfaces\AskResetPasswordTypeHandlerInterface;
+use App\UI\Form\FormHandler\Security\Interfaces\AskResetPasswordTypeHandlerInterface;
 use App\UI\Responder\Security\Interfaces\AskResetPasswordResponderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

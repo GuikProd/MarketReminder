@@ -17,6 +17,7 @@ use App\Infra\GCP\CloudPubSub\Adapter\SenderMessengerAdapterInterface;
 use App\Infra\GCP\CloudPubSub\Client\Interfaces\CloudPubSubClientInterface;
 use App\Infra\GCP\CloudPubSub\Sender\CloudPubSubSender;
 use App\Infra\GCP\CloudPubSub\Sender\Interfaces\CloudPubSubSenderInterface;
+use App\Tests\Infra\GCP\TestCase\TestMessage;
 use App\Tests\Infra\GCP\TestCase\WrongTestMessage;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -58,14 +59,28 @@ final class CloudPubSubSenderUnitTest extends TestCase
         static::assertInstanceOf(SenderInterface::class, $sender);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testItRefuseToSend()
     {
-        static::expectException(\InvalidArgumentException::class);
-        static::doesNotPerformAssertions();
-
         $sender = new CloudPubSubSender($this->cloudPubSubClient, $this->logger);
 
         $message = new WrongTestMessage();
+
+        $envelope = new Envelope($message);
+
+        $sender->send($envelope);
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testItAcceptToSend()
+    {
+        $sender = new CloudPubSubSender($this->cloudPubSubClient, $this->logger);
+
+        $message = new TestMessage('test', 'test', ['test' => 'test']);
 
         $envelope = new Envelope($message);
 

@@ -2,7 +2,7 @@ import { MDCSnackbar } from '@material/snackbar';
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
-             .register('/build/sw.js')
+             .register('/main.js')
              .then(function () {
                  const snackBar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
                  const dataObj = {

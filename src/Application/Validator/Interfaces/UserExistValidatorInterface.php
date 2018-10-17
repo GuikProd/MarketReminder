@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Application\Validator\Interfaces;
 
 use App\Domain\Repository\Interfaces\UserRepositoryInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Interface UserExistValidatorInterface.
@@ -26,11 +25,7 @@ interface UserExistValidatorInterface
     /**
      * UserExistValidatorInterface constructor.
      *
-     * @param TranslatorInterface      $translator
-     * @param UserRepositoryInterface  $userRepository
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(
-        TranslatorInterface $translator,
-        UserRepositoryInterface $userRepository
-    );
+    public function __construct(UserRepositoryInterface $userRepository);
 }

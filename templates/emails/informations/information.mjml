@@ -1,0 +1,32 @@
+<mjml>
+    <mj-body width="1000px" height="100%">
+        <mj-section background-color="#ffb300" padding="20px 0" text-align="center" vertical-align="top">
+            <mj-column>
+                <mj-text align="center" color="#FFFFFF" font-size="20px" font-style="italic">
+                    ''
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#FFFFFF" text-align="center">
+            <mj-column>
+                <mj-text align="center" color="#344955">
+                    {{- presenter.content['content'].value -}}
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#FFFFFF" text-align="center">
+            <mj-column>
+                <mj-text align="center" color="#344955" font-style="italic">
+                    {{- presenter.content['main'].value -}}
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#344955" text-align="center" text-align="center">
+            <mj-column>
+                <mj-text align="center" font-size="12px" color="#FFFFFF" font-style="italic">
+                    This email has been sent from <a href="{{ url('index') }}" style="color: #FFFFFF">MarketReminder</a>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

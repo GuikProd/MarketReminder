@@ -14,29 +14,29 @@ declare(strict_types=1);
 namespace App\UI\Presenter;
 
 use App\Domain\Models\Interfaces\UserInterface;
-use App\Infra\GCP\CloudTranslation\Domain\Repository\Interfaces\CloudTranslationRepositoryInterface;
-use App\Infra\GCP\CloudTranslation\UI\Interfaces\CloudTranslationPresenterInterface;
 use App\UI\Presenter\Interfaces\PresenterInterface;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class Presenter.
- * 
+ *
+ * @package App\UI\Presenter
+ *
  * @author Guillaume Loulier <guillaume.loulier@guikprod.com>
  */
-final class Presenter implements PresenterInterface, CloudTranslationPresenterInterface
+final class Presenter implements PresenterInterface
 {
     const FORM_ALLOWED_VARS = ['label', 'help'];
     const PAGE_ALLOWED_VARS = ['content', 'page'];
 
     /**
-     * @var CloudTranslationRepositoryInterface
+     * @var TranslatorInterface
      */
-    private $cloudTranslationRepository;
+    private $translator;
 
     /**
      * @var array
@@ -46,9 +46,9 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
     /**
      * {@inheritdoc}
      */
-    public function __construct(CloudTranslationRepositoryInterface $redisTranslationRepository)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->cloudTranslationRepository = $redisTranslationRepository;
+        $this->translator = $translator;
     }
 
     /**
@@ -59,41 +59,51 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
-        try {
-            $translatedViewOptions = $this->prepareTranslations($viewOptions);
-        } catch (InvalidArgumentException $exception) {
-            sprintf($exception->getMessage());
-        }
+        $content = $this->prepareContent($viewOptions);
 
-        $this->viewOptions = $resolver->resolve($translatedViewOptions);
+        $this->viewOptions = $resolver->resolve($content);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function prepareTranslations(array $viewOptions): array
+    public function prepareContent(array $content = []): array
     {
         for ($i = 0; $i < \count(self::PAGE_ALLOWED_VARS); $i++) {
 
-            foreach ($viewOptions[self::PAGE_ALLOWED_VARS[$i]] as $item =>  $value) {
+            foreach ($content[self::PAGE_ALLOWED_VARS[$i]] as $item =>  $value) {
 
-                if (!\is_array($value) || \count($value) == 0) { continue; }
-
-                if (!$redisTranslation = $this->cloudTranslationRepository->getSingleEntry(
-                    $value['channel'].'.'.$viewOptions['_locale'].'.yaml',
-                    $viewOptions['_locale'],
-                    $value['key']
-                )) {
-                    $value['value'] = $value['key'];
-                } elseif ($redisTranslation->getKey() == $value['key']) {
-                    $value['value'] = $redisTranslation->getValue();
+                if (!\is_array($value) || \count($value) == 0) {
+                    continue;
                 }
 
-                $viewOptions[self::PAGE_ALLOWED_VARS[$i]][$item] = $value;
+                if (!$translation = $this->translator->trans($value['key'], [], $value['channel'])) {
+                    $value['value'] = $value['key'];
+                }
+
+                $value['value'] = $translation;
+
+                $content[self::PAGE_ALLOWED_VARS[$i]][$item] = $value;
             }
         }
 
-        return $viewOptions;
+        return $content;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function prepareForm(array $values = []): void
+    {
+        foreach ($values as $key => $entry) {
+            foreach ($entry->vars as $k => $v) {
+                if (!\in_array($k, self::FORM_ALLOWED_VARS) || \is_null($v)) {
+                    continue;
+                }
+
+                $entry->vars[$k] = $this->translator->trans($v, [], 'form');
+            }
+        }
     }
 
     /**
@@ -103,7 +113,8 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
     {
         $resolver->setDefaults([
             '_locale' => '',
-            'content' => [],
+            'body' => null,
+            'content' => null,
             'form' => null,
             'user' => null,
             'page' => [],
@@ -111,11 +122,12 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
         ]);
 
         $resolver->setAllowedTypes('_locale', 'string');
-        $resolver->setAllowedTypes('content', 'array');
+        $resolver->setAllowedTypes('body', array('string', 'null'));
+        $resolver->setAllowedTypes('content', array('array', 'null'));
         $resolver->setAllowedTypes('data', 'array');
         $resolver->setAllowedTypes('form', array('null', FormInterface::class));
         $resolver->setAllowedTypes('page', 'array');
-        $resolver->setAllowedTypes('user', array('null', UserInterface::class));
+        $resolver->setAllowedTypes('user', array('array', 'null', UserInterface::class));
     }
 
     /**
@@ -139,7 +151,13 @@ final class Presenter implements PresenterInterface, CloudTranslationPresenterIn
      */
     public function getForm(): ?FormView
     {
-        return $this->viewOptions['form']->createView() ?? null;
+        $formView = $this->viewOptions['form']->createView() ?? null;
+
+        if (!\is_null($formView)) {
+            $this->prepareForm($formView->children);
+        }
+
+        return $formView;
     }
 
     /**

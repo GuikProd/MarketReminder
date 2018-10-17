@@ -6,7 +6,7 @@ tests:
     "Memory should be under control":
         path: "/.*"
         assertions:
-            - "main.peak_memory < 5mb"
+            - "main.peak_memory < 5MB"
     "IO wait time should be minimal":
         path: "/.*"
         assertions:
@@ -67,6 +67,14 @@ tests:
         assertions:
             - { label: null, expression: 'runtime.configuration.realpath_cache_ttl >= 3600' }
         exclude: {  }
+    'Doctrine annotations should be cached in production':
+        path:
+            - '/.*'
+        methods:
+            - ANY
+        assertions:
+            - { label: null, expression: 'metrics.doctrine.annotations.parsed.count + metrics.doctrine.annotations.read.count + metrics.doctrine.entities.metadata.count == 0' }
+        exclude: {  }
     'A Redis connection should be opened only when queries are made':
         path:
             - '/.*'
@@ -85,6 +93,14 @@ tests:
         assertions:
             - { label: null, expression: 'metrics.redis.connections.count <= 1' }
         exclude: {  }
+    'Emails should be sent asynchronously during a Web request':
+        path:
+            - '/.*'
+        methods:
+            - ANY
+        assertions:
+            - { label: null, expression: 'metrics.emails.sent.count == 0' }
+        exclude: {  }
     'OPcache interned strings buffer should not use more than 85% of its allocated memory':
         path:
             - '/.*'
@@ -93,4 +109,21 @@ tests:
         command: '.*'
         assertions:
             - { label: null, expression: '(runtime.opcache.status.interned_strings_usage.used_memory / runtime.opcache.status.interned_strings_usage.buffer_size) <= 0.85' }
+        exclude: {  }
+    'The session garbage collector should be disabled in production':
+        path:
+            - '/.*'
+        methods:
+            - ANY
+        command: '.*'
+        assertions:
+            - { label: null, expression: 'runtime.configuration.session_gc_probability === 0' }
+        exclude: {  }
+    'YAML parsing should be cached in production':
+        path:
+            - '/.*'
+        methods:
+            - ANY
+        assertions:
+            - { label: null, expression: 'metrics.symfony.yaml.reads.count == 0' }
         exclude: {  }
